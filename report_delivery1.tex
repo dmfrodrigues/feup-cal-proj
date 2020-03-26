@@ -1,0 +1,315 @@
+\documentclass{report}[a4paper]
+% Decent underlines
+\usepackage[normalem]{ulem}
+% Hyperreferences
+\usepackage{hyperref}
+% Margins
+\usepackage[top=35mm,bottom=35mm,left=25mm,right=25mm]{geometry}
+% Graphics and images
+\usepackage{graphicx} \graphicspath{{./images/}}
+\usepackage{subcaption}
+\usepackage{float}
+% Encodings (to render letters with diacritics and special characters)
+\usepackage[utf8]{inputenc}
+% Language
+\usepackage[english]{babel}
+% Source code
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+% Tables with bold rows
+\usepackage{tabularx}
+\newcommand\setrow[1]{\gdef\rowmac{#1}#1\ignorespaces}
+\newcommand\clearrow{\global\let\rowmac\relax}
+\clearrow
+\usepackage{multirow}
+% Math stuff
+\usepackage[mathscr]{euscript}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{xcolor}
+\newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}} % scientific notation
+% Definitions, theorems, remarks,...
+\usepackage{amsthm}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\renewcommand\qedsymbol{$\blacksquare$}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+% Contents title
+\addto\captionsenglish{\renewcommand*\contentsname{Table of contents}}
+% Headers and footers
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{\fancyplain{}{PortoCityTransfers — Delivery I (CAL 2019/20)}}
+\rhead{\fancyplain{}{Group T6G05}}
+\lfoot{\fancyplain{}{\leftmark}}
+\rfoot{\thepage}
+%
+\newcommand{\email}[1]{
+{\texttt{\href{mailto:#1}{#1}} }
+}
+% Metadata
+\title{\Huge PortoCityTransfers \\ \Large Delivery I \\ \vspace*{4pt} \large CAL 2019/20}
+\author{
+Group T6G05 \vspace{0.5em} \\
+\begin{tabular}{r l}
+	\email{up201806429@fe.up.pt} & Diogo Miguel Ferreira Rodrigues        \\
+	\email{up201806613@fe.up.pt} & João António Cardoso Vieira e Basto de Sousa \\
+	\email{up201806330@fe.up.pt} & Rafael Soares Ribeiro \\
+\end{tabular}
+}
+\date{10/04/2020}
+% Document
+\begin{document}
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+\listofalgorithms
+\chapter{Introduction}
+This preliminary report details the project to be designed and implemented.
+This project fundamentally consists of an application for managing a train station shuttle service based in a single train station, serving clients in the area inside and surrounding a big city.
+\chapter{Theme description}
+The company \emph{PortoCityTransfers} provides shttle services beetween Campanhã railway station (Porto, Portugal) and hotels/other places in the Porto region (Porto, Matosinhos, Maia, Vila Nova de Gaia). For that end, it owns a certain number of vans, which can transport a given number of passangers each. Service reservation must be made via Internet, where clients can indicate their estimated time of arrival and final destination. Given a set of service requests to satisfy in a given day, and their respective destinations, the company must group passangers and plan routes for that day, having in mind passangers should wait for a period as short as possible.\par
+This project will design and implement a computer system that will allow \emph{PortoCityTransfers} to plan its routes. The following iterations should be considered for project development:
+\begin{enumerate}
+    \item The company owns a single van.
+    \item The company owns several vans, where multiple travels are simultaneously possible for different vans.
+    \item Passangers without reservation must be accounted for, as well as passangers that wish to travel from their homes to the train station.
+\end{enumerate}
+\chapter{Problem formalization}
+This chapter is dedicated to the hardest, algorithmic problems related to this project. Therefore, we will only go into detail about aspects that algorithmically influence the project.
+\section{Definitions}
+\begin{definition}[Graph]
+    A graph $G$ is a pair $(V, E, w)$, where:
+    \begin{itemize}
+        \item $V$ is the finite set of \textbf{nodes}.
+        \item $E \subseteq V^2$ is the set of \textbf{edges}, where each edge is a pair $(u,v)$ describing an origin and destination.
+        \item $w: E \rightarrow \mathbb{R}^+$ is the \textbf{cost function} that maps each edge to a traversal cost.
+    \end{itemize}
+\end{definition}
+\begin{definition}[Path]
+    A path $p$ of length $k$ is a sequence of nodes $\langle p_0,p_1,p_2,...,p_k\rangle$ such that
+    \begin{equation*}
+        \forall i,~0 \leq i < k \implies (p_i, p_{i+1}) \in E
+    \end{equation*}
+\end{definition}
+\begin{definition}[Weight of a path]
+    The weight of a path $p$ is
+    \begin{equation*}
+        W(p) = \sum_{i=0}^{k-1}{w((p_i, p_{i+1}))}
+    \end{equation*}
+\end{definition}
+\begin{definition}[Adjacency set]
+    The adjacency set of $u \in V$ in $G(V,E)$ is the set of nodes directly reachable from $u$:
+    \begin{equation*}
+        Adj(G, u) = \{(u, v) \in E\} = E \cap (\{v\}\times V)
+    \end{equation*}
+\end{definition}
+\section{Input}
+There are two main inputs to this problem: a description of the map of the area the company serves (section \ref{input-map}); the list of requested services for a given day (section \ref{input-services}).
+\subsection{Map} \label{input-map}
+We will abstract the area \emph{PortoCityTransfers} serves into a graph $G=(V,E, w)$, where:
+\begin{itemize}
+    \item Nodes $V$ represent positions on Earth.
+    \item Edges $E$ represent roads traversable by automobiles.
+    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $5 m$, and that travelling at a maximum speed of $120 km/h$ a vehicle would take $0.15 s$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being relatively easy to manage as well as fitting in a 32-bit unsigned integer.
+\end{itemize}
+We thus have as input data the directed weighted graph $G=(V,E,w)$.
+\subsection{Services} \label{input-services}
+Services requested to the company are either from or to the train station. Thus, for each request, we need to know the origin, destination and the time the person can be picked up.
+We thus have as input data the sequence $r$ of clients $\langle c[0], c[1], ..., c[k-1] \rangle$ where each client $c_i=(u, v, t)$ can be picked at $u$ starting in time $t$, and must be dropped at $v$.
+\section{Output}
+For each van, a sequence $l=\langle l[0], l[1], ..., l_k \rangle$ of all routes where $l[i]=r=\langle r[0], r[1],..., r[k']\rangle$ is a route, which is a sequence of space-time coordinates $r[i]=(v, t)$, meaning the van must be at node $v$ at time $t$. REWRITE
+\section{Restrictions}
+\begin{enumerate}
+    \item Each route starts and ends in the train station; $\forall r,\,r[0]=r[k']=$ node of the train station.
+    \item Each route must be feasible, meaning for each consecutive space-time pair the van has enough time to travel from one location to the next one. Let $dist(u, v)$ be the \emph{distance} or cost between the two nodes (this cost is, in reality, the time it takes to go from $u$ to $v$);
+    \begin{equation*}
+        \forall i \in \mathbb{N}, 0 \leq i < k' \implies dist(r[i].v, r[i+1].v) \leq r[i+1].t-r[i].t
+    \end{equation*}
+    \item For each van with a list of routes $l$, a van can only perform the following order after the previous order is completed:
+    \begin{equation*}
+        \forall i \in \mathbb{N}, 0 \leq i < k \implies l[i][\text{end}].t \leq l[i+1][0].t
+    \end{equation*}
+    \item All clients must be picked up from their origins and delivered to their destinations.
+    \item REWRITE
+\end{enumerate}
+\section{Objective function}
+\section{Problem decomposition}
+For each iteration, we will decompose larger problems into successively smaller, well-known (and preferably classical) problems.
+\subsection{Iteration I}
+On iteration I, the company owns one van REWRITE
+\section{Shortest path problem}
+\begin{itemize}
+    \item \textbf{Summary:} Given a weighted directed graph, find the path with least cost from one node to another.
+    \item \textbf{Input:} Graph $G=(V,E)$ and origin/destination nodes $s, d \in V$.
+    \item \textbf{Output:} Path $p$ in $G$.
+    \item \textbf{Objective function:} $W(p)~\min$.
+\end{itemize}
+\subsection{Dijkstra's algorithm}
+Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortert path-finding algorithm between nodes. It was first published by Edsger Dijkstra (1930-2002), a Dutch computer scientist, in 1959 \cite{dijkstra}.\par
+This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$. The fundamental idea is that, at each moment, we have a set $Q$ of unprocessed nodes, and we know the values of functions distance $dist$ and previous node $prev$ for all nodes not in $Q$. Then we process the node $u \in Q$ with the least $c$ (i.e., the node not yet analysed that has the smallest distance do $s$). Processing consists of iterating over all nodes adjacent to $u$, calculate their potential new distance to $s$ passing through $u$ ($c'=c+w((u,v))$), and if the new distance is smaller we update distance $dist(v)=c'$, previous node $prev(v)=u$.
+\vspace{-1em}
+\begin{center}
+    \begin{algorithm}[ht]
+        \caption{Dijkstra's algorithm}
+        \label{alg-dijkstra}
+        \begin{minipage}[t]{0.49\linewidth}
+            (a) Mathematical version
+            \begin{algorithmic}[1]
+                \Procedure{Dijkstra}{$G(V,E)$, $s$}
+                    \State $Q \gets \emptyset$
+                    \For {$v \in V$}
+                        \State {$dist(v) \gets \infty$}
+                        \State {$prev(v) \gets \text{NULL}$}
+                        \State $Q \gets Q \cup \{v\}$
+                    \EndFor
+                    \State {$dist(s) \gets 0$}
+                    \While {$\#Q > 0$}
+                        \State $u \gets \text{element of } Q \text{ with least } dist(u)$
+                        \State $Q \gets Q \backslash \{u\}$
+                        \For {$v \in \textsc{Adj}(G, u)$}
+                            \State $c' \gets c + w((u, v))$
+                            \If {$c' < dist(v)$}
+                                \State $dist(v) \gets c'$
+                                \State $prev(v) \gets u$
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                    \Return $dist$, $prev$
+                \EndProcedure
+            \end{algorithmic}
+        \end{minipage}
+        \begin{minipage}[t]{0.49\linewidth}
+            (b) Programmatic version
+            \begin{algorithmic}[1]
+                \Procedure{Dijkstra}{$Adj$, $s$}
+                    \State $Q = \textsc{Min\_Priority\_Queue()}$
+                    \For {$v : V$}
+                        \State {$dist[v] = \infty$}
+                        \State {$prev[v] = \text{NULL}$}
+                        \State {$Q.\textsc{Insert\_With\_Priority}(\infty, v)$}
+                    \EndFor
+                    \State $dist[s] = 0$
+                    \State $Q.\textsc{Decrease\_Priority}(s, dist[s])$
+                    \While {$Q.\textsc{Size}() > 0$}
+                        \State $u = Q.\textsc{Pop}()$
+                        \For {$(v, w): Adj[u]$}
+                            \State $c' = c + w$
+                            \If {$c' < dist[v]$}
+                                \State $dist[v] = c'$
+                                \State $prev[v] = u$
+                                \State $Q.\textsc{Decrease\_Priority}(v, dist[v])$
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                    \Return {$dist$, $prev$}
+                \EndProcedure
+            \end{algorithmic}
+        \end{minipage}
+    \end{algorithm}
+\end{center}
+In actual implementations, the structures used are an adjacency list $Adj$ for the graph (which admits iteration in $O(1)$ for each adjacent node) and a minimum priority queue $Q$ for the set, where the priority of $v$ is $dist(v)$ (allows for fast lookup for node with smallest priority, as well as fast priority decrease when processing adjacent nodes).
+\subsubsection{Proof of correctness}
+The full proof is rather long and is promptly available, thus we will only present a short argument for correctness. The full proof can be found, for instance, in \cite[p.~659]{intro-alg}
+\begin{itemize}
+    \item \textbf{Pre-conditions:} $G(V, E)$ is a directed, weighted graph. $s \in V$. $s$ is the only node in $Q$, with $dist(s)=0$ and $prev(s)=\text{NULL}$
+    \item \textbf{Post-conditions:} the distance $dist(d)$ and previous node in shortest path $prev(d)$ from $s$ to $d$, $\forall v \in V$. Distance of unreachable nodes is $\infty$ and previous node in shortest path is invalid. Previous node for $s$ is also invalid.
+    \item \textbf{Cycle invariant:} for all nodes $v \not \in Q$, $dist(v)$ is minimum and $prev(v)$ is the previous node in the shortest path from $s$ to $v$. For all nodes $v \in Q$, $dist(v)$ is the least distance from $s$ to $v$ going only through nodes not in $Q$.\par
+    \item \textbf{Cycle variant:} $\#Q$, which is:
+    \begin{itemize}
+        \item Integer, given a size can only be integer.
+        \item Strictly decreasing, given that one node is removed from $Q$ everytime the cycle runs.
+        \item Positive, given it starts with value $\#V$ where $V$ has at least node $s$. The cycle breaks when $\#Q = 0$.
+    \end{itemize}
+\end{itemize}
+\subsubsection{Complexity analysis}
+The initial calls to \textsc{Insert\_With\_Priority} are all made in total time $O(N)$, given there is no need for sorting since all priorities are the same and equal to $\infty$. In the main cycle, all elementary operations can be done in $O(1)$ except for $Q$ operations \textsc{Pop} (extracts minimum and pops), which can be made in time $O(\text{T}_{p})$, and \textsc{Decrease\_Priority}, which can be made in time $O(\text{T}_{dp})$. We run \textsc{Top} as many times as we remove nodes from $Q$. Since there were $|V|$ nodes at the beginning in $Q$, \textsc{Top} is run $|V|$ times. For each node $u$, we iterate over $Adj[u]$, and for each item we iterate we potentially run \textsc{Decrease\_Priority}. Since $\sum_{u \in V}{|Adj[u]|} = |E|$, \textsc{Decrease\_Priority} is run at most $|E|$ times.
+This means the total time complexity of the algorithm is $O(|E|\cdot \text{T}_{dp}+|V|\cdot \text{T}_{p})$. \par
+Using a typical implementation of a priority queue as a binary heap, we have $O(\text{T}_{dp})=O(\log |V|)$ and $O(\text{T}_{p})=O(\log |V|)$, thus yielding the total time complexity $O((|E|+|V|)\log |V|)$. This can be further improved with a Fibonacci heap, with $O(\text{T}_{dp})=O(1)$ and $O(\text{T}_{p})=O(\log |V|)$ (both amortized), thus yielding $O(|E| + |V|\log |V|)$.
+\subsection{A* algorithm}
+The A* shortest path algorithm is a very well known and widely used algorithm for fast path-finding. It was created by Peter Hart, Nils Nilsson and Bertram Raphael of Stanford Research Institute \cite{Astar}, as part of the Shakey project, with the aim of building a mobile robot that could plan its own actions.\par
+Its fame derives from its similarity with Dijkstra's algorithm, which is not a mere coincidence: the A* algorithm is an heuristic extension of the Dijkstra algorithm. The A* algorithm uses an heuristic function $\hat{h}(u)$ to estimate the distance from node $u$ to the destination, but if we use as our heuristic the function $\hat{h}(u) = 0$ we arrive precisely at Dijkstra's algorithm (which makes no assumptions about the context of the graph).
+\begin{center}
+    \begin{algorithm}[H]
+        \caption[A* algorithm]{A* algorithm\\Added lines in green, changed expressions in orange, relative to Dijkstra's algorithm (Algorithm \ref{alg-dijkstra})}
+        \label{alg-astar}
+        \begin{minipage}[t]{0.49\linewidth}
+            (a) Mathematical version
+            \begin{algorithmic}[1]
+                \Procedure{Astar}{$G(V,E)$, $s$, $\hat{h}$}
+                    \State $Q \gets \emptyset$
+                    \For {$v \in V$}
+                        \State {$dist(v) \gets \infty$}
+                        \State {$\textcolor{green}{\bm{hdist(v) \gets \infty}}$}
+                        \State {$prev(v) \gets \text{NULL}$}
+                        \State $Q \gets Q \cup \{v\}$
+                    \EndFor
+                    \State $dist(s) \gets 0$
+                    \State $\textcolor{green}{\bm{hdist(s) \gets \hat{h}(s)}}$
+                    \While {$\#Q > 0$}
+                        \State $u \gets \text{element of } Q \text{ with least } \textcolor{orange}{\bm{hdist}}(u)$
+                        \State $Q \gets Q \backslash \{u\}$
+                        \For {$v \in \textsc{Adj}(G, u)$}
+                            \State $c' \gets c + w((u, v))$
+                            \If {$c' < dist(v)$}
+                                \State $dist(v) \gets c'$
+                                \State $\textcolor{green}{\bm{hdist(v) \gets c'+\hat{h}(v)}}$
+                                \State $prev(v) \gets u$
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                    \Return $dist$, $prev$
+                \EndProcedure
+            \end{algorithmic}
+        \end{minipage}
+        \begin{minipage}[t]{0.49\linewidth}
+            (b) Programmatic version
+            \begin{algorithmic}[1]
+                \Procedure{Astar}{$Adj$, $s$, $\hat{h}$}
+                    \State $Q = \textsc{Min\_Priority\_Queue()}$
+                    \For {$v : V$}
+                        \State {$dist[v] = \infty$}
+                        \State {$\textcolor{green}{\bm{hdist[v] = \infty}}$}
+                        \State {$prev[v] = \text{NULL}$}
+                        \State {$Q.\textsc{Insert\_With\_Priority}(\infty, v)$}
+                    \EndFor
+                    \State $dist[s] = 0$
+                    \State $\textcolor{green}{\bm{hdist[s] = \hat{h}(s)}}$
+                    \State $Q.\textsc{Decrease\_Priority}(s, \textcolor{orange}{\bm{hdist}}[s])$
+                    \While {$Q.\textsc{Size}() > 0$}
+                        \State $u = Q.\textsc{Pop}()$
+                        \For {$(v, w): Adj[u]$}
+                            \State $c' = c + w$
+                            \If {$c' < dist[v]$}
+                                \State $dist[v] = c'$
+                                \State $\textcolor{green}{\bm{hdist[v] = c'+\hat{h}(v)}}$
+                                \State $prev[v] = u$
+                                \State $Q.\textsc{Decrease\_Priority}(v, \textcolor{orange}{\bm{hdist}}[v])$
+                            \EndIf
+                        \EndFor
+                    \EndWhile
+                    \Return {$dist$, $prev$}
+                \EndProcedure
+            \end{algorithmic}
+        \end{minipage}
+    \end{algorithm}
+\end{center}
+\subsubsection{Proof of correctness}
+According to \cite{encyc-AI-Astar}, if the chosen heuristic $\hat{h}$ is such that it always gives a lower bound for the actual distance $h$ from $u$ to the destination ($\forall u \in V, \hat{h}(v) \leq h(u)$)\footnote{In our case, we can easily point as an heuristic $\hat{h}(u)$ the time it would take the van to go from $u$ to $d$ in a straight line at highway speed, given it gives us a lower bound on the time it would take to actually reach $d$}, then the A* algorithm is admissible\footnote{Admissible: guaranteed to find an optimal solution if it exists}. This proof is fully presented in the original article \cite{Astar}, which we prefer to reference instead of reproducing the proof.\par
+This means the A* algorithm is as effective as Dijkstra's path-finding algorithm as long as $\hat{h}$ belongs to the same asymptotic class as $O(\text{T}_{dp})$.
+\subsubsection{Complexity analysis}
+Complexity of the A* algorithm depends on various factors. For instance, the poorest choice of heuristic that optimally solves the problem $\hat{h}(u)=0$ has the same complexities as Dijkstra's algorithm. However, in a graph that is locally connected (and thus relatively sparse), with uniformly-distributed nodes and random edge weights (as is more or less expected from a map), it has a complexity of $O(\sqrt{|V|} \cdot (\text{T}_{p}+\text{T}_{dp}))$, given the A* algorithm will trace a more or less straight line to the destination, crossing $\sqrt{|V|}$ nodes which (because the graph is sparse) are adjacent to $O(\sqrt{|V|})$ edges. Because all nodes are still in $Q$, its size is still $|V|$ \footnote{Changes could be implemented so that nodes were only added to $Q$ if they had a priority different from $\infty$, but that would mean there would still be up to $O(\sqrt{N})$ nodes in $Q$, which does not make a difference in terms of complexity given that, if operations on $Q$ take place in time $O(\log |Q|)$, we have that $O(\log |Q|)=O(\log \sqrt{|V|})=O(\frac{1}{2}\log |V|)=O(\log |V|)$}.
+If either a binary heap or a Fibonacci heap is chosen, it makes no difference for the total time complexity, which is $O(\sqrt{|V|} \log |V|)$ in both cases.
+\chapter{Use cases}
+\chapter{Conclusion}
+\bibliographystyle{acm}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{report}
+\end{document}

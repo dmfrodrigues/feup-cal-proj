@@ -1,4 +1,14 @@
 map/provided/*.zip
 .vscode/
 map/map_process
-
+*.aux
+*.out
+*.pdf
+*.log
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.loa
+*.synctex.gz
+*.toc
