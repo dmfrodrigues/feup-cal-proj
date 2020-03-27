@@ -68,10 +68,15 @@ We will not put excessive emphasis on exagerated formalism, so we will by defaul
         Pred(s) = Adj(G^T, s)
     \end{equation*}
 \end{definition}
-\begin{definition}[Strongly connected component]
-    A strongly connected component $SCC$ is a subset of the nodes $V$ in a graph $G(V,E)$ where there is a path between any two nodes $u, v \in SSC$, and there is no other node $x \not \in SSC$ that can reach and be reached by all nodes $u \in SSC$.
+\begin{definition}[Strongly connected graph]
+    A strongly connected graph is one where there is a path between any two nodes $u, v \in V$.
 \end{definition}
-
+\begin{definition}[Strongly connected component]
+    A strongly connected component $SCC$ is a subgraph of $G(V, E)$ which is a maximum strongly connected graph (there is no other node $x \not \in SSC$ that can reach and be reached by all nodes $u \in SSC$).
+\end{definition}
+\begin{definition}[Bridge]
+    A bridge in a strongly connected graph $G(V,E)$ is an edge $e \in E$ that, if removed, would disconnect $G$.
+\end{definition}
 % \section{Miscellaneous}
 % \begin{theorem}[Master theorem of Divide-and-Conquer] \label{theor:master}
 %     Let $a \geq 1$, $b > 1$ be constants, let $f(n)$ be a function, and let $T(n)$ be defined on the nonnegative integers by the recurrence
