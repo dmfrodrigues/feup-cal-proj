@@ -82,9 +82,10 @@ This project will design and implement a computer system that will allow \emph{P
     \item The company owns several vans, where multiple travels are simultaneously possible for different vans.
     \item Passangers without reservation must be accounted for, as well as passangers that wish to travel from their homes to the train station.
 \end{enumerate}
-\chapter{Graph notions}
-This short chapter presents some basic notions and definitions on graphs, which ought to be useful in the following chapters.
-\section{Definitions}
+\chapter{Theoretical notions}
+This short chapter presents some basic notions and definitions on Computer Science, which ought to be useful in the following chapters.
+\section{Graphs}
+\subsection{Definitions}
 \begin{definition}[Directed weighted graph]
     A directed weighted graph $G$ is a triple $(V, E, w)$, where:
     \begin{itemize}
@@ -120,6 +121,21 @@ This short chapter presents some basic notions and definitions on graphs, which 
 \begin{definition}[Strongly connected component]
     A strongly connected component $SCC$ is a subset of the nodes $V$ in a graph $G(V,E)$ where there is a path between any two nodes $u, v \in SSC$, and there is no other node $x \not \in SSC$ that can reach and be reached by all nodes $u \in SSC$.
 \end{definition}
+
+% \section{Miscellaneous}
+% \begin{theorem}[Master theorem of Divide-and-Conquer] \label{theor:master}
+%     Let $a \geq 1$, $b > 1$ be constants, let $f(n)$ be a function, and let $T(n)$ be defined on the nonnegative integers by the recurrence
+%     \begin{equation*}
+%         T(n)=a\cdot T(n/b) + f(n)
+%     \end{equation*}
+%     Then $T(n)$ has the following assymptotic bounds:
+%     \begin{enumerate}
+%         \item If $f(n) \in O(n^{\log_b a-\epsilon})$ for some constant $\epsilon > 0$, then $T(n) \in \Theta(n^{\log_b a})$
+%         \item If $f(n) \in \Theta(n^{\log_b a})$, then $T(n) \in \Theta(f(n) \log n)$
+%         \item If $f(n) \in \Omega(n^{\log_b a+\epsilon})$ for some constant $\epsilon > 0$, and $a f(n/b)\leq c f(n)$ for some constant $c<1$ and large $n$, then $T(n) \in \Theta(f(n))$
+%     \end{enumerate}
+% \end{theorem}
+% The proof is prompty available in \cite[p.~97]{intro-alg}.
 \chapter{Problem formalization}
 This chapter is dedicated to the hardest, algorithmic problems related to this project. Therefore, we will only go into detail about aspects that algorithmically influence the project.
 \section{Input}
@@ -397,7 +413,7 @@ In our case, we can easily point as an heuristic $\hat{h}(u)$ the time it would 
 \subsection{Divide-and-Conquer Strong Components algorithm}
 The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown strongly connected component algorithm, proposed in 2000 by Fleischer et al. \cite{fleischer-dcsc}. Its main ideas are the two lemmas:
 \begin{lemma} \label{lem:dcsc1}
-    The $SCC(p)=Desc(p) \cap Pred(p)$ where $Desc(p)$ are the descendants and $Pred(p)$ the predecessors of $p$.
+    $SCC(p)=Desc(p) \cap Pred(p)$ where $Desc(p)$ are the descendants and $Pred(p)$ the predecessors of $p$.
 \end{lemma}
 \begin{proof}
     $Desc(p) \cap Pred(p) \subseteq SSC(p)$, given that a node $u \in Desc(p) \cap Pred(p)$ can reach and be reached from $p$, thus being able to trivially reach any other node $v \in Desc(p) \cap Pred(p)$ through a path passing through $p$.\par
@@ -453,6 +469,8 @@ The lecture notes go on to describe how these lemmas can be implemented as a div
 \subsubsection{Proof of correctness}
 Both algorithms are trivially correct from lemmas \ref{lem:dcsc1} and \ref{lem:dcsc2}.
 \subsubsection{Complexity analysis}
+Since we will not be using the original version, the complexity analysis for \textsc{DCSC} is promptly available at \cite{fleischer-dcsc}, which yields the time complexity $\Theta((|E|+|V|) \log |V|)$.\par
+For our variant \textsc{DCSCv}, we know that \textsc{DFS} has time complexity $O(|E|+|V|)$, and the \textsc{Transpose} operation can be done in $\Theta(|E|+|V|)$, thus the time complexity of \textsc{DCSC} is $O(|E|+|V|)$.
 \chapter{Use cases}
 \chapter{Conclusion}
 \bibliographystyle{acm}
