@@ -1,7 +1,7 @@
 \chapter{Problem formalization}
 In this chapter, we will make an effort to transform our specific problems into abstract (and to the greatest extent possible, classical) problems, in order to list all subproblems to be solved and possible solutions.
 \section{Input}
-There are two main inputs to this problem: a description of the map of the area the company serves (section \ref{input-map}); the list of requested services for a given day (section \ref{input-services}).
+There are two main inputs to this problem: a description of the map of the area the company serves (section \ref{input-map}); the list of vans (section \ref{input-vans}); the list of requested services for a given day (section \ref{input-services}).
 \subsection{Map} \label{input-map}
 We will abstract the area \emph{PortoCityTransfers} serves into a graph $G=(V,E, w)$, where:
 \begin{itemize}
@@ -10,56 +10,59 @@ We will abstract the area \emph{PortoCityTransfers} serves into a graph $G=(V,E,
     \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $5 m$, and that travelling at a maximum speed of $120 km/h$ a vehicle would take $0.15 s$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being relatively easy to manage as well as fitting in a 32-bit unsigned integer.
 \end{itemize}
 We thus have as input data the directed weighted graph $G=(V,E,w)$.
+\subsection{Vans} \label{input-vans}
+A list of vans $v_i=(n)$ where $n$ is the capacity.
 \subsection{Services} \label{input-services}
 For each client, we need to know the origin, destination and the time the person can be picked up.
 We thus have as input data a sequence of clients $c$ where each client $c=(u, v, t)$ can be picked at $u$ starting in time $t$, and must be dropped at $v$.
 \section{Output}
-For each van, a sequence $r$ of all routes. A route $r^i$ is a sequence of triples $r^i_j=(c, t, a)$, meaning the van must be at a certain node to perform a certain action (if $a=+1$ the client must be picked at $c.u$; if $a=-1$ the client must be dropped at $c.v$; if $a=0$ the van should do no particular action, except being at $c$ (which is now only a node, not a client)) at time $t$.
-\section{Restrictions}
-The limits of the index variables are implicitly limited to the size of the sequences.\par
-Let
+Various rides $r$, where a ride is a triple $r=(v, C, \langle e \rangle)$. $v$ is the van that will fulfill that ride, $C$ is the set of clients satisfied by that ride and $\langle e \rangle = \langle e_1, e_2,...,e_{|e|} \rangle$ is the sequence of events in that ride. An event $e$ is a triple $e=(t, a, c)$ where $t$ is the time point of that event, $a$ is the type of event and $c$ is defined according to $a$:
+\begin{itemize}
+    \item $a=+1$: client $c$ will be picked up at $c.u$ at time $t$.
+    \item $a=-1$: client $c$ will be dropped off at $c.v$ at time $t$.
+    \item $a=0$: the van must be at node $c$ at time $t$.
+\end{itemize}
+Let $node(e)$ be the node where the van is supposed to be according to event $e$:
 \begin{equation*}
-    v(r^i_j) =
-    \begin{cases}
-        r^i_j.c.u : a = +1\\
-        r^i_j.c.v : a = -1\\
-        r^i_j.c   : a = 0
-    \end{cases}
+    node(e)=\begin{dcases}
+        e.c.u & : e.a = +1\\
+        e.c.v & : e.a = -1\\
+        e.c   & : e.a = 0
+    \end{dcases}
 \end{equation*}
-be the node where the van must be at time $t$.
+\section{Restrictions}
+The limits of the index variables are implicitly limited to the size of the sequences.
 \begin{enumerate}
-    \item Each route starts and ends in the train station; $\forall i, v(r^i_0) = v(r^i_{end}) = $ train station.
-    \item Each route must be feasible, meaning for each triple $r^i_j$ in a route the van has enough time to travel to the next triple $r^i_{j+1}$:
-    \begin{equation*}
-        \forall i,j \in \mathbb{N}, dist(v(p^i_j), v(p^i_{j+1})) \leq p^i_{j+1}.t-p^i_j.t
-    \end{equation*}
-    \item Routes must be feasible among each other for the same van; for each van with a list of routes $r_i$, a van can only perform the following order after the previous order is completed:
-    \begin{equation*}
-        \forall i, r^i_{k'}.t \leq r^{i+1}_0.t
-    \end{equation*}
-    \item All clients must be picked up from their origins and delivered to their destinations in the same route:
-    \begin{alignat*}{2}
-        \forall c \text{ client}, \exists p \text{ route} \colon \exists i, j~[i<j] \colon
-        & p_i.c = c \wedge p_i.a = +1\,\wedge \\
-        & p_j.c = c \wedge p_j.a = -1
-    \end{alignat*}
-    \item No client can be picked up or dropped more than once:
-    \begin{gather*}
-        \forall p^i_j, p^{i'}_{j'} \text{ triples }[(i,j) \neq (i',j')], p^i_j.c \neq p^{i'}_{j'}.c
-    \end{gather*}
+    \item $\{r.C : r \text{ is a ride}\}$ is a partition of the set of all clients (a client can only be satisfied once, and all clients must be satisfied).
+    \item For a ride $r(v,C,\langle e \rangle)$:
+    \begin{enumerate}
+        \item It must start and end at the train station: $(e_1.a, e_1.c) = (e_{|e|}.a,e_{|e|}.c)=(0, \text{ train station})$
+        \item The clients in $C$ are the same as the clients in the ride's events: $C=\{e.c : e.a \neq 0\}$
+        \item Each client may only be picked up and dropped off once, and all clients must be served:
+        \begin{alignat*}{2}
+            \forall c \in C,
+            &(\exists !e: e.c = c \wedge e.a = +1)\,\wedge \\
+            &(\exists !e: e.c = c \wedge e.a = -1)
+        \end{alignat*}
+        \item The ride must be \emph{feasible}, i.e., there must be enough time between consecutive events for the van to travel between them: $\forall i,\,dist(node(e_i), node(e_{i+1})) \leq e_{i+1}.t - e_i.t$
+        \item At every moment, the number of clients inside a van must not be larger than its capacity:
+        \begin{equation*}
+            \forall i,~\sum_{j=1}^{i}{e_i.a} \leq v.n
+        \end{equation*}
+    \end{enumerate}
+    \item For a van $v$:
+    \begin{enumerate}
+        \item There are no overlapping rides: $\forall r, r',~r \neq r' \wedge v = v' \iff \min\{e_{|e|}.t,e'_{|e'|}.t\} \leq \max\{e_1.t,e'_1.t\}$
+    \end{enumerate}
 \end{enumerate}
 \section{Objective function}
-Let $pick(c)$ be the triple where $c$ is picked up, and $drop(c)$ the triple where $c$ is dropped off.\par
-Our objective function is
+Let $pick(c)$ be the event where $c$ is picked up, and $drop(c)$ the event where $c$ is dropped off. Our objective function is
 \begin{alignat*}{2}
-    & T        &&= \sum_{c \text{ client}}{drop(c).t - pick(c).t} \\
-    & T_{\min} &&= \sum_{c \text{ client}}{drop(c).t - pick(c).t} \\
-    & \Delta T &&= T - T_{\min}
+    \text{Total time it took}        ~~& T        &&= \sum_{c \text{ client}}{drop(c).t - pick(c).t} \\
+    \text{Minimum time it could take}~~& T_{\min} &&= \sum_{c \text{ client}}{dist(node(drop(c)), node(pick(c)))} \\
+    \text{Extra time we must minimize}~~& \Delta T &&= T - T_{\min}
 \end{alignat*}
 \begin{equation*}
     \min \Delta T
 \end{equation*}
-\section{Problem decomposition}
-For each iteration, we will decompose larger problems into successively smaller, well-known (and preferably classical) problems.
-\subsection{Iteration I}
-On iteration I, the company owns one van REWRITE
+
