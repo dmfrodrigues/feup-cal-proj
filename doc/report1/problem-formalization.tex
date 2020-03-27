@@ -1,0 +1,36 @@
+\chapter{Problem formalization}
+This chapter is dedicated to the hardest, algorithmic problems related to this project. Therefore, we will only go into detail about aspects that algorithmically influence the project.
+\section{Input}
+There are two main inputs to this problem: a description of the map of the area the company serves (section \ref{input-map}); the list of requested services for a given day (section \ref{input-services}).
+\subsection{Map} \label{input-map}
+We will abstract the area \emph{PortoCityTransfers} serves into a graph $G=(V,E, w)$, where:
+\begin{itemize}
+    \item Nodes $V$ represent positions on Earth.
+    \item Edges $E$ represent roads traversable by automobiles.
+    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $5 m$, and that travelling at a maximum speed of $120 km/h$ a vehicle would take $0.15 s$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being relatively easy to manage as well as fitting in a 32-bit unsigned integer.
+\end{itemize}
+We thus have as input data the directed weighted graph $G=(V,E,w)$.
+\subsection{Services} \label{input-services}
+Services requested to the company are either from or to the train station. Thus, for each request, we need to know the origin, destination and the time the person can be picked up.
+We thus have as input data the sequence $r$ of clients $\langle c[0], c[1], ..., c[k-1] \rangle$ where each client $c_i=(u, v, t)$ can be picked at $u$ starting in time $t$, and must be dropped at $v$.
+\section{Output}
+For each van, a sequence $l=\langle l[0], l[1], ..., l_k \rangle$ of all routes where $l[i]=r=\langle r[0], r[1],..., r[k']\rangle$ is a route, which is a sequence of space-time coordinates $r[i]=(v, t)$, meaning the van must be at node $v$ at time $t$. REWRITE
+\section{Restrictions}
+\begin{enumerate}
+    \item Each route starts and ends in the train station; $\forall r,\,r[0]=r[k']=$ node of the train station.
+    \item Each route must be feasible, meaning for each consecutive space-time pair the van has enough time to travel from one location to the next one. Let $dist(u, v)$ be the \emph{distance} or cost between the two nodes (this cost is, in reality, the time it takes to go from $u$ to $v$);
+    \begin{equation*}
+        \forall i \in \mathbb{N}, 0 \leq i < k' \implies dist(r[i].v, r[i+1].v) \leq r[i+1].t-r[i].t
+    \end{equation*}
+    \item For each van with a list of routes $l$, a van can only perform the following order after the previous order is completed:
+    \begin{equation*}
+        \forall i \in \mathbb{N}, 0 \leq i < k \implies l[i][\text{end}].t \leq l[i+1][0].t
+    \end{equation*}
+    \item All clients must be picked up from their origins and delivered to their destinations.
+    \item REWRITE
+\end{enumerate}
+\section{Objective function}
+\section{Problem decomposition}
+For each iteration, we will decompose larger problems into successively smaller, well-known (and preferably classical) problems.
+\subsection{Iteration I}
+On iteration I, the company owns one van REWRITE

@@ -1,0 +1,57 @@
+\subsection{Depth-first search}
+Depth-first search is a very elementary graph traversal, which explores nodes in depth before backtracking.
+\vspace{-1em}
+\begin{center}
+    \begin{algorithm}[ht]
+        \caption{Depth-first search}
+        \label{alg-dfs}
+        \begin{minipage}[t]{0.49\linewidth}
+            (a) Mathematical version
+            \begin{algorithmic}[1]
+                \State $R \gets \emptyset$
+                \Function{DFS}{$G(V,E)$, $u$}
+                    \If {$u \in R$} \Return {$ $}
+                    \EndIf 
+                    \State {$R \gets R \cap \{u\}$}
+                    \For {$v \in \Call{Adj}{G, u}$}
+                        \State {$\Call{DFS}{G, v}$}
+                    \EndFor
+                    \State \Return $R$
+                \EndFunction
+            \end{algorithmic}
+        \end{minipage}
+        \begin{minipage}[t]{0.49\linewidth}
+            (b) Programmatic version
+            \begin{algorithmic}[1]
+                \State $R[|Adj|] = \text{FALSE}$
+                \Function{DFS}{$Adj$, $u$}
+                    \If {$R[u]$} \Return {$ $}
+                    \EndIf 
+                    \State {$R[u] = \text{TRUE}$}
+                    \For {$v : Adj[u]$}
+                        \State {$\Call{DFS}{Adj, v}$}
+                    \EndFor
+                    \State \Return $R$
+                \EndFunction
+            \end{algorithmic}
+        \end{minipage}
+    \end{algorithm}
+\end{center}
+\vspace{-2em}
+\subsubsection{Proof of correctness}
+\begin{lemma} \label{lem:dfs}
+    If $u$ is reachable from $s$ and $v$ is adjacent to $u$, then $v$ is reachable from $s$.
+\end{lemma}
+\begin{proof}
+    If $u$ is reachable from $s$, then $\exists p \in P(G) \colon p_0 = s \wedge p_k = u$. Let that path be $p^u$. If $v$ is adjacent to $u$ then $(u,v) \in E$. We can thus add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[0:j]$ is a path from $s$ to $v$.
+\end{proof}
+\begin{theorem}
+    Depth-first search algorithm starting in $s$ finds all nodes reachable from $s$.
+\end{theorem}
+\begin{proof} \textbf{Base case:} $u=s$; $s$ is trivially reachable from itself. \\
+\textbf{Inductive step:} suppose \textsc{DFS} is always called for a node $u$ reachable from $s$. From lemma \ref{lem:dfs} we know all nodes adjacent to $u$ are reachable from $s$. Since \textsc{DFS} is only called for the nodes adjacent to $u$ the inductive implication holds.\par
+We have thus proven the theorem correct by induction.
+\end{proof}
+\subsubsection{Complexity analysis}
+Each node is explored once, and for each node all its adjacent nodes are explored via all edges. All elementary operations are $O(1)$, making this algorithm run in time $O(|E|+|V|)$.\par
+In terms of memory, each call takes $O(1)$ memory and the call chain can be as long as many nodes are there. This means this algorithm uses $O(|V|)$ memory.

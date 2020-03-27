@@ -1,0 +1,88 @@
+\chapter{Theoretical notions}
+This short chapter presents some basic notions and definitions on Computer Science, which ought to be useful in the following chapters.
+\section{Complexity analysis}
+Complexity analysis is the process of identifying the computational complexity of an algorithm, describing in a more or less precise way the asymptotic growth of the amount of resources (e.g., time and memory) an algorithm requires.
+\begin{definition}[Big-$O$ notation] $f(n) \in O(g(n))$ means that $g$ is an upper bound of $f$.
+    \begin{equation*}
+        O(g(n))=\{f(n) : \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \leq c\cdot g(n)\}
+    \end{equation*}
+\end{definition}
+\begin{definition}[Big-$\Omega$ notation] $f(n) \in \Omega(g(n))$ means that $g$ is a lower bound of $f$.
+    \begin{equation*}
+        \Omega(g(n))=\{f(n) : \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \geq c\cdot g(n)\}
+    \end{equation*}
+\end{definition}
+\begin{definition}[Big-$\Theta$ notation] $f(n) \in \Theta(g(n))$ means that $g$ is a strict upper and lower bound of $f$.
+    \begin{equation*}
+        \Theta(g(n))=O(g(n)) \cap \Omega(g(n))
+    \end{equation*}
+\end{definition}
+We will not put excessive emphasis on exagerated formalism, so we will by default use the big-$O$ notation.
+\section{Graphs}
+\subsection{Definitions}
+\begin{definition}[Directed weighted graph]
+    A directed weighted graph $G$ is a triple $(V, E, w)$, where:
+    \begin{itemize}
+        \item $V$ is the finite set of \textbf{nodes}.
+        \item $E \subseteq V^2$ is the set of \textbf{edges}, where each edge is a pair $(u,v)$ describing an origin and destination.
+        \item $w: E \rightarrow \mathbb{R}^+$ is the \textbf{cost function} that maps each edge to a traversal cost.
+    \end{itemize}
+\end{definition}
+\begin{definition}[Transposed graph]
+    The transposed graph $G^T(V, E^T)$ of a graph $G(V, E)$ is similar to $G$ but with reversed edge directions:
+    \begin{equation*}
+        (u, v) \in E \iff (v, u) \in E^T
+    \end{equation*}
+\end{definition}
+\begin{definition}[Path]
+    A path $p$ of length $k$ in a graph $G(V,E)$ is a sequence of nodes $\langle p_0,p_1,p_2,...,p_k\rangle$ such that
+    \begin{alignat*}{5}
+        \text{(All nodes belong to the graph)}       ~~&\forall~0 \leq &&i   &&<    k,&&~p_i \in V \\
+        \text{(Node is reachable from previous node)}~~&\forall~0 \leq &&i   &&<    k,&&~(p_i, p_{i+1}) \in E \\
+        \text{(No repeated nodes)}                   ~~&\forall~0 \leq &&i,j &&\leq k,&&~i\neq j \implies p_i \neq p_j \\
+        \text{(No repeated edges)}                   ~~&\forall~0 \leq &&i,j &&<    k,&&~i\neq j \implies (p_i,p_{i+1}) \neq (p_j, p_{j+1})
+    \end{alignat*}
+\end{definition}
+\begin{definition}[Set of all paths]
+    $P(G)$ is the set of all paths in graph $G(V,E)$.
+\end{definition}
+\begin{definition}[Weight of a path]
+    The weight of a path $p$ of length $k$ in graph $G(V,E,w)$ is
+    \begin{equation*}
+        W(p) = \sum_{i=0}^{k-1}{w(p_i, p_{i+1})}
+    \end{equation*}
+\end{definition}
+\begin{definition}[Adjacency set]
+    The adjacency set of $u \in V$ in $G(V,E)$ is the set of nodes directly reachable from $u$:
+    \begin{equation*}
+        Adj(G, u) = \{(u, v) \in E\} = E \cap (\{v\}\times V)
+    \end{equation*}
+\end{definition}
+\begin{definition}[Descendants] The descendants of a node $s \in V$ in a graph $G(V,E)$ are
+    \begin{equation*}
+        Desc(s) = Adj(G, s)
+    \end{equation*}
+\end{definition}
+\begin{definition}[Predecessors] The predecessors of a node $s \in V$ in a graph $G(V,E)$ are
+    \begin{equation*}
+        Pred(s) = Adj(G^T, s)
+    \end{equation*}
+\end{definition}
+\begin{definition}[Strongly connected component]
+    A strongly connected component $SCC$ is a subset of the nodes $V$ in a graph $G(V,E)$ where there is a path between any two nodes $u, v \in SSC$, and there is no other node $x \not \in SSC$ that can reach and be reached by all nodes $u \in SSC$.
+\end{definition}
+
+% \section{Miscellaneous}
+% \begin{theorem}[Master theorem of Divide-and-Conquer] \label{theor:master}
+%     Let $a \geq 1$, $b > 1$ be constants, let $f(n)$ be a function, and let $T(n)$ be defined on the nonnegative integers by the recurrence
+%     \begin{equation*}
+%         T(n)=a\cdot T(n/b) + f(n)
+%     \end{equation*}
+%     Then $T(n)$ has the following assymptotic bounds:
+%     \begin{enumerate}
+%         \item If $f(n) \in O(n^{\log_b a-\epsilon})$ for some constant $\epsilon > 0$, then $T(n) \in \Theta(n^{\log_b a})$
+%         \item If $f(n) \in \Theta(n^{\log_b a})$, then $T(n) \in \Theta(f(n) \log n)$
+%         \item If $f(n) \in \Omega(n^{\log_b a+\epsilon})$ for some constant $\epsilon > 0$, and $a f(n/b)\leq c f(n)$ for some constant $c<1$ and large $n$, then $T(n) \in \Theta(f(n))$
+%     \end{enumerate}
+% \end{theorem}
+% The proof is prompty available in \cite[p.~97]{intro-alg}.
