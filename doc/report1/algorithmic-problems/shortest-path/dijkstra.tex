@@ -1,6 +1,6 @@
 \subsection{Dijkstra's algorithm}
-Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortert path-finding algorithm between nodes. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
-This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving the shortest path problem in the meantime). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes the values of functions distance $dist$ and previous node $prev$ (temporary if the node is in $Q$, final otherwise). We then process the node $u \in Q$ with the least distance to $s$, which consists of iterating over all nodes adjacent to $u$, calculate their potential new distance to $s$ passing through $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update distance $dist(v)=c'$ and previous node $prev(v)=u$.
+Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm between nodes. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
+This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving the shortest path problem in the meantime). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes the values of functions distance $dist$ and previous node $prev$ (temporary if the node is in $Q$, final otherwise). We then process the node $u \in Q$ with the least distance to $s$, which consists of iterating over all nodes adjacent to $u$, calculate their potential new distance to $s$ passing through $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.
 \begin{center}
     \begin{algorithm}[ht]
         \caption{Dijkstra's algorithm}
@@ -71,11 +71,11 @@ The full proof is rather long and is promptly available, thus we will only prese
     \item \textbf{Cycle variant:} $|Q|$, which is:
     \begin{itemize}
         \item Integer, given a size can only be integer.
-        \item Strictly decreasing, given that one node is removed from $Q$ everytime the cycle runs.
+        \item Strictly decreasing, given that one node is removed from $Q$ every time the cycle runs.
         \item Positive, given it starts with value $|V|$ where $V$ has at least node $s$. The cycle breaks when $|Q| = 0$.
     \end{itemize}
 \end{itemize}
 \subsubsection{Complexity analysis}
-The initial calls to \textsc{Insert\_With\_Key} are made in time $O(|V|)$, given all keys are $\infty$ and the heap property is always maitained. In the main cycle, all elementary operations are done in $O(1)$ except for $Q$ operations \textsc{Extract\_Min} and \textsc{Decrease\_Key}. Let their time complexities be $O(\text{T}_{em})$ and $O(\text{T}_{dk})$ respectively. \textsc{Extract\_Min} is run once for each of the $|V|$ nodes we remove from $Q$. For each node $u$ we iterate over $Adj[u]$, thus iterating once over each of the $|E|$ edges, potentially running \textsc{Decrease\_Key} for each edge. This yields the total time complexity $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$. \par
+The initial calls to \textsc{Insert\_With\_Key} are made in time $O(|V|)$, given all keys are $\infty$ and the heap property is maintained. In the main cycle, all elementary operations are done in $O(1)$ except for $Q$ operations \textsc{Extract\_Min} and \textsc{Decrease\_Key}. Let their time complexities be $O(\text{T}_{em})$ and $O(\text{T}_{dk})$ respectively. \textsc{Extract\_Min} is run once for each of the $|V|$ nodes we remove from $Q$. For each node $u$ we iterate over $Adj[u]$, thus iterating once over each of the $|E|$ edges, potentially running \textsc{Decrease\_Key} for each edge. This yields the total time complexity $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$. \par
 Implementing $Q$ as a binary heap, we have $O(\text{T}_{dk})=O(\log |V|)$ and $O(\text{T}_{em})=O(\log |V|)$, thus yielding the total time complexity $O((|E|+|V|)\log |V|)$. This can be further improved with a Fibonacci heap, with $O(\text{T}_{dk})=O(1)$ and $O(\text{T}_{em})=O(\log |V|)$ (both amortized), thus yielding $O(|E| + |V|\log |V|)$.\par
 The algorithm takes as much memory as the heaps, thus giving a memory complexity of $O(|V|)$.

@@ -49,9 +49,9 @@ Depth-first search is a very elementary graph traversal, which explores nodes in
     Depth-first search algorithm starting in $s$ finds all nodes reachable from $s$.
 \end{theorem}
 \begin{proof} \textbf{Base case:} $u=s$; $s$ is trivially reachable from itself. \\
-\textbf{Inductive step:} suppose \textsc{DFS} is always called for a node $u$ reachable from $s$. From lemma \ref{lem:dfs} we know all nodes adjacent to $u$ are reachable from $s$. Since \textsc{DFS} is only called for the nodes adjacent to $u$ the inductive implication holds.\par
+\textbf{Inductive step:} suppose \textsc{DFS} is always called for a node $u$ reachable from $s$. By lemma \ref{lem:dfs} we know all nodes adjacent to $u$ are reachable from $s$. Since \textsc{DFS} is only called for the nodes adjacent to $u$ the inductive implication holds.\par
 We have thus proven the theorem correct by induction.
 \end{proof}
 \subsubsection{Complexity analysis}
 Each node is explored once, and for each node all its adjacent nodes are explored via all edges. All elementary operations are $O(1)$, making this algorithm run in time $O(|E|+|V|)$.\par
-In terms of memory, each call takes $O(1)$ memory and the call chain can be as long as many nodes are there. This means this algorithm uses $O(|V|)$ memory.
+In terms of memory, each call takes $O(1)$ and the call chain can be the same size as $|V|$ (one call per node). This means the algorithm uses $O(|V|)$ memory.

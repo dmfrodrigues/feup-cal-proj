@@ -4,13 +4,13 @@ The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown SC
     $SCC(p)=Desc(p) \cap Pred(p)$ where $Desc(p)$ are the descendants and $Pred(p)$ the predecessors of $p$.
 \end{lemma}
 \begin{proof}
-    $Desc(p) \cap Pred(p) \subseteq SSC(p)$, given that a node $u \in Desc(p) \cap Pred(p)$ can reach and be reached from $p$, thus being able to trivially reach any other node $v \in Desc(p) \cap Pred(p)$ through a path passing through $p$.\par
-    A node $u \in SSC(p)$ must meet both conditions, otherwise it is either false that there is a path from $p$ to $u$, or it is false that there is a path from $u$ to $p$, thus violating the definition of an SSC.
+    $Desc(p) \cap Pred(p) \subseteq SSC(p)$, given that a node $u \in Desc(p) \cap Pred(p)$ can reach and be reached from $p$, thus being able to trivially reach any other node $v \in Desc(p) \cap Pred(p)$ via a path passing through $p$.\par
+    A node $u \in SSC(p)$ must meet both conditions, otherwise it is either false that there is a path from $p$ to $u$, or it is false that there is a path from $u$ to $p$, thus violating the definition of an SCC.
 \end{proof}
 \begin{lemma} \label{lem:dcsc2}
-    Any SSC is a subset of the descendants of $p$, of the predecessors of $p$, or of the remaining.
+    Any SCC is a subset of the descendants of $p$, of the predecessors of $p$, or of the remaining.
 \end{lemma}
-We will not endeavour into proving lemma \ref{lem:dcsc2} since our implementation does not require it, adding to the fact it is proven in \cite{fleischer-dcsc}.\par
+We will not endeavor into proving lemma \ref{lem:dcsc2} since our implementation does not require it, adding to the fact it is proven in \cite{fleischer-dcsc}.\par
 The lecture notes go on to describe how these lemmas can be implemented as a divide-and-conquer algorithm to find all SCCs, however we are more interested in a variant designed by ourselves, to obtain the SCC of node $s$ and supported only on lemma \ref{lem:dcsc1}.
 \begin{center}
     \begin{algorithm}[H]
