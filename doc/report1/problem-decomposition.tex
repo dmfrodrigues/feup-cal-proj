@@ -2,3 +2,7 @@
 After having formally presented the general problem, we will decompose it into successively smaller, well-known (and preferably classical) problems for each iteration, and present solutions personalized for each iteration.
 \section{Iteration I}
 The company owns one van, and thus can not leave the train station for too long. One minor heuristic we can implement for this case is: after welcoming its first client, the van $v$ will wait to welcome all clients arriving in the following $\Delta t$ minutes (or the first $v.n$ client, whichever happens first). !DO 
+\section{Path-finding}
+We will take advantage of the hierarchical difference between $G$ and $G'$ to make path-finding faster.\par
+Since $G'$ is not too large, we can pre-calculate distances between all pairs of nodes in $G'$.
+Then, all we have to do is find the two nodes on the ends of the origin's street, and the two nodes on the ends of the destination's street, and try out all the four possibilities.
