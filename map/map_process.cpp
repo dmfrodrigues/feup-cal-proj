@@ -117,8 +117,8 @@ int main(int argc, char *argv[]) {
     doc.parse<0>(text);
 
     int num_ways = 0;
-    unordered_set<string> good_nodes;
-    list<string> edges;{
+    unordered_set<string> good_nodes, good_nodes_ways;
+    list<string> edges, edges_ways;{
         for (auto it = doc.first_node()->first_node("way"); string(it->name()) == "way"; it = it->next_sibling()) {
             EdgeType t = get_edge_type(it);
             if (t == EdgeType::No) continue;
@@ -130,12 +130,21 @@ int main(int argc, char *argv[]) {
                 reverse(nodes_edge.begin(), nodes_edge.end());
                 d = EdgeDirection::Front;
             }
+            
+            string first = *nodes_edge.begin();
+            string last  = *(--nodes_edge.end());
+            good_nodes_ways.insert(first); good_nodes_ways.insert(last);
+
+            // Direct way
+            edges_ways.push_back("(" + first + ", " + last + ", " + char(t) + ", " + sp + ")");
             string prev = *nodes_edge.begin(); good_nodes.insert(prev);
             for(auto it = ++nodes_edge.begin(); it != nodes_edge.end(); prev = *(it++)){
                 edges.push_back("(" + prev + ", " + string(*it) + ", " + char(t) + ", " + sp + ")");
                 good_nodes.insert(string(*it));
             }
+            // Reverse way
             if(d == EdgeDirection::Both){
+                edges_ways.push_back("(" + last + ", " + first + ", " + char(t) + ", " + sp + ")");
                 prev = *nodes_edge.rbegin();
                 for(auto it = ++nodes_edge.rbegin(); it != nodes_edge.rend(); prev = *(it++)){
                     edges.push_back("(" + prev + ", " + string(*it) + ", " + char(t) + ", " + sp + ")");
@@ -144,10 +153,16 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    list<string> nodes;{
+    list<string> nodes, nodes_ways;{
         for (auto it = doc.first_node()->first_node("node"); string(it->name()) == "node"; it = it->next_sibling()) {
             if(good_nodes.find(string(it->first_attribute("id")->value())) != good_nodes.end()){
                 nodes.push_back("(" +
+                                string(it->first_attribute("id")->value()) + ", " +
+                                string(it->first_attribute("lat")->value()) + ", " +
+                                string(it->first_attribute("lon")->value()) + ")");
+            }
+            if(good_nodes_ways.find(string(it->first_attribute("id")->value())) != good_nodes.end()){
+                nodes_ways.push_back("(" +
                                 string(it->first_attribute("id")->value()) + ", " +
                                 string(it->first_attribute("lat")->value()) + ", " +
                                 string(it->first_attribute("lon")->value()) + ")");
@@ -161,11 +176,22 @@ int main(int argc, char *argv[]) {
         for (const string &s : nodes) os << s << "\n";
     }
     {
-        cerr << "Num ways: " << num_ways << endl;
+        string nodes_path = string(argv[1]) + "-short.nodes";
+        ofstream os(nodes_path);
+        os << nodes_ways.size() << "\n";
+        for (const string &s : nodes_ways) os << s << "\n";
+    }
+    {
         string edges_path = string(argv[1]) + ".edges";
         ofstream os(edges_path);
         os << edges.size() << "\n";
         for (const string &s : edges) os << s << "\n";
+    }
+    {
+        string edges_path = string(argv[1]) + "-short.edges";
+        ofstream os(edges_path);
+        os << edges_ways.size() << "\n";
+        for (const string &s : edges_ways) os << s << "\n";
     }
     return 0;
 }
