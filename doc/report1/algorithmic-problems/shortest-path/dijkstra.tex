@@ -1,5 +1,5 @@
 \subsection{Dijkstra's algorithm}
-Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm between nodes. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
+Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
 This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving the shortest path problem in the meantime). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes the values of functions distance $dist$ and previous node $prev$ (temporary if the node is in $Q$, final otherwise). We then process the node $u \in Q$ with the least distance to $s$, which consists of iterating over all nodes adjacent to $u$, calculate their potential new distance to $s$ passing through $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.
 \begin{center}
     \begin{algorithm}[ht]
