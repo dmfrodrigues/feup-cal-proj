@@ -52,6 +52,8 @@
 \rhead{\fancyplain{}{Group T6G05}}
 \lfoot{\fancyplain{}{\leftmark}}
 \rfoot{\thepage}
+% Full reference (number and name of section)
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\ref*{#1} \nameref*{#1}}} % One single link
 %
 \newcommand{\email}[1]{
 {\texttt{\href{mailto:#1}{#1}} }

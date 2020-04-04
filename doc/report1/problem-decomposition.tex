@@ -1,8 +1,32 @@
-\chapter{Problem decomposition}
+\chapter{Problem decomposition} \label{problem-decomposition}
 After having formally presented the general problem, we will decompose it into successively smaller, well-known (and preferably classical) problems for each iteration, and present solutions personalized for each iteration.
-\section{Iteration I}
-The company owns one van, and thus can not leave the train station for too long. One minor heuristic we can implement for this case is: after welcoming its first client, the van $v$ will wait to welcome all clients arriving in the following $\Delta t$ minutes (or the first $v.n$ client, whichever happens first). !DO 
-\section{Path-finding}
+
+\section{Iterations} \label{problem-decomposition-iterations}
+\subsection{Iteration I}
+The company owns one van, and thus can not leave the train station for too long. However, it must also serve the clients that are ready to travel and that are waiting for the van to start its travel.\par
+We will use the first iteration to test our algorithms, therefore reducing the need for finding near-optimal heuristics for the hardest problems that will eventually be made harder in subsequent iterations.\par
+Being consistent with the explanation above, and giving priority to the first clients, 
+
+One minor heuristic we can implement for this case is: after welcoming its first client, the van $v$ will wait to welcome all clients arriving in the following $\Delta t$ minutes (or the first $v.n$ client, whichever happens first), which must be a relatively small time interval to avoid long waiting times. We estimate the suitable time interval to be a fifth of the approximate maximum round-trip in the served area. Using the approximate maximum round-trip:
+\begin{alignat*}{5}
+    \text{Campanhã, Porto}
+    &\rightarrow \text{Folgosa, Maia (17min)} \\
+    &\rightarrow\text{Angeiras, Matosinhos (23min)} \\
+    &\rightarrow\text{São Félix da Marinha, Vila Nova de Gaia (33min)} \\
+    &\rightarrow\text{Balteiro, Vila Nova de Gaia (14min)} \\
+    &\rightarrow\text{Campanhã, Porto (9min)}
+\end{alignat*}
+which totals to 96min. Taking a fifth of that would yield approximately $\Delta t = 20min$ (during implementation and testing we will evidently revisit this value and evaluate potentially better values).\par
+Having grouped clients, we now need to solve a problem similar to the Travelling Salesman Problem.
+\subsection{Iteration II}
+!DO
+\subsection{Iteration III}
+!DO
+\section{Path-finding} \label{problem-decomposition-pathfinding}
 We will take advantage of the hierarchical difference between $G$ and $G'$ to make path-finding faster.\par
 Since $G'$ is not too large, we can pre-calculate distances between all pairs of nodes in $G'$.
 Then, all we have to do is find the two nodes on the ends of the origin's street, and the two nodes on the ends of the destination's street, and try out all the four possibilities.
+\section{Travelling salesman problem} \label{problem-decomposition-tsp}
+Our particular instance of the travelling salesman problem is very similar to the classical version. This problem is more thoroughly described in section \ref{algorithm-tsp}.
+\section{Vehicle routing problem} \label{problem-decomposition-vrp}
+Known strategies for the vehicle routing problem offer case-specific solutions taking into account the particular problem's constraints. This problem is more thoroughly described in section \ref{algorithm-vrp}.

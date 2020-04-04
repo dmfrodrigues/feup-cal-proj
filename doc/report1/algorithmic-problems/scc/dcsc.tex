@@ -1,4 +1,4 @@
-\subsection{Divide-and-Conquer Strong Components algorithm}
+\subsection[DCSC algorithm]{Divide-and-Conquer Strong Components algorithm} \label{algorithm-scc-dcsc}
 The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown SCC algorithm, proposed in 2000 by Fleischer et al. \cite{fleischer-dcsc}. Its main ideas are the two lemmas:
 \begin{lemma} \label{lem:dcsc1}
     $SCC(p)=Desc(p) \cap Pred(p)$ where $Desc(p)$ are the descendants and $Pred(p)$ the predecessors of $p$.
@@ -58,4 +58,4 @@ The lecture notes go on to describe how these lemmas can be implemented as a div
 Both algorithms are trivially correct from lemmas \ref{lem:dcsc1} and \ref{lem:dcsc2}.
 \subsubsection{Complexity analysis}
 Since we will not be using the original version, the complexity analysis for \textsc{DCSC} is promptly available at \cite{fleischer-dcsc}, which yields the time complexity $\Theta((|E|+|V|) \log |V|)$.\par
-For our variant \textsc{DCSCv}, we know that \textsc{DFS} has time complexity $O(|E|+|V|)$, and the \textsc{Transpose} operation can be done in $\Theta(|E|+|V|)$, thus the time complexity of \textsc{DCSC} is $O(|E|+|V|)$.
+For our variant \textsc{DCSCv}, we know that \textsc{DFS} has time complexity $O(|E|+|V|)$, and the \textsc{Transpose} operation can be done in $\Theta(|E|+|V|)$, thus the time complexity of \textsc{DCSC} is $\Theta(|E|+|V|)$.

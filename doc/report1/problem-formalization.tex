@@ -1,8 +1,8 @@
-\chapter{Problem formalization}
+\chapter{Problem formalization} \label{problem-formalization}
 In this chapter, we will make an effort to transform our specific problems into abstract (and to the greatest extent possible, classical) problems, in order to list all subproblems to be solved and possible solutions.
-\section{Input}
-There are two main inputs to this problem: a description of the map of the area the company serves (section \ref{input-map}); the list of vans (section \ref{input-vans}); the list of requested services for a given day (section \ref{input-services}).
-\subsection{Map} \label{input-map}
+\section{Input} \label{problem-formalization-input}
+There are two main inputs to this problem: a description of the map of the area the company serves (section \ref{problem-formalization-input-map}); the list of vans (section \ref{problem-formalization-input-vans}); the list of requested services for a given day (section \ref{problem-formalization-input-services}).
+\subsection{Map} \label{problem-formalization-input-map}
 We will be using maps from OpenStreetMap (OSM) to model the area \emph{PortoCityTransfers} serves.
 Maps will be converted into graphs $G=(V,E, w)$, where:
 \begin{itemize}
@@ -16,12 +16,12 @@ We will have two graphs:
     \item $G'=(V',E',w')$ is the helper map, which instead of having all edges, will only contain as edges what OSM calls "ways", thus allowing for faster path-finding. Thus, the number of nodes ($|V'|=43592$) and edges ($|E'|=54677$) will be significantly smaller.
 \end{itemize}
 We thus have as input data the directed weighted graph $G=(V,E,w)$.
-\subsection{Vans} \label{input-vans}
+\subsection{Vans} \label{problem-formalization-input-vans}
 A list of vans $v_i=(n)$ where $n$ is the capacity.
-\subsection{Services} \label{input-services}
+\subsection{Services} \label{problem-formalization-input-services}
 For each client, we need to know the origin, destination and the time the person can be picked up.
 We thus have as input data a sequence of clients $c$ where each client $c=(u, v, t)$ can be picked at $u$ starting in time $t$, and must be dropped at $v$.
-\section{Output}
+\section{Output} \label{problem-formalization-output}
 Various rides $r$, where a ride is a triple $r=(v, C, \langle e \rangle)$. $v$ is the van that will fulfill that ride, $C$ is the set of clients satisfied by that ride and $\langle e \rangle = \langle e_1, e_2,...,e_{|e|} \rangle$ is the sequence of events in that ride. An event $e$ is a triple $e=(t, a, c)$ where $t$ is the time point of that event, $a$ is the type of event and $c$ is defined according to $a$:
 \begin{itemize}
     \item $a=+1$: client $c$ will be picked up at $c.u$ at time $t$.
@@ -36,7 +36,7 @@ Let $node(e)$ be the node where the van is supposed to be according to event $e$
         e.c   & : e.a = 0
     \end{dcases}
 \end{equation*}
-\section{Restrictions}
+\section{Restrictions} \label{problem-formalization-restrictions}
 The limits of index variables are implicitly limited sequences' sizes.
 \begin{enumerate}
     \item $\{r.C : r \text{ is a ride}\}$ is a partition of the set of all clients (a client can only be satisfied once, and all clients must be satisfied).
@@ -61,7 +61,7 @@ The limits of index variables are implicitly limited sequences' sizes.
         \item There are no overlapping rides: $\forall r, r',~r \neq r' \wedge v = v' \iff \min\{e_{|e|}.t,e'_{|e'|}.t\} \leq \max\{e_1.t,e'_1.t\}$
     \end{enumerate}
 \end{enumerate}
-\section{Objective function}
+\section{Objective function} \label{problem-formalization-objective}
 Let $pick(c)$ be the event where $c$ is picked up, and $drop(c)$ the event where $c$ is dropped off. Our objective function is
 \begin{alignat*}{2}
     \text{Total time it took}        ~~& T        &&= \sum_{c \text{ client}}{drop(c).t - pick(c).t} \\
