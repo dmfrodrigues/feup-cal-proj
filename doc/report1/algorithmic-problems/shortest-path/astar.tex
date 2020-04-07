@@ -3,7 +3,7 @@ The A* shortest path algorithm is very well known and widely used for fast path-
 This algorithm is an extension of the Dijkstra algorithm, using the heuristic function $\hat{h}(u)$ to estimate the distance from $u$ to $d$. In fact, for $\hat{h}(u) = 0$ we trivially obtain Dijkstra's algorithm, which confirms that it makes no assumptions about the graph's context, and that the A* algorithm is an extension of it.
 \begin{center}
     \begin{algorithm}[H]
-        \caption[A* algorithm]{A* algorithm\\Added lines in green, changed expressions in orange, relative to Dijkstra's algorithm (Algorithm \ref{alg-dijkstra})}
+        \caption{A* algorithm}
         \label{alg-astar}
         \begin{minipage}[t]{0.49\linewidth}
             (a) Mathematical version
@@ -12,25 +12,25 @@ This algorithm is an extension of the Dijkstra algorithm, using the heuristic fu
                     \State $Q \gets \emptyset$
                     \For {$v \in V$}
                         \State {$dist(v) \gets \infty$}
-                        \State {$\textcolor{green}{\bm{hdist(v) \gets \infty}}$}
+                        \State {$hdist(v) \gets \infty$}
                         \State {$prev(v) \gets \text{NULL}$}
                         \State $Q \gets Q \cup \{v\}$
                     \EndFor
                     \State $dist(s) \gets 0$
-                    \State $\textcolor{green}{\bm{hdist(s) \gets \hat{h}(s)}}$
+                    \State $hdist(s) \gets \hat{h}(s)$
                     \While {$|Q| > 0$}
-                        \State $u \gets \text{element of } Q \text{ with least } \textcolor{orange}{\bm{hdist}}(u)$
+                        \State $u \gets \text{element of } Q \text{ with least } hdist(u)$
+                        \If {$u=d$} \Return {$dist$, $prev$} \EndIf
                         \State $Q \gets Q \backslash \{u\}$
                         \For {$v \in \Call{Adj}{G, u}$}
                             \State $c' \gets c + w(u, v)$
                             \If {$c' < dist(v)$}
                                 \State $dist(v) \gets c'$
-                                \State $\textcolor{green}{\bm{hdist(v) \gets c'+\hat{h}(v)}}$
+                                \State $hdist(v) \gets c'+\hat{h}(v)$
                                 \State $prev(v) \gets u$
                             \EndIf
                         \EndFor
                     \EndWhile
-                    \State \Return $dist$, $prev$
                 \EndFunction
             \end{algorithmic}
         \end{minipage}
@@ -41,39 +41,39 @@ This algorithm is an extension of the Dijkstra algorithm, using the heuristic fu
                     \State $Q = \Call{Min\_Priority\_Queue}{ }$
                     \For {$v : V$}
                         \State {$dist[v] = \infty$}
-                        \State {$\textcolor{green}{\bm{hdist[v] = \infty}}$}
+                        \State {$hdist[v] = \infty$}
                         \State {$prev[v] = \text{NULL}$}
                         \State {$Q.\Call{Insert\_With\_Key}{\infty, v}$}
                     \EndFor
                     \State $dist[s] = 0$
-                    \State $\textcolor{green}{\bm{hdist[s] = \hat{h}(s)}}$
-                    \State $Q.\Call{Decrease\_Key}{s, \textcolor{orange}{\bm{hdist}}[s]}$
+                    \State $hdist[s] = \hat{h}(s)$
+                    \State $Q.\Call{Decrease\_Key}{s, hdist[s]}$
                     \While {$Q.\Call{Size}{ } > 0$}
                         \State $u = Q.\Call{Extract\_Min}{ }$
+                        \If {$u=d$} \Return {$dist$, $prev$} \EndIf
                         \For {$(v, w): Adj[u]$}
                             \State $c' = c + w$
                             \If {$c' < dist[v]$}
                                 \State $dist[v] = c'$
-                                \State $\textcolor{green}{\bm{hdist[v] = c'+\hat{h}(v)}}$
+                                \State $hdist[v] = c'+\hat{h}(v)$
                                 \State $prev[v] = u$
-                                \State $Q.\Call{Decrease\_Key}{v, \textcolor{orange}{\bm{hdist}}[v]}$
+                                \State $Q.\Call{Decrease\_Key}{v, hdist[v]}$
                             \EndIf
                         \EndFor
                     \EndWhile
-                    \State \Return {$dist$, $prev$}
                 \EndFunction
             \end{algorithmic}
         \end{minipage}
     \end{algorithm}
 \end{center}
 \subsubsection{Proof of correctness}
-According to \cite{Astar}, if the heuristic $\hat{h}$ always returns a lower bound for the actual distance $h$ from $u$ to $d$ ($\forall u \in V, \hat{h}(v) \leq h(u)$), then the A* algorithm is guaranteed to find an optimal solution if it exists. This proof is fully presented in the original article so we will only present a brief argument.\par
-!ARGUMENT\par
-This means the A* algorithm is as effective as Dijkstra's path-finding algorithm so far as $\hat{h}$ provides a lower bound for $h$.
+According to \cite{Astar}, if $\hat{h}$ is admissible\footnote{an heuristic $\hat{h}$ is admissible if it always provides a lower bound for the actual cost: $\forall u \in V, \hat{h}(u) \leq h(u)$} then the A* algorithm is guaranteed to find an optimal solution if it exists. This proof is fully presented in the original article so we will only present a brief argument.\par
+Our argument will rely on the fact that, once the destination node $d$ is removed from $Q$, it is because its key (the actual distance from $s$ to $d$) is less than an optimistic cost estimate from $s$ to $d$ via any other node $v \in Q$. If not even an optimistic estimate could force $v$ to be removed before $s$ from $Q$, then we can suppose $d$ has been reached with the least cost possible.\par
+This means the A* algorithm is as effective as Dijkstra's path-finding algorithm so far as $\hat{h}$ is admissible.
 \subsubsection{Complexity analysis}
-The poorest choice of heuristic that optimally solves the problem $\hat{h}(u)=0$ has the same time and memory complexities as Dijkstra's algorithm. However, in a graph representing a map (sparse, with uniformly-distributed nodes and random edge weights) and using as heuristic the euclidean distance between $u$ and $d$, it has a complexity of $O(\sqrt{|V|} \cdot (\text{T}_{em}+\text{T}_{dk}))$, given the A* algorithm will trace a more or less straight line to the destination, crossing $\sqrt{|V|}$ nodes which (because the graph is sparse) are adjacent to $O(\sqrt{|V|})$ edges. Because all nodes are still in $Q$, its size is still $|V|$ \footnote{We can implement $Q$ so that it only has nodes with keys different from $\infty$, but that would make no difference in terms of complexity, since we would mean there would still be up to $O(\sqrt{N})$ nodes in $Q$, and we would still have $O(\log |Q|)=O(\log \sqrt{|V|})=O(\frac{1}{2}\log |V|)=O(\log |V|)$}.
+The poorest choice of heuristic that optimally solves the problem $\hat{h}(u)=0$ has the same time and memory complexities as Dijkstra's algorithm. However, in a graph representing a map and using as heuristic a metric similar to the euclidean distance between $u$ and $d$, it has a complexity of $O(\sqrt{|V|} \cdot (\text{T}_{em}+\text{T}_{dk}))$, given the A* algorithm will trace a more or less straight line to the destination, crossing $\sqrt{|V|}$ nodes which (because the graph is sparse) are adjacent to $O(\sqrt{|V|})$ edges. Because all nodes are still in $Q$, its size is still $|V|$ \footnote{We can implement $Q$ so that it only has nodes with keys different from $\infty$, but that would make no difference in terms of complexity, since we would mean there would still be up to $O(\log |Q|)=O(\log \sqrt{|V|})=O(\frac{1}{2}\log |V|)=O(\log |V|)$ nodes in $Q$.}.
 If either a binary heap or a Fibonacci heap is chosen, it makes no difference for the total time complexity, which is $O(\sqrt{|V|} \log |V|)$ in both cases.\par
 Similarly to Dijkstra's algorithm, the heaps are the only large data structures we use so this algorithm's memory complexity is $O(|V|)$.\par
 This means the A* algorithm is at least as fast as Dijkstra's algorithm so far as $\hat{h}$ belongs to the same asymptotic class as $O(\text{T}_{dk})$, which is $O(\log |V|)$ for both types of heaps we analyzed.
 \subsubsection{Remarks}
-In our case, we can easily point as an heuristic $\hat{h}(u)$ the time it would take the van to go from $u$ to $d$ in a straight line at highway speed, given it gives us a lower bound on the time it would take to actually reach $d$.
+In our case, we can easily point as an heuristic $\hat{h}(u)$ the time it would take the van to go from $u$ to $d$ in a straight line at highway speed, since it it a lower bound on the time it would take to actually reach $d$.

@@ -1,10 +1,10 @@
 \subsection{Held-Karp algorithm} \label{algorithm-tsp-heldkarp}
-The Held-Karp algorithm is a dynamic programming algorithm proposed in 1962 independently by Richard Bellman \cite{bellman62} and by Michael Held and Richard Karp \cite{held-karp62}. The main idea is that the current state can be uniquely described by the city we are at, and the set of cities we have already visited; the algorithm then relies on a trivial recurrent formula to express the links between states:
+The Held-Karp algorithm is a dynamic programming approach to problems similar to the travelling salesman problem, proposed in 1962 independently by Richard Bellman \cite{bellman62} and by Michael Held and Richard Karp \cite{held-karp62}. The main idea is that the current state can be uniquely described by the city $v$ we are at, and the set $S$ of cities we have already visited (except for $s$, which will be the last city to be visited), and for each state we know the minimum cost $D(S,v)$ of reaching $v$ after having visited all cities in $S$. The algorithm then relies on a trivial recurrent formula to express the links between states, where the solution is $D(V, s)$:
 \begin{alignat*}{7}
-    D(&\emptyset   &&, v) &&=                && w(\emptyset,&&s,&&v)\\
-    D(&S \cup \{v\}&&, v) &&=\min\{D(S, u) + && w(S        ,&&u,&&v)\}
+    D(&\{v\} &&, v) &&=                  && w(\emptyset &&,s&&,v)\\
+    D(&S     &&, v) &&=\min_{u \in S}\{D(S-v, u) + && w(S-v&&,u&&,v)\}
 \end{alignat*}
-and the solution is $D(V, s)$.
+\vspace{-1em}
 \begin{center}
     \begin{algorithm}[ht]
         \caption{Held-Karp algorithm}
@@ -42,6 +42,15 @@ and the solution is $D(V, s)$.
     \end{algorithm}
 \end{center}
 \subsubsection{Proof of correctness}
-!DO
+We will rather present an argument as to why these recurrencies are valid. There are two possibilities for a state:
+\begin{itemize}
+    \item It is of the form $(\{v\}, v)$. In this case, the only cost is to go from $s$ to $v$ with set $\emptyset$.
+    \item It is not of the form $(\{v\}, v)$. In this case, $v$ is not the only visited city so far, meaning this path has already passed through one of the cities $u \in S$. Therefore, we grab all solutions that go to $u \in S$ and evaluate which one yields the least cost.
+\end{itemize}
 \subsubsection{Complexity analysis}
-!DO
+There are $2^{|V|}$ subsets of $V$, and $|V|$ possibilities for $v$, meaning there are at most $|V| \cdot 2^{|V|}$ states. However, those of the forms $(S, v)\colon v \not \in S$ and $(\emptyset, v)$ are not valid, but since these invalid states are outnumbered by far by the valid states (there are $|V|\cdot 2^{|V|-1}$ states of the former form, and $|V|$ of the latter form) we can claim we have approximately $|V|\cdot 2^{|V|-1}$ valid states which amount to $\Theta(|V|\cdot 2^{|V|})$.\par
+On each run of the algorithm, we will find the value for all valid states except for unreachable states of the form $(V, v)\colon v \neq s$, which are exactly $|V|-1$ states; since they are by far outnumbered by the valid reachable nodes, we will still find the value for $\Theta(|V|\cdot 2^{|V|})$ states.\par
+To find the value of a state $(S,v)$, we will iterate over $|S|$ other states. Since $|S|$ is at most $|V|$, we have a total time complexity of $\Theta (|V|^2 \cdot 2^{|V|})$.\par
+The memory complexity for this algorithm is $\Theta (|V| \cdot 2^{|V|})$, since we need to store the result for each state.
+\subsubsection{Remarks}
+We will have to perform approximately $|V|^2\cdot 2^{|V|-1}$ operations. Using the rule-of-thumb that a computer can perform $10^8$ serial operations per second, we can execute this algorithm in about 0.2s, which ought to be acceptable if this algorithm is run for only a few times.
