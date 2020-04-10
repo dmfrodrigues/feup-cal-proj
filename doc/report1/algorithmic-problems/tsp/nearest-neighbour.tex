@@ -1,8 +1,8 @@
 \subsection{Nearest neighbour algorithm} \label{algorithm-tsp-nn}
 % Comment do Diogo (esclarecer o que é que ele queria dizer com isto) -> Heuristic
 The Nearest Neighbour (NN) algorithm corresponds to a simple to understand constructive heuristic method that attempts to solve the travelling salesman problem.\par
-Starting by an empty solution, it chooses a random city which will be the starting point $s$. At each step builds upon the previous iteration, visiting the nearest city and adding it to the solution until all the cities have been visited, at which point in time all that is left is to return to the start city.\par
-
+Starting by an empty solution (no cities visited, i.e. $S=\emptyset$), it chooses a random city which will be the starting point $s$. At each step builds upon the previous iteration, visiting the nearest city and adding it to the solution until all the cities have been visited ($S = V$), at which point in time all that is left is to return to the start city.\par
+\par.\par.\par.\par Referir aqui brevemente a complexidade.
 % doubt: does it connect the last visited to the start city or goes the path backwards?
 
 \vspace{-1em}
@@ -12,6 +12,12 @@ Starting by an empty solution, it chooses a random city which will be the starti
         \label{alg:nearest neighbour}
         \begin{minipage}[t]{0.49\linewidth}
             (a) Mathematical version
+            \begin{algorithmic}[1]
+                \Function{NN}{$S=\emptyset$, $s$, $Q \gets V$}
+                \While {$|S| < |V|$}
+                \EndWhile
+                \EndFunction
+            \end{algorithmic}
             
         \end{minipage}
         \begin{minipage}[t]{0.49\linewidth}
@@ -21,11 +27,13 @@ Starting by an empty solution, it chooses a random city which will be the starti
     \end{algorithm}
 \end{center}
 
+\subsubsection{Remarks}
+Falar aqui daquilo que o Diogo disse
 
 % Some of the "raw" Bibliography used at the moment. It is here so I don't forget afterwards:
 % https://link.springer.com/chapter/10.1007/978-3-319-00951-3_11 -> page 112
 % (Wiley Series in Discrete Mathematics & Optimization) E. L. Lawler, Jan Karel Lenstra, A. H. G. Rinnooy Kan, D. B. Shmoys - The Traveling Salesman Problem_ A Guided Tour -> page 150 (page 158 in pdf)
-% need to get pdf of this: Gerhard Reinelt. The Travelling Salesman. Computational Solutions for TSP Applications, volume 840 of Lecture Notes in Computer Science. Springer-Verlag, Berlin Heidelberg New York, 1994.
+% Gerhard Reinelt. The Travelling Salesman. Computational Solutions for TSP Applications, volume 840 of Lecture Notes in Computer Science. Springer-Verlag, Berlin Heidelberg New York, 1994.
 
 \par
 !IN PROGRESS
