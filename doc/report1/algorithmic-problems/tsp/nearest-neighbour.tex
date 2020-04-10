@@ -13,12 +13,17 @@ Starting by an empty solution (no cities visited, i.e. $S=\emptyset$), it choose
         \begin{minipage}[t]{0.49\linewidth}
             (a) Mathematical version
             \begin{algorithmic}[1]
-                \Function{NN}{$S=\emptyset$, $s$, $Q \gets V$}
-                \While {$|S| < |V|$}
-                \EndWhile
+                \State $s \gets RandomNode \in V$
+                \Function{NN}{$S=\{s\}$, $v=s$, $Q \gets V\backslash \{s\}$}
+                    \While {$|Q| > 0$}
+                        \State $D \gets \min\{D(v, u | u \in Q)\}$
+                        \State $Q \gets Q \backslash \{v\}$
+                        \State $S \gets S \cup \{v\}$ 
+                        \State $s \gets u$ 
+                    \EndWhile
+                    \State \Return {something}
                 \EndFunction
             \end{algorithmic}
-            
         \end{minipage}
         \begin{minipage}[t]{0.49\linewidth}
             (b) Programmatic version
