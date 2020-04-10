@@ -12,3 +12,5 @@ map/map_process
 *.loa
 *.synctex.gz
 *.toc
+obj/
+

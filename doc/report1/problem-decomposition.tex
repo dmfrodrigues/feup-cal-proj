@@ -5,19 +5,8 @@ After having formally presented the general problem, we will decompose it into s
 \subsection{Iteration I}
 The company owns one van, and thus can not leave the train station for too long. However, it must also serve the clients that are ready to travel and that are waiting for the van to start its travel.\par
 We will use the first iteration to test our algorithms, therefore reducing the need for finding near-optimal heuristics for the hardest problems that will eventually be made harder in subsequent iterations.\par
-Being consistent with the explanation above, and giving priority to the first clients, 
-
-One minor heuristic we can implement for this case is: after welcoming its first client, the van $v$ will wait to welcome all clients arriving in the following $\Delta t$ minutes (or the first $v.n$ client, whichever happens first), which must be a relatively small time interval to avoid long waiting times. We estimate the suitable time interval to be a fifth of the approximate maximum round-trip in the served area. Using the approximate maximum round-trip:
-\begin{alignat*}{5}
-    \text{Campanhã, Porto}
-    &\rightarrow \text{Folgosa, Maia (17min)} \\
-    &\rightarrow\text{Angeiras, Matosinhos (23min)} \\
-    &\rightarrow\text{São Félix da Marinha, Vila Nova de Gaia (33min)} \\
-    &\rightarrow\text{Balteiro, Vila Nova de Gaia (14min)} \\
-    &\rightarrow\text{Campanhã, Porto (9min)}
-\end{alignat*}
-which totals to 96min. Taking a fifth of that would yield approximately $\Delta t = 20min$ (during implementation and testing we will evidently revisit this value and evaluate potentially better values).\par
-Having grouped clients, we now need to solve a problem similar to the Travelling Salesman Problem.
+One minor heuristic we can implement to group clients is described in section \ref{algorithm-vrp-heuristic}. Having grouped clients, we now need to solve a problem similar to the Travelling Salesman Problem.\par
+!REVIEW
 \subsection{Iteration II}
 !DO
 \subsection{Iteration III}
