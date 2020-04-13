@@ -38,10 +38,10 @@ Depth-first search is a very elementary graph traversal, which explores nodes in
 \end{center}
 \subsubsection{Proof of correctness}
 \begin{lemma} \label{lem:dfs}
-    If $u$ is reachable from $s$ and $v$ is adjacent to $u$, then $v$ is reachable from $s$.
+    If $s \leadsto u$ and $v \in Adj(G, u)$, then $s \leadsto v$.
 \end{lemma}
 \begin{proof}
-    If $u$ is reachable from $s$, then $\exists p \in P(G) \colon p_0 = s \wedge p_k = u$. Let that path be $p^u$. If $v$ is adjacent to $u$ then $(u,v) \in E$. We can thus add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[0:j]$ is a path from $s$ to $v$.
+    If $s \leadsto u$, then $\exists p \in P(G) \colon p_0 = s \wedge p_k = u$. Let that path be $p^u$. If $v \in Adj(G, u)$ then we can add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[0:j]$ is a path from $s$ to $v$.
 \end{proof}
 \begin{theorem}
     Depth-first search algorithm starting in $s$ finds all nodes reachable from $s$.

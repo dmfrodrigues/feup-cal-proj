@@ -4,8 +4,8 @@ The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown SC
     $SCC(p)=Desc(p) \cap Pred(p)$ where $Desc(p)$ are the descendants and $Pred(p)$ the predecessors of $p$.
 \end{lemma}
 \begin{proof}
-    $Desc(p) \cap Pred(p) \subseteq SSC(p)$, given that a node $u \in Desc(p) \cap Pred(p)$ can reach and be reached from $p$, thus being able to trivially reach any other node $v \in Desc(p) \cap Pred(p)$ via a path passing through $p$.\par
-    A node $u \in SSC(p)$ must meet both conditions, otherwise it is either false that there is a path from $p$ to $u$, or it is false that there is a path from $u$ to $p$, thus violating the definition of an SCC.
+    $Desc(p) \cap Pred(p) \subseteq SSC(p)$, given that $\forall u, v \in Desc(p) \cap Pred(p)$ we know $p \leadsto u$, $u \leadsto p$, $p \leadsto v$, $v \leadsto p$, thus meaning $u \leadsto p \leadsto v$ and $v \leadsto p \leadsto u$.\par
+    A node $u \in SSC(p)$ must meet both conditions, otherwise it is either false that $p \leadsto u$, or it is false that $u \leadsto p$, thus violating the definition of SCC.
 \end{proof}
 \begin{lemma} \label{lem:dcsc2}
     Any SCC is a subset of the descendants of $p$, of the predecessors of $p$, or of the remaining.

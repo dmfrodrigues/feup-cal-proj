@@ -1,38 +1,46 @@
 \documentclass{report}[a4paper]
+\usepackage[top=35mm,bottom=35mm,left=25mm,right=25mm]{geometry} % Margins
+
 % Decent underlines
 \usepackage[normalem]{ulem}
+
 % Hyperreferences
 \usepackage{hyperref}
+
 % Imports
 \usepackage{import}
-% Margins
-\usepackage[top=35mm,bottom=35mm,left=25mm,right=25mm]{geometry}
+
 % Graphics and images
 \usepackage{graphicx} \graphicspath{{./images/}}
 \usepackage{subcaption}
 \usepackage{float}
+
 % Encodings (to render letters with diacritics and special characters)
 \usepackage[utf8]{inputenc}
+
 % Language
 \usepackage[english]{babel}
+
 % Source code and algorithms
-\usepackage{amsmath}
+%\usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+
 % Tables with bold rows
 \usepackage{tabularx}
 \newcommand\setrow[1]{\gdef\rowmac{#1}#1\ignorespaces}
 \newcommand\clearrow{\global\let\rowmac\relax}
 \clearrow
 \usepackage{multirow}
+
 % Math stuff
 \usepackage[mathscr]{euscript}
-\usepackage{amsmath,amssymb}
-\usepackage{mathtools}
-\usepackage{enumitem}
-\usepackage{bm}
-\usepackage{xcolor}
+\usepackage{amssymb, latexsym} %Load math symbols like \blacksquare, but also load normal \leadsto arrows
+\usepackage{mathtools} % For \text{...}
+% \usepackage{enumitem}
+% \usepackage{xcolor}
 \newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}} % scientific notation
+
 % Definitions, theorems, remarks,...
 \usepackage{amsthm}
 \newtheorem{definition}{Definition}[section]
@@ -42,8 +50,10 @@
 \renewcommand\qedsymbol{$\blacksquare$}
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
+
 % Contents title
 \addto\captionsenglish{\renewcommand*\contentsname{Table of contents}}
+
 % Headers and footers
 \usepackage{fancyhdr}
 \pagestyle{fancyplain}
@@ -52,12 +62,15 @@
 \rhead{\fancyplain{}{Group T6G05}}
 \lfoot{\fancyplain{}{\leftmark}}
 \rfoot{\thepage}
+
 % Full reference (number and name of section)
 \newcommand*{\fullref}[1]{\hyperref[{#1}]{\ref*{#1} \nameref*{#1}}} % One single link
-%
+
+% Email
 \newcommand{\email}[1]{
 {\texttt{\href{mailto:#1}{#1}} }
 }
+
 % Metadata
 \title{\Huge PortoCityTransfers \\ \Large Delivery I \\ \vspace*{4pt} \large CAL 2019/20}
 \author{
@@ -69,6 +82,7 @@ Group T6G05 \vspace{0.5em} \\
 \end{tabular}
 }
 \date{10/04/2020}
+
 % Document
 \begin{document}
 \maketitle

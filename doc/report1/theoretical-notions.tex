@@ -34,11 +34,17 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
         (u, v) \in E \iff (v, u) \in E^T
     \end{equation*}
 \end{definition}
+\begin{definition}[Adjacency set]
+    The adjacency set of $u \in V$ in $G(V,E)$ is the set of nodes directly reachable from $u$:
+    \begin{equation*}
+        Adj(G, u) = \{(u, v) \in E\} = E \cap (\{v\}\times V)
+    \end{equation*}
+\end{definition}
 \begin{definition}[Path]
     A path $p$ of length $k$ in a graph $G(V,E)$ is a sequence of nodes $\langle p_0,p_1,p_2,...,p_k\rangle$ such that
     \begin{alignat*}{5}
         \text{(All nodes belong to the graph)}       ~~&\forall~0 \leq &&i   &&<    k,&&~p_i \in V \\
-        \text{(Node is reachable from previous node)}~~&\forall~0 \leq &&i   &&<    k,&&~(p_i, p_{i+1}) \in E \\
+        \text{(Consecutive nodes are adjacent)}~~&\forall~0 <    &&i   &&\leq k,&&~p_i \in Adj(G, p_{i-1})\\
         \text{(No repeated nodes)}                   ~~&\forall~0 \leq &&i,j &&\leq k,&&~i\neq j \implies p_i \neq p_j \\
         \text{(No repeated edges)}                   ~~&\forall~0 \leq &&i,j &&<    k,&&~i\neq j \implies (p_i,p_{i+1}) \neq (p_j, p_{j+1})
     \end{alignat*}
@@ -46,30 +52,37 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
 \begin{definition}[Set of all paths]
     $P(G)$ is the set of all paths in graph $G(V,E)$.
 \end{definition}
+\begin{definition}[Reachability]
+    A node $v \in V$ is reachable from $u \in V$ (or \emph{$u$ can reach $v$}) if there is a path starting in $u$ and ending in $v$.
+    \begin{equation*}
+        u \leadsto v \iff \exists p \in P(G) \colon p_0 = u \wedge p_k = v
+    \end{equation*}
+    To easen the run of thought, let us introduce the following notation:
+    \begin{equation*}
+        x \leadsto y \wedge y \leadsto z \iff x \leadsto y \leadsto z
+    \end{equation*}
+\end{definition}
 \begin{definition}[Weight of a path]
     The weight of a path $p$ of length $k$ in graph $G(V,E,w)$ is
     \begin{equation*}
         W(p) = \sum_{i=0}^{k-1}{w(p_i, p_{i+1})}
     \end{equation*}
 \end{definition}
-\begin{definition}[Adjacency set]
-    The adjacency set of $u \in V$ in $G(V,E)$ is the set of nodes directly reachable from $u$:
+\begin{definition}[Descendants] The descendants $Desc(s)$ of a node $s \in V$ in a graph $G(V,E)$ are all nodes $v \in V$ reachable from $s$.
     \begin{equation*}
-        Adj(G, u) = \{(u, v) \in E\} = E \cap (\{v\}\times V)
+        Desc(s) = \{v \in V : s \leadsto v\}
     \end{equation*}
 \end{definition}
-\begin{definition}[Descendants] The descendants of a node $s \in V$ in a graph $G(V,E)$ are
+\begin{definition}[Predecessors] The predecessors $Pred(s)$ of a node $s \in V$ in a graph $G(V,E)$ are all nodes $u \in V$ that can reach $s$.
     \begin{equation*}
-        Desc(s) = Adj(G, s)
-    \end{equation*}
-\end{definition}
-\begin{definition}[Predecessors] The predecessors of a node $s \in V$ in a graph $G(V,E)$ are
-    \begin{equation*}
-        Pred(s) = Adj(G^T, s)
+        Pred(s) = \{u \in V : u \leadsto s\}
     \end{equation*}
 \end{definition}
 \begin{definition}[Strongly connected graph]
-    A strongly connected graph is one where there is a path between any two nodes $u, v \in V$.
+    A graph $G(V, E)$ is strongly connected if any node can be reached from any other node.
+    \begin{equation*}
+        \forall u, v \in V, u \leadsto v
+    \end{equation*}
 \end{definition}
 \begin{definition}[Strongly connected component]
     A strongly connected component $SCC$ is a subgraph of $G(V, E)$ which is a maximum strongly connected graph (there is no other node $x \not \in SSC$ that can reach and be reached by all nodes $u \in SSC$).
@@ -77,6 +90,22 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
 \begin{definition}[Bridge]
     A bridge in a strongly connected graph $G(V,E)$ is an edge $e \in E$ that, if removed, would disconnect $G$.
 \end{definition}
+\subsection{Theorems}
+\begin{theorem}
+    The set $Desc(s)$ in a graph $G(V,E)$ is equal to the set $Pred(s)$ in graph $G^T$.
+\end{theorem}
+\begin{proof}
+    It is trivial that, if $s \leadsto v$ in $G$, then $v \leadsto s$ in $G^T$. Thus, if $v$ is a descendant of $s$ in $G$ then it is also a predecessor of $s$ in $G^T$.
+\end{proof}
+\begin{theorem}[Transitivity of reachability]
+    The reachability relation is transitive.
+    \begin{equation*}
+        x \leadsto y \leadsto z \implies x \leadsto z
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+Let $p$ be a path that makes $x \leadsto y$ true, and let $q$ be a path that makes $y \leadsto z$ true. The path $r = \langle p[0:k_p], q[1:k_q] \rangle = \langle x, p_1, p_2,...,p_{k_p-1},y,q_1,q_2,...,q_{k_q-1}, z \rangle$ makes $x \leadsto z$ trivially true.
+\end{proof}
 % \section{Miscellaneous}
 % \begin{theorem}[Master theorem of Divide-and-Conquer] \label{theor:master}
 %     Let $a \geq 1$, $b > 1$ be constants, let $f(n)$ be a function, and let $T(n)$ be defined on the nonnegative integers by the recurrence
