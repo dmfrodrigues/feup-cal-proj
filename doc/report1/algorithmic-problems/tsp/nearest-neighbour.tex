@@ -1,33 +1,52 @@
 \subsection{Nearest neighbour algorithm} \label{algorithm-tsp-nn}
 % Comment do Diogo (esclarecer o que é que ele queria dizer com isto) -> Heuristic
-The Nearest Neighbour (NN) algorithm corresponds to a simple to understand constructive heuristic method that attempts to solve the travelling salesman problem.\par
-Starting by an empty solution (no cities visited, i.e. $S=\emptyset$), it chooses a random city which will be the starting point $s$. At each step builds upon the previous iteration, visiting the nearest city and adding it to the solution until all the cities have been visited ($S = V$), at which point in time all that is left is to return to the start city.\par
+The nearest-neighbour (NN) algorithm is a simple constructive heuristic method for solving the travelling salesman problem.\par
+Starting at the origin $s$, at each step we build upon the previous iteration, visiting the city nearest to the previous city and adding it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.\par
 \par.\par.\par.\par Referir aqui brevemente a complexidade.
-% doubt: does it connect the last visited to the start city or goes the path backwards?
-
 \vspace{-1em}
 \begin{center}
     \begin{algorithm}[ht]
-        \caption{Nearest Neighbour algorithm}
+        \caption{Nearest-neighbour algorithm}
         \label{alg:nearest neighbour}
         \begin{minipage}[t]{0.49\linewidth}
             (a) Mathematical version
             \begin{algorithmic}[1]
-                \State $s \gets RandomNode \in V$
-                \Function{NN}{$S=\{s\}$, $v=s$, $Q \gets V\backslash \{s\}$}
-                    \While {$|Q| > 0$}
-                        \State $D \gets \min\{D(v, u | u \in Q)\}$
-                        \State $Q \gets Q \backslash \{v\}$
-                        \State $S \gets S \cup \{v\}$ 
-                        \State $s \gets u$ 
-                    \EndWhile
-                    \State \Return {$D$}
+                \Function{NN}{$G(V, w)$, $s$}
+                    \For {$0 \leq i \leq |V|$} {$Ans(i) \gets \textsc{NULL}$}
+                    \EndFor
+                    \State {$Ans(0) \gets s$}
+                    \State {$S \gets \emptyset$}
+                    \For {$0 < i < |V|$}
+                        \State {$c \gets \min_{u \in V \backslash (S + s)}{w(S, Ans(i-1), u)}$}
+                        \State {$Ans(i) \gets u : w(S, Ans(i-1), u) = c$}
+                    \EndFor
+                    \State {$Ans(|V|) \gets s$}
+                    \State \Return {$Ans$}
                 \EndFunction
             \end{algorithmic}
         \end{minipage}
         \begin{minipage}[t]{0.49\linewidth}
             (b) Programmatic version
-            
+            \begin{algorithmic}[1]
+                \Function{NN}{$G(V, w)$, $s$}
+                    \For {$0 \leq i \leq |V|$} {$Ans[i] = \textsc{NULL}$}
+                    \EndFor
+                    \State {$Ans[0] = s$}
+                    \State {$S = \emptyset$}
+                    \For {$0 < i < |V|$}
+                        \State {$c = \infty$}
+                        \For {$u' \in V \backslash (S + s)$}
+                            \State {$c' = w(S, Ans(i-1), u')$}
+                            \If {$c' < c$}
+                                \State {$c = c'$}
+                                \State {$Ans[i] = u$}
+                            \EndIf
+                        \EndFor
+                    \EndFor
+                    \State {$Ans[|V|] = s$}
+                    \State \Return {$Ans$}
+                \EndFunction
+            \end{algorithmic}
         \end{minipage}
     \end{algorithm}
 \end{center}
