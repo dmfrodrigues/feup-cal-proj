@@ -4,8 +4,8 @@ The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown SC
     $SCC(p)=Desc(p) \cap Pred(p)$ where $Desc(p)$ are the descendants and $Pred(p)$ the predecessors of $p$.
 \end{lemma}
 \begin{proof}
-    $Desc(p) \cap Pred(p) \subseteq SSC(p)$, given that $\forall u, v \in Desc(p) \cap Pred(p)$ we know $p \leadsto u$, $u \leadsto p$, $p \leadsto v$, $v \leadsto p$, thus meaning $u \leadsto p \leadsto v$ and $v \leadsto p \leadsto u$.\par
-    A node $u \in SSC(p)$ must meet both conditions, otherwise it is either false that $p \leadsto u$, or it is false that $u \leadsto p$, thus violating the definition of SCC.
+    $Desc(p) \cap Pred(p) \subseteq SCC(p)$, given that $\forall u, v \in Desc(p) \cap Pred(p)$ we know $p \leadsto u$, $u \leadsto p$, $p \leadsto v$, $v \leadsto p$, thus meaning $u \leadsto p \leadsto v$ and $v \leadsto p \leadsto u$.\par
+    A node $u \in SCC(p)$ must meet both conditions, otherwise it is either false that $p \leadsto u$, or it is false that $u \leadsto p$, thus violating the definition of SCC.
 \end{proof}
 \begin{lemma} \label{lem:dcsc2}
     Any SCC is a subset of the descendants of $p$, of the predecessors of $p$, or of the remaining.
@@ -23,10 +23,10 @@ The lecture notes go on to describe how these lemmas can be implemented as a div
                 \State {$P \gets \Call{DFS}{G^T, s}$} \Comment {$Predecessors$}
                 \State {$R \gets G \backslash (D \cup P)$} \Comment {$Remainder$}
                 \State {$SCC \gets D \cap P$}
-                \State {$D' \gets \Call{DCSC}{D \backslash SSC}$}
-                \State {$P' \gets \Call{DCSC}{P \backslash SSC}$}
+                \State {$D' \gets \Call{DCSC}{D \backslash SCC}$}
+                \State {$P' \gets \Call{DCSC}{P \backslash SCC}$}
                 \State {$R' \gets \Call{DCSC}{R}$}
-                \State \Return {$\{SSC\} \cup D' \cup P' \cup R'$}
+                \State \Return {$\{SCC\} \cup D' \cup P' \cup R'$}
             \EndFunction
         \end{algorithmic}
     \end{minipage}
@@ -45,9 +45,9 @@ The lecture notes go on to describe how these lemmas can be implemented as a div
                 \State {$D = \Call{DFS}{Adj, s}$} \Comment {$Descendants$}
                 \State {$Adj.\Call{Transpose}{ }$}
                 \State {$P = \Call{DFS}{Adj, s}$} \Comment {$Predecessors$}
-                \For {$u : V$} {$SSC[u] = D[u] \text{ AND } P[u]$}
+                \For {$u : V$} {$SCC[u] = D[u] \text{ AND } P[u]$}
                 \EndFor
-                \State \Return {$SSC$}
+                \State \Return {$SCC$}
             \EndFunction
         \end{algorithmic}
     \end{minipage}
