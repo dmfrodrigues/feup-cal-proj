@@ -4,7 +4,7 @@ In this chapter, we will make an effort to transform our specific problems into 
 There are three main inputs to this problem: a description of the map of the area the company serves (section \ref{problem-formalization-input-map}); the list of vans (section \ref{problem-formalization-input-vans}); the list of requested services for a given day (section \ref{problem-formalization-input-services}).
 \subsection{Map} \label{problem-formalization-input-map}
 We will be using maps from OpenStreetMap (OSM) to model the area \emph{PortoCityTransfers} serves.
-Maps will be converted into graphs $G=(V,E, w)$, where:
+Maps will be converted into graphs $G(V,E, w)$, where:
 \begin{itemize}
     \item Nodes $V$ represent positions on Earth.
     \item Edges $E$ represent roads traversable by automobiles.
@@ -12,10 +12,10 @@ Maps will be converted into graphs $G=(V,E, w)$, where:
 \end{itemize}
 We will have two graphs:
 \begin{itemize}
-    \item $G=(V,E,w)$ is the main map, with all the nodes ($|V|=185360$) and edges ($|E|=343617$).
-    \item $G'=(V',E',w')$ is the helper map, which instead of having all edges, will only contain as edges what OSM calls "ways", thus allowing for faster path-finding. Thus, the number of nodes ($|V'|=43592$) and edges ($|E'|=54677$) will be significantly smaller.
+    \item $G(V,E,w)$ is the main map, with all the nodes ($|V|=185360$) and edges ($|E|=343617$).
+    \item $G'(V',E',w')$ is the helper map, which instead of having all edges, will only contain as edges what OSM calls "ways", thus allowing for faster path-finding. Thus, the number of nodes ($|V'|=43592$) and edges ($|E'|=54677$) will be significantly smaller.
 \end{itemize}
-We thus have as input data the directed weighted graph $G=(V,E,w)$.
+We thus have as input data the directed weighted graph $G(V,E,w)$.
 \subsection{Vans} \label{problem-formalization-input-vans}
 A list of vans $v_i=(n)$ where $n$ is the capacity.
 \subsection{Services} \label{problem-formalization-input-services}
