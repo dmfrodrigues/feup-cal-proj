@@ -1,71 +1,69 @@
 \subsection{A* algorithm} \label{algorithm-shortestpath-astar}
 The A* shortest path algorithm is very well known and widely used for fast path-finding. It was created by Peter Hart, Nils Nilsson and Bertram Raphael of Stanford Research Institute \cite{Astar}, as part of the Shakey project, with the aim of building a mobile robot that could plan its own actions.\par
 This algorithm is an extension of the Dijkstra algorithm, using the heuristic function $\hat{h}(u)$ to estimate the distance from $u$ to $d$. In fact, for $\hat{h}(u) = 0$ we trivially obtain Dijkstra's algorithm, which confirms that it makes no assumptions about the graph's context, and that the A* algorithm is an extension of it.
-\begin{center}
-    \begin{algorithm}[H]
-        \caption{A* algorithm}
-        \label{alg-astar}
-        \begin{minipage}[t]{0.49\linewidth}
-            (a) Mathematical version
-            \begin{algorithmic}[1]
-                \Function{Astar}{$G(V,E)$, $s$, $\hat{h}$}
-                    \State $Q \gets \emptyset$
-                    \For {$v \in V$}
-                        \State {$dist(v) \gets \infty$}
-                        \State {$hdist(v) \gets \infty$}
-                        \State {$prev(v) \gets \text{NULL}$}
-                        \State $Q \gets Q \cup \{v\}$
+\begin{algorithm}[H]
+    \caption{A* algorithm}
+    \label{alg-astar}
+    \begin{minipage}[t]{0.49\linewidth}
+        (a) Mathematical version
+        \begin{algorithmic}[1]
+            \Function{Astar}{$G(V,E)$, $s$, $\hat{h}$}
+                \State $Q \gets \emptyset$
+                \For {$v \in V$}
+                    \State {$dist(v) \gets \infty$}
+                    \State {$hdist(v) \gets \infty$}
+                    \State {$prev(v) \gets \text{NULL}$}
+                    \State $Q \gets Q \cup \{v\}$
+                \EndFor
+                \State $dist(s) \gets 0$
+                \State $hdist(s) \gets \hat{h}(s)$
+                \While {$|Q| > 0$}
+                    \State $u \gets \text{element of } Q \text{ with least } hdist(u)$
+                    \If {$u=d$} \Return {$dist$, $prev$} \EndIf
+                    \State $Q \gets Q \backslash \{u\}$
+                    \For {$v \in \Call{Adj}{G, u}$}
+                        \State $c' \gets c + w(u, v)$
+                        \If {$c' < dist(v)$}
+                            \State $dist(v) \gets c'$
+                            \State $hdist(v) \gets c'+\hat{h}(v)$
+                            \State $prev(v) \gets u$
+                        \EndIf
                     \EndFor
-                    \State $dist(s) \gets 0$
-                    \State $hdist(s) \gets \hat{h}(s)$
-                    \While {$|Q| > 0$}
-                        \State $u \gets \text{element of } Q \text{ with least } hdist(u)$
-                        \If {$u=d$} \Return {$dist$, $prev$} \EndIf
-                        \State $Q \gets Q \backslash \{u\}$
-                        \For {$v \in \Call{Adj}{G, u}$}
-                            \State $c' \gets c + w(u, v)$
-                            \If {$c' < dist(v)$}
-                                \State $dist(v) \gets c'$
-                                \State $hdist(v) \gets c'+\hat{h}(v)$
-                                \State $prev(v) \gets u$
-                            \EndIf
-                        \EndFor
-                    \EndWhile
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-        \begin{minipage}[t]{0.49\linewidth}
-            (b) Programmatic version
-            \begin{algorithmic}[1]
-                \Function{Astar}{$Adj$, $s$, $\hat{h}$}
-                    \State $Q = \Call{Min\_Priority\_Queue}{ }$
-                    \For {$v : V$}
-                        \State {$dist[v] = \infty$}
-                        \State {$hdist[v] = \infty$}
-                        \State {$prev[v] = \text{NULL}$}
-                        \State {$Q.\Call{Insert\_With\_Key}{\infty, v}$}
+                \EndWhile
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.49\linewidth}
+        (b) Programmatic version
+        \begin{algorithmic}[1]
+            \Function{Astar}{$Adj$, $s$, $\hat{h}$}
+                \State $Q = \Call{Min\_Priority\_Queue}{ }$
+                \For {$v : V$}
+                    \State {$dist[v] = \infty$}
+                    \State {$hdist[v] = \infty$}
+                    \State {$prev[v] = \text{NULL}$}
+                    \State {$Q.\Call{Insert\_With\_Key}{\infty, v}$}
+                \EndFor
+                \State $dist[s] = 0$
+                \State $hdist[s] = \hat{h}(s)$
+                \State $Q.\Call{Decrease\_Key}{s, hdist[s]}$
+                \While {$Q.\Call{Size}{ } > 0$}
+                    \State $u = Q.\Call{Extract\_Min}{ }$
+                    \If {$u=d$} \Return {$dist$, $prev$} \EndIf
+                    \For {$(v, w): Adj[u]$}
+                        \State $c' = c + w$
+                        \If {$c' < dist[v]$}
+                            \State $dist[v] = c'$
+                            \State $hdist[v] = c'+\hat{h}(v)$
+                            \State $prev[v] = u$
+                            \State $Q.\Call{Decrease\_Key}{v, hdist[v]}$
+                        \EndIf
                     \EndFor
-                    \State $dist[s] = 0$
-                    \State $hdist[s] = \hat{h}(s)$
-                    \State $Q.\Call{Decrease\_Key}{s, hdist[s]}$
-                    \While {$Q.\Call{Size}{ } > 0$}
-                        \State $u = Q.\Call{Extract\_Min}{ }$
-                        \If {$u=d$} \Return {$dist$, $prev$} \EndIf
-                        \For {$(v, w): Adj[u]$}
-                            \State $c' = c + w$
-                            \If {$c' < dist[v]$}
-                                \State $dist[v] = c'$
-                                \State $hdist[v] = c'+\hat{h}(v)$
-                                \State $prev[v] = u$
-                                \State $Q.\Call{Decrease\_Key}{v, hdist[v]}$
-                            \EndIf
-                        \EndFor
-                    \EndWhile
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-    \end{algorithm}
-\end{center}
+                \EndWhile
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
 \subsubsection{Proof of correctness}
 According to \cite{Astar}, if $\hat{h}$ is admissible\footnote{an heuristic $\hat{h}$ is admissible if it always provides a lower bound for the actual cost: $\forall u \in V, \hat{h}(u) \leq h(u)$} then the A* algorithm is guaranteed to find an optimal solution if it exists. This proof is fully presented in the original article so we will only present a brief argument.\par
 Our argument will rely on the fact that, once the destination node $d$ is removed from $Q$, it is because its key (the actual distance from $s$ to $d$) is less than an optimistic cost estimate from $s$ to $d$ via any other node $v \in Q$. If not even an optimistic estimate could force $v$ to be removed before $s$ from $Q$, then we can suppose $d$ has been reached with the least cost possible.\par

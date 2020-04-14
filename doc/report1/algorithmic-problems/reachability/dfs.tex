@@ -1,47 +1,45 @@
 \subsection{Depth-first search} \label{algorithm-reachability-dfs}
 Depth-first search is a very elementary graph traversal, which explores nodes in depth before backtracking.
-\begin{center}
-    \begin{algorithm}[ht]
-        \caption{Depth-first search}
-        \label{alg-dfs}
-        \begin{minipage}[t]{0.49\linewidth}
-            (a) Mathematical version
-            \begin{algorithmic}[1]
-                \State $R \gets \emptyset$
-                \Function{DFS}{$G(V,E)$, $u$}
-                    \If {$u \in R$} \Return {$ $}
-                    \EndIf 
-                    \State {$R \gets R \cap \{u\}$}
-                    \For {$v \in \Call{Adj}{G, u}$}
-                        \State {$\Call{DFS}{G, v}$}
-                    \EndFor
-                    \State \Return $R$
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-        \begin{minipage}[t]{0.49\linewidth}
-            (b) Programmatic version
-            \begin{algorithmic}[1]
-                \State $R[|Adj|] = \text{FALSE}$
-                \Function{DFS}{$Adj$, $u$}
-                    \If {$R[u]$} \Return {$ $}
-                    \EndIf 
-                    \State {$R[u] = \text{TRUE}$}
-                    \For {$v : Adj[u]$}
-                        \State {$\Call{DFS}{Adj, v}$}
-                    \EndFor
-                    \State \Return $R$
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-    \end{algorithm}
-\end{center}
+\begin{algorithm}[ht]
+    \caption{Depth-first search}
+    \label{alg-dfs}
+    \begin{minipage}[t]{0.49\linewidth}
+        (a) Mathematical version
+        \begin{algorithmic}[1]
+            \State $R \gets \emptyset$
+            \Function{DFS}{$G(V,E)$, $u$}
+                \If {$u \in R$} \Return {$ $}
+                \EndIf 
+                \State {$R \gets R \cap \{u\}$}
+                \For {$v \in \Call{Adj}{G, u}$}
+                    \State {$\Call{DFS}{G, v}$}
+                \EndFor
+                \State \Return $R$
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.49\linewidth}
+        (b) Programmatic version
+        \begin{algorithmic}[1]
+            \State $R[|Adj|] = \text{FALSE}$
+            \Function{DFS}{$Adj$, $u$}
+                \If {$R[u]$} \Return {$ $}
+                \EndIf 
+                \State {$R[u] = \text{TRUE}$}
+                \For {$v : Adj[u]$}
+                    \State {$\Call{DFS}{Adj, v}$}
+                \EndFor
+                \State \Return $R$
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
 \subsubsection{Proof of correctness}
 \begin{lemma} \label{lem:dfs}
     If $s \leadsto u$ and $v \in Adj(G, u)$, then $s \leadsto v$.
 \end{lemma}
 \begin{proof}
-    If $s \leadsto u$, then $\exists p \in P(G) \colon p_0 = s \wedge p_k = u$. Let that path be $p^u$. If $v \in Adj(G, u)$ then we can add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[0:j]$ is a path from $s$ to $v$.
+    If $s \leadsto u$, then $\exists p \in P_G \colon p_0 = s \wedge p_k = u$. Let that path be $p^u$. If $v \in Adj(G, u)$ then we can add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[0:j]$ is a path from $s$ to $v$.
 \end{proof}
 \begin{theorem}
     Depth-first search algorithm starting in $s$ finds all nodes reachable from $s$.

@@ -1,65 +1,64 @@
 \subsection{Dijkstra's algorithm} \label{algorithm-shortestpath-dijkstra}
-Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
-This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving the shortest path problem in the meantime). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes the values of functions distance $dist$ and previous node $prev$ (temporary if the node is in $Q$, final otherwise). We then process the node $u \in Q$ with the least distance to $s$, which consists of iterating over all nodes adjacent to $u$, calculate their potential new distance to $s$ passing through $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.
-\begin{center}
-    \begin{algorithm}[ht]
-        \caption{Dijkstra's algorithm}
-        \label{alg-dijkstra}
-        \begin{minipage}[t]{0.49\linewidth}
-            (a) Mathematical version
-            \begin{algorithmic}[1]
-                \Function{Dijkstra}{$G(V,E)$, $s$}
-                    \State $Q \gets \emptyset$
-                    \For {$v \in V$}
-                        \State {$dist(v) \gets \infty$}
-                        \State {$prev(v) \gets \text{NULL}$}
-                        \State $Q \gets Q \cup \{v\}$
+Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.
+
+\begin{algorithm}[H]
+    \caption{Dijkstra's algorithm}
+    \label{alg-dijkstra}
+    \begin{minipage}[t]{0.49\linewidth}
+        (a) Mathematical version
+        \begin{algorithmic}[1]
+            \Function{Dijkstra}{$G(V,E)$, $s$}
+                \State $Q \gets \emptyset$
+                \For {$v \in V$}
+                    \State {$dist(v) \gets \infty$}
+                    \State {$prev(v) \gets \text{NULL}$}
+                    \State $Q \gets Q \cup \{v\}$
+                \EndFor
+                \State {$dist(s) \gets 0$}
+                \While {$|Q| > 0$}
+                    \State $u \gets \text{element of } Q \text{ with least } dist(u)$
+                    \State $Q \gets Q \backslash \{u\}$
+                    \For {$v \in \Call{Adj}{G, u}$}
+                        \State $c' \gets c + w(u, v)$
+                        \If {$c' < dist(v)$}
+                            \State $dist(v) \gets c'$
+                            \State $prev(v) \gets u$
+                        \EndIf
                     \EndFor
-                    \State {$dist(s) \gets 0$}
-                    \While {$|Q| > 0$}
-                        \State $u \gets \text{element of } Q \text{ with least } dist(u)$
-                        \State $Q \gets Q \backslash \{u\}$
-                        \For {$v \in \Call{Adj}{G, u}$}
-                            \State $c' \gets c + w(u, v)$
-                            \If {$c' < dist(v)$}
-                                \State $dist(v) \gets c'$
-                                \State $prev(v) \gets u$
-                            \EndIf
-                        \EndFor
-                    \EndWhile
-                    \State \Return $dist$, $prev$
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-        \begin{minipage}[t]{0.49\linewidth}
-            (b) Programmatic version
-            \begin{algorithmic}[1]
-                \Function{Dijkstra}{$Adj$, $s$}
-                    \State $Q = \Call{Min\_Priority\_Queue}{ }$
-                    \For {$v : V$}
-                        \State {$dist[v] = \infty$}
-                        \State {$prev[v] = \text{NULL}$}
-                        \State {$Q.\Call{Insert\_With\_Key}{\infty, v}$}
+                \EndWhile
+                \State \Return $dist$, $prev$
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.49\linewidth}
+        (b) Programmatic version
+        \begin{algorithmic}[1]
+            \Function{Dijkstra}{$Adj$, $s$}
+                \State $Q = \Call{Min\_Priority\_Queue}{ }$
+                \For {$v : V$}
+                    \State {$dist[v] = \infty$}
+                    \State {$prev[v] = \text{NULL}$}
+                    \State {$Q.\Call{Insert\_With\_Key}{\infty, v}$}
+                \EndFor
+                \State $dist[s] = 0$
+                \State $Q.\Call{Decrease\_Key}{s, dist[s]}$
+                \While {$Q.\Call{Size}{ } > 0$}
+                    \State $u = Q.\Call{Extract\_Min}{ }$
+                    \For {$(v, w): Adj[u]$}
+                        \State $c' = c + w$
+                        \If {$c' < dist[v]$}
+                            \State $dist[v] = c'$
+                            \State $prev[v] = u$
+                            \State $Q.\Call{Decrease\_Key}{v, dist[v]}$
+                        \EndIf
                     \EndFor
-                    \State $dist[s] = 0$
-                    \State $Q.\Call{Decrease\_Key}{s, dist[s]}$
-                    \While {$Q.\Call{Size}{ } > 0$}
-                        \State $u = Q.\Call{Extract\_Min}{ }$
-                        \For {$(v, w): Adj[u]$}
-                            \State $c' = c + w$
-                            \If {$c' < dist[v]$}
-                                \State $dist[v] = c'$
-                                \State $prev[v] = u$
-                                \State $Q.\Call{Decrease\_Key}{v, dist[v]}$
-                            \EndIf
-                        \EndFor
-                    \EndWhile
-                    \State \Return {$dist$, $prev$}
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-    \end{algorithm}
-\end{center}
+                \EndWhile
+                \State \Return {$dist$, $prev$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
+This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving the shortest path problem in the meantime). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes the values of functions distance $dist$ and previous node $prev$ (temporary if the node is in $Q$, final otherwise). We then process the node $u \in Q$ with the least distance to $s$, which consists of iterating over all nodes adjacent to $u$, calculate their potential new distance to $s$ passing through $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.\par
 For Dijkstra's algorithm we usually represent the graph as an adjacency list $Adj$ (admits iteration in $O(1)$ for each adjacent node). We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$ (fast extraction of element with smallest key and key decrease when processing adjacent nodes).
 \subsubsection{Proof of correctness}
 The full proof is rather long and is promptly available, thus we will only present a short argument for correctness. The full proof can be found, for instance, in \cite[p.~659]{intro-alg}

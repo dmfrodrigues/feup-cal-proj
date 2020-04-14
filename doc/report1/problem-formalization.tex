@@ -8,12 +8,12 @@ Maps will be converted into graphs $G(V,E, w)$, where:
 \begin{itemize}
     \item Nodes $V$ represent positions on Earth.
     \item Edges $E$ represent roads traversable by automobiles.
-    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $5 m$, and that traveling at a maximum speed of $120 km/h$ a vehicle would take $0.15 s$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being relatively easy to manage as well as fitting in a 32-bit unsigned integer.
+    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $5 m$, and that travelling at a maximum speed of $120 km/h$ a vehicle would take $0.15 s$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being relatively easy to manage as well as fitting in a 32-bit unsigned integer.
 \end{itemize}
 We will have two graphs:
 \begin{itemize}
     \item $G(V,E,w)$ is the main map, with all the nodes ($|V|=185360$) and edges ($|E|=343617$).
-    \item $G'(V',E',w')$ is the helper map, which instead of having all edges, will only contain as edges what OSM calls "ways", thus allowing for faster path-finding. Thus, the number of nodes ($|V'|=43592$) and edges ($|E'|=54677$) will be significantly smaller.
+    \item $G'(V',E',w')$ is the helper map, which instead of having all edges, will only contain as edges what OSM calls \emph{ways}, thus allowing for faster path-finding. Thus, the number of nodes ($|V'|=43592$) and edges ($|E'|=54677$) will be significantly smaller.
 \end{itemize}
 We thus have as input data the directed weighted graph $G(V,E,w)$.
 \subsection{Vans} \label{problem-formalization-input-vans}

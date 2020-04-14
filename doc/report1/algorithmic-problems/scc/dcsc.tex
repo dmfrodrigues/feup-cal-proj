@@ -12,48 +12,46 @@ The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown SC
 \end{lemma}
 We will not endeavor into proving lemma \ref{lem:dcsc2} since our implementation does not require it, adding to the fact it is proven in \cite{fleischer-dcsc}.\par
 The lecture notes go on to describe how these lemmas can be implemented as a divide-and-conquer algorithm to find all SCCs, however we are more interested in a variant designed by ourselves, to obtain the SCC of node $s$ and supported only on lemma \ref{lem:dcsc1}.
-\begin{center}
-    \begin{algorithm}[H]
-        \caption{Divide-and-Conquer Strong Components (DCSC) algorithm}
-        \label{alg-dcsc}
-        \begin{minipage}[t]{0.49\linewidth}
-            (a) Original version
-            \begin{algorithmic}[1]
-                \Function{DCSC}{$G(V,E)$}
-                    \State {$D \gets \Call{DFS}{G, s}$} \Comment {$Descendants$}
-                    \State {$P \gets \Call{DFS}{G^T, s}$} \Comment {$Predecessors$}
-                    \State {$R \gets G \backslash (D \cup P)$} \Comment {$Remainder$}
-                    \State {$SCC \gets D \cap P$}
-                    \State {$D' \gets \Call{DCSC}{D \backslash SSC}$}
-                    \State {$P' \gets \Call{DCSC}{P \backslash SSC}$}
-                    \State {$R' \gets \Call{DCSC}{R}$}
-                    \State \Return {$\{SSC\} \cup D' \cup P' \cup R'$}
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-        \begin{minipage}[t]{0.49\linewidth}
-            (b) Mathematical version
-            \begin{algorithmic}[1]
-                \Function{DCSCv}{$G(V,E)$, $s$}
-                    \State {$D \gets \Call{DFS}{G, s}$} \Comment {$Descendants$}
-                    \State {$P \gets \Call{DFS}{G^T, s}$} \Comment {$Predecessors$}
-                    \State \Return {$D \cap P$}
-                \EndFunction
-            \end{algorithmic}
-            (c) Programmatic version
-            \begin{algorithmic}[1]
-                \Function{DCSCv}{$Adj$, $s$}
-                    \State {$D = \Call{DFS}{Adj, s}$} \Comment {$Descendants$}
-                    \State {$Adj.\Call{Transpose}{ }$}
-                    \State {$P = \Call{DFS}{Adj, s}$} \Comment {$Predecessors$}
-                    \For {$u : V$} {$SSC[u] = D[u] \text{ AND } P[u]$}
-                    \EndFor
-                    \State \Return {$SSC$}
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-    \end{algorithm}
-\end{center}
+\begin{algorithm}[H]
+    \caption{Divide-and-Conquer Strong Components (DCSC) algorithm}
+    \label{alg-dcsc}
+    \begin{minipage}[t]{0.49\linewidth}
+        (a) Original version
+        \begin{algorithmic}[1]
+            \Function{DCSC}{$G(V,E)$}
+                \State {$D \gets \Call{DFS}{G, s}$} \Comment {$Descendants$}
+                \State {$P \gets \Call{DFS}{G^T, s}$} \Comment {$Predecessors$}
+                \State {$R \gets G \backslash (D \cup P)$} \Comment {$Remainder$}
+                \State {$SCC \gets D \cap P$}
+                \State {$D' \gets \Call{DCSC}{D \backslash SSC}$}
+                \State {$P' \gets \Call{DCSC}{P \backslash SSC}$}
+                \State {$R' \gets \Call{DCSC}{R}$}
+                \State \Return {$\{SSC\} \cup D' \cup P' \cup R'$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.49\linewidth}
+        (b) Mathematical version
+        \begin{algorithmic}[1]
+            \Function{DCSCv}{$G(V,E)$, $s$}
+                \State {$D \gets \Call{DFS}{G, s}$} \Comment {$Descendants$}
+                \State {$P \gets \Call{DFS}{G^T, s}$} \Comment {$Predecessors$}
+                \State \Return {$D \cap P$}
+            \EndFunction
+        \end{algorithmic}
+        (c) Programmatic version
+        \begin{algorithmic}[1]
+            \Function{DCSCv}{$Adj$, $s$}
+                \State {$D = \Call{DFS}{Adj, s}$} \Comment {$Descendants$}
+                \State {$Adj.\Call{Transpose}{ }$}
+                \State {$P = \Call{DFS}{Adj, s}$} \Comment {$Predecessors$}
+                \For {$u : V$} {$SSC[u] = D[u] \text{ AND } P[u]$}
+                \EndFor
+                \State \Return {$SSC$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
 \subsubsection{Proof of correctness}
 Both algorithms are trivially correct from lemmas \ref{lem:dcsc1} and \ref{lem:dcsc2}.
 \subsubsection{Complexity analysis}

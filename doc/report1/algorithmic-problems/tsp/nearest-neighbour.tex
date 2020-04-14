@@ -4,52 +4,50 @@ The nearest-neighbour (NN) algorithm is a simple constructive heuristic method f
 Starting at the origin $s$, at each step we build upon the previous iteration, visiting the city nearest to the previous city and adding it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.\par
 \par.\par.\par.\par Referir aqui brevemente a complexidade.
 \vspace{-1em}
-\begin{center}
-    \begin{algorithm}[ht]
-        \caption{Nearest-neighbour algorithm}
-        \label{alg:nearest neighbour}
-        \begin{minipage}[t]{0.49\linewidth}
-            (a) Mathematical version
-            \begin{algorithmic}[1]
-                \Function{NN}{$G(V, w)$, $s$}
-                    \For {$0 \leq i \leq |V|$} {$Ans(i) \gets \textsc{NULL}$}
+\begin{algorithm}[ht]
+    \caption{Nearest-neighbour algorithm}
+    \label{alg:nearest neighbour}
+    \begin{minipage}[t]{0.49\linewidth}
+        (a) Mathematical version
+        \begin{algorithmic}[1]
+            \Function{NN}{$G(V, w)$, $s$}
+                \For {$0 \leq i \leq |V|$} {$Ans(i) \gets \textsc{NULL}$}
+                \EndFor
+                \State {$Ans(0) \gets s$}
+                \State {$S \gets \emptyset$}
+                \For {$0 < i < |V|$}
+                    \State {$c \gets \min_{u \in V \backslash (S + s)}{w(S, Ans(i-1), u)}$}
+                    \State {$Ans(i) \gets u : w(S, Ans(i-1), u) = c$}
+                \EndFor
+                \State {$Ans(|V|) \gets s$}
+                \State \Return {$Ans$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.49\linewidth}
+        (b) Programmatic version
+        \begin{algorithmic}[1]
+            \Function{NN}{$G(V, w)$, $s$}
+                \For {$0 \leq i \leq |V|$} {$Ans[i] = \textsc{NULL}$}
+                \EndFor
+                \State {$Ans[0] = s$}
+                \State {$S = \emptyset$}
+                \For {$0 < i < |V|$}
+                    \State {$c = \infty$}
+                    \For {$u' \in V \backslash (S + s)$}
+                        \State {$c' = w(S, Ans(i-1), u')$}
+                        \If {$c' < c$}
+                            \State {$c = c'$}
+                            \State {$Ans[i] = u$}
+                        \EndIf
                     \EndFor
-                    \State {$Ans(0) \gets s$}
-                    \State {$S \gets \emptyset$}
-                    \For {$0 < i < |V|$}
-                        \State {$c \gets \min_{u \in V \backslash (S + s)}{w(S, Ans(i-1), u)}$}
-                        \State {$Ans(i) \gets u : w(S, Ans(i-1), u) = c$}
-                    \EndFor
-                    \State {$Ans(|V|) \gets s$}
-                    \State \Return {$Ans$}
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-        \begin{minipage}[t]{0.49\linewidth}
-            (b) Programmatic version
-            \begin{algorithmic}[1]
-                \Function{NN}{$G(V, w)$, $s$}
-                    \For {$0 \leq i \leq |V|$} {$Ans[i] = \textsc{NULL}$}
-                    \EndFor
-                    \State {$Ans[0] = s$}
-                    \State {$S = \emptyset$}
-                    \For {$0 < i < |V|$}
-                        \State {$c = \infty$}
-                        \For {$u' \in V \backslash (S + s)$}
-                            \State {$c' = w(S, Ans(i-1), u')$}
-                            \If {$c' < c$}
-                                \State {$c = c'$}
-                                \State {$Ans[i] = u$}
-                            \EndIf
-                        \EndFor
-                    \EndFor
-                    \State {$Ans[|V|] = s$}
-                    \State \Return {$Ans$}
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-    \end{algorithm}
-\end{center}
+                \EndFor
+                \State {$Ans[|V|] = s$}
+                \State \Return {$Ans$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
 
 \subsubsection{Remarks}
 Falar aqui daquilo que o Diogo disse
