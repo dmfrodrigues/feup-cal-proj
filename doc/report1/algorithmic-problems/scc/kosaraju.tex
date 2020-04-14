@@ -1,5 +1,5 @@
 \subsection{Kosaraju's algorithm} \label{algorithm-scc-kosaraju}
-Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978 \cite{intro-alg}. It makes use of the following lemma:
+Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. It makes use of the following lemma:
 \begin{lemma} \label{lem:kosaraju1}
     Let $C$ and $C'$ be distinct strongly connected components in directed graph $G=(V,E)$, let $u,v \in C$, let $u',v' \in C'$, and suppose that G contains a path $u \leadsto u'$. Then G cannot also contain a path $v \leadsto v'$
 \end{lemma}
