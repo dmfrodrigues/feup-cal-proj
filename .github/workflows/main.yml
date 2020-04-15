@@ -22,7 +22,7 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    - name: latexmk report1
-      run: |
-        cd doc/report1
-        latexmk report_delivery1.tex -pdf
+    - name: Compile report 1
+      uses: xu-cheng/latex-action@master
+      with:
+        root_file: doc/report1/report_delivery1.tex
