@@ -25,4 +25,5 @@ jobs:
     - name: Compile report 1
       uses: xu-cheng/latex-action@master
       with:
-        root_file: doc/report1/report_delivery1.tex
+        root_file: report_delivery1.tex
+        working_directory: doc/report1/
