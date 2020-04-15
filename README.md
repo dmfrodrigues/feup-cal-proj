@@ -1,7 +1,7 @@
 # PortoCityTransfers <!-- {#mainpage} -->
 
 <p align="left">
-  <img src="https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile%20report%201/badge.svg">
+  <img src="https://github.com/dmfrodrigues/feup-cal-proj/workflows/report1/badge.svg">
 </p>
 
 - **Project name:** PortoCityTransfers
