@@ -1,4 +1,8 @@
-# PortoCityTransfers {#mainpage}
+# PortoCityTransfers <!-- {#mainpage} -->
+
+<p align="left">
+  <img src="https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile report 1/badge.svg">
+</p>
 
 - **Project name:** PortoCityTransfers
 - **Short description:** Console-based program to manage a shuttle company
