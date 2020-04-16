@@ -1,10 +1,25 @@
 \subsection{Kosaraju's algorithm} \label{algorithm-scc-kosaraju}
 Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. It makes use of the following lemma:
 \begin{lemma} \label{lem:kosaraju1}
-    Let $C$ and $C'$ be distinct strongly connected components in directed graph $G(V,E)$, let $u,v \in C$, let $u',v' \in C'$, and suppose that G contains a path $u \leadsto u'$. Then G cannot also contain a path $v \leadsto v'$
+    Let $C$ and $C'$ be distinct strongly connected components in directed graph $G(V,E)$, let $u,v \in C$, let $u',v' \in C'$, and assume
+    \begin{equation}
+        \label{eq:utou_} u \leadsto u'
+    \end{equation}
+    Then it is impossible that
+    \begin{equation}
+        \label{eq:v_tov} v' \leadsto v
+    \end{equation}
 \end{lemma}
-\begin{proof}
-    If $v \leadsto v'$, then $u \leadsto u' \leadsto v'$ and $v' \leadsto v \leadsto u$ exist. Thus, $u$ and $v'$ are reachable from each other, thereby contradicting the assumption that $C$ and $C'$ are distinct strongly connected components.
+\begin{proof} From $u, v \in C$ and that $C$ is a SSC, we can assume
+    \begin{equation}
+        \label{eq:vtou} v \leadsto u
+    \end{equation}
+    From $u', v' \in C'$ and that $C'$ is a SSC, we can assume
+    \begin{equation}
+        \label{eq:u_tov_} u' \leadsto v'
+    \end{equation}
+    By \eqref{eq:utou_} and \eqref{eq:u_tov_}, $u \leadsto u' \leadsto v'$.\par
+    Assume the absurd \eqref{eq:v_tov}. Then, by \eqref{eq:v_tov} and \eqref{eq:vtou}, $v' \leadsto v \leadsto u$. Thus, $u$ and $v'$ are reachable from each other, thereby contradicting the assumption that $C$ and $C'$ are distinct strongly connected components.
 \end{proof}
 \begin{center}
     \begin{algorithm}
