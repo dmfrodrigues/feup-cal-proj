@@ -41,12 +41,12 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
     \end{equation*}
 \end{definition}
 \begin{definition}[Path]
-    A path $p$ of length $k$ in a graph $G(V,E)$ is a sequence of nodes $\langle p_0,p_1,p_2,...,p_k\rangle$ such that
+    A path $p$ of length $k$ in a graph $G(V,E)$ is a sequence of nodes $\langle p_1,p_2,...,p_{|p|}\rangle$ such that
     \begin{alignat*}{5}
-        \text{(All nodes belong to the graph)}       ~~&\forall~0 \leq &&i   &&\leq k,&&~p_i \in V \\
-        \text{(Consecutive nodes are adjacent)}      ~~&\forall~0 <    &&i   &&\leq k,&&~p_i \in Adj(G, p_{i-1})\\
-        \text{(No repeated nodes)}                   ~~&\forall~0 \leq &&i,j &&\leq k,&&~i\neq j \implies p_i \neq p_j \\
-        \text{(No repeated edges)}                   ~~&\forall~0 \leq &&i,j &&<    k,&&~i\neq j \implies (p_i,p_{i+1}) \neq (p_j, p_{j+1})
+        \text{(All nodes belong to the graph)}       ~~&\forall~1 \leq &&i   &&\leq |p|,&&~p_i \in V \\
+        \text{(Consecutive nodes are adjacent)}      ~~&\forall~1 <    &&i   &&\leq |p|,&&~p_i \in Adj(G, p_{i-1})\\
+        \text{(No repeated nodes)}                   ~~&\forall~1 \leq &&i,j &&\leq |p|,&&~i\neq j \implies p_i \neq p_j \\
+        \text{(No repeated edges)}                   ~~&\forall~1 \leq &&i,j &&<    |p|,&&~i\neq j \implies (p_i,p_{i+1}) \neq (p_j, p_{j+1})
     \end{alignat*}
 \end{definition}
 \begin{definition}[Set of all paths]
@@ -55,7 +55,7 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
 \begin{definition}[Reachability]
     A node $v \in V$ is reachable from $u \in V$ (or \emph{$u$ can reach $v$}) if there is a path starting in $u$ and ending in $v$.
     \begin{equation*}
-        u \leadsto v \iff \exists p \in P_G \colon p_0 = u \wedge p_k = v
+        u \leadsto v \iff \exists p \in P_G \colon p_1 = u \wedge p_{|p|} = v
     \end{equation*}
     Let us introduce the following notation, which can be read as ``$z$ is reachable from $x$ via $y$":
     \begin{equation*}
@@ -65,7 +65,7 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
 \begin{definition}[Weight of a path]
     The weight of a path $p$ of length $k$ in graph $G(V,E,w)$ is
     \begin{equation*}
-        W(p) = \sum_{i=0}^{k-1}{w(p_i, p_{i+1})}
+        W(p) = \sum_{i=1}^{|p|-1}{w(p_i, p_{i+1})}
     \end{equation*}
 \end{definition}
 \begin{definition}[Descendants] The descendants $Desc(s)$ of a node $s \in V$ in a graph $G(V,E)$ are all nodes $v \in V$ reachable from $s$.
@@ -108,7 +108,7 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
     \end{equation*}
 \end{theorem}
 \begin{proof}
-Let $p$ be a path that makes $x \leadsto y$ true, and let $q$ be a path that makes $y \leadsto z$ true. The path $r = \langle p[0:k_p], q[1:k_q] \rangle = \langle x, p_1, p_2,...,p_{k_p-1},y,q_1,q_2,...,q_{k_q-1}, z \rangle$ makes $x \leadsto z$ trivially true.
+Let $p$ be a path that makes $x \leadsto y$ true, and let $q$ be a path that makes $y \leadsto z$ true. The path $r = \langle p[1:|p|], q[2:|q|] \rangle = \langle x, p_2, p_3,...,p_{|p|-1},y,q_2,q_3,...,q_{|q|-1}, z \rangle$ makes $x \leadsto z$ trivially true.
 \end{proof}
 % \section{Miscellaneous}
 % \begin{theorem}[Master theorem of Divide-and-Conquer] \label{theor:master}

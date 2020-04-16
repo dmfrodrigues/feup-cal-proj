@@ -39,7 +39,7 @@ Depth-first search is a very elementary graph traversal, which explores nodes in
     If $s \leadsto u$ and $v \in Adj(G, u)$, then $s \leadsto v$.
 \end{lemma}
 \begin{proof}
-    If $s \leadsto u$, then $\exists p \in P_G \colon p_0 = s \wedge p_k = u$. Let that path be $p^u$. If $v \in Adj(G, u)$ then we can add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[0:j]$ is a path from $s$ to $v$.
+    If $s \leadsto u$, then $\exists p \in P_G \colon p_1 = s \wedge p_{|p|} = u$. Let that path be $p^u$. If $v \in Adj(G, u)$ then we can add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[1:j]$ is a path from $s$ to $v$.
 \end{proof}
 \begin{theorem}
     Depth-first search algorithm starting in $s$ finds all nodes reachable from $s$.

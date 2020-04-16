@@ -1,5 +1,5 @@
 \chapter{Problem formalization} \label{problem-formalization}
-In this chapter, we will make an effort to transform our specific problems into abstract (and to the greatest extent possible, classical) problems, in order to list all subproblems to be solved and possible solutions.
+In this chapter, we will express our specific problems into abstract (and to the greatest extent possible, classical) problems, in order to list all subproblems to be solved and possible solutions.
 \section{Input} \label{problem-formalization-input}
 There are three main inputs to this problem: a description of the map of the area the company serves (section \ref{problem-formalization-input-map}); the list of vans (section \ref{problem-formalization-input-vans}); the list of requested services for a given day (section \ref{problem-formalization-input-services}).
 \subsection{Map} \label{problem-formalization-input-map}
@@ -8,19 +8,19 @@ Maps will be converted into graphs $G(V,E, w)$, where:
 \begin{itemize}
     \item Nodes $V$ represent positions on Earth.
     \item Edges $E$ represent roads traversable by automobiles.
-    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $5 m$, and that travelling at a maximum speed of $120 km/h$ a vehicle would take $0.15 s$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being relatively easy to manage as well as fitting in a 32-bit unsigned integer.
+    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $\SI{5}{m}$, and that travelling at a maximum speed of $\SI{120}{km/h}$ a vehicle would take $\SI{0.15}{s}$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being tangible for human analysis, as well as fitting in a 32-bit unsigned integer.
 \end{itemize}
 We will have two graphs:
 \begin{itemize}
     \item $G(V,E,w)$ is the main map, with all the nodes ($|V|=185360$) and edges ($|E|=343617$).
-    \item $G'(V',E',w')$ is the helper map, which instead of having all edges, will only contain as edges what OSM calls \emph{ways}, thus allowing for faster path-finding. Thus, the number of nodes ($|V'|=43592$) and edges ($|E'|=54677$) will be significantly smaller.
+    \item $G'(V',E',w')$ is the helper map, which will only have edges that are designated by OSM as \emph{ways}, and have as nodes all those in which a \emph{way} starts or ends. Thus, the number of nodes ($|V'|=43592$) and edges ($|E'|=54677$) will be significantly smaller.
 \end{itemize}
-We thus have as input data the directed weighted graph $G(V,E,w)$.
+We thus have as input data the directed weighted graphs $G$ and $G'$.
 \subsection{Vans} \label{problem-formalization-input-vans}
-A list of vans $v_i=(n)$ where $n$ is the capacity.
+A list of vans, where each van $v=(n)$ \footnote{a van is a 1-tuple} has a capacity of $n$ people, driver not included.
 \subsection{Services} \label{problem-formalization-input-services}
 For each client, we need to know the origin, destination and the time the person can be picked up.
-We thus have as input data a sequence of clients $c$ where each client $c=(u, v, t)$ can be picked at $u$ starting in time $t$, and must be dropped at $v$.
+We thus have as input data a sequence of clients where each client $c=(u, v, t)$ can be picked at $u$ starting in time $t$, and must be dropped at $v$.
 \section{Output} \label{problem-formalization-output}
 Various rides $r$, where a ride is a triple $r=(v, C, \langle e \rangle)$. $v$ is the van that will fulfill that ride, $C$ is the set of clients satisfied by that ride and $\langle e \rangle = \langle e_1, e_2,...,e_{|e|} \rangle$ is the sequence of events in that ride. An event $e$ is a triple $e=(t, a, c)$ where $t$ is the time point of that event, $a$ is the type of event and $c$ is defined according to $a$:
 \begin{itemize}
@@ -37,7 +37,7 @@ Let $node(e)$ be the node where the van is supposed to be according to event $e$
     \end{dcases}
 \end{equation*}
 \section{Restrictions} \label{problem-formalization-restrictions}
-The limits of index variables are implicitly limited sequences' sizes.
+The limits of index variables are implicitly limited to the sequences' sizes.
 \begin{enumerate}
     \item $\{r.C : r \text{ is a ride}\}$ is a partition of the set of all clients (a client can only be satisfied once, and all clients must be satisfied).
     \item For a ride $r(v,C,\langle e \rangle)$:
@@ -58,7 +58,10 @@ The limits of index variables are implicitly limited sequences' sizes.
     \end{enumerate}
     \item For a van $v$:
     \begin{enumerate}
-        \item There are no overlapping rides: $\forall r, r',~r \neq r' \wedge v = v' \iff \min\{e_{|e|}.t,e'_{|e'|}.t\} \leq \max\{e_1.t,e'_1.t\}$
+        \item There are no overlapping rides:
+        \begin{equation*}
+            \forall r(v,C,\langle e \rangle), r'(v',C',\langle e' \rangle),~r \neq r' \wedge v = v' \iff \min\{e_{|e|}.t,e'_{|e'|}.t\} \leq \max\{e_1.t,e'_1.t\}
+        \end{equation*}
     \end{enumerate}
 \end{enumerate}
 \section{Objective function} \label{problem-formalization-objective}
@@ -71,4 +74,3 @@ Let $pick(c)$ be the event where $c$ is picked up, and $drop(c)$ the event where
 \begin{equation*}
     \min \Delta T
 \end{equation*}
-
