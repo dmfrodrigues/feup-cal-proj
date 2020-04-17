@@ -6,30 +6,30 @@ Depth-first search is a very elementary graph traversal, which explores nodes in
     \begin{minipage}[t]{0.49\linewidth}
         (a) Mathematical version
         \begin{algorithmic}[1]
-            \State $R \gets \emptyset$
+            \State $D \gets \emptyset$
             \Function{DFS}{$G(V,E)$, $u$}
-                \If {$u \in R$} \Return {$ $}
+                \If {$u \in D$} \Return {$ $}
                 \EndIf 
-                \State {$R \gets R \cap \{u\}$}
+                \State {$D \gets D \cap \{u\}$}
                 \For {$v \in \Call{Adj}{G, u}$}
                     \State {$\Call{DFS}{G, v}$}
                 \EndFor
-                \State \Return $R$
+                \State \Return $D$
             \EndFunction
         \end{algorithmic}
     \end{minipage}
     \begin{minipage}[t]{0.49\linewidth}
         (b) Programmatic version
         \begin{algorithmic}[1]
-            \State $R[|Adj|] = \text{FALSE}$
+            \State $D[|Adj|] = \text{FALSE}$
             \Function{DFS}{$Adj$, $u$}
-                \If {$R[u]$} \Return {$ $}
+                \If {$D[u]$} \Return {$ $}
                 \EndIf 
-                \State {$R[u] = \text{TRUE}$}
+                \State {$D[u] = \text{TRUE}$}
                 \For {$v : Adj[u]$}
                     \State {$\Call{DFS}{Adj, v}$}
                 \EndFor
-                \State \Return $R$
+                \State \Return $D$
             \EndFunction
         \end{algorithmic}
     \end{minipage}
