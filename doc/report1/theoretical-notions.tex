@@ -4,12 +4,12 @@ This short chapter presents some basic notions and definitions on Computer Scien
 Complexity analysis is the process of identifying the computational complexity of an algorithm, describing in a more or less precise way the asymptotic growth of the amount of resources (e.g., time and memory) an algorithm requires.
 \begin{definition}[Big-$O$ notation] $f(n) \in O(g(n))$ means that $g$ is an upper bound of $f$.
     \begin{equation*}
-        O(g(n))=\{f(n) : \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \leq c\cdot g(n)\}
+        O(g(n))=\{f(n) \mid \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \leq c\cdot g(n)\}
     \end{equation*}
 \end{definition}
 \begin{definition}[Big-$\Omega$ notation] $f(n) \in \Omega(g(n))$ means that $g$ is a lower bound of $f$.
     \begin{equation*}
-        \Omega(g(n))=\{f(n) : \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \geq c\cdot g(n)\}
+        \Omega(g(n))=\{f(n) \mid \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \geq c\cdot g(n)\}
     \end{equation*}
 \end{definition}
 \begin{definition}[Big-$\Theta$ notation] $f(n) \in \Theta(g(n))$ means that $g$ is a strict upper and lower bound of $f$.
@@ -70,12 +70,12 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
 \end{definition}
 \begin{definition}[Descendants] The descendants $Desc(s)$ of a node $s \in V$ in a graph $G(V,E)$ are all nodes $v \in V$ reachable from $s$.
     \begin{equation*}
-        Desc(s) = \{v \in V : s \leadsto v\}
+        Desc(s) = \{v \in V \mid s \leadsto v\}
     \end{equation*}
 \end{definition}
 \begin{definition}[Predecessors] The predecessors $Pred(s)$ of a node $s \in V$ in a graph $G(V,E)$ are all nodes $u \in V$ that can reach $s$.
     \begin{equation*}
-        Pred(s) = \{u \in V : u \leadsto s\}
+        Pred(s) = \{u \in V \mid u \leadsto s\}
     \end{equation*}
 \end{definition}
 \begin{definition}[Strongly connected graph]

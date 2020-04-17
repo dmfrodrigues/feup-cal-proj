@@ -39,11 +39,11 @@ Let $node(e)$ be the node where the van is supposed to be according to event $e$
 \section{Restrictions} \label{problem-formalization-restrictions}
 The limits of index variables are implicitly limited to the sequences' sizes.
 \begin{enumerate}
-    \item $\{r.C : r \text{ is a ride}\}$ is a partition of the set of all clients (a client can only be satisfied once, and all clients must be satisfied).
+    \item $\{r.C \mid r \text{ is a ride}\}$ is a partition of the set of all clients (a client can only be satisfied once, and all clients must be satisfied).
     \item For a ride $r(v,C,\langle e \rangle)$:
     \begin{enumerate}
         \item It must start and end at the train station: $(e_1.a, e_1.c) = (e_{|e|}.a,e_{|e|}.c)=(0, \text{ train station})$
-        \item The clients in $C$ are the same as those in the ride's events: $C=\{e.c : e.a \neq 0\}$
+        \item The clients in $C$ are the same as those in the ride's events: $C=\{e.c \mid e.a \neq 0\}$
         \item Each client may only be picked up and dropped off once, and all clients must be served:
         \begin{alignat*}{2}
             \forall c \in C,
