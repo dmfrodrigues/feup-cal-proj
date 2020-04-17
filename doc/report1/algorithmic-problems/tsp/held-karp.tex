@@ -51,4 +51,4 @@ On each run of the algorithm, we will find the value for all valid states except
 To find the value of a state $(S,v)$, we will iterate over $|S|$ other states. Since $|S|$ is at most $|V|$, we have a total time complexity of $\Theta (|V|^2 \cdot 2^{|V|})$.\par
 The memory complexity for this algorithm is $\Theta (|V| \cdot 2^{|V|})$, since we need to store the result for each state.
 \subsubsection{Remarks}
-We will have to perform approximately $|V|^2\cdot 2^{|V|-1}$ operations. Using the rule-of-thumb that a computer can perform $10^8$ serial operations per second, we can execute this algorithm in about 0.2s, which ought to be acceptable if this algorithm is run for only a few times.
+We will have to perform approximately $|V|^2\cdot 2^{|V|-1}$ operations. Using the rule-of-thumb that a computer can perform $10^8$ serial operations per second, and assuming as maximum van capacity the legal limit for european driving license category D1 (light buses with a maximum of 16 seats, not including driver)\cite{dir-2006-126-ec}, we can execute this algorithm in about $\SI{0.08}{s}$, which ought to be acceptable if this algorithm is run only a few times.
