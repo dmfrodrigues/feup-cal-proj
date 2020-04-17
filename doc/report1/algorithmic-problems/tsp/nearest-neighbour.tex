@@ -1,8 +1,8 @@
 \subsection{Nearest neighbour algorithm} \label{algorithm-tsp-nn}
-% Comment do Diogo (esclarecer o que é que ele queria dizer com isto) -> Heuristic
 The nearest-neighbour (NN) algorithm is a simple constructive heuristic method for solving the travelling salesman problem.\par
-Starting at the origin $s$, at each step we build upon the previous iteration, visiting the city nearest to the previous city and adding it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.\par
-\par.\par.\par.\par Referir aqui brevemente a complexidade.
+Starting at the origin $s$, at each step we build upon the previous iteration, visiting the city nearest to the previous city and adding it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.
+Therefore the memory complexity of this algorithm is $\Theta (|V|)$, having a time complexity in the order of $\Omega (|V|^{2})$.
+
 \vspace{-1em}
 \begin{algorithm}[ht]
     \caption{Nearest-neighbour algorithm}
@@ -50,12 +50,14 @@ Starting at the origin $s$, at each step we build upon the previous iteration, v
 \end{algorithm}
 
 \subsubsection{Remarks}
-Falar aqui daquilo que o Diogo disse
+Even though the Nearest Neighbour algorithm does not always yield the optimal solution it is still a method that in average gives acceptability good results.
+By causing a relatively low number of critical mistakes which are mostly concentrated at the end of its execution (due to "forgotten" cities), it can provide a decent starting solution that can be worked on and improved by other methods.\par
+In the context of this project it is especially good if we take into account that by finding the closest passanger's destination to its current position it tries to empty out the van as quickly as possible
+which should result in a better median when it comes to customer satisfaction due to a higher number of less displeased customers on one hand and a lower number of customers with a higher degree of unsatisfaction on the other.
+\par!TODO: REFERENCES / REVIEW
 
 % Some of the "raw" Bibliography used at the moment. It is here so I don't forget afterwards:
 % https://link.springer.com/chapter/10.1007/978-3-319-00951-3_11 -> page 112
 % (Wiley Series in Discrete Mathematics & Optimization) E. L. Lawler, Jan Karel Lenstra, A. H. G. Rinnooy Kan, D. B. Shmoys - The Traveling Salesman Problem_ A Guided Tour -> page 150 (page 158 in pdf)
 % Gerhard Reinelt. The Travelling Salesman. Computational Solutions for TSP Applications, volume 840 of Lecture Notes in Computer Science. Springer-Verlag, Berlin Heidelberg New York, 1994.
 
-\par
-!IN PROGRESS
