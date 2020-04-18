@@ -1,7 +1,42 @@
 \subsection{Floyd-Warshall algorithm} \label{algorithm-shortestpath-floydwarshall}
+The Floyd-Warshall's algorithm also knows as Floyd's algorithm was published in 1962 is a generalization of Warshall's algorithm 
+(which only tested the existence of a path between two vertexes) and corresponds to a dynamic programming method 
+that finds the shortest path between each pair of vertices in a graph (whose edges' weights may be not only positive but also negative).
 
+\begin{algorithm}[ht]
+    \caption{Floyd-Warshall algorithm}
+    \label{alg:held-karp}
+    \begin{minipage}[t]{0.49\linewidth}
+        (a) Mathematical version
+        \begin{algorithmic}[1]
+            \Function{FloydWarshall}{$G(V,E), W$}
+                \State $n \gets W.rows$
+                \State $D^{(0)} \gets W$
+                \For {$0 < k < |V|$}
+                    \State $D^{(0)} \gets $new$ D[n, n]$
+                    \For {$0 < i < |V|$}
+                        \For {$0 < j < |V|$}
+                            \State $D[i,j]^{(k)} \gets min( D[i,j]^{(k-1)},$
+                            $D[i,k]^{(k-1)} + D[k,j]^{(k-1)} )$
+                        \EndFor
+                    \EndFor
+                \EndFor
+                \State \Return{$D^{(n)}$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.49\linewidth}
+        (b) Programmatic version
+        \begin{algorithmic}[1]
+            \Function{FloydWarshall}{$Adj$}
+            \State $n = G.size()$
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
 \subsubsection{Proof of correctness}
 
 \subsubsection{Complexity analysis}
+% referir que se pode não criar uma matriz de cada vez mas substituir a que existia
 
 \subsubsection{Remarks}
