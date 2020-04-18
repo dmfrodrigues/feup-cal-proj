@@ -4,8 +4,7 @@ The Held-Karp algorithm is a dynamic programming approach to problems similar to
     D(&\{v\} &&, v) &&=                  && w(\emptyset &&,s&&,v)\\
     D(&S     &&, v) &&=\min_{u \in S}\{D(S-v, u) + && w(S-v&&,u&&,v)\}
 \end{alignat*}
-\vspace{-1em}
-\begin{algorithm}[ht]
+\begin{algorithm}[h]
     \caption{Held-Karp algorithm}
     \label{alg:held-karp}
     \begin{minipage}[t]{0.49\linewidth}
