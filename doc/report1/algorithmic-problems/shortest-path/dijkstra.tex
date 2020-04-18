@@ -1,6 +1,6 @@
 \subsection{Dijkstra's algorithm} \label{algorithm-shortestpath-dijkstra}
-Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.
-
+Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
+This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving all shortest path problems from $s$). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes $u$ the least distance $dist(u)$ from $s$ to $u$ and previous node $prev(u)$ in the shortest path (temporary if the node is in $Q$, final otherwise). We then pick the node $u \in Q$ with the least distance to $s$, and process it by iterating over all nodes adjacent to $u$, calculating their potential new distance to $s$ via $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.\par
 \begin{algorithm}[H]
     \caption{Dijkstra's algorithm}
     \label{alg-dijkstra}
@@ -58,23 +58,17 @@ Dijkstra's algorithm is one of the most famous graph algorithms, and the most po
         \end{algorithmic}
     \end{minipage}
 \end{algorithm}
-This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving the shortest path problem in the meantime). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes the values of functions distance $dist$ and previous node $prev$ (temporary if the node is in $Q$, final otherwise). We then process the node $u \in Q$ with the least distance to $s$, which consists of iterating over all nodes adjacent to $u$, calculate their potential new distance to $s$ passing through $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.\par
-For Dijkstra's algorithm we usually represent the graph as an adjacency list $Adj$ (admits iteration in $O(1)$ for each adjacent node). We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$ (fast extraction of element with smallest key and key decrease when processing adjacent nodes).
+To achieve the least time complexity possible, the graph is usually represented as an adjacency list $Adj$. We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$, which allows fast extraction of element with lowest key and key decrease when processing adjacent nodes.
 \subsubsection{Proof of correctness}
-The full proof is rather long and is promptly available, thus we will only present a short argument for correctness. The full proof can be found, for instance, in \cite[p.~659]{intro-alg}
+The full proof is rather long and is promptly available (for instance, in \cite[p.~659]{intro-alg}), thus we will only present a short argument for correctness based on cycle invariants/variants for the \textbf{while} loop.
 \begin{itemize}
     \item \textbf{Pre-conditions:} $G(V, E, w)$ is a graph. $s \in V$. $Q$ contains all nodes. $dist(s)=0$ and $prev(s)=\text{NULL}$
-    \item \textbf{Post-conditions:} shortest path distance $dist(u)$ and previous node $prev(u)$ from $s$ to $\forall u \in V$ are final. Distance of unreachable nodes is $\infty$ and previous node in shortest path is invalid. Previous node for $s$ is also invalid.\par
-    \item \textbf{Cycle invariant:} $\forall u \not \in Q$, $dist(u)$ is the weight of the shortest path from $s$ to $u$ and $prev(u)$ is the previous node in the shortest path from $s$ to $u$. $\forall u \in Q$, $dist(u)$ is the least distance from $s$ to $u$ going only through nodes not in $Q$.\par
+    \item \textbf{Post-conditions:} $dist(u)$ and $prev(u)$ from $s$ to $\forall u \in V$ are final. Distance of unreachable nodes is $\infty$ and previous node in shortest path is NULL. $prev(s)$ is also NULL.\par
+    \item \textbf{Cycle invariant:} $\forall u \not \in Q$, $dist(u)$ and $prev(u)$ are final. $\forall u \in Q$, $dist(u)$ is the least distance from $s$ to $u$ going only through nodes not in $Q$.\par
     This holds for the next cycle run because the element $u$ we remove from $Q$ already has the least $dist(u)$ passing through nodes $u' \not \in Q$, and it can't pass through nodes $u' \in Q$ because there is no node with less $dist(u')$ that would allow to reduce $dist(u)$ even further.
-    \item \textbf{Cycle variant:} $|Q|$, which is:
-    \begin{itemize}
-        \item Integer, given a size can only be integer.
-        \item Strictly decreasing, given that one node is removed from $Q$ every time the cycle runs.
-        \item Positive, given it starts with value $|V|$ where $V$ has at least node $s$. The cycle breaks when $|Q| = 0$.
-    \end{itemize}
+    \item \textbf{Cycle variant:} $|Q|$, which, being a size, is obviously integer. It is strictly decreasing, given that one node is removed from $Q$ for every cycle run. It is also always positive, given it starts with value $|V|$ where $V$ has at least node $s$. The cycle breaks when $|Q| = 0$.
 \end{itemize}
 \subsubsection{Complexity analysis}
-The initial calls to \textsc{Insert\_With\_Key} are made in time $O(|V|)$, given all keys are $\infty$ and the heap property is maintained. In the main cycle, all elementary operations are done in $O(1)$ except for $Q$ operations \textsc{Extract\_Min} and \textsc{Decrease\_Key}. Let their time complexities be $O(\text{T}_{em})$ and $O(\text{T}_{dk})$ respectively. \textsc{Extract\_Min} is run once for each of the $|V|$ nodes we remove from $Q$. For each node $u$ we iterate over $Adj[u]$, thus iterating once over each of the $|E|$ edges, potentially running \textsc{Decrease\_Key} for each edge. This yields the total time complexity $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$. \par
+The initial calls to \textsc{Insert\_With\_Key} are made in time $O(|V|)$, given all keys are $\infty$ and the heap property is maintained. In the main cycle, all elementary operations are done in $O(1)$ except \textsc{Extract\_Min} and \textsc{Decrease\_Key}. Let their time complexities be $O(\text{T}_{em})$ and $O(\text{T}_{dk})$ respectively. \textsc{Extract\_Min} is run once for each of the $|V|$ nodes we remove from $Q$. For each node $u$ we iterate over $Adj[u]$, thus iterating once over each of the $|E|$ edges, potentially running \textsc{Decrease\_Key} for each edge. This yields the total time complexity $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$. \par
 Implementing $Q$ as a binary heap, we have $O(\text{T}_{dk})=O(\log |V|)$ and $O(\text{T}_{em})=O(\log |V|)$, thus yielding the total time complexity $O((|E|+|V|)\log |V|)$. This can be further improved with a Fibonacci heap, with $O(\text{T}_{dk})=O(1)$ and $O(\text{T}_{em})=O(\log |V|)$ (both amortized), thus yielding $O(|E| + |V|\log |V|)$.\par
 The algorithm takes as much memory as the heaps, thus giving a memory complexity of $O(|V|)$.
