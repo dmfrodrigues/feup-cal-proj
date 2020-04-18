@@ -5,31 +5,53 @@ that finds the shortest path between each pair of vertices in a graph (whose edg
 
 \begin{algorithm}[ht]
     \caption{Floyd-Warshall algorithm}
-    \label{alg:held-karp}
+    \label{alg:floyd-warshall}
     \begin{minipage}[t]{0.49\linewidth}
         (a) Mathematical version
         \begin{algorithmic}[1]
             \Function{FloydWarshall}{$G(V,E), W$}
-                \State $n \gets W.rows$
-                \State $D^{(0)} \gets W$
-                \For {$0 < k < |V|$}
-                    \State $D^{(0)} \gets $new$ D[n, n]$
-                    \For {$0 < i < |V|$}
-                        \For {$0 < j < |V|$}
-                            \State $D[i,j]^{(k)} \gets min( D[i,j]^{(k-1)},$
-                            $D[i,k]^{(k-1)} + D[k,j]^{(k-1)} )$
+                    \State $dist^{(0)} \gets $ new $ dist[V, V] = \infty$
+                    \For{$each\ edge\ E(i,j)$}
+                        \State $dist[i,j]^{(0)} \gets W(i,j)$
+                    \EndFor
+                    \For{$each\ vertex\ i$}
+                        \State $dist[i,i]^{(0)} \gets 0$
+                    \EndFor
+                \For {$0 < k < V$}
+                    \State $dist^{(k)} \gets $ new $ dist[V, V]$
+                    \For {$0 < i < V$}
+                        \For {$0 < j < V$}
+                            \State $dist[i,j]^{(k)} \gets min( dist[i,j]^{(k-1)},$
+                            $dist[i,k]^{(k-1)} + dist[k,j]^{(k-1)} )$
                         \EndFor
                     \EndFor
                 \EndFor
-                \State \Return{$D^{(n)}$}
+                \State \Return{$dist^{(n)}$}
             \EndFunction
         \end{algorithmic}
     \end{minipage}
     \begin{minipage}[t]{0.49\linewidth}
         (b) Programmatic version
         \begin{algorithmic}[1]
-            \Function{FloydWarshall}{$Adj$}
-            \State $n = G.size()$
+            \Function{FloydWarshall}{$G(V,E), W$}
+                \For {$i = 1\ to\ V$}
+                    \For {$j = 1\ to\ V$}
+                        \State $dist[0][i][j] = \inf$
+                        \If{$(i,j) \in E$}
+                            \State $dist[0][i][j] = W(i,j)$
+                        \EndIf
+                    \EndFor
+                \EndFor
+                \For {$k = 1 < V$}
+                    \State $dist^{(k)} \gets $ new $ dist[n, n]$
+                    \For {$i = 1\ to\ V$}
+                        \For {$j = 1\ to\ V$}
+                            \State $dist[k,i,j] = min(dist[k-1,i,j],$
+                            $dist[k-1,i,k] + dist[k-1,k,j])$
+                        \EndFor
+                    \EndFor
+                \EndFor
+                \State \Return{$dist[k]$}
             \EndFunction
         \end{algorithmic}
     \end{minipage}
