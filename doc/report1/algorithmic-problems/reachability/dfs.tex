@@ -1,6 +1,6 @@
 \subsection{Depth-first search} \label{algorithm-reachability-dfs}
 Depth-first search is a very elementary graph traversal, which explores nodes in depth before backtracking.
-\begin{algorithm}[ht]
+\begin{algorithm}[h]
     \caption{Depth-first search}
     \label{alg-dfs}
     \begin{minipage}[t]{0.49\linewidth}
@@ -39,7 +39,8 @@ Depth-first search is a very elementary graph traversal, which explores nodes in
     If $s \leadsto u$ and $v \in Adj(G, u)$, then $s \leadsto v$.
 \end{lemma}
 \begin{proof}
-    If $s \leadsto u$, then $\exists p \in P_G \colon p_1 = s \wedge p_{|p|} = u$. Let that path be $p^u$. If $v \in Adj(G, u)$ then we can add $v$ to the end of path $p^u$, which will either be a valid path, or an invalid path which means $v$ was already in $p^u$ in position $j$, implying $p^u[1:j]$ is a path from $s$ to $v$.
+    If $s \leadsto u$, then $\exists p \in P_G \colon p_1 = s \wedge p_{|p|} = u$; let that path be $p^u$.\par
+    If $v \in Adj(G, u)$ then $p^v \coloneqq \langle p^u, v \rangle = \langle p^u_1, p^u_2,...,p^u_{|p^u|}, v\rangle$ is either a valid path (thus $s \leadsto v$ because of $p^v$), or an invalid path which means $p^u_j = v$ for some $j$, in which case $s \leadsto v$ because of $p^u[1:j]$.
 \end{proof}
 \begin{theorem}
     Depth-first search algorithm starting in $s$ finds all nodes reachable from $s$.
@@ -49,5 +50,5 @@ Depth-first search is a very elementary graph traversal, which explores nodes in
 We have thus proven the theorem correct by induction.
 \end{proof}
 \subsubsection{Complexity analysis}
-Each node is explored once, and for each node all its adjacent nodes are explored via all edges. All elementary operations are $O(1)$, making this algorithm run in time $O(|E|+|V|)$.\par
-In terms of memory, each call takes $O(1)$ and the call chain can be the same size as $|V|$ (one call per node). This means the algorithm uses $O(|V|)$ memory.
+Each node is explored at most once, and for each node all its adjacent nodes are explored via all edges at most once. All elementary operations are $O(1)$, making this algorithm run in time $O(|E|+|V|)$.\par
+In terms of memory, each call takes $O(1)$, the call chain can be the same size as $|V|$ (one call per node) and $D$ has at most $|V|$ elements. This means the algorithm uses $O(|V|)$ memory.

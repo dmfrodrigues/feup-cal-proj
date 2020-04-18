@@ -49,6 +49,20 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
         \text{(No repeated edges)}                   ~~&\forall~1 \leq &&i,j &&<    |p|,&&~i\neq j \implies (p_i,p_{i+1}) \neq (p_j, p_{j+1})
     \end{alignat*}
 \end{definition}
+\begin{definition}[Subpath]
+    A subpath $p'$ of a path $p$ is a subsequence of $p$. From the properties of paths, a subpath is also a path. The subpath of $p$ from indexes $a$ to $b$ ($a \leq b)$ is denoted as $p[a:b]$.
+\end{definition}
+\begin{definition}[Path concatenation]
+    $\langle p^1, p^2 \rangle$ is the concatenation of $p^1$ and $p^2$.
+    \begin{equation*}
+        \langle p^1, p^2 \rangle = \begin{dcases}
+            \langle p^1_1, p^1_2,...,p^1_{|p^1|}, p^2_1,p^2_2,...,p^2_{|p^2|} \rangle & : p_1,p_2 \in P_G \\
+            \langle p^1_1, p^1_2,...,p^1_{|p^1|}, p^2                         \rangle & : p_1 \in P_G \wedge p_2 \in V \\
+            \langle p^1, p^2_1, p^2_2,..., p^2_{|p^2|}                        \rangle & : p_1 \in V \wedge p_2 \in P_G \\
+            \langle p^1, p^2                                                  \rangle & : p_1,p_2 \in V \\
+        \end{dcases}
+    \end{equation*}
+\end{definition}
 \begin{definition}[Set of all paths]
     $P_G$ is the set of all paths in graph $G(V,E)$.
 \end{definition}
