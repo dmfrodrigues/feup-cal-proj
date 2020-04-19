@@ -98,9 +98,10 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
         \forall u, v \in V, u \leadsto v
     \end{equation*}
 \end{definition}
-\begin{definition}[Strongly connected component]
-    A strongly connected component $SCC$ is a subgraph of $G(V, E)$ which is a maximum strongly connected graph (there is no other node $x \not \in SCC$ that can reach and be reached by all nodes $u \in SCC$).
+\begin{definition}[\Acrlong*{SCC}]
+    A \acrlong*{SCC} $SCC$ is a subgraph of $G(V, E)$ which is a maximum strongly connected graph (there is no other node $x \not \in SCC$ that can reach and be reached by all nodes $u \in SCC$).
 \end{definition}
+Let us denote by $SCC(u)$ the \acrshort{SCC} that node $u$ belongs to.
 \begin{definition}[Bridge]
     A bridge in a strongly connected graph $G(V,E)$ is an edge $e \in E$ that, if removed, would disconnect $G$.
 \end{definition}
@@ -114,6 +115,13 @@ We will not put excessive emphasis on exaggerated formalism, so we will by defau
 \begin{proof}
     To prove $Pred_G(s) \subseteq Desc_{G^T}(s)$, we can argue it is trivial that, if $u \leadsto s$ in $G$, then $s \leadsto u$ in $G^T$. Thus, if $u$ is a predecessor of $s$ in $G$ then it is also a descendant of $s$ in $G^T$.\par
     We can follow a similar line of thought to prove $Desc_{G^T}(s) \subseteq Pred_G(s)$.
+\end{proof}
+\begin{theorem} \label{teor:scc}
+    $SCC(p)=Desc(p) \cap Pred(p)$
+\end{theorem}
+\begin{proof}
+    $Desc(p) \cap Pred(p) \subseteq SCC(p)$, given that $\forall u, v \in Desc(p) \cap Pred(p)$ we know $p \leadsto u$, $u \leadsto p$, $p \leadsto v$, $v \leadsto p$, thus meaning $u \leadsto p \leadsto v$ and $v \leadsto p \leadsto u$.\par
+    A node $u \in SCC(p)$ must meet both conditions, otherwise it is either false that $p \leadsto u$, or it is false that $u \leadsto p$, thus violating the definition of SCC.
 \end{proof}
 \begin{theorem}[Transitivity of reachability]
     The reachability relation is transitive.

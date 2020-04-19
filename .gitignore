@@ -12,5 +12,12 @@ map/map_process
 *.loa
 *.synctex.gz
 *.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
 obj/
 

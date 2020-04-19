@@ -1,7 +1,7 @@
-\subsection{Depth-first search} \label{algorithm-reachability-dfs}
-Depth-first search is a very elementary graph traversal, which explores nodes in depth before backtracking.
+\subsection{\texorpdfstring{\Acrlong*{DFS}}{Depth-first search}} \label{algorithm-reachability-dfs}
+\Acrlong*{DFS} is a very elementary graph traversal, which explores nodes in depth before backtracking.
 \begin{algorithm}[h]
-    \caption{Depth-first search}
+    \caption{\Acrlong*{DFS}}
     \label{alg-dfs}
     \begin{minipage}[t]{0.49\linewidth}
         (a) Mathematical version
@@ -43,7 +43,7 @@ Depth-first search is a very elementary graph traversal, which explores nodes in
     If $v \in Adj(G, u)$ then $p^v \coloneqq \langle p^u, v \rangle = \langle p^u_1, p^u_2,...,p^u_{|p^u|}, v\rangle$ is either a valid path (thus $s \leadsto v$ because of $p^v$), or an invalid path which means $p^u_j = v$ for some $j$, in which case $s \leadsto v$ because of $p^u[1:j]$.
 \end{proof}
 \begin{theorem}
-    Depth-first search algorithm starting in $s$ finds all nodes reachable from $s$.
+    \Acrlong*{DFS} algorithm starting in $s$ finds all nodes reachable from $s$.
 \end{theorem}
 \begin{proof} \textbf{Base case:} $u=s$; $s$ is trivially reachable from itself. \\
 \textbf{Inductive step:} suppose \textsc{DFS} is always called for a node $u$ reachable from $s$. By lemma \ref{lem:dfs} we know all nodes adjacent to $u$ are reachable from $s$. Since \textsc{DFS} is only called for the nodes adjacent to $u$ the inductive implication holds.\par

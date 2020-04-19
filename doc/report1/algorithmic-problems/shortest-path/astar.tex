@@ -65,7 +65,7 @@ This algorithm is an extension of Dijkstra's algorithm, using the heuristic func
     \end{minipage}
 \end{algorithm}
 \subsubsection{Proof of correctness}
-According to \cite{Astar}, if $\hat{h}$ is admissible\footnote{An heuristic $\hat{h}$ is admissible if it always provides a lower bound for the actual cost: $\forall u \in V, \hat{h}(u) \leq h(u)$} then the A* algorithm is guaranteed to find an optimal solution if it exists. This proof is fully presented in the original article so we will only present a brief argument.\par
+According to \cite{Astar}, if $\hat{h}$ is \gls{admissible} then the A* algorithm is also \gls{admissible}. This proof is fully presented in the original article so we will only present a brief argument.\par
 Our argument consists of a minor change to the argument for Dijkstra's algorithm. In the cycle invariant, the only difference is that, instead of removing the node with least $dist(u)$, we remove the node with the least $hdist(u)$ passing through nodes $u' \not \in Q$, and it can't pass through nodes $u' \in Q$ because there is no node with less $hdist(u')$ that would, even optimistically, allow to reduce $dist(u)$ and $hdist(u)$ even further.\par
 This means the A* algorithm is as effective as Dijkstra's path-finding algorithm so far as $\hat{h}$ is admissible.
 \subsubsection{Complexity analysis}

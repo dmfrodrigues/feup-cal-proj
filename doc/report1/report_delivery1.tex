@@ -52,6 +52,32 @@
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
 
+% Glossaries
+\usepackage[acronym,nonumberlist]{glossaries}
+\makeglossaries
+\newglossaryentry{admissible}{
+    name=admissible,
+    description={An algorithm is \emph{admissible} iff it always returns an optimal solution, if one exists. A function $\hat{h}$ that estimates $h$ is \emph{admissible} iff it always returns a lower bound for $h$ ($\forall x, \hat{h}(x) < h(x)$)}
+}
+
+\newglossaryentry{constructive}{
+    name=constructive,
+    description={An algorithm is \emph{constructive} when it progressively constructs a solution}
+}
+
+\newglossaryentry{iterative}{
+    name=iterative,
+    description={An algorithm is \emph{iterative} when it progressively evaluates and improves a complete solution}
+}
+
+\newacronym{DFS}{DFS}{depth-first search}
+
+\newacronym{TSP}{TSP}{travelling salesman problem}
+
+\newacronym{VRP}{VRP}{vehicle routing problem}
+
+\newacronym{SCC}{SCC}{strongly connected component}
+
 % Contents title
 \addto\captionsenglish{\renewcommand*\contentsname{Table of contents}}
 
@@ -90,6 +116,9 @@ Group T6G05 \vspace{0.5em} \\
 \setcounter{tocdepth}{2}
 \tableofcontents
 \listofalgorithms
+\clearpage
+\printglossary[type=\acronymtype]
+\printglossary
 \input{introduction.tex}
 \input{theoretical-notions.tex}
 \input{problem-formalization.tex}

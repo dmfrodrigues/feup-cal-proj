@@ -6,10 +6,10 @@ After having formally presented the general problem, we will decompose it into s
 The company owns one van, and thus can not leave the train station for too long. However, it must also serve the clients that are ready to travel and that are waiting for the van to start its travel.\par
 We will use the first iteration to test our algorithms, therefore reducing the need for finding near-optimal heuristics for the hardest problems that will eventually be made harder in subsequent iterations.\par
 We will use the path-finding algorithms described in section \ref{problem-decomposition-pathfinding} to find the shortest paths between nodes in the graph.\par
-One minor heuristic we can implement to group clients is described in section \ref{algorithm-vrp-heuristic}. Having grouped clients, we now need to solve a problem similar to the Travelling Salesman Problem, further described in section \ref{problem-decomposition-tsp}.
+One minor heuristic we can implement to group clients is described in section \ref{algorithm-vrp-heuristic}. Having grouped clients, we now need to solve a problem similar to the \acrshort{TSP}, further described in section \ref{problem-decomposition-tsp}.
 \subsection{Iteration II}
 The company owns a fleet of vans, thus allowing multiple simultaneous travels to handle an increase in client demand. The system must optimize passenger grouping in vans, so as to optimize travels.\par
-We will find shortest paths and handle the travelling salesman problem in ways similar to the previous iteration. To group clients, we will use strategies generally used to solve vehicle routing problems, as described in section \ref{problem-decomposition-vrp}.
+We will find shortest paths and handle the \acrshort{TSP} in ways similar to the previous iteration. To group clients, we will use strategies generally used to solve the \acrshort{VRP}, as described in section \ref{problem-decomposition-vrp}.
 \subsection{Iteration III}
 The company may also provide shuttle service for clients that might want to travel from their homes to the train station, as well as for clients without reservation.\par
 To solve the first problem, we believe adding some conditions to the TSP/VRP solutions is enough, and return an infinite cost when the solution is impossible.\par
@@ -18,7 +18,7 @@ As for the second problem, priority will be given to clients with reservation, m
 We will take advantage of the hierarchical difference between $G$ and $G'$ to make path-finding faster.\par
 Since $G'$ is not too large, we can pre-calculate distances between all pairs of nodes in $G'$.
 Then, all we have to do is find the two nodes on the ends of the origin's street, and the two nodes on the ends of the destination's street, and try out all the four possibilities.
-\section{Travelling salesman problem} \label{problem-decomposition-tsp}
-Our particular instance of the travelling salesman problem is very similar to the classical version. This problem is more thoroughly described in section \ref{algorithm-tsp}.
-\section{Vehicle routing problem} \label{problem-decomposition-vrp}
-Known strategies for the vehicle routing problem offer case-specific solutions taking into account the particular problem's constraints. This problem is more thoroughly described in section \ref{algorithm-vrp}.
+\section{\texorpdfstring{\Acrlong*{TSP}}{Travelling salesman problem}} \label{problem-decomposition-tsp}
+Our particular instance of the \acrshort{TSP} is very similar to the classical version. This problem is more thoroughly described in section \ref{algorithm-tsp}.
+\section{\texorpdfstring{\Acrlong*{VRP}}{Vehicle routing problem}} \label{problem-decomposition-vrp}
+Known strategies for the \acrshort{VRP} offer case-specific solutions taking into account the particular problem's constraints. This problem is more thoroughly described in section \ref{algorithm-vrp}.

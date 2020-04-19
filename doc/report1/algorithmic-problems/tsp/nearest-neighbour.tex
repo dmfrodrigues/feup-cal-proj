@@ -1,9 +1,7 @@
 \subsection{Nearest neighbour algorithm} \label{algorithm-tsp-nn}
-The nearest-neighbour (NN) algorithm is a simple constructive heuristic method for solving the travelling salesman problem.\par
-Starting at the origin $s$, at each step we build upon the previous iteration, visiting the city nearest to the previous city and adding it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.
-Therefore the memory complexity of this algorithm is $\Theta (|V|)$, having a time complexity in the order of $\Omega (|V|^{2})$.
-
-\vspace{-1em}
+The nearest-neighbour (NN) algorithm is a simple \gls{constructive} heuristic method for solving the travelling salesman problem.\par
+Starting at the origin $s$, at each step we visit the city nearest to the previous city and add it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.
+Therefore the memory complexity of this algorithm is $\Theta (|V|)$, and the time complexity of $\Omega (|V|^{2})$.
 \begin{algorithm}[ht]
     \caption{Nearest-neighbour algorithm}
     \label{alg:nearest neighbour}

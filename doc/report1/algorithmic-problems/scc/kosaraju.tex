@@ -1,74 +1,102 @@
 \subsection{Kosaraju's algorithm} \label{algorithm-scc-kosaraju}
-Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. It makes use of the following lemma:
-\begin{lemma} \label{lem:kosaraju1}
-    Let $C$ and $C'$ be distinct strongly connected components in directed graph $G(V,E)$, let $u,v \in C$, let $u',v' \in C'$, and assume
-    \begin{equation}
-        \label{eq:utou_} u \leadsto u'
-    \end{equation}
-    Then it is impossible that
-    \begin{equation}
-        \label{eq:v_tov} v' \leadsto v
-    \end{equation}
-\end{lemma}
-\begin{proof} From $u, v \in C$ and that $C$ is a SSC, we can assume
-    \begin{equation}
-        \label{eq:vtou} v \leadsto u
-    \end{equation}
-    From $u', v' \in C'$ and that $C'$ is a SSC, we can assume
-    \begin{equation}
-        \label{eq:u_tov_} u' \leadsto v'
-    \end{equation}
-    By \eqref{eq:utou_} and \eqref{eq:u_tov_}, $u \leadsto u' \leadsto v'$.\par
-    Assume the absurd \eqref{eq:v_tov}. Then, by \eqref{eq:v_tov} and \eqref{eq:vtou}, $v' \leadsto v \leadsto u$. Thus, $u$ and $v'$ are reachable from each other, thereby contradicting the assumption that $C$ and $C'$ are distinct strongly connected components.
-\end{proof}
-\begin{center}
-    \begin{algorithm}
-        \caption{Kosaraju's algorithm}
-        \label{alg-kosaraju}
-        \begin{minipage}[t]{0.49\linewidth}
-            (a) Programmatic version
-            \begin{algorithmic}[1]
-                \State{$V = \emptyset$}
-                \State{$L = \Call{Stack}{ }$}
-                \Function{DFS\_K}{$Adj$, $u$}
-                    \If{$u \in V$} {\Return{}}
-                    \EndIf
-                    \For{$v : Adj[u]$} 
-                    \State{\Call{DFS\_K}{$Adj$, $v$}}
-                    \EndFor
-                    \State{$L.\Call{Push}{u}$}
-                \EndFunction
-
-                \State{$SCC[|Adj|] = \text{NULL}$}
-
-                \Function{Assign}{$Adj$, $u$, $root$}
-                    \If{$SCC[u] \neq \text{NULL}$} {\Return{}}
-                    \EndIf
-                    \State{$SCC[u] = root$}
-                    \For{$v : Adj[u]]$}
-                        \State{\Call{Assign}{$Adj$, $v$, $root$}}
-                    \EndFor
-                \EndFunction
-
-                \Function{Kosaraju}{$Adj$}
-                \For{$u = 1:|Adj|$} {\Call{DFS\_K}{$Adj$, $u$}}
+Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently.\par
+We consider stack $L$ has its top on the left side, and elements \emph{before} $u$ are closer to the top of the stack (or to the left of $u$).
+\begin{algorithm}
+    \caption{Kosaraju's algorithm}
+    \label{alg-kosaraju}
+    \begin{minipage}[t]{0.49\textwidth}
+        (a) Main algorithm
+        \begin{algorithmic}[1]
+            \Function{Kosaraju}{$Adj$}
+            \For{$u = 1:|Adj|$} {\Call{DFS\_K}{$Adj$, $u$}}
+            \EndFor
+            \State {$Adj. \Call{Transpose}{ }$}
+            \While{$!L.\Call{Empty}{ }$}
+                \State{$u = L. \Call{Pop}{ }$}
+                \State \Call{Assign}{$Adj$, $u$, $u$}
+            \EndWhile
+            \State \Return{$SCC$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.49\textwidth}
+        (b) Helper functions
+        \begin{algorithmic}[1]
+            \State{$V = \emptyset,~L = \Call{Stack}{ }$}
+            \Function{DFS\_K}{$Adj$, $u$}
+                \If{$u \in V$} {\Return{}}
+                \EndIf
+                \State {$V = V \cup \{u\}$}
+                \For{$v : Adj[u]$} {\Call{DFS\_K}{$Adj$, $v$}}
                 \EndFor
-                \State {$Adj. \Call{Transpose}{ }$}
-                \While{$!L.\Call{Empty}{ }$}
-                    \State{$u = L. \Call{Pop}{ }$}
-                    \State \Call{Assign}{$Adj$, $u$, $u$}
-                \EndWhile
-                \State \Return{$SCC$}
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-    \end{algorithm}
-\end{center}
+                \State{$L.\Call{Push}{u}$}
+            \EndFunction
+
+            \State{$SCC[|Adj|] = \text{NULL}$}
+
+            \Function{Assign}{$Adj$, $u$, $root$}
+                \If{$SCC[u] \neq \text{NULL}$} {\Return{}}
+                \EndIf
+                \State{$SCC[u] = root$}
+                \For{$v : Adj[u]]$} {\Call{Assign}{$Adj$, $v$, $root$}}
+                \EndFor
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
 \subsection{Proof of correctness}
+A formal proof is promply available at \cite[p.~619]{intro-alg}, we will thus only present a brief argument as to why Kosaraju's algorithm is correct. This argument might however seem rather confusing.\par
+Let $Before(v)$ be the set of nodes that are before $v$ in $L$ after \textsc{DFS\_K}, let $After(v)$ be the set of nodes that are after $v$ in $L$. Let $P = Pred(v)=P$, $D = Desc(v)$, $B = Before(v)$ and $A=After(v)$.\par
+Trivially, we know that,
+\begin{equation} \label{eq:ABpart}
+    \{B, \{v\}, A\}\text{ is a partition of $V$ in a loose sense}
+\end{equation}
+since $B$, $\{v\}$ and $A$ are mutually exclusive, and their union is $V$.\par
+It is also trivial that
+\begin{equation} \label{eq:vnotinPD}
+    P \cap \{v\} = D\cap\{v\}=\emptyset
+\end{equation}
+
+Let $v$ be a node not yet assigned to an \acrshort{SCC}, meaning it is the root of its own \acrshort{SCC}. From now on, we will use the notation \sout{$S$} to state that the set $S$ is empty.\par
+Since we have added nodes to $L$ in post-order, for every node $v$ we know all nodes $u$ for which $u \leadsto v$ (all nodes in $P$) are either:
+\begin{enumerate}
+    \item \label{itm:B} Before $v$ ($B \cap P$);
+    \begin{enumerate}
+        \item \label{itm:Bexcept} However, it is impossible for a node to be before $v$ and also be in $P \cap D$, because if such node $u$ existed before $v$ then $v$ would have already been assigned to the same \acrshort{SCC} as $u$ (\sout{$B \cap P \cap D$}).
+    \end{enumerate} 
+    \item \label{itm:A} After $v$, where it must also be true that $v \leadsto u$ for $u$ to be validly put after $v$ ($A \cap P \cap D$ and \sout{$A \cap P \cap \overline{D}$}).
+\end{enumerate}
+In the following table, we show a kind of set diagram that shows all possible relevant logical relations (we ignored $\overline{P}$), and which ones are possible.
+\begin{center}
+    \begin{tabular}{r | c | l}
+        In $B$ & & In $A$ \\ \hline
+        \begin{tabular}{r}
+            from \ref{itm:Bexcept}, \sout{$P \cap D$} \\
+            from \ref{itm:B}, $P \cap \overline{D}$
+        \end{tabular} & $v$ & \begin{tabular}{l}
+            $P \cap D$, from \ref{itm:A} (SCC) \\
+            \sout{$P \cap \overline{D}$}, from \ref{itm:A}
+        \end{tabular}
+    \end{tabular}
+\end{center}
+
+As per theorem \ref{teor:scc}, the SCC of which $v$ is a root can be obtained from $SCC(v)=P \cap D$. We will now endeavour into proving $P \cap D = P \backslash B$:
+\begin{alignat*}{2}
+    P \backslash B &= P \cap \overline{B}&&\text{ which from \eqref{eq:ABpart} is} \\
+                   &= P \cap (\{v\} \cup A) && \\
+                   &= (P \cap \{v\}) \cup (P \cap A)&&\text{ which from \eqref{eq:vnotinPD} is}\\
+                   &= \emptyset \cup (P \cap A)&&\\
+                   &= P \cap A &&\text{ which from the table is }\\
+                   &= A \cap P \cap D &&
+\end{alignat*}
+From the table, $P \cap D = A \cap P \cap D$.\par
+This essentially means we can then perform a \acrshort{DFS} on $G^T$ to find $P$, being sufficient to test if a newly encountered element of $P$ has already been assigned to a \acrshort{SCC} (in which case it would be in $B$).\par
+There is one last detail we must mention: how we maintain property \ref{itm:A} after processing a node, particularly the fact that \sout{$A \cap P \cap \overline{D}$}. After executing a \acrshort{DFS} on $G^T$ starting in $v$, we might have marked a node $x \in A$ as belonging to $SCC(v)$ although there is an unprocessed node $\alpha \in A$ before $x$; in this case, before we are finished processing $v$ we can \emph{conceptually} make all nodes marked as belonging to $SCC(v)$ ``bubble'' to the left until all nodes in $SCC(v)$ are placed consecutively in $L$, thus allowing us to now consider all processed nodes to be in $Before(\alpha)$ once we start processing $\alpha$. To better explain this concept, consider $L=\langle u, \alpha, x, \beta, y, \gamma, \delta \rangle $ where greek letters are unprocessed nodes and latin letters are processed nodes that we now know belong to $SCC(u)$; we could then transform $L$ into $L'=\langle u, x, y, \alpha, \beta, \gamma, \delta \rangle$. This is still in post-order, since we know the greek letters are not in $SCC(v)$ (so they're not in $P \cap D$), and $\alpha$ can thus be safely moved from $Before(x)$ to $After(x)$ without breaking the post-order property.\par
+In practice, we implement these ``bubble'' movements by simply ignoring them if they are already assigned to \acrshortpl{SCC}, considering \emph{conceptually} that they were moved to $Before(v)$. These approaches are equivalent, because ``bubbling'' the nodes in $Before(v)$ is equivalent to move them to the top of the stack, which we then pop. 
 
 \subsection{Complexity analysis}
-Analysing each part of the algorithm, both DFS\_K and Assign functions yeald time complexity $O(|V|+|E|)$ since they are fundamentally DFS's \ref{algorithm-reachability-dfs}. The \text{Transpose} operation also yields $O(|V|+|E|)$.
-Memory-wise, the visited nodes V, the stack L and the resulting SCC's are all $O(|V|)$. On another note, the \text{Transpose} operation is also $O(|V|)$ because it is an in-place operation.
+Analysing each part of the algorithm, both \textsc{DFS\_K} and \textsc{Assign} have time complexity $O(|E|+|V|)$ since they are fundamentally \acrshortpl{DFS}. The \textsc{Transpose} operation is also executed in time $O(|E|+|V|)$, thus the total time complexity is $O(|E|+|V|)$.\par
+Memory-wise, the visited nodes $V$, the stack $L$ and the resulting \acrshortpl{SCC} are all $O(|V|)$. On another note, the \textsc{Transpose} operation takes $O(|1|)$ memory if executed in-place, or otherwise $O(|E|+|V|)$ if a copy is made.
 
 
 % DFS_K O(|V|+|E|)

@@ -1,5 +1,5 @@
 \subsection{A simple heuristic} \label{algorithm-vrp-heuristic}
-A simple heuristic we can initially implement consists of: after welcoming its first client, the van $v$ will wait to welcome all clients arriving in the following $\Delta t$ minutes (or the first $v.n$ client, whichever happens first), which must be a relatively small time interval to avoid long waiting times. We estimate the suitable time interval to be a fifth of the approximate maximum round-trip in the served area. Using the approximate maximum round-trip:
+A simple, \gls{constructive} heuristic algorithm we can initially implement consists of: after welcoming its first client, the van $v$ will wait to welcome all clients arriving in the following $\Delta t$ minutes (or the first $v.n$ client, whichever happens first), which must be a relatively small time interval to avoid long waiting times. We estimate the suitable time interval to be a fifth of the approximate maximum round-trip in the served area. Using the approximate maximum round-trip:
 \begin{alignat*}{5}
     \text{Campanhã, Porto}
     &\rightarrow \text{Folgosa, Maia (17min)} \\
