@@ -55,6 +55,22 @@
 % Glossaries
 \usepackage[acronym,nonumberlist]{glossaries}
 \makeglossaries
+
+\newglossaryentry{heuristic}{
+    name=heuristic,
+    description={An \emph{heuristic} function $\hat{h}$ of a function $h$ is a function that aims at estimating the value of $h$. In Computer Science, an \emph{heuristic} is a technique to solve a hard problem in a faster way, or to otherwise solve a problem for which there is no known algorithm that can find an exact solution}
+}
+
+\newglossaryentry{metaheuristic}{
+    name=metaheuristic,
+    description={A \emph{metaheuristic} is a strategy to solve certain classes of problems. It is usually a general method to solve a black-box problem, distinguishing it from an \gls{heuristic} which is usually a technique specifically designed to solve a particular instance of a problem}
+}
+
+\newglossaryentry{natural selection}{
+    name=natural selection,
+    description={Key mechanism of biological evolution, consisting of the observation that individuals' characteristics cause differential survival and reproduction of individuals of a species not subjected to intentional environmental stresses}
+}
+
 \newglossaryentry{admissible}{
     name=admissible,
     description={An algorithm is \emph{admissible} iff it always returns an optimal solution, if one exists. A function $\hat{h}$ that estimates $h$ is \emph{admissible} iff it always returns a lower bound for $h$ ($\forall x, \hat{h}(x) < h(x)$)}
