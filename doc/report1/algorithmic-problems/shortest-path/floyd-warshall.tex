@@ -1,7 +1,21 @@
 \subsection{Floyd-Warshall algorithm} \label{algorithm-shortestpath-floydwarshall}
 The Floyd-Warshall's algorithm also knows as Floyd's algorithm was published in 1962 is a generalization of Warshall's algorithm 
-(which only tested the existence of a path between two vertexes) and corresponds to a dynamic programming method 
-that finds the shortest path between each pair of vertices in a graph (whose edges' weights may be not only positive but also negative).
+(which only tested the existence of a path between two vertices) and corresponds to a dynamic programming method 
+that finds the shortest path between each pair of vertices in a graph (whose edges' weights may be not only positive but also negative).\par
+Assuming $dist(i, j)^{(k)}$ as the distance between $i$ and $j$ that resorts to the vertices $v_{1}$, $v_{2}$, ... $v_{k}$ to create that path
+and that $W(i,j)$ is the weight function that returns the weight of the edge that connects the two vertices $i$ and $j$,
+this algorithm follows the following recurrence:
+
+\begin{equation}
+    dist[i,j]^{(k)}=\begin{cases}
+      W(i,j), & \text{if $k=0$}\\
+      min(dist[i,j]^{(k-1)}, dist[i,k]^{(k-1)} + dist[k,j]^{(k-1)}), & \text{if $k>=1$}
+    \end{cases}
+\end{equation}
+
+The base case corresponds to $k=0$ where $dist(i, j)^{(0)}$ is the value of the edge (if it exists) that connects those two vertices.
+Otherwise, the length of the shortest path between vertices $i$ and $j$ is either the length of the path without considering the vertex
+labeled as $k$ or the sum of the length of two paths: one from $i$ to $k$ and the other from $k$ to $j$.
 
 \begin{algorithm}[ht]
     \caption{Floyd-Warshall algorithm}
@@ -56,7 +70,6 @@ that finds the shortest path between each pair of vertices in a graph (whose edg
         \end{algorithmic}
     \end{minipage}
 \end{algorithm}
-\subsubsection{Proof of correctness}
 
 \subsubsection{Complexity analysis}
 By comparing every path of the graph between each pair of vertices, the Floyd-Warshall algorithm detains a time complexity in the order of $\Theta(|V|^3)$ due not only to the three nested $for$ loops but also to the $O(1)$ run time of line 11.\par

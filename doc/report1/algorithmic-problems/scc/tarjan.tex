@@ -1,2 +1,56 @@
 \subsection{Tarjan's algorithm} \label{algorithm-scc-tarjan}
-!DO
+Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Michael Tarjan in 1972, \cite{tarjan72} uses the ordered DFS of all nodes, starting on a random node, to find all SCCs. However, it makes use of memory to bookkeep each visited node's index and lowlink (corresponds to the smallest index of any node known to be reachable from it's DFS subtree). 
+\begin{center}
+    \begin{algorithm}[H]
+        \caption{Tarjan's algorithm}
+        \label{alg-tarjan}
+        \begin{minipage}[t]{0.80\linewidth}
+            (a) Programmatic version
+            \begin{algorithmic}[1]
+                % E melhor deixar estas cenas aqui como global ou por dentro do Tarjan (e portanto passar por argument ao DFS) ??
+                \State{$id = 0$}
+                \State{$L = \Call{Stack}{ }$}
+                \State{$SCC[|Adj|] = \text{NULL}$}
+                \State{$ids[|Adj|] = \text{NULL}$}
+
+                \Function{DFS\_T}{$Adj$, $u$}
+                    \State{$L.\Call{Push}{u}$}
+                    \State{$ids[u] = ++id$} % Pode se ++?
+                    \State{$SCC[u] = id$}
+
+                    \For{$v : Adj[u]$}
+                        \If{$ids[v] = 0$} {\Call{DFS\_T}{$Adj$, $v$}}
+                        \EndIf
+                        \If{$v \in L$} {$SCC[v] = \Call{min}{$SCC[u]$, $SCC[v]$}$}
+                        \EndIf
+                    \EndFor
+
+                    \If{$ids[u] = SCC[u]$}
+                        \While{$(node = L.\Call{Pop}{ }) \neq u$} % Spaguetti af ??
+                            \State{$SCC[node] = ids[i]$}
+                        \EndWhile
+                    \EndIf
+                \EndFunction
+
+                \Function{Tarjan}{$Adj$}
+                    \For{$u = 1:|Adj|$}
+                        % Ha forma melhor de fazer esta inicializaçao ? (inline quando e definido)
+                        \State{$ids[u] = 0$}
+                        \State{$SCC[u] = 0$}
+                    \EndFor
+                    \For{$u = 1:|Adj|$}
+                        \If{$ids[u] = 0$} 
+                            \Call{DFS\_T}{$Adj$, $u$}
+                        \EndIf
+                    \EndFor
+                    \State \Return{$SCC$}
+                \EndFunction
+            \end{algorithmic}
+        \end{minipage}
+    \end{algorithm}
+\end{center}
+\subsection{Proof of correctness}
+
+\subsection{Complexity analysis}
+Simlar to Kosaraju's algorithm, Tarjan's yields time complexity $O(|V|+|E|)$ in the DFS\_T function since it iterates once over all nodes. However, this can only be achieved if the test $u \in L$ is done in constant time ($O(1)$), by, for example, storing this information in an array of flags $onStack[|V|]$.
+The drawback to this method over it's predecessor is the space complexity, for which it yields $O(|V|)$, since in the worst case it stores a stack and an array of all node indexes with complexity $O(|V|)$, along with the fields $index$ and $onStack$ for each node. 
