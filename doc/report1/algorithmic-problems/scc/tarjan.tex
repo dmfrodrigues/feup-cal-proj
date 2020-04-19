@@ -1,5 +1,5 @@
 \subsection{Tarjan's algorithm} \label{algorithm-scc-tarjan}
-Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Michael Tarjan in 1972, \cite{tarjan72} uses the ordered DFS of all nodes, starting on a random node, to find all SCCs. However, it makes use of memory to bookkeep each visited node's index and lowlink (corresponds to the smallest index of any node known to be reachable from it's DFS subtree). 
+Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Michael Tarjan in 1972, \cite{tarjan72} uses the ordered DFS of all nodes, starting on a random node, to find all \acrshortpl{SCC}. However, it makes use of memory to bookkeep each visited node's index and lowlink (corresponds to the smallest index of any node known to be reachable from it's DFS subtree). 
 \begin{center}
     \begin{algorithm}[H]
         \caption{Tarjan's algorithm}

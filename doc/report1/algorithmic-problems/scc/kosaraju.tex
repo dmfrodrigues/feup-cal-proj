@@ -1,5 +1,5 @@
 \subsection{Kosaraju's algorithm} \label{algorithm-scc-kosaraju}
-Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently.\par
+Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. Like many \acrshort{SCC} algorithms, it performs a \acrshort{DFS} on the graph and another one on its transpose, having as main idea the fact a graph and its transpose have exactly the same \acrshortpl{SCC}.\par
 We consider stack $L$ has its top on the left side, and elements \emph{before} $u$ are closer to the top of the stack (or to the left of $u$).
 \begin{algorithm}
     \caption{Kosaraju's algorithm}
@@ -80,7 +80,7 @@ In the following table, we show a kind of set diagram that shows all possible re
     \end{tabular}
 \end{center}
 
-As per theorem \ref{teor:scc}, the SCC of which $v$ is a root can be obtained from $SCC(v)=P \cap D$. We will now endeavour into proving $P \cap D = P \backslash B$:
+As per theorem \ref{teor:scc}, the \acrshort{SCC} of which $v$ is a root can be obtained from $SCC(v)=P \cap D$. We will now endeavour into proving $P \cap D = P \backslash B$:
 \begin{alignat*}{2}
     P \backslash B &= P \cap \overline{B}&&\text{ which from \eqref{eq:ABpart} is} \\
                    &= P \cap (\{v\} \cup A) && \\

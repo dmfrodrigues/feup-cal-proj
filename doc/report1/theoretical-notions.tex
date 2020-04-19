@@ -121,7 +121,7 @@ Let us denote by $SCC(u)$ the \acrshort{SCC} that node $u$ belongs to.
 \end{theorem}
 \begin{proof}
     $Desc(p) \cap Pred(p) \subseteq SCC(p)$, given that $\forall u, v \in Desc(p) \cap Pred(p)$ we know $p \leadsto u$, $u \leadsto p$, $p \leadsto v$, $v \leadsto p$, thus meaning $u \leadsto p \leadsto v$ and $v \leadsto p \leadsto u$.\par
-    A node $u \in SCC(p)$ must meet both conditions, otherwise it is either false that $p \leadsto u$, or it is false that $u \leadsto p$, thus violating the definition of SCC.
+    A node $u \in SCC(p)$ must meet both conditions, otherwise it is either false that $p \leadsto u$, or it is false that $u \leadsto p$, thus violating the definition of \acrshort{SCC}.
 \end{proof}
 \begin{theorem}[Transitivity of reachability]
     The reachability relation is transitive.

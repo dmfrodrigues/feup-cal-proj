@@ -1,10 +1,10 @@
 \subsection[DCSC algorithm]{Divide-and-Conquer Strong Components algorithm} \label{algorithm-scc-dcsc}
-The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown SCC algorithm, proposed in 2000 by Fleischer et al. \cite{fleischer-dcsc}. Its main ideas are the two lemmas:
+The Divide-and-Conquer Strong Components (DCSC) algorithm is a mostly unknown \acrshort{SCC} algorithm, proposed in 2000 by Fleischer et al. \cite{fleischer-dcsc}. Its main ideas are the two lemmas:
 \begin{lemma} \label{lem:dcsc2}
-    Any SCC is a subset of the descendants of $p$, of the predecessors of $p$, or of the remaining.
+    Any \acrshort{SCC} is a subset of the descendants of $p$, of the predecessors of $p$, or of the remaining.
 \end{lemma}
 We will not endeavor into proving lemma \ref{lem:dcsc2} since our implementation does not require it, adding to the fact it is proven in \cite{fleischer-dcsc}.\par
-The lecture notes go on to describe how these lemmas can be implemented as a divide-and-conquer algorithm to find all SCCs, however we are more interested in a variant designed by ourselves, to obtain the SCC of node $s$ and supported only on lemma \ref{teor:scc}.
+The lecture notes go on to describe how these lemmas can be implemented as a divide-and-conquer algorithm to find all \acrshortpl{SCC}, however we are more interested in a variant designed by ourselves, to obtain the \acrshort{SCC} of node $s$ and supported only on lemma \ref{teor:scc}.
 \begin{algorithm}[H]
     \caption{Divide-and-Conquer Strong Components (DCSC) algorithm}
     \label{alg-dcsc}
