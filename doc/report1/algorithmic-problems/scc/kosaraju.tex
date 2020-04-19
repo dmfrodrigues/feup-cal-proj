@@ -30,6 +30,7 @@ Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but o
             \begin{algorithmic}[1]
                 \State{$V = \emptyset$}
                 \State{$L = \Call{Stack}{ }$}
+                \State{$SCC[|Adj|] = \text{NULL}$}
                 \Function{DFS\_K}{$Adj$, $u$}
                     \If{$u \in V$} {\Return{}}
                     \EndIf
@@ -38,8 +39,6 @@ Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but o
                     \EndFor
                     \State{$L.\Call{Push}{u}$}
                 \EndFunction
-
-                \State{$SCC[|Adj|] = \text{NULL}$}
 
                 \Function{Assign}{$Adj$, $u$, $root$}
                     \If{$SCC[u] \neq \text{NULL}$} {\Return{}}
