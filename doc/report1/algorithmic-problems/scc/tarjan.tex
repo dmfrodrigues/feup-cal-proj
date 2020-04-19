@@ -49,8 +49,8 @@ Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Michael Tarjan 
         \end{minipage}
     \end{algorithm}
 \end{center}
-\subsection{Proof of correctness}
+\subsubsection{Proof of correctness}
 
-\subsection{Complexity analysis}
+\subsubsection{Complexity analysis}
 Simlar to Kosaraju's algorithm, Tarjan's yields time complexity $O(|V|+|E|)$ in the DFS\_T function since it iterates once over all nodes. However, this can only be achieved if the test $u \in L$ is done in constant time ($O(1)$), by, for example, storing this information in an array of flags $onStack[|V|]$.
 The drawback to this method over it's predecessor is the space complexity, for which it yields $O(|V|)$, since in the worst case it stores a stack and an array of all node indexes with complexity $O(|V|)$, along with the fields $index$ and $onStack$ for each node. 

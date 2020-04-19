@@ -44,7 +44,7 @@ We consider stack $L$ has its top on the left side, and elements \emph{before} $
         \end{algorithmic}
     \end{minipage}
 \end{algorithm}
-\subsection{Proof of correctness}
+\subsubsection{Proof of correctness}
 A formal proof is promply available at \cite[p.~619]{intro-alg}, we will thus only present a brief argument as to why Kosaraju's algorithm is correct. This argument might however seem rather confusing.\par
 Let $Before(v)$ be the set of nodes that are before $v$ in $L$ after \textsc{DFS\_K}, let $After(v)$ be the set of nodes that are after $v$ in $L$. Let $P = Pred(v)=P$, $D = Desc(v)$, $B = Before(v)$ and $A=After(v)$.\par
 Trivially, we know that,
@@ -94,10 +94,9 @@ This essentially means we can then perform a \acrshort{DFS} on $G^T$ to find $P$
 There is one last detail we must mention: how we maintain property \ref{itm:A} after processing a node, particularly the fact that \sout{$A \cap P \cap \overline{D}$}. After executing a \acrshort{DFS} on $G^T$ starting in $v$, we might have marked a node $x \in A$ as belonging to $SCC(v)$ although there is an unprocessed node $\alpha \in A$ before $x$; in this case, before we are finished processing $v$ we can \emph{conceptually} make all nodes marked as belonging to $SCC(v)$ ``bubble'' to the left until all nodes in $SCC(v)$ are placed consecutively in $L$, thus allowing us to now consider all processed nodes to be in $Before(\alpha)$ once we start processing $\alpha$. To better explain this concept, consider $L=\langle u, \alpha, x, \beta, y, \gamma, \delta \rangle $ where greek letters are unprocessed nodes and latin letters are processed nodes that we now know belong to $SCC(u)$; we could then transform $L$ into $L'=\langle u, x, y, \alpha, \beta, \gamma, \delta \rangle$. This is still in post-order, since we know the greek letters are not in $SCC(v)$ (so they're not in $P \cap D$), and $\alpha$ can thus be safely moved from $Before(x)$ to $After(x)$ without breaking the post-order property.\par
 In practice, we implement these ``bubble'' movements by simply ignoring them if they are already assigned to \acrshortpl{SCC}, considering \emph{conceptually} that they were moved to $Before(v)$. These approaches are equivalent, because ``bubbling'' the nodes in $Before(v)$ is equivalent to move them to the top of the stack, which we then pop. 
 
-\subsection{Complexity analysis}
+\subsubsection{Complexity analysis}
 Analysing each part of the algorithm, both \textsc{DFS\_K} and \textsc{Assign} have time complexity $O(|E|+|V|)$ since they are fundamentally \acrshortpl{DFS}. The \textsc{Transpose} operation is also executed in time $O(|E|+|V|)$, thus the total time complexity is $O(|E|+|V|)$.\par
 Memory-wise, the visited nodes $V$, the stack $L$ and the resulting \acrshortpl{SCC} are all $O(|V|)$. On another note, the \textsc{Transpose} operation takes $O(|1|)$ memory if executed in-place, or otherwise $O(|E|+|V|)$ if a copy is made.
-
 
 % DFS_K O(|V|+|E|)
 % Transpose O(|V| + |E|)
