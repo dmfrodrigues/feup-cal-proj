@@ -53,5 +53,5 @@ By comparing every path of the graph between each pair of vertices, the Floyd-Wa
 When it comes to memory expenditure, by creating k matrices, one for each iteration of the k for loop, it takes up $\Theta(|V|^3)$ which may possibly be reduced to $\Theta(|V|^2)$ if instead of creating a new matrix, the existing one is updated.
 
 \subsubsection{Remarks}
-Even though the Floyd-Warshall's algorithm functions correctly with negative weight edges, these features will most likely not be of much use, due to the nature of the problem:
+Even though the Floyd-Warshall's algorithm functions correctly with negative weight edges, this feature will most likely not be of much use, due to the nature of the problem:
 the time it takes to get from one location to another must be a value equal to (in the case of the ``current position" being equal to the ``final position") or greater than zero.
