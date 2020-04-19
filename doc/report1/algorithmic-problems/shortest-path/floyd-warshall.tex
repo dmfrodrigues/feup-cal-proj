@@ -1,74 +1,51 @@
 \subsection{Floyd-Warshall algorithm} \label{algorithm-shortestpath-floydwarshall}
-The Floyd-Warshall's algorithm also knows as Floyd's algorithm was published in 1962 is a generalization of Warshall's algorithm 
-(which only tested the existence of a path between two vertices) and corresponds to a dynamic programming method 
-that finds the shortest path between each pair of vertices in a graph (whose edges' weights may be not only positive but also negative).\par
-Assuming $dist(i, j)^{(k)}$ as the distance between $i$ and $j$ that resorts to the vertices $v_{1}$, $v_{2}$, ... $v_{k}$ to create that path
-and that $W(i,j)$ is the weight function that returns the weight of the edge that connects the two vertices $i$ and $j$,
-this algorithm follows the following recurrence:
+The Floyd-Warshall algorithm was published in 1962 as a generalization of Warshall's algorithm 
+(which only tested the existence of a path between two vertices). It applies a dynamic programming approach 
+to find the shortest path between each pair of vertices in a graph (whose edges' weights may be not only positive but also negative).\par
+To simplify, consider each vertex in $V$ is identified by a unique integer $1 \leq i \leq |V|$.
+Let $dist(i, j)^{(k)}$ be the cost of the shortest path from $i$ to $j$ that resorts to vertices $1, 2, ..., k$.
+This algorithm follows the following recurrence:
 
 \begin{equation}
-    dist[i,j]^{(k)}=\begin{cases}
-      W(i,j), & \text{if $k=0$}\\
-      min(dist[i,j]^{(k-1)}, dist[i,k]^{(k-1)} + dist[k,j]^{(k-1)}), & \text{if $k>=1$}
-    \end{cases}
+    dist(i,j)^{(k)}=\begin{dcases}
+        \infty                                                         &: k=0 \wedge (i,j) \not \in E \\
+        w(i,j)                                                         &: k=0 \wedge (i,j) \in E\\
+        \min\{dist(i,j)^{(k-1)}, dist(i,k)^{(k-1)} + dist(k,j)^{(k-1)}\}, &: k \geq 1
+    \end{dcases}
 \end{equation}
 
-The base case corresponds to $k=0$ where $dist(i, j)^{(0)}$ is the value of the edge (if it exists) that connects those two vertices.
-Otherwise, the length of the shortest path between vertices $i$ and $j$ is either the length of the path without considering the vertex
-labeled as $k$ or the sum of the length of two paths: one from $i$ to $k$ and the other from $k$ to $j$.
+The base case corresponds to $k=0$ where $dist(i, j)^{(0)}$ is the value of the edge if it exists (or $\infty$ otherwise) that connects those two vertices.
+Otherwise, the length of the shortest path from $i$ to $j$ is the least of the length of the path without considering the vertex labeled as $k$,
+or the length of the shortest path from $i$ to $j$ via $k$ (i.e., from $i$ to $k$ and from $k$ to $j$).\par
 
 \begin{algorithm}[ht]
     \caption{Floyd-Warshall algorithm}
     \label{alg:floyd-warshall}
-    \begin{minipage}[t]{0.49\linewidth}
-        (a) Mathematical version
-        \begin{algorithmic}[1]
-            \Function{FloydWarshall}{$G(V,E), W$}
-                    \State $dist^{(0)} \gets $ new $ dist[V, V] = \infty$
-                    \For{$each\ edge\ E(i,j)$}
-                        \State $dist[i,j]^{(0)} \gets W(i,j)$
-                    \EndFor
-                    \For{$each\ vertex\ i$}
-                        \State $dist[i,i]^{(0)} \gets 0$
-                    \EndFor
-                \For {$0 < k < V$}
-                    \State $dist^{(k)} \gets $ new $ dist[V, V]$
-                    \For {$0 < i < V$}
-                        \For {$0 < j < V$}
-                            \State $dist[i,j]^{(k)} \gets min( dist[i,j]^{(k-1)},$
-                            $dist[i,k]^{(k-1)} + dist[k,j]^{(k-1)} )$
-                        \EndFor
-                    \EndFor
+    \begin{algorithmic}[1]
+        \Function{FloydWarshall}{$G(V,E, w)$}
+            \For {$i, j \in V$} \Comment{Initializations}
+                \State {$dist(i,j)^{(0)} \gets \infty$}
+                \For {$k \in V$} {$prev(i,j)^{(k)} \gets \text{NULL}$}
                 \EndFor
-                \State \Return{$dist^{(n)}$}
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
-    \begin{minipage}[t]{0.49\linewidth}
-        (b) Programmatic version
-        \begin{algorithmic}[1]
-            \Function{FloydWarshall}{$G(V,E), W$}
-                \For {$i = 1\ to\ V$}
-                    \For {$j = 1\ to\ V$}
-                        \State $dist[0][i][j] = \inf$
-                        \If{$(i,j) \in E$}
-                            \State $dist[0][i][j] = W(i,j)$
-                        \EndIf
-                    \EndFor
+            \EndFor
+            \For{$i \in V$} $dist(i,i)^{(0)} \gets 0$
+            \EndFor
+            \For{$(i,j) \in E$} \Comment{Add edges}
+                \State $dist(i,j)^{(0)} \gets w(i,j)$
+                \State $prev(i,j)^{(j)} \gets i$
+            \EndFor
+            \For {$1 \leq k \leq |V|$} \Comment{Main cycle}
+                \For {$1 \leq i,j \leq |V|$}
+                    \State {$c' \gets dist(i,k)^{(k-1)} + dist(k,j)^{(k-1)}$}
+                    \If {$c' < dist(i,j)^{(k)}$}
+                        \State {$dist(i,j)^{(k)} \gets c'$}
+                        \State {$prev(i,j)^{(k)} \gets prev(i,k)^{(k)}$}
+                    \EndIf
                 \EndFor
-                \For {$k = 1 < V$}
-                    \State $dist^{(k)} \gets $ new $ dist[n, n]$
-                    \For {$i = 1\ to\ V$}
-                        \For {$j = 1\ to\ V$}
-                            \State $dist[k,i,j] = min(dist[k-1,i,j],$
-                            $dist[k-1,i,k] + dist[k-1,k,j])$
-                        \EndFor
-                    \EndFor
-                \EndFor
-                \State \Return{$dist[k]$}
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
+            \EndFor
+            \State \Return{$dist^{(|V|)}$}
+        \EndFunction
+    \end{algorithmic}
 \end{algorithm}
 
 \subsubsection{Complexity analysis}
