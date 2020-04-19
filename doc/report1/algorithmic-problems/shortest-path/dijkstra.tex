@@ -1,6 +1,7 @@
 \subsection{Dijkstra's algorithm} \label{algorithm-shortestpath-dijkstra}
 Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
 This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving all shortest path problems from $s$). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes $u$ the least distance $dist(u)$ from $s$ to $u$ and previous node $prev(u)$ in the shortest path (temporary if the node is in $Q$, final otherwise). We then pick the node $u \in Q$ with the least distance to $s$, and process it by iterating over all nodes adjacent to $u$, calculating their potential new distance to $s$ via $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.\par
+To achieve the least time complexity possible, the graph is usually represented as an adjacency list $Adj$. We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$, which allows fast extraction of element with lowest key and key decrease when processing adjacent nodes.
 \begin{algorithm}[H]
     \caption{Dijkstra's algorithm}
     \label{alg-dijkstra}
@@ -26,7 +27,6 @@ This algorithm finds the distance between a node $s$ and every other node $d$ re
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
-To achieve the least time complexity possible, the graph is usually represented as an adjacency list $Adj$. We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$, which allows fast extraction of element with lowest key and key decrease when processing adjacent nodes.
 \subsubsection{Proof of correctness}
 The full proof is rather long and is promptly available (for instance, in \cite[p.~659]{intro-alg}), thus we will only present a short argument for correctness based on cycle invariants/variants for the \textbf{while} loop.
 \begin{itemize}
