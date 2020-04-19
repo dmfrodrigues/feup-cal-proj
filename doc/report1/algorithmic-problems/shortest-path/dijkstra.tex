@@ -4,59 +4,27 @@ This algorithm finds the distance between a node $s$ and every other node $d$ re
 \begin{algorithm}[H]
     \caption{Dijkstra's algorithm}
     \label{alg-dijkstra}
-    \begin{minipage}[t]{0.49\linewidth}
-        (a) Mathematical version
-        \begin{algorithmic}[1]
-            \Function{Dijkstra}{$G(V,E)$, $s$}
-                \State $Q \gets \emptyset$
-                \For {$v \in V$}
-                    \State {$dist(v) \gets \infty$}
-                    \State {$prev(v) \gets \text{NULL}$}
-                    \State $Q \gets Q \cup \{v\}$
+    \begin{algorithmic}[1]
+        \Function{Dijkstra}{$G(V,E)$, $s$}
+            \For {$v \in V$} \Comment{Initializations}
+                \State {$dist(v) \gets \infty$}
+                \State {$prev(v) \gets \text{NULL}$}
+            \EndFor
+            \State $Q = V$
+            \State {$dist(s) \gets 0$}
+            \While {$|Q| > 0$} \Comment{Main cycle}
+                \State {$u \gets $ vertex of $Q$ with least $dist(u)$}
+                \For {$v \in \Call{Adj}{G, u}$}
+                    \State $c' \gets c + w(u, v)$
+                    \If {$c' < dist(v)$}
+                        \State $dist(v) \gets c'$
+                        \State $prev(v) \gets u$
+                    \EndIf
                 \EndFor
-                \State {$dist(s) \gets 0$}
-                \While {$|Q| > 0$}
-                    \State $u \gets \text{element of } Q \text{ with least } dist(u)$
-                    \State $Q \gets Q \backslash \{u\}$
-                    \For {$v \in \Call{Adj}{G, u}$}
-                        \State $c' \gets c + w(u, v)$
-                        \If {$c' < dist(v)$}
-                            \State $dist(v) \gets c'$
-                            \State $prev(v) \gets u$
-                        \EndIf
-                    \EndFor
-                \EndWhile
-                \State \Return $dist$, $prev$
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
-    \begin{minipage}[t]{0.49\linewidth}
-        (b) Programmatic version
-        \begin{algorithmic}[1]
-            \Function{Dijkstra}{$Adj$, $s$}
-                \State $Q = \Call{Min\_Priority\_Queue}{ }$
-                \For {$v : V$}
-                    \State {$dist[v] = \infty$}
-                    \State {$prev[v] = \text{NULL}$}
-                    \State {$Q.\Call{Insert\_With\_Key}{\infty, v}$}
-                \EndFor
-                \State $dist[s] = 0$
-                \State $Q.\Call{Decrease\_Key}{s, dist[s]}$
-                \While {$Q.\Call{Size}{ } > 0$}
-                    \State $u = Q.\Call{Extract\_Min}{ }$
-                    \For {$(v, w): Adj[u]$}
-                        \State $c' = c + w$
-                        \If {$c' < dist[v]$}
-                            \State $dist[v] = c'$
-                            \State $prev[v] = u$
-                            \State $Q.\Call{Decrease\_Key}{v, dist[v]}$
-                        \EndIf
-                    \EndFor
-                \EndWhile
-                \State \Return {$dist$, $prev$}
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
+            \EndWhile
+            \State \Return $dist$, $prev$
+        \EndFunction
+    \end{algorithmic}
 \end{algorithm}
 To achieve the least time complexity possible, the graph is usually represented as an adjacency list $Adj$. We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$, which allows fast extraction of element with lowest key and key decrease when processing adjacent nodes.
 \subsubsection{Proof of correctness}
@@ -69,6 +37,12 @@ The full proof is rather long and is promptly available (for instance, in \cite[
     \item \textbf{Cycle variant:} $|Q|$, which, being a size, is obviously integer. It is strictly decreasing, given that one node is removed from $Q$ for every cycle run. It is also always positive, given it starts with value $|V|$ where $V$ has at least node $s$. The cycle breaks when $|Q| = 0$.
 \end{itemize}
 \subsubsection{Complexity analysis}
-The initial calls to \textsc{Insert\_With\_Key} are made in time $O(|V|)$, given all keys are $\infty$ and the heap property is maintained. In the main cycle, all elementary operations are done in $O(1)$ except \textsc{Extract\_Min} and \textsc{Decrease\_Key}. Let their time complexities be $O(\text{T}_{em})$ and $O(\text{T}_{dk})$ respectively. \textsc{Extract\_Min} is run once for each of the $|V|$ nodes we remove from $Q$. For each node $u$ we iterate over $Adj[u]$, thus iterating once over each of the $|E|$ edges, potentially running \textsc{Decrease\_Key} for each edge. This yields the total time complexity $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$. \par
+Let $Q$ be a minimum priority queue, where the following should be considered:
+\begin{itemize}
+    \item To add a node $v$ to $Q$, we call $Q.\textsc{Insert\_With\_Key}(v, dist(v))$ to add it with priority $dist(v)$.
+    \item To get the vertex of $Q$ with least $dist(v)$, we call $u \gets Q.\textsc{Extract\_Min}()$ to extract $u$ it from $Q$. Let \textsc{Extract\_Min} have time complexity $O(\text{T}_{em})$.
+    \item When changing $dist(v)$ in the main cycle, we also call $Q.\textsc{Decrease\_Key}(v, dist(v))$ to decrease its priority in $Q$. Let \textsc{Decrease\_Key} have time complexity $O(\text{T}_{dk})$.
+\end{itemize}
+All the insertions at the beginning are made in time $O(|V|)$, given all keys are $\infty$ and the heap property is maintained. In the main cycle, all elementary operations are done in $O(1)$ except \textsc{Extract\_Min} and \textsc{Decrease\_Key}. \textsc{Extract\_Min} is run once for each of the $|V|$ nodes we remove from $Q$. For each node $u$ we iterate over $Adj[u]$, thus iterating once over each of the $|E|$ edges, potentially running \textsc{Decrease\_Key} for each edge. This yields the total time complexity $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$. \par
 Implementing $Q$ as a binary heap, we have $O(\text{T}_{dk})=O(\log |V|)$ and $O(\text{T}_{em})=O(\log |V|)$, thus yielding the total time complexity $O((|E|+|V|)\log |V|)$. This can be further improved with a Fibonacci heap, with $O(\text{T}_{dk})=O(1)$ and $O(\text{T}_{em})=O(\log |V|)$ (both amortized), thus yielding $O(|E| + |V|\log |V|)$.\par
 The algorithm takes as much memory as the heaps, thus giving a memory complexity of $O(|V|)$.
