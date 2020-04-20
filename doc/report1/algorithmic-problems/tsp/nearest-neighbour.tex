@@ -1,7 +1,7 @@
 \subsection{Nearest neighbour algorithm} \label{algorithm-tsp-nn}
 The nearest-neighbour (NN) algorithm is a simple \gls{constructive} heuristic method for solving the travelling salesman problem.\par
 Starting at the origin $s$, at each step we visit the city nearest to the previous city and add it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.
-Therefore the memory complexity of this algorithm is $\Theta (|V|)$, and the time complexity of $\Omega (|V|^{2})$ \cite{reinelt}.
+Therefore the memory complexity of this algorithm is $\Theta (|V|)$, and the time complexity of $\Theta (|V|^{2})$ \cite{reinelt}.
 \begin{algorithm}[ht]
     \caption{Nearest-neighbour algorithm}
     \label{alg:nearest neighbour}
@@ -48,10 +48,10 @@ Therefore the memory complexity of this algorithm is $\Theta (|V|)$, and the tim
 \end{algorithm}
 
 \subsubsection{Remarks}
-Even though the Nearest Neighbour algorithm does not always yield the optimal solution it is still a method that in many cases gives acceptability good results.
-Its' solution can be improved by repeating it $V$ times and executing it for every vertex or by using a variation of this algorithm: Nearest Neighbour Algorithm from Both End-Points, which chooses the next vertex based on two vertices instead of only one \cite{NN-algorithm}.
-By causing a relatively low number of critical mistakes which are mostly concentrated at the end of its execution (due to "forgotten" cities along the way), it can provide a decent starting solution that can be worked on and improved by other methods.\par
-In the context of this project it is especially good if we take into account that by finding the closest passanger's destination to its current position it tries to empty out the van as quickly as possible
-which should result in a better median when it comes to customer satisfaction due to a higher number of less displeased customers on one hand and a lower number of customers with a higher degree of unsatisfaction on the other.
+Even though the Nearest Neighbour algorithm does not always yield the optimal solution it is still a method that in many cases gives decent results.
+The solution can be futher improved by repeating it $V$ times and executing it for every vertex or by using a variation of this algorithm: Nearest Neighbour Algorithm from Both End-Points, which chooses the next vertex based on two vertices instead of only one \cite{NN-algorithm}.
+By causing a relatively low number of critical mistakes which are mostly concentrated at the end of its execution (due to ``forgotten" cities along the way), it can provide a decent starting solution that can be worked on and improved by other methods.\par
+In the context of this project it is especially good if we take into account that by finding the closest client's destination to its current position it tries to empty out the van as quickly as possible
+which should result in a better result when it comes to customer satisfaction due to a higher number of less displeased customers on one hand and a lower number of customers with a higher degree of unsatisfaction on the other.
 \par
 !REVIEW

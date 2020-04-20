@@ -4,7 +4,7 @@ After having formally presented the general problem, we will decompose it into s
 \section{Iterations} \label{problem-decomposition-iterations}
 \subsection{Iteration I}
 The company owns one van, and thus can not leave the train station for too long. However, it must also serve the clients that are ready to travel and that are waiting for the van to start its travel.\par
-We will use the first iteration to test our algorithms, therefore reducing the need for finding near-optimal heuristics for the hardest problems that will eventually be made harder in subsequent iterations.\par
+The first iteration will mostly serve the purpose of testing our algorithms, therefore reducing the need for finding near-optimal heuristics for the hardest problems that will eventually be made harder in subsequent iterations.\par
 We will use the path-finding algorithms described in section \ref{problem-decomposition-pathfinding} to find the shortest paths between nodes in the graph.\par
 One minor heuristic we can implement to group clients is described in section \ref{algorithm-vrp-heuristic}. Having grouped clients, we now need to solve a problem similar to the \acrshort{TSP}, further described in section \ref{problem-decomposition-tsp}.
 \subsection{Iteration II}
