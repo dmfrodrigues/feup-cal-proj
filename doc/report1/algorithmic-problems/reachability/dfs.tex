@@ -3,36 +3,17 @@
 \begin{algorithm}[h]
     \caption{\Acrlong*{DFS}}
     \label{alg-dfs}
-    \begin{minipage}[t]{0.49\linewidth}
-        (a) Mathematical version
-        \begin{algorithmic}[1]
-            \State $D \gets \emptyset$
-            \Function{DFS}{$G(V,E)$, $u$}
-                \If {$u \in D$} \Return {$ $}
-                \EndIf 
-                \State {$D \gets D \cap \{u\}$}
-                \For {$v \in \Call{Adj}{G, u}$}
-                    \State {$\Call{DFS}{G, v}$}
-                \EndFor
-                \State \Return $D$
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
-    \begin{minipage}[t]{0.49\linewidth}
-        (b) Programmatic version
-        \begin{algorithmic}[1]
-            \State $D[|Adj|] = \text{FALSE}$
-            \Function{DFS}{$Adj$, $u$}
-                \If {$D[u]$} \Return {$ $}
-                \EndIf 
-                \State {$D[u] = \text{TRUE}$}
-                \For {$v : Adj[u]$}
-                    \State {$\Call{DFS}{Adj, v}$}
-                \EndFor
-                \State \Return $D$
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
+    \begin{algorithmic}[1]
+        \State $D \gets \emptyset$
+        \Function{DFS}{$G(V,E)$, $u$}
+            \If {$u \in D$} \Return {$ $}
+            \EndIf 
+            \State {$D \gets D \cap \{u\}$}
+            \For {$v \in \Call{Adj}{G, u}$} {$\Call{DFS}{G, v}$}
+            \EndFor
+            \State \Return $D$
+        \EndFunction
+    \end{algorithmic}
 \end{algorithm}
 \subsubsection{Proof of correctness}
 \begin{lemma} \label{lem:dfs}
