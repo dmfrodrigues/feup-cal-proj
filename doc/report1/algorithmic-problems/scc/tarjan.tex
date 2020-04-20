@@ -4,31 +4,9 @@ Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan i
     \begin{algorithm}[H]
         \caption{Tarjan's algorithm}
         \label{alg-tarjan}
-        \begin{minipage}[t]{0.80\linewidth}
-            (a) Programmatic version
+        \begin{minipage}[t]{0.40\linewidth}
+            (a) Main algorithm
             \begin{algorithmic}[1]
-                \State{$id \gets 0$}
-                \State{$L \gets \Call{Stack}{ }$}
-
-                \Function{DFS\_T}{$G$, $u$}
-                    \State{$L.\Call{Push}{u}$}
-                    \State{$ids[u] \gets ++id$} % Pode se ++?
-                    \State{$SCC[u] \gets id$}
-
-                    \For{$v \in \Call{Adj}{G, u}$}
-                        \If{$ids[v] = 0$} {\Call{DFS\_T}{$G$, $v$}}
-                        \EndIf
-                        \If{$v \in L$} {$SCC[v] = \min \{SCC[u], SCC[v]\}$}
-                        \EndIf
-                    \EndFor
-
-                    \If{$ids[u] = SCC[u]$}
-                        \While{$(node = L.\Call{Pop}{ }) \neq u$} % Spaguetti af ??
-                            \State{$SCC[node] \gets ids[i]$}
-                        \EndWhile
-                    \EndIf
-                \EndFunction
-
                 \Function{Tarjan}{$G(V,E)$}
                     \For{$u \in V$}
                         % Ha forma melhor de fazer esta inicializaçao ? (inline quando e definido)
@@ -44,10 +22,35 @@ Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan i
                 \EndFunction
             \end{algorithmic}
         \end{minipage}
+        \begin{minipage}[t]{0.58\textwidth}
+            (b) Helper functions
+            \begin{algorithmic}[1]
+                \State{$id \gets 0, ~L \gets \Call{Stack}{ }$}
+
+                \Function{DFS\_T}{$G$, $u$}
+                    \State{$L.\Call{Push}{u}$}
+                    \State{$ids[u] \gets ++id$} % Pode se ++?
+                    \State{$SCC[u] \gets id$}
+
+                    \For{$v \in \Call{Adj}{G, u}$}
+                        \If{$ids[v] = 0$} {\Call{DFS\_T}{$G$, $v$}}
+                        \EndIf
+                        \If{$v \in L$} {$SCC[v] = \min \{SCC[u], SCC[v]\}$}
+                        \EndIf
+                    \EndFor
+
+                    \If{$ids[u] = SCC[u]$}
+                        \While{$(node = L.\Call{Pop}{ }) \neq u$} % Spaguetti af ??
+                            \State{$SCC[node] \gets ids[node]$}
+                        \EndWhile
+                    \EndIf
+                \EndFunction
+            \end{algorithmic}
+        \end{minipage}
     \end{algorithm}
 \end{center}
 \subsubsection{Proof of correctness}
-!DO
+!DO 
 \subsubsection{Complexity analysis}
 Simlar to Kosaraju's algorithm, Tarjan's yields time complexity $O(|V|+|E|)$ in the DFS\_T function since it iterates once over all nodes. However, this can only be achieved if the test $u \in L$ is done in constant time $O(1)$, by, for example, storing this information in an array of flags $onStack[|V|]$.
 The drawback to this method over its predecessor is the space complexity, for which it yields $O(|V|)$, since in the worst case it stores a stack and an array of all node indexes with complexity $O(|V|)$, along with the fields $index$ and $onStack$ for each node. 
