@@ -58,7 +58,7 @@ The limits of index variables are implicitly limited to the sequences' sizes.
     \end{enumerate}
     \item For a van $v$:
     \begin{enumerate}
-        \item There are no overlapping rides:
+        \item \label{itm:van-restriction} There are no overlapping rides:
         \begin{equation*}
             \forall r(v,C,\langle e \rangle), r'(v',C',\langle e' \rangle),~r \neq r' \wedge v = v' \iff \min\{e_{|e|}.t,e'_{|e'|}.t\} \leq \max\{e_1.t,e'_1.t\}
         \end{equation*}

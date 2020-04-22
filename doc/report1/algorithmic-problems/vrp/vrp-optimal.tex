@@ -1,19 +1,2 @@
 \subsection{Optimal solution} \label{algorithm-vrp-optimal}
-We can aggregate into three types the modeling approaches that have been presented for the VRP.
-\par
-The first one of them called Vehicle Flow and includes integer linear programming formulations that utilize binary variables
-to indicate whether a vehicle traverses an arc (path between two vertices) that is part of the optimal solution or not: two or three
-(three for ease of use in more complex situations with a time complexity of $O(n^2 * k)$ instead of $O(n^2)$ \cite[p.~11]{optimal-vrp}) index formulations
-It is a good way to tackle the basic versions of a Vehicle Routing Problem but a poor performer for complex and generally more realistic VRPs
-due to the fact, for instance, that they cannot be used if the solution can't result of the sum of the arc's costs.
-\par
-The second type is known as Commodity Flow and was first introduced as an answer to an oil delivery problem 
-and afterwards expanded to the domain of the TSP and VRP. Besides requiring variables like the ones in the two-index vehicle flow formulations,
-they use demand-representing variables that are affiliated with the arcs allowing, for example, for better management of the passenger capacity 
-of a vehicle by starting empty and ending full or vice-versa.
-\par
-The third group is named Set-Partitioning that is characterized by the use of a rapidly growing (exponential) number of binary variables, 
-being each one of them associated with an achievable circuit. It can obey to a high number of constraints and can deliver a set of circuits where each vertex is part of only one of them. \cite[p.~21-22]{optimal-vrp}.
-
-
-% maybe refer that exact methods have the disadvantage that they are slower and can't handle instances as large as the heuristic methods?
+Like the \acrshort*{TSP}, the \acrshort*{VRP} is an NP-complete problem, meaning an optimal solution will necessarily be exponential in at least $N$. In our case, it implies at least to inspect all partitions of the set of clients. We will not go into much detail about this solution because, no matter what algorithm we use to solve the underlying \acrshort*{TSP}, we will not be able to return a solution within a decent time limit taking into account our datasets are relatively large.
