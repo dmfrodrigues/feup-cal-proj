@@ -27,6 +27,27 @@ Complexity analysis is the process of identifying the computational complexity o
     \end{equation*}
 \end{definition}
 We will not put excessive emphasis on exaggerated formalism, so we will by default use the big-$O$ notation.
+\section{Classes of problems} \label{classes-problems}
+Although we will not go into much detail over the definition of a \acrfull*{TM}, one should know that, for practical reasons, the C++ language is Turing-complete, which in layman's terms means everytime something applies to a Turing machine it also applies to C++.
+\begin{definition}[Problem]
+    Binary relation on a set $I$ of problem \emph{instances} and a set $S$ of problem \emph{solutions}.
+\end{definition}
+\begin{definition}[Decision problem]
+    Problem where the solution can be a \emph{yes} or a \emph{no}; $S=\{0,1\}$
+\end{definition}
+\begin{definition}[P]
+    Set of all decision problems that can be \textbf{solved in time polynomial} in the problem instance's size by a deterministic \acrshort{TM}.
+\end{definition}
+\begin{definition}[NP]
+    Set of all decision problems that, provided a \emph{witness} $w$ to the answer being \emph{yes}, $w$ can be \textbf{validated in time polynomial} in the problem instance's size by a deterministic \acrshort{TM}.
+\end{definition}
+\begin{definition}[NP-hard]
+    A problem $C$ is NP-hard iff \textbf{every problem in NP can be reduced to $C$}. This is usually expressed as $C$ being at least as hard as the hardest problem in NP. In a stricter definition, $C$ is NP-hard iff every problem in NP can be reduced to $C$, and $C$ does not belong to NP.
+\end{definition}
+\begin{definition}[NP-complete]
+    A problem $C$ is NP-complete iff \textbf{it is in NP and every problem in NP is reducible to $C$}. It is the intersection of NP with NP-hard.
+\end{definition}
+
 \section{Graphs} \label{graphs}
 \subsection{Definitions}
 \begin{definition}[Directed weighted graph]

@@ -5,5 +5,8 @@
     \item \textbf{Output:} Path $p$ in $G$, starting and ending in $s$ and passing through all nodes.
     \item \textbf{Objective function:} $W(p)~\min$.
 \end{itemize}
+A variant of this problem is the decision version of the \acrshort*{TSP}, which is formulated as ``is there a path crossing all nodes with cost less than $z$?'', which is NP-complete since a witness in the form of the actual path can be checked to have a cost less or equal to $z$ in linear time.
+The general \acrshort*{TSP} is a strict NP-hard problem, since given a solution there is no known algorithm that can check if that solution is optimal (that would actually be as hard as finding the solution itself).\par
+However, the rational \acrshort*{TSP} (all edges and solutions are rational) is NP-complete, since it can be converted into an integer \acrshort*{TSP} (where all edges and solutions are integers), which can itself be transformed into the decision version of the \acrshort*{TSP} with an extra step searching the least $z$ for which the decision problem returns \emph{yes}, starting at some finite upper bound that can be easily obtained (this extra section could be a linear search or a binary search, for instance).
 \input{held-karp.tex}
 \input{nearest-neighbour.tex}
