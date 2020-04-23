@@ -38,4 +38,4 @@ The poorest choice of heuristic that optimally solves the problem ($\hat{h}(u)=0
 Similarly to Dijkstra's algorithm, the heaps are the only large data structures we use so this algorithm's memory complexity is $O(|V|)$.\par
 This means the A* algorithm is at least as fast as Dijkstra's algorithm so far as $\hat{h}$ belongs to the same asymptotic class as $O(\text{T}_{dk})$, which is $O(\log |V|)$ for both types of heaps we analyzed.
 \subsubsection{Remarks}
-In our case, we can easily point as an heuristic $\hat{h}(u)$ the time it would take the van to go from $u$ to $d$ in a straight line at highway speed, since it it a lower bound on the time it would take to actually reach $d$.
+In our case, we can easily point as an heuristic $\hat{h}(u)$ the time it would take the van to go from $u$ to $d$ in a straight line at highway speed, since it is a lower bound on the time it would take to actually reach $d$.
