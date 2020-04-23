@@ -40,7 +40,7 @@ The full proof is rather long and is promptly available (for instance, in \cite[
 Let $Q$ be a minimum priority queue, where the following should be considered:
 \begin{itemize}
     \item To add a node $v$ to $Q$, we call $Q.\textsc{Insert\_With\_Key}(v, dist(v))$ to add it with priority $dist(v)$.
-    \item To get the vertex of $Q$ with least $dist(v)$, we call $u \gets Q.\textsc{Extract\_Min}()$ to extract $u$ it from $Q$. Let \textsc{Extract\_Min} have time complexity $O(\text{T}_{em})$.
+    \item To get the vertex of $Q$ with least $dist(v)$, we call $u \gets Q.\textsc{Extract\_Min}()$ to extract $u$ from $Q$. Let \textsc{Extract\_Min} have time complexity $O(\text{T}_{em})$.
     \item When changing $dist(v)$ in the main cycle, we also call $Q.\textsc{Decrease\_Key}(v, dist(v))$ to decrease its priority in $Q$. Let \textsc{Decrease\_Key} have time complexity $O(\text{T}_{dk})$.
 \end{itemize}
 All the insertions at the beginning are made in time $O(|V|)$, given all keys are $\infty$ and the heap property is maintained. In the main cycle, all elementary operations are done in $O(1)$ except \textsc{Extract\_Min} and \textsc{Decrease\_Key}. \textsc{Extract\_Min} is run once for each of the $|V|$ nodes we remove from $Q$. For each node $u$ we iterate over $Adj[u]$, thus iterating once over each of the $|E|$ edges, potentially running \textsc{Decrease\_Key} for each edge. This yields the total time complexity $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$. \par
