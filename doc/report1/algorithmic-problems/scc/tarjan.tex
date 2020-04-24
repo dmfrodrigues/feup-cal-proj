@@ -1,5 +1,5 @@
 \subsection{Tarjan's algorithm} \label{algorithm-scc-tarjan}
-Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan in 1972 \cite{tarjan72}, uses the ordered DFS of all nodes to find all \acrshortpl*{SCC}. However, it makes use of memory to bookkeep for each visited node $u$ its index $id$ (identifier in a pre-order visit) and lowlink $low$ (smallest index of any node known to be reachable from $u$ through $u$'s DFS subtree).
+Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan in 1972 \cite{tarjan72}, uses the ordered \acrshort*{DFS} of all nodes to find all \acrshortpl*{SCC}. However, it makes use of memory to bookkeep for each visited node $u$ its index $id$ (identifier in a pre-order visit) and lowlink $low$ (smallest index of any node known to be reachable from $u$ through $u$'s \acrshort*{DFS} subtree), avoiding a second \acrshort*{DFS}.
 \begin{algorithm}[ht]
     \caption{Tarjan's algorithm}
     \label{alg-tarjan}
@@ -67,5 +67,5 @@ Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan i
 % !REVIEW
 % Check if this \emph{argument} is enough.
 \subsubsection{Complexity analysis}
-Simlar to Kosaraju's algorithm, Tarjan's yields time complexity $O(|V|+|E|)$ in the \textsc{DFS\_T} function since it iterates once over all nodes. However, this can only be achieved if the test $u \in L$ is done in constant time $O(1)$, by, for example, storing this information in an array of flags $onStack[|V|]$.
+Similar to Kosaraju's algorithm, Tarjan's yields time complexity $O(|V|+|E|)$ in the \textsc{DFS\_T} function since it iterates once over all nodes. However, this can only be achieved if the test $u \in L$ is done in constant time $O(1)$, by, for example, storing this information in an array of flags $onStack[|V|]$.
 The drawback to this method over its predecessor is the space complexity, for which it yields $O(|V|)$, since in the worst case it stores a stack and an array of all node indexes with complexity $O(|V|)$, along with the fields $index$ and $onStack$ for each node. 
