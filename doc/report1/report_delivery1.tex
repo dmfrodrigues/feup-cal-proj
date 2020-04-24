@@ -56,7 +56,7 @@
 \newtheorem*{remark}{Remark}
 
 % Glossaries
-\usepackage[acronym,nonumberlist]{glossaries}
+\usepackage[acronym,nonumberlist,entrycounter]{glossaries}
 \makeglossaries
 
 \newglossaryentry{heuristic}{
@@ -86,7 +86,22 @@
 
 \newglossaryentry{iterative}{
     name=iterative,
-    description={An algorithm is \emph{iterative} when it progressively evaluates and improves a complete solution}
+    description={An heuristic algorithm is \emph{iterative} when it progressively evaluates and improves a complete solution. An algorithm is \emph{iterative} when it repeatedly executes a set of instructions without calling itself.}
+}
+
+\newglossaryentry{recursive}{
+    name=iterative,
+    description={An algorithm is \emph{recursive} when it repeatedly executes a set of instructions by calling itself, as opposed to an \gls{iterative} algorithm.}
+}
+
+\newglossaryentry{dynamic programming}{
+    name=dynamic programming,
+    description={Problem-solving strategy generally used to solve algorithmic problems that have optimal substructure (optimal solutions to subproblems lead to globally optimal solutions) and overlapping subproblems (several subproblems are computed from the same sub-subproblems). The distinguishing feature of this approach is memoization (memorization of subproblem solutions for reuse later on. Generally, wherever there is a recurrence, dynamic programming can be applied}
+}
+
+\newglossaryentry{greedy}{
+    name=greedy,
+    description={An algorithm is \emph{greedy} iff it makes a locally optimal choice in the hope that this choice will lead to a globally optimal solution \cite{intro-alg}. Depending on the problem, they may or may not in fact provide a globally optimal solution.}
 }
 
 \newglossaryentry{superpolynomial}{
@@ -105,6 +120,8 @@
 \newacronym{TM}{TM}{Turing machine}
 
 \newacronym{NN}{NN}{nearest neighbour}
+
+\renewcommand{\glsentrycounterlabel}{}
 
 % Contents title
 \addto\captionsenglish{\renewcommand*\contentsname{Table of contents}}
