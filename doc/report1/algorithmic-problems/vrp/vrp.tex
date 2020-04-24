@@ -1,11 +1,11 @@
 \section{\texorpdfstring{\Acrlong*{VRP}}{Vehicle routing problem}} \label{algorithm-vrp}
-The \acrfull*{VRP} is an optimization problem whose goal is to find the optimal routes between goods or people while taking into account constraints specific to the issue to solve (such as customer satisfaction). It is a generalization of the \acrshort{TSP}.\par
+The \acrfull*{VRP} is an optimization problem with the goal of finding the optimal routes between goods or people while taking into account constraints specific to the issue to solve (such as customer satisfaction). It is a generalization of the \acrshort{TSP}, and as thus is also strictly NP-hard and has variations that are NP-complete.\par
 There are many ways to model and approach a \acrshort{VRP}. Due to the fact our particular instance has a large number of constraints, we will use an adaptation of the set-partitioning model \cite[p.~21-22]{optimal-vrp} so we can leave the task of evaluating the cost of a certain route to a \acrshort{TSP} algorithm.\par
 
 \begin{itemize}
     \item \textbf{Summary:} Given a set of clients and vans, partition the clients, find routes and assign them vans so as to minimize a cost function.
     \item \textbf{Input:} Clients $C$, vans $V$, cost $W(r)$ as a function of a route $r$.
-    \item \textbf{Output:} Sequence of routes Partition $P \in \mathbb{P}_C$ and function $v\colon P \rightarrow V$, subject to restriction \ref{itm:van-restriction}.
+    \item \textbf{Output:} Partition $P \in \mathbb{P}_C$ and function $v\colon P \rightarrow V$, subject to restriction \ref{itm:van-restriction}.
     \item \textbf{Objective function:} $\min W(P)$.
 \end{itemize}
 
