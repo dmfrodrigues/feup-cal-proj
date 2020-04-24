@@ -11,7 +11,7 @@ To achieve the least time complexity possible, the graph is usually represented 
                 \State {$dist(v) \gets \infty$}
                 \State {$prev(v) \gets \text{NULL}$}
             \EndFor
-            \State $Q = V$
+            \State $Q \gets V$
             \State {$dist(s) \gets 0$}
             \While {$|Q| > 0$} \Comment{Main cycle}
                 \State {$u \gets $ vertex of $Q$ with least $dist(u)$}

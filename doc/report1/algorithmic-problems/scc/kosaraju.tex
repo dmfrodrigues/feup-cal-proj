@@ -1,6 +1,5 @@
 \subsection{Kosaraju's algorithm} \label{algorithm-scc-kosaraju}
-Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. Like many \acrshort{SCC} algorithms, it performs a \acrshort{DFS} on the graph and another one on its transpose, having as main idea the fact that a graph and its transpose have exactly the same \acrshortpl*{SCC}.\par
-We consider stack $L$ has its top on the left side, and elements \emph{before} $u$ are closer to the top of the stack (or to the left of $u$).
+Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. Like many \acrshort{SCC} algorithms, it performs a \acrshort{DFS} on the graph and another one on its transpose, having as main idea the fact that a graph and its transpose have exactly the same \acrshortpl*{SCC}.
 \begin{algorithm}
     \caption{Kosaraju's algorithm}
     \label{alg-kosaraju}
@@ -8,10 +7,12 @@ We consider stack $L$ has its top on the left side, and elements \emph{before} $
         (a) Main algorithm
         \begin{algorithmic}[1]
             \Function{Kosaraju}{$G(V,E)$}
-            \For{$1 \leq u \leq |Adj|$} {\Call{DFS\_K}{$G$, $u$}}
+            \For{$u \in V$} {$SCC(u) \gets \text{NULL}$}
             \EndFor
-            \While{$!L.\Call{Empty}{ }$}
-                \State{$u = L. \Call{Pop}{ }$}
+            \For{$u \in G$} {\Call{DFS\_K}{$G$, $u$}}
+            \EndFor
+            \While{$!L.\Call{Empty}{ }$} \label{alg:kosaraju-start-cycle}
+                \State{$u \gets L. \Call{Pop}{ }$}
                 \State \Call{Assign}{$G$, $u$, $u$}
             \EndWhile
             \State \Return{$SCC$}
@@ -25,18 +26,17 @@ We consider stack $L$ has its top on the left side, and elements \emph{before} $
             \Function{DFS\_K}{$G(V,E)$, $u$}
                 \If{$u \in S$} {\Return{}}
                 \EndIf
-                \State {$S = S \cup \{u\}$}
+                \State {$S \gets S \cup \{u\}$}
                 \For{$v \in \Call{Adj}{G, u}$} {\Call{DFS\_K}{$G$, $v$}}
                 \EndFor
                 \State{$L.\Call{Push}{u}$}
             \EndFunction
 
-            \State{$SCC[|Adj|] = \text{NULL}$}
-
+            
             \Function{Assign}{$G(V,E)$, $u$, $root$}
                 \If{$SCC(u) \neq \text{NULL}$} {\Return{}}
                 \EndIf
-                \State{$SCC(u) = root$}
+                \State{$SCC(u) \gets root$}
                 \For{$v \in \Call{Adj}{G^T, u}$} {\Call{Assign}{$G$, $v$, $root$}}
                 \EndFor
             \EndFunction
@@ -44,13 +44,15 @@ We consider stack $L$ has its top on the left side, and elements \emph{before} $
     \end{minipage}
 \end{algorithm}
 \subsubsection{Proof of correctness}
-A formal proof is promply available at \cite[p.~619]{intro-alg}, we will thus only present a brief argument as to why Kosaraju's algorithm is correct. This argument might however seem rather confusing.\par
-Let $Before(v)$ be the set of nodes that are before $v$ in $L$ after \textsc{DFS\_K}, let $After(v)$ be the set of nodes that are after $v$ in $L$. Let $P = Pred(v)$, $D = Desc(v)$, $B = Before(v)$ and $A=After(v)$.\par
-Trivially, we know that,
+A formal proof is promply available at \cite[p.~619]{intro-alg}, we will thus only present an argument as brief as possible as to why Kosaraju's algorithm is correct.\par
+Consider the state of $L$ as of line \ref{alg:kosaraju-start-cycle}. Let $P = Pred(v)$, $D = Desc(v)$, $B = Before(v)$ and $A=After(v)$.\par
+Trivially, we know that
 \begin{equation} \label{eq:ABpart}
-    \{B, \{v\}, A\}\text{ is a partition of $V$ in a loose sense}
+    \begin{cases}
+        B \cup \{v\} \cup A = B \\
+        B \cap \{v\} = B \cap A = \emptyset
+    \end{cases} \implies \overline{B} = \{v\} \cup A
 \end{equation}
-since $B$, $\{v\}$ and $A$ are pairwise disjoint, and their union is $V$.\par
 It is also trivial that
 \begin{equation} \label{eq:vnotinPD}
     P \cap \{v\} = D\cap\{v\}=\emptyset
@@ -63,7 +65,11 @@ Since we have added nodes to $L$ in post-order, for every node $v$ we know all n
     \begin{enumerate}
         \item \label{itm:Bexcept} However, it is impossible for a node to be before $v$ and also be in $P \cap D$, because if such node $u$ existed before $v$ then $v$ would have already been assigned to the same \acrshort*{SCC} as $u$ (\sout{$B \cap P \cap D$}).
     \end{enumerate} 
-    \item \label{itm:A} After $v$, where it must also be true that $v \leadsto u$ for $u$ to be validly put after $v$ ($A \cap P \cap D$ and \sout{$A \cap P \cap \overline{D}$}).
+    \item \label{itm:A} After $v$;
+    \begin{enumerate}
+        \item \label{itm:Agood} If $SCC(u)=SCC(v)$ their order is arbitrary in $L$, since we can consider either paths $u \leadsto v$ or $v \leadsto u$ to order them ($A \cap P \cap D$).
+        \item \label{itm:Abad} The above case is the only valid way of having both $u \leadsto v$ and $u \in A$; otherwise, we would have $u \leadsto v$, $u \not \leadsto v$ and $u \in A$ ($A \cap P \cap \overline{D}$), which is obviously a violation of the fact nodes in $L$ are in pre-order, since $u \leadsto v$ and $u \not \leadsto v$ is undisputable evidence that $u$ must be before $v$ in $L$ (\sout{$A \cap P \cap \overline{D}$}).
+    \end{enumerate}
 \end{enumerate}
 In the following table, we show a kind of set diagram that shows all possible relevant logical relations (we ignored $\overline{P}$), and which ones are possible.
 \begin{center}
@@ -73,8 +79,8 @@ In the following table, we show a kind of set diagram that shows all possible re
             from \ref{itm:Bexcept}, \sout{$P \cap D$} \\
             from \ref{itm:B}, $P \cap \overline{D}$
         \end{tabular} & $v$ & \begin{tabular}{l}
-            $P \cap D$, from \ref{itm:A} (SCC) \\
-            \sout{$P \cap \overline{D}$}, from \ref{itm:A}
+            $P \cap D$, from \ref{itm:Agood} (SCC) \\
+            \sout{$P \cap \overline{D}$}, from \ref{itm:Abad}
         \end{tabular}
     \end{tabular}
 \end{center}
@@ -90,8 +96,8 @@ As per theorem \ref{teor:scc}, the \acrshort*{SCC} of which $v$ is a root can be
 \end{alignat*}
 From the table, $P \cap D = A \cap P \cap D$.\par
 This essentially means we can then perform a \acrshort*{DFS} on $G^T$ to find $P$, being sufficient to test if a newly encountered element of $P$ has already been assigned to a \acrshort*{SCC} (in which case it would be in $B$).\par
-There is one last detail we must mention: how we maintain property \ref{itm:A} after processing a node, particularly the fact that \sout{$A \cap P \cap \overline{D}$}. After executing a \acrshort*{DFS} on $G^T$ starting in $v$, we might have marked a node $x \in A$ as belonging to $SCC(v)$ although there is an unprocessed node $\alpha \in A$ before $x$; in this case, before we are finished processing $v$ we can \emph{conceptually} make all nodes marked as belonging to $SCC(v)$ ``bubble'' to the left until all nodes in $SCC(v)$ are placed consecutively in $L$, thus allowing us to now consider all processed nodes to be in $Before(\alpha)$ once we start processing $\alpha$. To better explain this concept, consider $L=\langle u, \alpha, x, \beta, y, \gamma, \delta \rangle $ where greek letters are unprocessed nodes and latin letters are processed nodes that we now know belong to $SCC(u)$; we could then transform $L$ into $L'=\langle u, x, y, \alpha, \beta, \gamma, \delta \rangle$. This is still in post-order, since we know the greek letters are not in $SCC(v)$ (so they're not in $P \cap D$), and $\alpha$ can thus be safely moved from $Before(x)$ to $After(x)$ without breaking the post-order property.\par
-In practice, we implement these ``bubble'' movements by simply ignoring them if they are already assigned to \acrshortpl*{SCC}, considering \emph{conceptually} that they were moved to $Before(v)$. These approaches are equivalent, because ``bubbling'' the nodes in $Before(v)$ is equivalent to moving them to the top of the stack, which we then pop. 
+There is one last detail we must mention: how, once we start processing $v'$, all nodes before $v'$ are processed and all nodes after $v'$ are unprocessed. It is trivial that all nodes before $v'$ in $L$ are processed, since we process $L$ from left to right. As for the nodes after $v'$: after executing a \acrshort*{DFS} on $G^T$ starting in $v$, we might have marked a node $x \in A$ as belonging to $SCC(v)$ although there is an unprocessed node $\alpha \in A$ before $x$; in this case, before we are finished processing $v$ we can \emph{conceptually} make all nodes marked as belonging to $SCC(v)$ ``bubble'' to the left until all nodes in $SCC(v)$ are placed consecutively in $L$, thus allowing us to now consider all processed nodes to be in $Before(\alpha)$ once we start processing $\alpha$. To better explain this concept, consider $L=\langle v, \alpha, x, \beta, y, \gamma, \delta \rangle $ where greek letters are unprocessed nodes and latin letters are processed nodes that we now know belong to $SCC(v)$; we could then transform $L$ into $L'=\langle v, x, y, \alpha, \beta, \gamma, \delta \rangle$. This is still in post-order, since we know the latin letters are not in $SCC(\alpha)$ (otherwise, $\alpha$ would have been already processed as an element of the \acrshort*{SCC} of the latin letters); since $Before(\alpha) \cap Pred(\alpha) \cap Desc(\alpha)$ is the only set we explicitly said was empty for $\alpha$ (and we just excluded the possibility of the latin letters being in $After(\alpha) \cap Pred(\alpha) \cap Desc(\alpha)$), all latin letters after $\alpha$ can ``bubble'' to $Before(\alpha)$.\par
+In practice, we implement these ``bubble'' movements by simply ignoring them if they are already assigned to \acrshortpl*{SCC}, considering \emph{conceptually} that they were moved to $Before(v)$. These approaches are equivalent, because ``bubbling'' the nodes in $Before(v)$ is equivalent to moving them to the top of the stack, which we then pop, which as such means bubbling them and popping them is equivalent to leave them be and once they are found in the stack they are popped and ignored. 
 
 \subsubsection{Complexity analysis}
 Analysing each part of the algorithm, both \textsc{DFS\_K} and \textsc{Assign} have time complexity $O(|E|+|V|)$ since they are fundamentally \acrshortpl*{DFS}. The \textsc{Transpose} operation is also executed in time $O(|E|+|V|)$, thus the total time complexity is $O(|E|+|V|)$.\par

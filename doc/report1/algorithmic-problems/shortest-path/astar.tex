@@ -5,13 +5,13 @@ This algorithm is an extension of Dijkstra's algorithm, using the heuristic func
     \caption{A* algorithm}
     \label{alg-astar}
     \begin{algorithmic}[1]
-        \Function{Dijkstra}{$G(V,E)$, $s$}
+        \Function{Astar}{$G(V,E)$, $s$}
             \For {$v \in V$} \Comment{Initializations}
                 \State {$dist(v) \gets \infty$}
-                \State {$prev(v) \gets \text{NULL}$}
+                \State {$hdist(v) \gets \infty$}
                 \State {$prev(v) \gets \text{NULL}$}
             \EndFor
-            \State $Q = V$
+            \State $Q \gets V$
             \State {$dist(s) \gets 0$}
             \State $hdist(s) \gets \hat{h}(s)$
             \While {$|Q| > 0$} \Comment{Main cycle}
