@@ -64,8 +64,6 @@ Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan i
         \item It is impossible for $low(u) > id(u)$, since $low(u)$ is initially assigned with $id(u)$ and the only operation that changes $low(u)$ is a minimum operation where $low(u)$ is always an argument, meaning $low(u)$ starts at $id(u)$ and can only decrease.
     \end{itemize}
 \end{itemize}
-% !REVIEW
-% Check if this \emph{argument} is enough.
 \subsubsection{Complexity analysis}
 Similar to Kosaraju's algorithm, Tarjan's yields time complexity $O(|V|+|E|)$ in the \textsc{DFS\_T} function since it iterates once over all nodes. However, this can only be achieved if the test $u \in L$ is done in constant time $O(1)$, by, for example, storing this information in an array of flags $onStack[|V|]$.
 The drawback to this method over its predecessor is the space complexity, for which it yields $O(|V|)$, since in the worst case it stores a stack and an array of all node indexes with complexity $O(|V|)$, along with the fields $index$ and $onStack$ for each node. 
