@@ -1,56 +1,30 @@
 \subsection{Nearest neighbour algorithm} \label{algorithm-tsp-nn}
-The nearest-neighbour (NN) algorithm is a simple \gls{constructive} heuristic method for solving the travelling salesman problem.\par
+The \acrfull*{NN} algorithm is a simple \gls{constructive} heuristic method for solving the travelling salesman problem.
 Starting at the origin $s$, at each step we visit the city nearest to the previous one and add it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.
-Therefore the memory complexity of this algorithm is $\Theta (|V|)$, and the time complexity of $\Theta (|V|^{2})$ \cite{reinelt}.
-\begin{algorithm}[ht]
+Therefore the memory complexity of this algorithm is $\Theta (|V|)$, and the time complexity of $\Theta (|V|^{2})$ \cite{reinelt}.\par
+Let $\overline{S}$ be the complement of $S$ where the universe is $V$.
+\begin{algorithm}[h]
     \caption{Nearest-neighbour algorithm}
     \label{alg:nearest neighbour}
-    \begin{minipage}[t]{0.49\linewidth}
-        (a) Mathematical version
-        \begin{algorithmic}[1]
-            \Function{NN}{$G(V, w)$, $s$}
-                \For {$0 \leq i \leq |V|$} {$Ans(i) \gets \textsc{NULL}$}
-                \EndFor
-                \State {$Ans(0) \gets s$}
-                \State {$S \gets \emptyset$}
-                \For {$0 < i < |V|$}
-                    \State {$c \gets \min_{u \in V \backslash (S + s)}{w(S, Ans(i-1), u)}$}
-                    \State {$Ans(i) \gets u : w(S, Ans(i-1), u) = c$}
-                \EndFor
-                \State {$Ans(|V|) \gets s$}
-                \State \Return {$Ans$}
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
-    \begin{minipage}[t]{0.49\linewidth}
-        (b) Programmatic version
-        \begin{algorithmic}[1]
-            \Function{NN}{$G(V, w)$, $s$}
-                \For {$0 \leq i \leq |V|$} {$Ans[i] = \textsc{NULL}$}
-                \EndFor
-                \State {$Ans[0] = s$}
-                \State {$S = \emptyset$}
-                \For {$0 < i < |V|$}
-                    \State {$c = \infty$}
-                    \For {$u' \in V \backslash (S + s)$}
-                        \State {$c' = w(S, Ans(i-1), u')$}
-                        \If {$c' < c$}
-                            \State {$c = c'$}
-                            \State {$Ans[i] = u$}
-                        \EndIf
-                    \EndFor
-                \EndFor
-                \State {$Ans[|V|] = s$}
-                \State \Return {$Ans$}
-            \EndFunction
-        \end{algorithmic}
-    \end{minipage}
+    \begin{algorithmic}[1]
+        \Function{NN}{$G(V, w)$, $s$}
+            \For {$0 \leq i \leq |V|$} {$Ans(i) \gets \textsc{NULL}$}
+            \EndFor
+            \State {$Ans(0) \gets s$}
+            \State {$S \gets \emptyset$}
+            \For {$0 < i < |V|$}
+                \State {$u' \gets u \in \overline{S} \backslash \{s\}$ that minimizes $w(S, Ans(i-1), u)$}
+                \State {$Ans(i) \gets u'$}
+                \State {$S \gets S \cup \{u'\}$}
+            \EndFor
+            \State {$Ans(|V|) \gets s$}
+            \State \Return {$Ans$}
+        \EndFunction
+    \end{algorithmic}
 \end{algorithm}
-
 \subsubsection{Remarks}
-Even though the Nearest Neighbour algorithm does not always yield the optimal solution it is still a method that in many cases gives decent results.
-The solution can be futher improved by repeating it $V$ times and executing it for every vertex or by using a variation of this algorithm: Nearest Neighbour Algorithm from Both End-Points, which chooses the next vertex based on two vertices instead of only one \cite{NN-algorithm}.
-By causing a relatively low number of critical mistakes which are mostly concentrated at the end of its execution (due to ``forgotten" cities along the way), it can provide a decent starting solution that can be worked on and improved by other methods.\par
+Even though the \acrlong*{NN} algorithm does not always yield the optimal solution it is still a method that in many cases gives decent results, which can be worked on and improved by other methods.
+The solution can be further improved by repeating it $V$ times and executing it for every vertex.\par
 In the context of this project it is especially good if we take into account that by finding the closest client's destination to its current position it tries to empty out the van as quickly as possible
 which should result in a better result when it comes to customer satisfaction due to a higher number of less displeased customers on one hand and a lower number of customers with a higher degree of unsatisfaction on the other.
-\par
+\\
