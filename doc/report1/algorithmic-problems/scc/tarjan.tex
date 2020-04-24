@@ -1,61 +1,59 @@
 \subsection{Tarjan's algorithm} \label{algorithm-scc-tarjan}
 Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan in 1972 \cite{tarjan72}, uses the ordered DFS of all nodes to find all \acrshortpl*{SCC}. However, it makes use of memory to bookkeep for each visited node $u$ its index $id$ (identifier in a pre-order visit) and lowlink $low$ (smallest index of any node known to be reachable from $u$ through $u$'s DFS subtree).
-\begin{center}
-    \begin{algorithm}[H]
-        \caption{Tarjan's algorithm}
-        \label{alg-tarjan}
-        \begin{minipage}[t]{0.40\linewidth}
-            (a) Main algorithm
-            \begin{algorithmic}[1]
-                \Function{Tarjan}{$G(V,E)$}
-                    \For{$u \in V$}
-                        % Ha forma melhor de fazer esta inicializaçao ? (inline quando e definido)
-                        \State{$id(u) \gets \text{NULL}$}
-                        \State{$SCC(u) \gets \text{NULL}$}
-                    \EndFor
-                    \For{$u \in V$}
-                        \If{$id(u) = \text{NULL}$} 
-                            \State {\Call{DFS\_T}{$G$, $u$}}
-                        \EndIf
-                    \EndFor
-                    \State \Return{$SCC$}
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-        \begin{minipage}[t]{0.58\textwidth}
-            (b) Helper functions
-            \begin{algorithmic}[1]
-                \State{$nid \gets 1, ~L \gets \Call{Stack}{ }$}
-
-                \Function{DFS\_T}{$G(V,E)$, $u$}
-                    \State{$L.\Call{Push}{u}$}
-                    \State {$id(u) \gets nid++$}
-                    \State{$low(u) \gets id(u)$} \label{alg-line:tarjan-dfs-assign-low-init}
-                    \For{$v \in \Call{Adj}{G, u}$}
-                        \label{alg-line:tarjan-dfs-cycle-begin}
-                        \Comment{For all successors of $u$}
-                        \If{$id(v) = \text{NULL}$}
-                            \Comment{If not yet visited}
-                            \State {\Call{DFS\_T}{$G$, $v$}}
-                            \Comment{Recurse on it}
-                            \State {$low(u) \gets \min \{low(u), low(v)\}$}
-                        \ElsIf {$v \in L$}
-                            \State {$low(u) \gets \min \{low(u), id(v)\}$}
-                        \EndIf
-                    \EndFor
-                    \label{alg-line:tarjan-dfs-cycle-end}
-                    \If{$low(u) = id(u)$}
-                        \Comment{If $u$ is a root}
-                        \While{$(v \gets L.\Call{Pop}{ }) \neq u$}
-                            {$SCC(v) \gets u$}
-                        \EndWhile
-                        \State{$SCC(u) \gets u$}
+\begin{algorithm}[h]
+    \caption{Tarjan's algorithm}
+    \label{alg-tarjan}
+    \begin{minipage}[t]{0.40\linewidth}
+        (a) Main algorithm
+        \begin{algorithmic}[1]
+            \Function{Tarjan}{$G(V,E)$}
+                \For{$u \in V$}
+                    % Ha forma melhor de fazer esta inicializaçao ? (inline quando e definido)
+                    \State{$id(u) \gets \text{NULL}$}
+                    \State{$SCC(u) \gets \text{NULL}$}
+                \EndFor
+                \For{$u \in V$}
+                    \If{$id(u) = \text{NULL}$} 
+                        \State {\Call{DFS\_T}{$G$, $u$}}
                     \EndIf
-                \EndFunction
-            \end{algorithmic}
-        \end{minipage}
-    \end{algorithm}
-\end{center}
+                \EndFor
+                \State \Return{$SCC$}
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+    \begin{minipage}[t]{0.58\textwidth}
+        (b) Helper functions
+        \begin{algorithmic}[1]
+            \State{$nid \gets 1, ~L \gets \Call{Stack}{ }$}
+
+            \Function{DFS\_T}{$G(V,E)$, $u$}
+                \State{$L.\Call{Push}{u}$}
+                \State {$id(u) \gets nid++$}
+                \State{$low(u) \gets id(u)$} \label{alg-line:tarjan-dfs-assign-low-init}
+                \For{$v \in \Call{Adj}{G, u}$}
+                    \label{alg-line:tarjan-dfs-cycle-begin}
+                    \Comment{For all successors of $u$}
+                    \If{$id(v) = \text{NULL}$}
+                        \Comment{If not yet visited}
+                        \State {\Call{DFS\_T}{$G$, $v$}}
+                        \Comment{Recurse on it}
+                        \State {$low(u) \gets \min \{low(u), low(v)\}$}
+                    \ElsIf {$v \in L$}
+                        \State {$low(u) \gets \min \{low(u), id(v)\}$}
+                    \EndIf
+                \EndFor
+                \label{alg-line:tarjan-dfs-cycle-end}
+                \If{$low(u) = id(u)$}
+                    \Comment{If $u$ is a root}
+                    \While{$(v \gets L.\Call{Pop}{ }) \neq u$}
+                        {$SCC(v) \gets u$}
+                    \EndWhile
+                    \State{$SCC(u) \gets u$}
+                \EndIf
+            \EndFunction
+        \end{algorithmic}
+    \end{minipage}
+\end{algorithm}
 \subsubsection{Proof of correctness}
 \begin{itemize}
     \item \textbf{Stack invariant:} a node $u$ remains in $L$ after being visited iff there exists a path from $u$ to some node $v$ earlier on the stack (otherwise, $low(u)=id(u)$). This is trivially true at the beginning, since $L$ is initially empty.\par

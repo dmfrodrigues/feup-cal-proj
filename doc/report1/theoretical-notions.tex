@@ -101,18 +101,18 @@ Although we will not go into much detail over the definition of a \acrfull*{TM},
     \begin{equation*}
         u \leadsto v \iff \exists p \in P_G \colon p_1 = u \wedge p_{|p|} = v
     \end{equation*}
-    Let us introduce the following notation, which can be read as ``$z$ is reachable from $x$ via $y$":
-    \begin{equation*}
-        x \leadsto y \wedge y \leadsto z \iff x \leadsto y \leadsto z
-    \end{equation*}
 \end{definition}
+Let us introduce the following notation, which can be read as ``$z$ is reachable from $x$ via $y$":
+\begin{equation*}
+    x \leadsto y \wedge y \leadsto z \iff x \leadsto y \leadsto z
+\end{equation*}
 \begin{definition}[Weight of a path]
     The weight of a path $p$ of length $k$ in graph $G(V,E,w)$ is
     \begin{equation*}
         W(p) = \sum_{i=1}^{|p|-1}{w(p_i, p_{i+1})}
     \end{equation*}
 \end{definition}
-\begin{definition}[Descendants] The descendants $Desc(s)$ of a node $s \in V$ in a graph $G(V,E)$ are all nodes $v \in V$ reachable from $s$.
+\begin{definition}[Descendants] \label{def:desc} The descendants $Desc(s)$ of a node $s \in V$ in a graph $G(V,E)$ are all nodes $v \in V$ reachable from $s$. The descendants of $s$ can also be referred to as the \emph{transitive closure} of $E$ starting in $s$.
     \begin{equation*}
         Desc(s) = \{v \in V \mid s \leadsto v\}
     \end{equation*}

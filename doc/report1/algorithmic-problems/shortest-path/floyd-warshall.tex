@@ -1,10 +1,9 @@
 \subsection{Floyd-Warshall algorithm} \label{algorithm-shortestpath-floydwarshall}
-The Floyd-Warshall algorithm was published in 1962 as a generalization of Warshall's algorithm 
-(which only tested the existence of a path between two vertices \cite[p.~346]{floyd-alg}). It applies a dynamic programming approach 
-to find the shortest path between each pair of vertices in a graph (whose edges' weights may be not only positive but also negative).\par
+The Floyd-Warshall algorithm was published in 1962 as a generalization of Warshall's algorithm for the \hyperref[def:desc]{transitive closure} \cite[p.~346]{floyd-alg}. It applies a dynamic programming approach 
+to find the shortest path between each pair of vertices in a graph, even if edges have negative weights.\par
 To simplify, consider each vertex in $V$ is identified by a unique integer $1 \leq i \leq |V|$.
 Let $dist(i, j)^{(k)}$ be the cost of the shortest path from $i$ to $j$ that resorts to vertices $1, 2, ..., k$.
-This algorithm follows the following recurrence \cite[p.~694]{intro-alg}:
+This algorithm follows the recurrence adapted from \cite{intro-alg}:
 
 \begin{equation}
     dist(i,j)^{(k)}=\begin{dcases}
@@ -49,9 +48,8 @@ or the length of the shortest path from $i$ to $j$ via $k$ (i.e., from $i$ to $k
 \end{algorithm}
 
 \subsubsection{Complexity analysis}
-By comparing every path of the graph between each pair of vertices, the Floyd-Warshall algorithm detains a time complexity in the order of $\Theta(|V|^3)$ due not only to the three nested $for$ loops but also to the $O(1)$ run time of line 11.\par
-When it comes to memory expenditure, by creating k matrices, one for each iteration of the k for loop, it takes up $\Theta(|V|^3)$ which may possibly be reduced to $\Theta(|V|^2)$ if instead of creating a new matrix, the existing one is updated.
+By comparing every path of the graph between each pair of vertices, the Floyd-Warshall algorithm has a time complexity of $\Theta(|V|^3)$ due not only to the three nested $for$ loops but also to the fact all elementary operations having $O(1)$ run time.\par
+When it comes to memory, by creating $k$ matrices, one for each iteration of the outer-most \textbf{for} loop, it takes up $\Theta(|V|^3)$. This can be reduced to $\Theta(|V|^2)$ if, on processing $dist^{(k)}$, we only hold the previous matrix $dist^{(k-1)}$, or we can even reduce it in half if we always perform updates over the same matrix, thus making unnecessary to hold the previous matrix.
 
 \subsubsection{Remarks}
-Even though the Floyd-Warshall's algorithm functions correctly with negative weight edges, this feature will most likely not be of much use, due to the nature of the problem:
-the time it takes to get from one location to another must be a value equal to (in the case of the ``current position" being equal to the ``final position") or greater than zero.
+The added flexibility of working with negative-weight edges is not particularly useful in our case, since the time it takes to travel between two places must be equal to (should the two positions be the same) or greater than zero. Besides, Dijkstra's algorithm can produce the same result in time $O(|V|^2 \log {|V|})$.

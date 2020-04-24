@@ -27,7 +27,7 @@
     \Acrlong*{DFS} algorithm starting in $s$ finds all nodes reachable from $s$.
 \end{theorem}
 \begin{proof} \textbf{Base case:} $u=s$; $s$ is trivially reachable from itself. \\
-\textbf{Inductive step:} suppose \textsc{DFS} is always called for a node $u$ reachable from $s$. By lemma \ref{lem:dfs} we know all nodes adjacent to $u$ are reachable from $s$. Since \textsc{DFS} is only called for the nodes adjacent to $u$ the inductive implication holds.\par
+\textbf{Inductive step:} assume \textsc{DFS} is always called for a node $u \colon s \leadsto u$. Thus, by lemma \ref{lem:dfs} we know $\forall v \in Adj(G,u), s \leadsto v$. Since \textsc{DFS} is only called for the nodes in $Adj(G,u)$, the inductive implication holds.\par
 We have thus proven the theorem correct by induction.
 \end{proof}
 \subsubsection{Complexity analysis}

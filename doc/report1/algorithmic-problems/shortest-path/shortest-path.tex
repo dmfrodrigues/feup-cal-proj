@@ -3,8 +3,9 @@
     \item \textbf{Summary:} Given a directed weighted graph, find the path with least cost from one node to another.
     \item \textbf{Input:} Graph $G(V,E,w)$ and origin/destination nodes $s, d \in V$.
     \item \textbf{Output:} Path $p \in P_G$, starting in $s$ and ending in $d$.
-    \item \textbf{Objective function:} $W(p)~\min$.
+    \item \textbf{Objective function:} $\min W(p)$.
 \end{itemize}
+It is trivial that $G$ can not have negative-weight cycles, otherwise there is not a finite set of shortest paths from $u$ to $v$, since we could always further reduce the weight by traversing the cycle once again.
 \input{floyd-warshall.tex}
 \input{dijkstra.tex}
 \input{astar.tex}

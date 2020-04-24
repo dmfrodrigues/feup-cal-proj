@@ -1,25 +1,23 @@
 \subsection{Dijkstra's algorithm} \label{algorithm-shortestpath-dijkstra}
-Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}.\par
-This algorithm finds the distance between a node $s$ and every other node $d$ reachable from $s$ (thus solving all shortest path problems from $s$). The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes $u$ the least distance $dist(u)$ from $s$ to $u$ and previous node $prev(u)$ in the shortest path (temporary if the node is in $Q$, final otherwise). We then pick the node $u \in Q$ with the least distance to $s$, and process it by iterating over all nodes adjacent to $u$, calculating their potential new distance to $s$ via $u$ ($c'=c+w(u,v)$), and if the new distance is smaller we update $dist(v)=c'$ and $prev(v)=u$.\par
-To achieve the least time complexity possible, the graph is usually represented as an adjacency list $Adj$. We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$, which allows fast extraction of element with lowest key and key decrease when processing adjacent nodes.
+Dijkstra's algorithm is one of the most famous graph algorithms, and the most popular shortest path algorithm. It was first published in 1959 by Dutch computer scientist Edsger Dijkstra \cite{dijkstra}. This algorithm finds the distance between $s$ and every other node $d \colon s \leadsto d$ (thus solving all shortest path problems from $s$).\par
+The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed nodes, and we know for all nodes $u$ the least distance $dist(u)$ from $s$ to $u$ and previous node $prev(u)$ in the shortest path (temporary if $u \in Q$, final otherwise). We then extract the node $u \in Q$ with the least distance to $s$, and process it by iterating over all adjacent nodes, calculating their potential new distance $c'$ to $s$ via $u$, and if $c'$ is smaller we update $dist(v)=c'$ and $prev(v)=u$.\par
 \begin{algorithm}[H]
     \caption{Dijkstra's algorithm}
     \label{alg-dijkstra}
     \begin{algorithmic}[1]
         \Function{Dijkstra}{$G(V,E)$, $s$}
-            \For {$v \in V$} \Comment{Initializations}
-                \State {$dist(v) \gets \infty$}
-                \State {$prev(v) \gets \text{NULL}$}
+            \For {$v \in V$} 
+                {$dist(v) \gets \infty$, $prev(v) \gets \text{NULL}$} \Comment{Initializations}
             \EndFor
             \State $Q \gets V$
             \State {$dist(s) \gets 0$}
             \While {$|Q| > 0$} \Comment{Main cycle}
                 \State {$u \gets $ vertex of $Q$ with least $dist(u)$}
+                \State {$Q \gets Q \backslash \{u\}$}
                 \For {$v \in \Call{Adj}{G, u}$}
                     \State $c' \gets c + w(u, v)$
                     \If {$c' < dist(v)$}
-                        \State $dist(v) \gets c'$
-                        \State $prev(v) \gets u$
+                        \State{ $dist(v) \gets c'$, $prev(v) \gets u$}
                     \EndIf
                 \EndFor
             \EndWhile
@@ -27,6 +25,7 @@ To achieve the least time complexity possible, the graph is usually represented 
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
+To achieve the least time complexity possible, the graph is usually represented as an adjacency list $Adj$. We also use a minimum priority queue for $Q$, where the key of $u$ is $dist(u)$, which allows fast extraction of the element with lowest key and key decrease when processing adjacent nodes.
 \subsubsection{Proof of correctness}
 The full proof is rather long and is promptly available (for instance, in \cite[p.~659]{intro-alg}), thus we will only present a short argument for correctness based on cycle invariants/variants for the \textbf{while} loop.
 \begin{itemize}
