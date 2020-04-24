@@ -1,11 +1,12 @@
 \subsection{Kosaraju's algorithm} \label{algorithm-scc-kosaraju}
-Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. Like many \acrshort{SCC} algorithms, it performs a \acrshort{DFS} on the graph and another one on its transpose, having as main idea the fact that a graph and its transpose have exactly the same \acrshortpl*{SCC}.
-\begin{algorithm}
+Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but only published in 1981 by Micha Sharir \cite{sharir81}, independently. Like many \acrshort*{SCC} algorithms, it performs a \acrshort{DFS} on the graph and another one on its transpose, having as main idea the fact a graph and its transpose have exactly the same \acrshortpl*{SCC}.
+\begin{algorithm}[ht]
     \caption{Kosaraju's algorithm}
     \label{alg-kosaraju}
     \begin{minipage}[t]{0.49\textwidth}
         (a) Main algorithm
         \begin{algorithmic}[1]
+            \State{$S = \emptyset,~L = \Call{Stack}{ }$}
             \Function{Kosaraju}{$G(V,E)$}
             \For{$u \in V$} {$SCC(u) \gets \text{NULL}$}
             \EndFor
@@ -22,7 +23,6 @@ Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but o
     \begin{minipage}[t]{0.49\textwidth}
         (b) Helper functions
         \begin{algorithmic}[1]
-            \State{$S = \emptyset,~L = \Call{Stack}{ }$}
             \Function{DFS\_K}{$G(V,E)$, $u$}
                 \If{$u \in S$} {\Return{}}
                 \EndIf
@@ -43,32 +43,30 @@ Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but o
         \end{algorithmic}
     \end{minipage}
 \end{algorithm}
+\vspace{-1em}
 \subsubsection{Proof of correctness}
 A formal proof is promply available at \cite[p.~619]{intro-alg}, we will thus only present an argument as brief as possible as to why Kosaraju's algorithm is correct.\par
 Consider the state of $L$ as of line \ref{alg:kosaraju-start-cycle}. Let $P = Pred(v)$, $D = Desc(v)$, $B = Before(v)$ and $A=After(v)$.\par
 Trivially, we know that
-\begin{equation} \label{eq:ABpart}
+\begin{gather} \label{eq:ABpart}
     \begin{cases}
         B \cup \{v\} \cup A = B \\
         B \cap \{v\} = B \cap A = \emptyset
-    \end{cases} \implies \overline{B} = \{v\} \cup A
-\end{equation}
-It is also trivial that
-\begin{equation} \label{eq:vnotinPD}
+    \end{cases} \implies \overline{B} = \{v\} \cup A \\
+    \label{eq:vnotinPD}
     P \cap \{v\} = D\cap\{v\}=\emptyset
-\end{equation}
-
-Let $v$ be a node not yet assigned to an \acrshort*{SCC}, meaning it is the root of its own \acrshort*{SCC}. From now on, we will use the notation \sout{$S$} to state that the set $S$ is empty.\par
+\end{gather}
+Let $v$ be a node not yet assigned to an \acrshort*{SCC}, meaning it is the root of its own \acrshort*{SCC}. From now on, we will use the notation \sout{$S$} to state that the set $S$ is empty.
 Since we have added nodes to $L$ in post-order, for every node $v$ we know all nodes $u$ for which $u \leadsto v$ (all nodes in $P$) are either:
-\begin{enumerate}
+\begin{enumerate}[topsep=0.5em]
     \item \label{itm:B} Before $v$ ($B \cap P$);
-    \begin{enumerate}
+    \begin{enumerate}[topsep=0em]
         \item \label{itm:Bexcept} However, it is impossible for a node to be before $v$ and also be in $P \cap D$, because if such node $u$ existed before $v$ then $v$ would have already been assigned to the same \acrshort*{SCC} as $u$ (\sout{$B \cap P \cap D$}).
     \end{enumerate} 
     \item \label{itm:A} After $v$;
-    \begin{enumerate}
-        \item \label{itm:Agood} If $SCC(u)=SCC(v)$ their order is arbitrary in $L$, since we can consider either paths $u \leadsto v$ or $v \leadsto u$ to order them ($A \cap P \cap D$).
-        \item \label{itm:Abad} The above case is the only valid way of having both $u \leadsto v$ and $u \in A$; otherwise, we would have $u \leadsto v$, $u \not \leadsto v$ and $u \in A$ ($A \cap P \cap \overline{D}$), which is obviously a violation of the fact nodes in $L$ are in pre-order, since $u \leadsto v$ and $u \not \leadsto v$ is undisputable evidence that $u$ must be before $v$ in $L$ (\sout{$A \cap P \cap \overline{D}$}).
+    \begin{enumerate}[topsep=0em]
+        \item \label{itm:Agood} If $SCC(u)=SCC(v)$ their order is arbitrary, since we can consider $u \leadsto v$ or $v \leadsto u$ ($A \cap P \cap D$).
+        \item \label{itm:Abad} The above case is the only valid way of having both $u \leadsto v$ and $u \in A$; otherwise, we would have $u \leadsto v$, $u \not \leadsto v$ and $u \in A$, which is obviously a violation of the fact nodes in $L$ are in pre-order, since $u \leadsto v$ and $u \not \leadsto v$ is undisputable evidence that $u$ must be before $v$ in $L$ (\sout{$A \cap P \cap \overline{D}$}).
     \end{enumerate}
 \end{enumerate}
 In the following table, we show a kind of set diagram that shows all possible relevant logical relations (we ignored $\overline{P}$), and which ones are possible.

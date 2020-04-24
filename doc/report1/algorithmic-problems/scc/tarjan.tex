@@ -1,6 +1,6 @@
 \subsection{Tarjan's algorithm} \label{algorithm-scc-tarjan}
 Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan in 1972 \cite{tarjan72}, uses the ordered DFS of all nodes to find all \acrshortpl*{SCC}. However, it makes use of memory to bookkeep for each visited node $u$ its index $id$ (identifier in a pre-order visit) and lowlink $low$ (smallest index of any node known to be reachable from $u$ through $u$'s DFS subtree).
-\begin{algorithm}[h]
+\begin{algorithm}[ht]
     \caption{Tarjan's algorithm}
     \label{alg-tarjan}
     \begin{minipage}[t]{0.40\linewidth}
@@ -57,16 +57,15 @@ Similar to Kosaraju's algorithm, Tarjan's algorithm, proposed by Robert Tarjan i
 \subsubsection{Proof of correctness}
 \begin{itemize}
     \item \textbf{Stack invariant:} a node $u$ remains in $L$ after being visited iff there exists a path from $u$ to some node $v$ earlier on the stack (otherwise, $low(u)=id(u)$). This is trivially true at the beginning, since $L$ is initially empty.\par
-    Upon executing \textsc{DFS\_T} over all adjacent nodes (lines \ref*{alg-line:tarjan-dfs-cycle-begin}-\ref*{alg-line:tarjan-dfs-cycle-end}), we assume calls to \textsc{DFS\_T} in the cycle have performed all procedures required to guarantee the invariant for the nodes they added, now we only need to perform the procedures required to guarantee the invariant for node $u$ that we added to $L$.
+    Upon executing \textsc{DFS\_T} over all adjacent nodes (lines \ref*{alg-line:tarjan-dfs-cycle-begin}-\ref*{alg-line:tarjan-dfs-cycle-end}), we assume calls to \textsc{DFS\_T} in the cycle have performed all procedures required to guarantee the invariant for the nodes they added, so now we only need to guarantee the invariant despite having initially added $u$ to $L$.
     \begin{itemize}
         \item If $low(u) < id(u)$ then the stack invariant is still valid, and we do not need to do anything.
         \item If $low(u)=id(u)$ (which is possible, since $low(u)$ is initially assigned with $id(u)$ in line \ref{alg-line:tarjan-dfs-assign-low-init}), then we know $u$ is a root of a \acrshort*{SCC} consisting of itself and all nodes before it in $L$. To restore the stack invariant, we pop all nodes before $u$, and eventually pop $u$, assigning all those nodes to the same \acrshort*{SCC} in the process.
         \item It is impossible for $low(u) > id(u)$, since $low(u)$ is initially assigned with $id(u)$ and the only operation that changes $low(u)$ is a minimum operation where $low(u)$ is always an argument, meaning $low(u)$ starts at $id(u)$ and can only decrease.
     \end{itemize}
 \end{itemize}
-!REVIEW
-\par
-Check if this \emph{argument} is enough.
+% !REVIEW
+% Check if this \emph{argument} is enough.
 \subsubsection{Complexity analysis}
 Simlar to Kosaraju's algorithm, Tarjan's yields time complexity $O(|V|+|E|)$ in the \textsc{DFS\_T} function since it iterates once over all nodes. However, this can only be achieved if the test $u \in L$ is done in constant time $O(1)$, by, for example, storing this information in an array of flags $onStack[|V|]$.
 The drawback to this method over its predecessor is the space complexity, for which it yields $O(|V|)$, since in the worst case it stores a stack and an array of all node indexes with complexity $O(|V|)$, along with the fields $index$ and $onStack$ for each node. 
