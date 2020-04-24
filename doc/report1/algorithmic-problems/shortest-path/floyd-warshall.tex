@@ -1,8 +1,8 @@
 \subsection{Floyd-Warshall algorithm} \label{algorithm-shortestpath-floydwarshall}
-The Floyd-Warshall algorithm was published in 1962 as a generalization of Warshall's algorithm for the \hyperref[def:desc]{transitive closure} \cite[p.~346]{floyd-alg}. It applies a dynamic programming approach 
+The Floyd-Warshall algorithm was published in 1962 as a generalization of Warshall's algorithm for the \hyperref[def:desc]{transitive closure} \cite[p.~346]{floyd-alg}. It is a \gls{recursive} algorithm that applies a \gls{dynamic programming} approach 
 to find the shortest path between each pair of vertices in a graph, even if edges have negative weights.\par
-To simplify, consider each vertex in $V$ is identified by a unique integer $1 \leq i \leq |V|$.
-Let $dist(i, j)^{(k)}$ be the cost of the shortest path from $i$ to $j$ that resorts to vertices $1, 2, ..., k$.
+Consider each vertex in $V$ is identified by a unique integer $1 \leq i \leq |V|$.
+Let $dist(i, j)^{(k)}$ be the cost of the shortest path from $i$ to $j$ using vertices $1, 2, ..., k$.
 This algorithm follows the recurrence adapted from \cite{intro-alg}:
 
 \begin{equation}

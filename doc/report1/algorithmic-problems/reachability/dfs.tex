@@ -23,7 +23,8 @@
     If $s \leadsto u$, then $\exists p \in P_G \colon p_1 = s \wedge p_{|p|} = u$; let that path be $p^u$.\par
     If $v \in Adj(G, u)$ then $p^v \coloneqq \langle p^u, v \rangle = \langle p^u_1, p^u_2,...,p^u_{|p^u|}, v\rangle$ is either a valid path (thus $s \leadsto v$ because of $p^v$), or an invalid path which means $p^u_j = v$ for some $j$, in which case $s \leadsto v$ because of $p^u[1:j]$.
 \end{proof}
-\begin{theorem}
+\vspace{2em}
+\begin{theorem} \label{teor:dfs}
     \Acrlong*{DFS} algorithm starting in $s$ finds all nodes reachable from $s$.
 \end{theorem}
 \begin{proof} \textbf{Base case:} $u=s$; $s$ is trivially reachable from itself. \\
