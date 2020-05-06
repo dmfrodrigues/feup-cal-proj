@@ -30,10 +30,12 @@ test: all
 # testmem: all
 # 	valgrind --leak-check=yes $(ODIR)/$(TEXE)
 
+O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o
+
 makefolders:
 	mkdir -p $(ODIR)
 
-$(PROG):  $(ODIR)/DFS.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o
+$(PROG):  $(O_FILES)
 	echo Compiling
 	# $(CC) $(ODIR)/simpledu.o $(ODIR)/simpledu_args.o $(ODIR)/simpledu_envp.o $(ODIR)/simpledu_stat.o $(ODIR)/simpledu_log.o $(ODIR)/simpledu_time.o $(ODIR)/simpledu_iterate.o -o simpledu
 

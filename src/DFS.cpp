@@ -3,12 +3,13 @@
 void DFS::initialize(const DUGraph *G, DUGraph::node_t s){
     this->G = G;
     this->s = s;
+    R.clear();
 }
 
 void DFS::dfs(DUGraph::node_t u){
     if(R[u]) return;
     R[u] = true;
-    for(const auto &v:G->Adj(u))
+    for(const DUGraph::node_t &v:G->getAdj(u))
         dfs(v);
 }
 
@@ -17,5 +18,5 @@ void DFS::run(){
 }
 
 bool DFS::is_reachable(DUGraph::node_t v) const{
-    return R[v];
+    return R.at(v);
 }

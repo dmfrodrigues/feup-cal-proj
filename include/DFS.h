@@ -7,7 +7,7 @@ class DFS : public Reachability {
 private:
     const DUGraph *G;
     DUGraph::node_t s;
-    std::vector<bool> R;
+    std::unordered_map<DUGraph::node_t, bool> R;
     
     void dfs(DUGraph::node_t u);
 public:
