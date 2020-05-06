@@ -15,7 +15,7 @@ The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed n
                 \State {$u \gets $ vertex of $Q$ with least $dist(u)$}
                 \State {$Q \gets Q \backslash \{u\}$}
                 \For {$v \in \Call{Adj}{G, u}$}
-                    \State $c' \gets c + w(u, v)$
+                    \State $c' \gets dist(u) + w(u, v)$
                     \If {$c' < dist(v)$}
                         \State{ $dist(v) \gets c'$, $prev(v) \gets u$}
                     \EndIf
