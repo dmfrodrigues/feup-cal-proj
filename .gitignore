@@ -20,4 +20,4 @@ map/map_process
 *.glo
 *.gls
 obj/
-
+main

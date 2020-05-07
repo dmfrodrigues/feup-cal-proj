@@ -1,7 +1,5 @@
 PROG   =main
 
-IFLAGS =$(IDIR)
-
 CC     =g++
 
 SDIR   =./src
@@ -10,11 +8,19 @@ ODIR   =./obj
 TDIR   =./test
 TEXE   =test
 
+GVDIR=./GraphViewer
+IDIR_GV=-I$(GVDIR)/cpp
+LDIR_GV=$(GVDIR)/lib
+LIB_GV=$(LDIR_GV)/libgraphviewer.a
+
+IFLAGS =$(IDIR) $(IDIR_GV)
+
 CFLAGS =-Wall -g $(IFLAGS) #-O3
 
-all: makefolders $(PROG)
+all: $(PROG)
 
 clean:
+	make -C GraphViewer clean
 	rm -rf $(ODIR)
 	rm -f $(ODIR)/$(TEXE)
 	rm -f $(PROG)
@@ -30,14 +36,17 @@ test: all
 # testmem: all
 # 	valgrind --leak-check=yes $(ODIR)/$(TEXE)
 
-O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o
+O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o $(ODIR)/main.o
 
-makefolders:
-	mkdir -p $(ODIR)
-
-$(PROG):  $(O_FILES)
+$(PROG): $(O_FILES) $(LIB_GV)
 	echo Compiling
-	# $(CC) $(ODIR)/simpledu.o $(ODIR)/simpledu_args.o $(ODIR)/simpledu_envp.o $(ODIR)/simpledu_stat.o $(ODIR)/simpledu_log.o $(ODIR)/simpledu_time.o $(ODIR)/simpledu_iterate.o -o simpledu
+	$(CC) $(O_FILES) -o $(PROG) -L$(LDIR_GV) -lgraphviewer
 
-$(ODIR)/%.o:          $(SDIR)/%.cpp
+$(LIB_GV):
+	make -C GraphViewer
+
+$(ODIR)/%.o: $(ODIR) $(SDIR)/%.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
+
+$(ODIR):
+	mkdir -p $(ODIR)
