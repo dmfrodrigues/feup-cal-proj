@@ -22,3 +22,16 @@ const std::list<DWGraph::node_t>& DWGraph::getNodes() const{
 const std::list<DWGraph::Edge>& DWGraph::getAdj(node_t u) const{
     return adj.at(u);
 }
+
+DWGraph::operator DUGraph() const{
+    DUGraph G;
+    for(const node_t &u: getNodes()){
+        G.addNode(u);
+    }
+    for(const node_t &u: getNodes()){
+        for(const Edge &e: getAdj(u)){
+            G.addEdge(u, e.v);
+        }
+    }
+    return G;
+}

@@ -15,12 +15,12 @@ LIB_GV=$(LDIR_GV)/libgraphviewer.a
 
 IFLAGS =$(IDIR) $(IDIR_GV)
 
-CFLAGS =-Wall -g $(IFLAGS) #-O3
+CFLAGS =-Wall -g $(IFLAGS)#-O3
 
 all: $(PROG)
 
 clean:
-	make -C GraphViewer clean
+	#make -C GraphViewer clean
 	rm -rf $(ODIR)
 	rm -f $(ODIR)/$(TEXE)
 	rm -f $(PROG)
@@ -39,14 +39,13 @@ test: all
 O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o $(ODIR)/main.o
 
 $(PROG): $(O_FILES) $(LIB_GV)
-	echo Compiling
 	$(CC) $(O_FILES) -o $(PROG) -L$(LDIR_GV) -lgraphviewer
 
 $(LIB_GV):
 	make -C GraphViewer
 
-$(ODIR)/%.o: $(ODIR) $(SDIR)/%.cpp
-	$(CC) $(CFLAGS) -c $^ -o $@
+$(ODIR)/%.o: $(SDIR)/%.cpp $(ODIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(ODIR):
 	mkdir -p $(ODIR)
