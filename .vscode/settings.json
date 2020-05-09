@@ -1,0 +1,38 @@
+{
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk (latexmkrc)",
+            "tools": [
+                "latexmk_rconly"
+            ]
+        },
+        {
+            "name": "latexmk 🔃",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "latexmk (lualatex)",
+            "tools": [
+                "lualatexmk"
+            ]
+        },
+        {
+            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "Compile Rnw files",
+            "tools": [
+                "rnw2tex",
+                "latexmk"
+            ]
+        }
+    ]
+}
