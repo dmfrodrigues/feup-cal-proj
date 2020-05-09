@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include "rapidxml.hpp"
+#include "EdgeType.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -12,14 +13,80 @@ xml_node<> *find_tag(xml_node<> *p, const string &k) {
     return ret;
 }
 
-enum EdgeType : char{
-    No          = 'n',
-    Motorway    = 'M',
-    Trunk       = 'T',
-    Road        = 'R',
-    Residential = 'r',
-    Slow        = 's'
+enum dir_t {
+    Front = 1,
+    Both = 0,
+    Back = -1
 };
+
+typedef string node_id_t;
+
+struct node_t{
+    node_id_t id;
+    double lat;
+    double lon;
+    node_t(xml_node<> *it){
+        id = it->first_attribute("id")->value();
+        lat = atof(it->first_attribute("lat")->value());
+        lon = atof(it->first_attribute("lon")->value());
+    }
+};
+
+ostream& operator<<(ostream &os, const node_t &u){
+    os << fixed << setprecision(10);
+    os << u.id << " " << u.lat << " " << u.lon;
+    return os;
+}
+
+typedef int speed_t;
+
+class way_t : public list<node_id_t> {
+private:
+    void get_way(xml_node<> *it){
+        for(auto j = it->first_node("nd"); string(j->name()) == "nd"; j = j->next_sibling()){
+            this->push_back(j->first_attribute("ref")->value());
+        }
+    }
+
+    dir_t get_dir(xml_node<> *it){
+        auto p = find_tag(it, "oneway");
+        if(!p) return dir_t::Both;
+        if(string(p->first_attribute("v")->value()) == "yes") return dir_t::Front;
+        if(string(p->first_attribute("v")->value()) == "no") return dir_t::Both;
+        if(string(p->first_attribute("v")->value()) == "reversible") return dir_t::Both;
+        return dir_t::Both;
+    }
+
+    speed_t get_speed(xml_node<> *it){
+        auto p = find_tag(it, "maxspeed");
+        if(!p) return -1;
+        speed_t s;
+        if(sscanf(p->first_attribute("v")->value(), "%d", &s) != 1) return -1;
+        return s;
+    }
+public:
+    dir_t dir;
+    speed_t speed;
+    EdgeType edgeType;
+    way_t(xml_node<> *it, EdgeType eType){
+        edgeType = eType;
+        get_way(it);
+        dir = get_dir(it);
+        speed = get_speed(it);
+        if(dir == dir_t::Back){
+            reverse();
+            dir = dir_t::Front;
+        }
+    }
+};
+
+ostream& operator<<(ostream &os, const way_t &w){
+    os << w.dir << " " << char(w.edgeType) << " " << w.speed << " " << w.size();
+    for(auto it = w.begin(); it != w.end(); ++it){
+        os << "\n" << *it;
+    }
+    return os;
+}
 
 unordered_map<string, EdgeType> edge_accept = {
     {"motorway"         , EdgeType::Motorway},
@@ -70,38 +137,6 @@ EdgeType get_edge_type(xml_node<> *it) {
     return EdgeType::No;
 }
 
-list<string> get_edge_nodes(xml_node<> *it){
-    list<string> nodes_edge;
-    for(auto j = it->first_node("nd"); string(j->name()) == "nd"; j = j->next_sibling()){
-        nodes_edge.push_back(j->first_attribute("ref")->value());
-    }
-    return nodes_edge;
-}
-
-enum EdgeDirection {
-    Front = 1,
-    Both = 0,
-    Back = -1
-};
-
-EdgeDirection get_edge_direction(xml_node<> *it){
-    auto p = find_tag(it, "oneway");
-    if(!p) return EdgeDirection::Both;
-    if(string(p->first_attribute("v")->value()) == "yes") return EdgeDirection::Front;
-    if(string(p->first_attribute("v")->value()) == "no") return EdgeDirection::Both;
-    if(string(p->first_attribute("v")->value()) == "reversible") return EdgeDirection::Both;
-    return EdgeDirection::Both;
-}
-
-typedef int Speed;
-Speed get_edge_speed(xml_node<> *it){
-    auto p = find_tag(it, "maxspeed");
-    if(!p) return -1;
-    Speed s;
-    if(sscanf(p->first_attribute("v")->value(), "%d", &s) != 1) return -1;
-    return s;
-}
-
 int main(int argc, char *argv[]) {
     assert(argc == 2);
     char *text = NULL; {
@@ -116,82 +151,35 @@ int main(int argc, char *argv[]) {
     xml_document<> doc;
     doc.parse<0>(text);
 
-    int num_ways = 0;
-    unordered_set<string> good_nodes, good_nodes_ways;
-    list<string> edges, edges_ways;{
+    set<node_id_t> node_ids;
+    list<way_t> ways;
+    
+    {
         for (auto it = doc.first_node()->first_node("way"); string(it->name()) == "way"; it = it->next_sibling()) {
-            EdgeType t = get_edge_type(it);
-            if (t == EdgeType::No) continue;
-            ++num_ways;
-            list<string> nodes_edge = get_edge_nodes(it);
-            EdgeDirection d = get_edge_direction(it);
-            string sp = to_string(get_edge_speed(it));
-            if(d == EdgeDirection::Back){
-                reverse(nodes_edge.begin(), nodes_edge.end());
-                d = EdgeDirection::Front;
-            }
-            
-            string first = *nodes_edge.begin();
-            string last  = *(--nodes_edge.end());
-            good_nodes_ways.insert(first); good_nodes_ways.insert(last);
-
-            // Direct way
-            edges_ways.push_back("(" + first + ", " + last + ", " + char(t) + ", " + sp + ")");
-            string prev = *nodes_edge.begin(); good_nodes.insert(prev);
-            for(auto it = ++nodes_edge.begin(); it != nodes_edge.end(); prev = *(it++)){
-                edges.push_back("(" + prev + ", " + string(*it) + ", " + char(t) + ", " + sp + ")");
-                good_nodes.insert(string(*it));
-            }
-            // Reverse way
-            if(d == EdgeDirection::Both){
-                edges_ways.push_back("(" + last + ", " + first + ", " + char(t) + ", " + sp + ")");
-                prev = *nodes_edge.rbegin();
-                for(auto it = ++nodes_edge.rbegin(); it != nodes_edge.rend(); prev = *(it++)){
-                    edges.push_back("(" + prev + ", " + string(*it) + ", " + char(t) + ", " + sp + ")");
-                }
-            }
+            EdgeType t = get_edge_type(it); if (t == EdgeType::No) continue;
+            way_t way(it, t); ways.push_back(way);
+            node_ids.insert(way.begin(), way.end());
         }
     }
 
-    list<string> nodes, nodes_ways;{
+    list<node_t> nodes;{
         for (auto it = doc.first_node()->first_node("node"); string(it->name()) == "node"; it = it->next_sibling()) {
-            if(good_nodes.find(string(it->first_attribute("id")->value())) != good_nodes.end()){
-                nodes.push_back("(" +
-                                string(it->first_attribute("id")->value()) + ", " +
-                                string(it->first_attribute("lat")->value()) + ", " +
-                                string(it->first_attribute("lon")->value()) + ")");
-            }
-            if(good_nodes_ways.find(string(it->first_attribute("id")->value())) != good_nodes.end()){
-                nodes_ways.push_back("(" +
-                                string(it->first_attribute("id")->value()) + ", " +
-                                string(it->first_attribute("lat")->value()) + ", " +
-                                string(it->first_attribute("lon")->value()) + ")");
-            }
+            node_t node(it);
+            if(node_ids.find(node.id) != node_ids.end()){
+                nodes.push_back(node);
+            }            
         }
     }
     {
-        string nodes_path = string(argv[1]) + ".nodes";
-        ofstream os(nodes_path);
+        ofstream os(string(argv[1]) + ".nodes");
         os << nodes.size() << "\n";
-        for (const string &s : nodes) os << s << "\n";
+        for(const node_t &u: nodes) os << u << "\n";
     }
     {
-        string nodes_path = string(argv[1]) + "-short.nodes";
-        ofstream os(nodes_path);
-        os << nodes_ways.size() << "\n";
-        for (const string &s : nodes_ways) os << s << "\n";
+        ofstream os(string(argv[1]) + ".edges");
+        os << ways.size() << "\n";
+        for(const way_t &w: ways) os << w << "\n";
     }
-    {
-        string edges_path = string(argv[1]) + ".edges";
-        ofstream os(edges_path);
-        os << edges.size() << "\n";
-        for (const string &s : edges) os << s << "\n";
-    }
-    {
-        string edges_path = string(argv[1]) + "-short.edges";
-        ofstream os(edges_path);
-        os << edges_ways.size() << "\n";
-        for (const string &s : edges_ways) os << s << "\n";
-    }
+    
     return 0;
 }
