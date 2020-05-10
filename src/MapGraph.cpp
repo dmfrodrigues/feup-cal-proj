@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#define COORDMULT 20000
+#define COORDMULT 50000
 
 MapGraph::MapGraph(const std::string &path){
     {
@@ -39,13 +39,15 @@ void MapGraph::draw(GraphViewer *gv) const{
     size_t edge_id = 0;
     for(const way_t &way: ways){
         string color;
+        int width;
+        bool dashed;
         bool draw;
         switch(way.edgeType){
-            case edge_type_t::Motorway      : draw = true ; color = "red"; break;
-            case edge_type_t::Trunk         : draw = true ; color = "pink"; break;
-            case edge_type_t::Residential   : draw = false; color = "green"; break;
-            case edge_type_t::Road          : draw = false; color = "black"; break;
-            case edge_type_t::Slow          : draw = false; color = "gray"; break;
+            case edge_type_t::Motorway      : draw = true ; width = 10; color = "RED"   ; dashed = false; break;
+            case edge_type_t::Trunk         : draw = true ; width = 10; color = "ORANGE"; dashed = false; break;
+            case edge_type_t::Road          : draw = true ; width =  7; color = "BLACK" ; dashed = false; break;
+            case edge_type_t::Residential   : draw = true ; width =  5; color = "GRAY"  ; dashed = false; break;
+            case edge_type_t::Slow          : draw = true ; width =  5; color = "GRAY"  ; dashed = true ; break;
             case edge_type_t::No: throw invalid_argument("edge type cannot be 'No'");
         }
 
@@ -78,6 +80,8 @@ void MapGraph::draw(GraphViewer *gv) const{
             if(u != 0){
                 gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
                 gv->setEdgeColor(edge_id, color);
+                gv->setEdgeThickness(edge_id, width);
+                gv->setEdgeDashed(edge_id, dashed);
                 ++edge_id;
             }
             u = v;

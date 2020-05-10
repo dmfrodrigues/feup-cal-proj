@@ -3,7 +3,7 @@
 
 int main(){
     GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineVertexColor("black");
+    gv->defineVertexColor("WHITE");
     gv->defineEdgeCurved(false);
     gv->defineVertexSize(0);
     gv->createWindow(1900, 1000);
