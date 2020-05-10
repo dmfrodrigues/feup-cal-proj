@@ -7,14 +7,15 @@
 
 class MapGraph {
 public:
-    typedef long long speed_t;
+    typedef int speed_t;
     struct pos_t {
         double lat, lon;
     };
     struct way_t {
         std::list<DWGraph::node_t> nodes;
         speed_t speed;
-        edge_type_t edgeType;  
+        edge_type_t edgeType;
+        speed_t getMaxSpeed() const;
     };
     enum Display {
         MOTORWAY    = 1,
@@ -32,7 +33,8 @@ private:
     DWGraph G;
 public:
     MapGraph(const std::string &path);
-    void draw(GraphViewer *gv, int fraction, int display) const;
+    void drawRoads (GraphViewer *gv, int fraction, int display) const;
+    void drawSpeeds(GraphViewer *gv, int fraction, int display) const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED

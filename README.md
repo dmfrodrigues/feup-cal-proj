@@ -1,11 +1,8 @@
 # PortoCityTransfers <!-- {#mainpage} -->
 
-<p align="left">
-  <img src="https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile%20reports/badge.svg">
-</p>
-<p align="left">
-  <img src="https://github.com/dmfrodrigues/feup-cal-proj/workflows/Test/badge.svg">
-</p>
+![Compile reports](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile%20reports/badge.svg)
+
+![Test](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Test/badge.svg)
 
 - **Project name:** PortoCityTransfers
 - **Short description:** Console-based program to manage a shuttle company
@@ -53,6 +50,33 @@ make test   # Run unit tests
 FRACTION    Fraction of nodes to draw (improves display performance).
 FLAGS       Flag which roads to draw (add them to combine):
 
+            ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━┓
+            ┃ Type of road  ┃ Description   ┃ Flag  ┃
+            ┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━┩
+            │ Motorway      │ Red           │     1 │
+            │ Trunk         │ Pink          │     2 │
+            │ Primary       │ Orange        │     4 │
+            │ Secondary     │ Yellow        │     8 │
+            │ Tertiary      │ Gray          │    16 │
+            │ Road          │ Gray          │    32 │
+            │ Residential   │ Gray          │    64 │
+            │ Slow          │ Gray, dashed  │   128 │
+            └───────────────┴───────────────┴───────┘
+```
+
+#### Examples
+
+- To see all types of roads with a fraction of 5, run `./main view 5 255`
+- To see all main roads with a fraction of 3, run `./main view 3 15`
+
+### Speed
+
+```
+./main view FRACTION FLAGS
+
+FRACTION    Fraction of nodes to draw (improves display performance).
+FLAGS       Flag which roads to draw (add them to combine):
+
             ┏━━━━━━━━━━━━━━━┳━━━━━━━┓
             ┃ Type of road  ┃ Flag  ┃
             ┡━━━━━━━━━━━━━━━╇━━━━━━━┩
@@ -65,9 +89,16 @@ FLAGS       Flag which roads to draw (add them to combine):
             │ Residential   │    64 │
             │ Slow          │   128 │
             └───────────────┴───────┘
+
+Roads are coloured according to the following table:
+┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+┃ Speed [km/h] (up to)  ┃ Colour  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+│                   120 │ Red     │
+│                   100 │ Orange  │
+│                    80 │ Yellow  │
+│                    60 │ Green   │
+│                    50 │ Black   │
+│                    40 │ Gray    │
+└───────────────────────┴─────────┘
 ```
-
-#### Examples
-
-- To see all types of roads with a fraction of 5, run `./main view 5 255`
-- To see all main roads with a fraction of 3, run `./main view 3 15`
