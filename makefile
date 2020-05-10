@@ -25,21 +25,19 @@ clean:
 	rm -f $(ODIR)/$(TEXE)
 	rm -f $(PROG)
 
-test: all
-	@echo Current directory: $(PWD)
-	# $(CC) $(CFLAGS) -c -I./acutest/include $(TDIR)/tests.c -o $(ODIR)/tests.o
-	# $(CC) $(ODIR)/tests.o $(ODIR)/simpledu_args.o $(ODIR)/simpledu_envp.o $(ODIR)/simpledu_stat.o $(ODIR)/simpledu_log.o $(ODIR)/simpledu_time.o $(ODIR)/simpledu_iterate.o -o $(ODIR)/$(TEXE)
-	# $(ODIR)/$(TEXE)
-	# chmod u+x $(TDIR)/*.sh
-	# $(TDIR)/test_compare_du.sh
+$(TEXE): all
+	$(CC) -ICatch2/include $(TDIR)/test.cpp -o $(ODIR)/test #-L$(LDIR_GV) -lgraphviewer
+
+test: $(TEXE)
+	$(TEXE)
 
 # testmem: all
 # 	valgrind --leak-check=yes $(ODIR)/$(TEXE)
 
-O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o $(ODIR)/main.o $(ODIR)/MapGraph.o
+O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o $(ODIR)/MapGraph.o
 
-$(PROG): $(O_FILES) $(LIB_GV)
-	$(CC) $(O_FILES) -o $(PROG) -L$(LDIR_GV) -lgraphviewer
+$(PROG): $(O_FILES) $(LIB_GV) $(ODIR)/main.o
+	$(CC) $(O_FILES) $(ODIR)/main.o -o $(PROG) -L$(LDIR_GV) -lgraphviewer
 
 $(LIB_GV):
 	make -C GraphViewer
