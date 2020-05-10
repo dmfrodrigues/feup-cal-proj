@@ -1,4 +1,4 @@
-name: Compile reports
+name: Test
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -20,10 +20,5 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    - name: apt
-      run: sudo apt install -y texlive-latex-extra texlive-science latexmk
-
-    - name: report1
-      run: |
-        cd doc/report1
-        latexmk report_delivery1.tex -pdf
+    - name: test
+      run: make test

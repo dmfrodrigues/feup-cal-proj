@@ -18,7 +18,21 @@
 
 ## Media
 
-## Make commands
+## Installing
+
+If you are cloning from GitHub, you should pull all LFS files with
+
+```sh
+git lfs fetch --all
+```
+
+and pull all submodules with
+
+```sh
+git submodule update --init --recursive # If for the first time
+```
+
+### Make commands
 
 ```sh
 make        # Compile all dependencies (including GraphViewer)
@@ -26,7 +40,7 @@ make clean  # Cleanup all files (except GraphViewer)
 make test   # Run unit tests
 ```
 
-## Run me
+## Running
 
 ### View
 
@@ -50,6 +64,7 @@ FLAGS       Flag which roads to draw (add them to combine):
             └───────────────┴───────┘
 ```
 
-To see all types of roads with a fraction of 5, run `./main view 5 255`
+#### Examples
 
-To see all main roads with a fraction of 3, run `./main view 3 15`
+- To see all types of roads with a fraction of 5, run `./main view 5 255`
+- To see all main roads with a fraction of 3, run `./main view 3 15`

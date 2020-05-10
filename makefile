@@ -6,7 +6,7 @@ SDIR   =./src
 IDIR   =-I./include
 ODIR   =./obj
 TDIR   =./test
-TEXE   =test
+TEXE   =$(ODIR)/test
 
 GVDIR=./GraphViewer
 IDIR_GV=-I$(GVDIR)/cpp
@@ -20,15 +20,12 @@ CFLAGS =-Wall -g $(IFLAGS)#-O3
 all: $(PROG)
 
 clean:
-	#make -C GraphViewer clean
 	rm -rf $(ODIR)
 	rm -f $(ODIR)/$(TEXE)
 	rm -f $(PROG)
 
-$(TEXE): all
-	$(CC) -ICatch2/include $(TDIR)/test.cpp -o $(ODIR)/test #-L$(LDIR_GV) -lgraphviewer
-
-test: $(TEXE)
+test: all $(TDIR)/test.cpp
+	$(CC) -I$(TDIR)/Catch2/single_include/catch2 $(TDIR)/test.cpp -o $(TEXE) #-L$(LDIR_GV) -lgraphviewer
 	$(TEXE)
 
 # testmem: all
