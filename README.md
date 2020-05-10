@@ -3,6 +3,9 @@
 <p align="left">
   <img src="https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile%20reports/badge.svg">
 </p>
+<p align="left">
+  <img src="https://github.com/dmfrodrigues/feup-cal-proj/workflows/Test/badge.svg">
+</p>
 
 - **Project name:** PortoCityTransfers
 - **Short description:** Console-based program to manage a shuttle company
