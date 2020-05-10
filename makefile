@@ -36,7 +36,7 @@ test: all
 # testmem: all
 # 	valgrind --leak-check=yes $(ODIR)/$(TEXE)
 
-O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o $(ODIR)/main.o
+O_FILES=$(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/KosarajuV.o $(ODIR)/main.o $(ODIR)/MapGraph.o
 
 $(PROG): $(O_FILES) $(LIB_GV)
 	$(CC) $(O_FILES) -o $(PROG) -L$(LDIR_GV) -lgraphviewer
