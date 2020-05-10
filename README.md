@@ -18,78 +18,38 @@
 
 ## Media
 
-<!--
-<div align="center">
-    <table>
-        <tr align="center">
-            <th>
-                Services table
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img src="https://raw.githubusercontent.com/dmfrodrigues/feup-aeda/master/apresentacao/images/feature2.png">
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr align="center">
-            <th>
-                Drivers table
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img src="https://raw.githubusercontent.com/dmfrodrigues/feup-aeda/master/apresentacao/images/part2_feature1.png">
-            </td>
-        </tr>
-    </table>
-</div>
--->
-
-<!--
 ## Make commands
-### Compile
 
 ```sh
-cd codigo
-make
-```
-
-### Cleanup
-
-```sh
-cd codigo
-make clean
+make        # Compile all dependencies (including GraphViewer)
+make clean  # Cleanup all files (except GraphViewer)
+make test   # Run unit tests
 ```
 
 ## Run me
 
-```sh
-cd codigo
-./bin/main.app
-```
-
-Some sample logins:
-
-Client
+### View
 
 ```
-aadamante
-aiadam
+./main view FRACTION FLAGS
+
+FRACTION    Fraction of nodes to draw (improves display performance).
+FLAGS       Flag which roads to draw (add them to combine):
+
+            ┏━━━━━━━━━━━━━━━┳━━━━━━━┓
+            ┃ Type of road  ┃ Flag  ┃
+            ┡━━━━━━━━━━━━━━━╇━━━━━━━┩
+            │ Motorway      │     1 │
+            │ Trunk         │     2 │
+            │ Primary       │     4 │
+            │ Secondary     │     8 │
+            │ Tertiary      │    16 │
+            │ Road          │    32 │
+            │ Residential   │    64 │
+            │ Slow          │   128 │
+            └───────────────┴───────┘
 ```
 
-Driver
+To see all types of roads with a fraction of 5, run `./main view 5 255`
 
-```
-brunoss
-brunopt
-```
-
-Manager
-
-```
-carlita
-carlita123
-```
--->
+To see all main roads with a fraction of 3, run `./main view 3 15`

@@ -16,13 +16,23 @@ public:
         speed_t speed;
         edge_type_t edgeType;  
     };
+    enum Display {
+        MOTORWAY    = 1,
+        TRUNK       = 2,
+        PRIMARY     = 4,
+        SECONDARY   = 8,
+        TERTIARY    = 16,
+        ROAD        = 32,
+        RESIDENTIAL = 64,
+        SLOW        = 128
+    };
 private:
     std::unordered_map<DWGraph::node_t, pos_t> nodes;
     std::list<way_t> ways;
     DWGraph G;
 public:
     MapGraph(const std::string &path);
-    void draw(GraphViewer *gv) const;
+    void draw(GraphViewer *gv, int fraction, int display) const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED

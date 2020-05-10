@@ -2,12 +2,15 @@
 #define EDGETYPE_H_INCLUDED
 
 enum edge_type_t : char{
-    No          = 'n',
-    Motorway    = 'M',
-    Trunk       = 'T',
-    Road        = 'R',
-    Residential = 'r',
-    Slow        = 's'
+    NO          = 'n',
+    MOTORWAY    = 'M',
+    TRUNK       = 'T',
+    PRIMARY     = 'P',
+    SECONDARY   = 'S',
+    TERTIARY    = 't',
+    ROAD        = 'r',
+    RESIDENTIAL = 'e',
+    SLOW        = 's'
 };
 
 #endif //EDGETYPE_H_INCLUDED

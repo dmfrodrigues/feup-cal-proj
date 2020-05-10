@@ -106,22 +106,22 @@ ostream& operator<<(ostream &os, const way_t &w){
 }
 
 unordered_map<string, edge_type_t> edge_accept = {
-    {"motorway"         , edge_type_t::Motorway},
-    {"motorway_link"    , edge_type_t::Motorway},
-    {"trunk"            , edge_type_t::Trunk},
-    {"trunk_link"       , edge_type_t::Trunk},
-    {"primary"          , edge_type_t::Road},
-    {"primary_link"     , edge_type_t::Road},
-    {"secondary"        , edge_type_t::Road},
-    {"secondary_link"   , edge_type_t::Road},
-    {"tertiary"         , edge_type_t::Road},
-    {"tertiary_link"    , edge_type_t::Road},
-    {"unclassified"     , edge_type_t::Road},
-    {"residential"      , edge_type_t::Residential},
-    {"living_street"    , edge_type_t::Slow},
-    {"road"             , edge_type_t::Slow},
-    {"services"         , edge_type_t::Slow},
-    {"bus_stop"         , edge_type_t::Slow}
+    {"motorway"         , edge_type_t::MOTORWAY},
+    {"motorway_link"    , edge_type_t::MOTORWAY},
+    {"trunk"            , edge_type_t::TRUNK},
+    {"trunk_link"       , edge_type_t::TRUNK},
+    {"primary"          , edge_type_t::PRIMARY},
+    {"primary_link"     , edge_type_t::PRIMARY},
+    {"secondary"        , edge_type_t::SECONDARY},
+    {"secondary_link"   , edge_type_t::SECONDARY},
+    {"tertiary"         , edge_type_t::TERTIARY},
+    {"tertiary_link"    , edge_type_t::TERTIARY},
+    {"unclassified"     , edge_type_t::ROAD},
+    {"residential"      , edge_type_t::RESIDENTIAL},
+    {"living_street"    , edge_type_t::SLOW},
+    {"road"             , edge_type_t::SLOW},
+    {"services"         , edge_type_t::SLOW},
+    {"bus_stop"         , edge_type_t::SLOW}
 };
 unordered_set<string> edge_reject = {
     "steps",        "pedestrian", "footway",   "cycleway", "track",
@@ -133,25 +133,21 @@ unordered_set<string> service_reject = {"campground", "emergency_access",
 edge_type_t get_edge_type(xml_node<> *it) {
     auto phighway = find_tag(it, "highway");
     auto pservice = find_tag(it, "service");
-    if (phighway == NULL) return edge_type_t::No;
-    if (edge_reject.find(phighway->first_attribute("v")->value()) !=
-        edge_reject.end())
-        return edge_type_t::No;
-    if (edge_accept.find(phighway->first_attribute("v")->value()) !=
-        edge_accept.end())
-        return edge_accept[phighway->first_attribute("v")->value()];
-    if (pservice == NULL) return edge_type_t::No;
+    if (phighway == NULL) return edge_type_t::NO;
+    if (edge_reject.find(phighway->first_attribute("v")->value()) != edge_reject.end()) return edge_type_t::NO;
+    if (edge_accept.find(phighway->first_attribute("v")->value()) != edge_accept.end()) return edge_accept[phighway->first_attribute("v")->value()];
+    if (pservice == NULL) return edge_type_t::NO;
     if (string(phighway->first_attribute("v")->value()) == "service") {
         if (service_reject.find(pservice->first_attribute("v")->value()) !=
             service_reject.end())
-            return edge_type_t::No;
+            return edge_type_t::NO;
         if (service_accept.find(pservice->first_attribute("v")->value()) !=
             service_accept.end())
-            return edge_type_t::Slow;
+            return edge_type_t::SLOW;
     }
     cerr << it->first_attribute("id")->value() << " rejected "
          << phighway->first_attribute("v")->value() << "\n";
-    return edge_type_t::No;
+    return edge_type_t::NO;
 }
 
 int main(int argc, char *argv[]) {
@@ -173,7 +169,7 @@ int main(int argc, char *argv[]) {
     
     {
         for (auto it = doc.first_node()->first_node("way"); string(it->name()) == "way"; it = it->next_sibling()) {
-            edge_type_t t = get_edge_type(it); if (t == edge_type_t::No) continue;
+            edge_type_t t = get_edge_type(it); if (t == edge_type_t::NO) continue;
             way_t way(it, t); ways.push_back(way);
             node_ids.insert(way.begin(), way.end());
         }
