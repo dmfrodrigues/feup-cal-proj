@@ -28,6 +28,6 @@ DUGraph DUGraph::getTranspose() const{
     for(const node_t u: getNodes()) ret.addNode(u);
     for(const node_t u: getNodes())
         for(const node_t v: getAdj(u))
-            ret.addEdge(u, v);
+            ret.addEdge(v, u);
     return ret;
 }
