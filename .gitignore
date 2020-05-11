@@ -21,3 +21,5 @@ map/map_process
 *.dvi
 obj/
 main
+*.nodes
+*.edges
