@@ -34,5 +34,20 @@
                 "latexmk"
             ]
         }
-    ]
+    ],
+    "files.associations": {
+        "list": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "regex": "cpp",
+        "valarray": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
 }

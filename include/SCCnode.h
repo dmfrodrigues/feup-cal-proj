@@ -1,5 +1,5 @@
-#ifndef SCC_H_INCLUDED
-#define SCC_H_INCLUDED
+#ifndef SCC_NODE_H_INCLUDED
+#define SCC_NODE_H_INCLUDED
 
 #include "DUGraph.h"
 
@@ -10,4 +10,4 @@ public:
     virtual bool is_scc(DUGraph::node_t v) const = 0;
 };
 
-#endif //SCC_H_INCLUDED
+#endif //SCC_NODE_H_INCLUDED
