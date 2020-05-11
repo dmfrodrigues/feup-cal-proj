@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include "include/Kosaraju.h"
+#include "Kosaraju.h"
 
 TEST_CASE("Human-readable name", "[shortname]"){
     REQUIRE(true);
