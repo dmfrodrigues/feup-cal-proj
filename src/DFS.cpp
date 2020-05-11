@@ -4,6 +4,7 @@ void DFS::initialize(const DUGraph *G, DUGraph::node_t s){
     this->G = G;
     this->s = s;
     R.clear();
+    for (DUGraph::node_t x : G->getNodes()) R[x] = false;
 }
 
 void DFS::dfs(DUGraph::node_t u){

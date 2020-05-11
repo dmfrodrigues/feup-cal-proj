@@ -1,4 +1,5 @@
 #include "Kosaraju.h"
+#include <iostream>
 
 typedef DUGraph::node_t node_t;
 
@@ -19,6 +20,7 @@ void Kosaraju::DFS_K(const DUGraph *G, DUGraph::node_t u){
 
 void Kosaraju::assign(const DUGraph *G, DUGraph::node_t u, DUGraph::node_t root){
     if (SCCs.find(u) != SCCs.end()) return;
+    std::cout << "HEHERH   " << u << std::endl;
     SCCs[u] = root;
     for (node_t v : G->getTranspose().getAdj(u)) assign(G, v, root);
 }
@@ -33,6 +35,6 @@ void Kosaraju::run(){
     
 }
 
-node_t Kosaraju::get_scc(node_t v) const{
-    return SCCs.at(v);
+node_t Kosaraju::get_scc(node_t u) const{
+    return SCCs.at(u);
 }

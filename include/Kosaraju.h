@@ -16,7 +16,7 @@ public:
     void DFS_K(const DUGraph *G, DUGraph::node_t u);
     void assign(const DUGraph *G, DUGraph::node_t u, DUGraph::node_t root);
     void run();
-    DUGraph::node_t get_scc(DUGraph::node_t v) const;
+    DUGraph::node_t get_scc(DUGraph::node_t u) const;
 };
 
 #endif //KOSARAJU_H_INCLUDED
