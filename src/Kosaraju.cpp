@@ -20,9 +20,11 @@ void Kosaraju::DFS_K(const DUGraph *G, DUGraph::node_t u){
 
 void Kosaraju::assign(const DUGraph *G, DUGraph::node_t u, DUGraph::node_t root){
     if (SCCs.find(u) != SCCs.end()) return;
-    std::cout << "HEHERH   " << u << std::endl;
     SCCs[u] = root;
-    for (node_t v : G->getTranspose().getAdj(u)) assign(G, v, root);
+    DUGraph temp = G->getTranspose();
+    for (node_t v : temp.getAdj(u)) {
+        assign(G, v, root);
+    }
 }
 
 void Kosaraju::run(){
@@ -31,8 +33,7 @@ void Kosaraju::run(){
         node_t u = L.top();
         assign(G,u,u);
         L.pop();
-    }
-    
+    }   
 }
 
 node_t Kosaraju::get_scc(node_t u) const{
