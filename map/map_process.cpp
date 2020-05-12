@@ -96,7 +96,7 @@ ostream& operator<<(ostream &os, const way_t &w){
         }
     }
     if(w.dir == dir_t::Back || w.dir == dir_t::Both){
-        os << char(w.edgeType) << " " << w.speed << " " << w.size();
+        os << "\n" << char(w.edgeType) << " " << w.speed << " " << w.size();
         for(auto it = w.rbegin(); it != w.rend(); ++it){
             os << "\n" << *it;
         }
@@ -126,25 +126,30 @@ unordered_map<string, edge_type_t> edge_accept = {
 unordered_set<string> edge_reject = {
     "steps",        "pedestrian", "footway",   "cycleway", "track",
     "construction", "path",       "bridleway", "platform", "raceway",
-    "elevator",     "proposed",   "planned"};
+    "elevator",     "proposed",   "planned",   "bus_stop"};
 unordered_set<string> service_accept = {"driveway", "parking_aisle", "alley"};
 unordered_set<string> service_reject = {"campground", "emergency_access",
                                         "drive-through"};
 edge_type_t get_edge_type(xml_node<> *it) {
-    auto phighway = find_tag(it, "highway");
-    auto pservice = find_tag(it, "service");
-    if (phighway == NULL) return edge_type_t::NO;
-    if (edge_reject.find(phighway->first_attribute("v")->value()) != edge_reject.end()) return edge_type_t::NO;
-    if (edge_accept.find(phighway->first_attribute("v")->value()) != edge_accept.end()) return edge_accept[phighway->first_attribute("v")->value()];
-    if (pservice == NULL) return edge_type_t::NO;
-    if (string(phighway->first_attribute("v")->value()) == "service") {
-        if (service_reject.find(pservice->first_attribute("v")->value()) !=
-            service_reject.end())
-            return edge_type_t::NO;
-        if (service_accept.find(pservice->first_attribute("v")->value()) !=
-            service_accept.end())
+    auto parea = find_tag(it, "area");
+    if (parea != NULL && string(parea->first_attribute("v")->value()) == "yes") return edge_type_t::NO;
+    
+    /* highway */
+    auto phighway = find_tag(it, "highway");{
+        if (phighway == NULL) return edge_type_t::NO;
+        string highway = phighway->first_attribute("v")->value();
+        if (edge_reject.find(highway) != edge_reject.end()) return edge_type_t::NO;
+        if (edge_accept.find(highway) != edge_accept.end()) return edge_accept[highway];
+        if (highway == "service"){
+            auto paccess  = find_tag(it, "access");
+            if(paccess == NULL) return edge_type_t::SLOW;
+            string access = paccess->first_attribute("v")->value();
+            if (access == "private" || access == "no" ) return edge_type_t::NO;
             return edge_type_t::SLOW;
+        }
     }
+    
+
     cerr << it->first_attribute("id")->value() << " rejected "
          << phighway->first_attribute("v")->value() << "\n";
     return edge_type_t::NO;
@@ -169,7 +174,8 @@ int main(int argc, char *argv[]) {
     
     {
         for (auto it = doc.first_node()->first_node("way"); string(it->name()) == "way"; it = it->next_sibling()) {
-            edge_type_t t = get_edge_type(it); if (t == edge_type_t::NO) continue;
+            edge_type_t t = get_edge_type(it);
+            if (t == edge_type_t::NO) continue;
             way_t way(it, t); ways.push_back(way);
             node_ids.insert(way.begin(), way.end());
         }

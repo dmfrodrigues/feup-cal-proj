@@ -8,8 +8,23 @@
 class MapGraph {
 public:
     typedef int speed_t;
+private:
     struct pos_t {
         double lat, lon;
+        /**
+         * @brief Get distance between two positions in SI units (meters).
+         * 
+         * @param p1        First position
+         * @param p2        Second position
+         * @return double   Distance between them in meters
+         */
+        static double getDistanceSI(const pos_t &p1, const pos_t &p2);
+
+        pos_t operator+(const pos_t &p) const;
+        pos_t operator/(double d) const;
+    private:
+        double getMetersPerLatDeg() const;
+        double getMetersPerLonDeg() const;
     };
     struct way_t {
         std::list<DWGraph::node_t> nodes;
@@ -27,14 +42,18 @@ public:
         RESIDENTIAL = 64,
         SLOW        = 128
     };
-private:
+
+    const DWGraph::node_t station = 1390706567;
+
     std::unordered_map<DWGraph::node_t, pos_t> nodes;
     std::list<way_t> ways;
     DWGraph G;
 public:
     MapGraph(const std::string &path);
+    DWGraph getFullGraph() const;
     void drawRoads (GraphViewer *gv, int fraction, int display) const;
     void drawSpeeds(GraphViewer *gv, int fraction, int display) const;
+    void drawSCC   (GraphViewer *gv, int fraction, int display) const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED
