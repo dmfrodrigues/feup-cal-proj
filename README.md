@@ -72,7 +72,7 @@ FLAGS       Flag which roads to draw (add them to combine):
 ### Speed
 
 ```
-./main view FRACTION FLAGS
+./main speed FRACTION FLAGS
 
 FRACTION    Fraction of nodes to draw (improves display performance).
 FLAGS       Flag which roads to draw (add them to combine):
@@ -101,4 +101,28 @@ Roads are coloured according to the following table:
 │                    50 │ Black   │
 │                    40 │ Gray    │
 └───────────────────────┴─────────┘
+```
+
+### Strongly connected components
+
+```
+./main scc FRACTION FLAGS
+
+FRACTION    Fraction of nodes to draw (improves display performance).
+FLAGS       Flag which roads to draw (add them to combine):
+
+            ┏━━━━━━━━━━━━━━━┳━━━━━━━┓
+            ┃ Type of road  ┃ Flag  ┃
+            ┡━━━━━━━━━━━━━━━╇━━━━━━━┩
+            │ Motorway      │     1 │
+            │ Trunk         │     2 │
+            │ Primary       │     4 │
+            │ Secondary     │     8 │
+            │ Tertiary      │    16 │
+            │ Road          │    32 │
+            │ Residential   │    64 │
+            │ Slow          │   128 │
+            └───────────────┴───────┘
+
+Roads are coloured red if they connect two nodes in the train station's SCC, or gray otherwise.
 ```

@@ -1,8 +1,55 @@
 \chapter{Use cases} \label{use-cases}
-Our program should allow a user to:
+\section{Graphical uses}
+All graphical uses make use of \href{https://github.com/STEMS-group/GraphViewer}{GraphViewer}, and are of the form \texttt{./main \textit{cmd} FRACTION FLAGS}, where:
 \begin{itemize}
-    \item Visualize the road network, placing nodes in their correct geographical position and displaying speed limits in a graphical way, using the suggested tool \href{https://github.com/STEMS-group/GraphViewer}{GraphViewer} or another visualization tool if necessary.
-    \item Visualize the \acrshort{SCC} of the train station.
+    \item \texttt{FRACTION} is the fraction of roads to draw; more specifically, if \texttt{FRACTION} is $k$, for a given way $w$ the nodes $w_0, w_k, w_{2k},...,w_{|w|}$ are drawn. Thus, the higher the number, the greater the performance is, but also less nodes/edges are drawn.
+    \item \texttt{FLAGS} flags which roads are to be drawn (add them to combine):
+    \begin{center}
+        \begin{tabular}{l | r}
+            \textbf{Type of road} & \textbf{Flag} \\ \hline
+            Motorway     &    1 \\
+            Trunk        &    2 \\
+            Primary      &    4 \\
+            Secondary    &    8 \\
+            Tertiary     &   16 \\
+            Road         &   32 \\
+            Residential  &   64 \\
+            Slow         &  128
+        \end{tabular}
+    \end{center}
+\end{itemize}
+\subsection{View}
+\texttt{./main view FRACTION FLAGS} draws the road network, colouring roads according to their designated role (highway, residential, ...). Roads are drawn according to the following scheme:
+\begin{center}
+    \begin{tabular}{l | l}
+        \textbf{Type of road} & \textbf{Colour} \\ \hline
+        Motorway              & Red          \\
+        Trunk                 & Pink         \\
+        Primary               & Orange       \\
+        Secondary             & Yellow       \\
+        Tertiary              & Gray         \\
+        Road                  & Gray         \\
+        Residential           & Gray         \\
+        Slow                  & Gray, dashed
+    \end{tabular}
+\end{center}
+\subsection{Speed}
+\texttt{./main speed FRACTION FLAGS} draws the road network, colouring roads according to their maximum allowed speed. Roads are drawn according to the following scheme:
+\begin{center}
+    \begin{tabular}{r | l}
+        \textbf{Speed [$\SI{}{km/h}$] (up to)} & \textbf{Colour} \\ \hline
+                                  120 & Red             \\
+                                  100 & Orange          \\
+                                   80 & Yellow          \\
+                                   60 & Green           \\
+                                   50 & Black           \\
+                                   40 & Gray            
+    \end{tabular}
+\end{center}
+\subsection{Strongly connected components}
+\texttt{./main scc FRACTION FLAGS} draws the road network, colouring roads red if they connect two nodes in the train station's \acrshort{SCC}, or gray if at least one of the nodes is not in the train station's \acrshort{SCC}.
+\section{To implement}
+\begin{itemize}
     \item Find the shortest path from one node to another.
     \item Given a list of vans and services for a day, find the set of routes for that day.
 \end{itemize}
