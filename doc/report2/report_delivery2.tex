@@ -1,0 +1,177 @@
+\documentclass{report}[a4paper]
+\usepackage[top=35mm,bottom=35mm,left=25mm,right=25mm]{geometry} % Margins
+
+% Decent underlines
+\usepackage[normalem]{ulem}
+
+% Hyperreferences
+\usepackage{hyperref}
+
+% Imports
+\usepackage{import}
+
+% Graphics and images
+\usepackage{graphicx} \graphicspath{{./images/}}
+\usepackage{subcaption}
+\usepackage{float}
+
+% Encodings (to render letters with diacritics and special characters)
+\usepackage[utf8]{inputenc}
+
+% Language
+\usepackage[english]{babel}
+
+% Source code and algorithms
+%\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% Tables with bold rows
+\usepackage{tabularx}
+\newcommand\setrow[1]{\gdef\rowmac{#1}#1\ignorespaces}
+\newcommand\clearrow{\global\let\rowmac\relax}
+\clearrow
+\usepackage{multirow}
+
+% Lists and items
+\usepackage{enumitem}
+
+% Math stuff
+\usepackage[mathscr]{euscript}
+\usepackage{amssymb, latexsym} %Load math symbols like \blacksquare, but also load normal \leadsto arrows
+\usepackage{mathtools} % For \text{...}
+% \usepackage{enumitem}
+% \usepackage{xcolor}
+\newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}} % scientific notation
+\usepackage{siunitx} %SI units
+
+% Definitions, theorems, remarks,...
+\usepackage{amsthm}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\renewcommand\qedsymbol{$\blacksquare$}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% Glossaries
+\usepackage[acronym,nonumberlist,entrycounter]{glossaries}
+\makeglossaries
+
+\newglossaryentry{heuristic}{
+    name=heuristic,
+    description={An \emph{heuristic} function $\hat{h}$ of a function $h$ is a function that aims at estimating the value of $h$. In Computer Science, an \emph{heuristic} is a technique to solve a hard problem in a faster way, or to otherwise solve a problem for which there is no known algorithm that can find an exact solution}
+}
+
+\newglossaryentry{metaheuristic}{
+    name=metaheuristic,
+    description={A \emph{metaheuristic} is a strategy to solve certain classes of problems. It is usually a general method to solve a black-box problem, distinguishing it from an \gls{heuristic} which is usually a technique specifically designed to solve a particular instance of a problem}
+}
+
+\newglossaryentry{natural selection}{
+    name=natural selection,
+    description={Key mechanism of biological evolution, based on the observation that individuals' characteristics cause differential survival and reproduction of individuals of a species not subjected to intentional environmental stresses}
+}
+
+\newglossaryentry{admissible}{
+    name=admissible,
+    description={An algorithm is \emph{admissible} iff it always returns an optimal solution, if one exists. A function $\hat{h}$ that estimates $h$ is \emph{admissible} iff it always returns a lower bound for $h$ ($\forall x, \hat{h}(x) < h(x)$)}
+}
+
+\newglossaryentry{constructive}{
+    name=constructive,
+    description={An algorithm is \emph{constructive} when it progressively constructs a solution}
+}
+
+\newglossaryentry{iterative}{
+    name=iterative,
+    description={An heuristic algorithm is \emph{iterative} when it progressively evaluates and improves a complete solution. An algorithm is \emph{iterative} when it repeatedly executes a set of instructions without calling itself.}
+}
+
+\newglossaryentry{recursive}{
+    name=iterative,
+    description={An algorithm is \emph{recursive} when it repeatedly executes a set of instructions by calling itself, as opposed to an \gls{iterative} algorithm.}
+}
+
+\newglossaryentry{dynamic programming}{
+    name=dynamic programming,
+    description={Problem-solving strategy generally used to solve algorithmic problems that have optimal substructure (optimal solutions to subproblems lead to globally optimal solutions) and overlapping subproblems (several subproblems are computed from the same sub-subproblems). The distinguishing feature of this approach is memoization (memorization of subproblem solutions for reuse later on. Generally, wherever there is a recurrence, dynamic programming can be applied}
+}
+
+\newglossaryentry{greedy}{
+    name=greedy,
+    description={An algorithm is \emph{greedy} iff it makes a locally optimal choice in the hope that this choice will lead to a globally optimal solution \cite{intro-alg}. Depending on the problem, they may or may not in fact provide a globally optimal solution.}
+}
+
+\newglossaryentry{superpolynomial}{
+    name=superpolynomial,
+    description={A function $f(n)$ is \emph{superpolynomial} iff $\forall k \in \mathbb{R}, f \not \in O(n^k)$ (i.e., it grows faster than polynomial). This concept is particularly useful when $f$ is superpolynomial but not exponential, like $O(2^{\sqrt{n}})$}
+}
+
+\newacronym{DFS}{DFS}{depth-first search}
+
+\newacronym{TSP}{TSP}{travelling salesman problem}
+
+\newacronym{VRP}{VRP}{vehicle routing problem}
+
+\newacronym{SCC}{SCC}{strongly connected component}
+
+\newacronym{TM}{TM}{Turing machine}
+
+\newacronym{NN}{NN}{nearest neighbour}
+
+\renewcommand{\glsentrycounterlabel}{}
+
+% Contents title
+\addto\captionsenglish{\renewcommand*\contentsname{Table of contents}}
+
+% Headers and footers
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{\fancyplain{}{PortoCityTransfers — Delivery II (CAL 2019/20)}}
+\rhead{\fancyplain{}{Class 6, group 5}}
+\lfoot{\fancyplain{}{\leftmark}}
+\rfoot{\thepage}
+
+% Full reference (number and name of section)
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\ref*{#1} \nameref*{#1}}} % One single link
+
+% Email
+\newcommand{\email}[1]{
+{\texttt{\href{mailto:#1}{#1}} }
+}
+
+% Metadata
+\title{\Huge PortoCityTransfers \\ \Large Delivery II \\ \vspace*{4pt} \large CAL 2019/20}
+\author{
+Class 6, group 5 \vspace{0.5em} \\
+\begin{tabular}{r l}
+	\email{up201806429@fe.up.pt} & Diogo Miguel Ferreira Rodrigues        \\
+	\email{up201806613@fe.up.pt} & João António Cardoso Vieira e Basto de Sousa \\
+	\email{up201806330@fe.up.pt} & Rafael Soares Ribeiro \\
+\end{tabular}
+}
+\date{22nd of May, 2020}
+
+% Document
+\begin{document}
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+\listofalgorithms
+\clearpage
+\printglossary[type=\acronymtype]
+\printglossary
+\input{introduction.tex}
+\input{theoretical-notions.tex}
+\input{problem-formalization.tex}
+\input{problem-decomposition.tex}
+\import{./algorithmic-problems/}{algorithmic-problems.tex}
+\input{use-cases.tex}
+\input{conclusion.tex}
+\bibliographystyle{acm}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{report}
+\end{document}

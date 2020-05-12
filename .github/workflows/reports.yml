@@ -17,3 +17,8 @@ jobs:
       run: |
         cd doc/report1
         latexmk report_delivery1.tex -pdf
+
+    - name: report2
+      run: |
+        cd doc/report2
+        latexmk report_delivery2.tex -pdf
