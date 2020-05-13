@@ -53,14 +53,20 @@ double MapGraph::pos_t::getMetersPerLonDeg() const{
 MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
     if(speed != -1) return speed;
     switch(edgeType){
-        case edge_type_t::MOTORWAY   : return 120;
-        case edge_type_t::TRUNK      : return 100;
-        case edge_type_t::PRIMARY    : return  90;
-        case edge_type_t::SECONDARY  : return  50;
-        case edge_type_t::TERTIARY   : return  50;
-        case edge_type_t::ROAD       : return  50;
-        case edge_type_t::RESIDENTIAL: return  50;
-        case edge_type_t::SLOW       : return  20;
+        case edge_type_t::MOTORWAY       : return 120;
+        case edge_type_t::MOTORWAY_LINK  : return 160;
+        case edge_type_t::TRUNK          : return 100;
+        case edge_type_t::TRUNK_LINK     : return  50;
+        case edge_type_t::PRIMARY        : return  90;
+        case edge_type_t::PRIMARY_LINK   : return  40;
+        case edge_type_t::SECONDARY      : return  70;
+        case edge_type_t::SECONDARY_LINK : return  30;
+        case edge_type_t::TERTIARY       : return  50;
+        case edge_type_t::TERTIARY_LINK  : return  30;
+        case edge_type_t::UNCLASSIFIED   : return  30;
+        case edge_type_t::RESIDENTIAL    : return  30;
+        case edge_type_t::LIVING_STREET  : return  10;
+        case edge_type_t::SERVICE        : return  20;
         default: throw invalid_argument("");
     }
 }
@@ -99,54 +105,77 @@ DWGraph MapGraph::getFullGraph() const{
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = pos_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
             DWGraph::weight_t t_ms = SECONDS_TO_MILLIS * d / w.getMaxSpeed();
-            cout << SECONDS_TO_MILLIS << " " << d << " " << w.getMaxSpeed() << " " << t_ms << "\n";
             G.addEdge(*it2, *it1, t_ms);
         }
     }
     return G;
 }
 
-void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
+const std::unordered_map<edge_type_t, MapGraph::Display> MapGraph::display_map = {
+    {edge_type_t::MOTORWAY      , Display::MOTORWAY   },
+    {edge_type_t::MOTORWAY_LINK , Display::MOTORWAY   },
+    {edge_type_t::TRUNK         , Display::TRUNK      },
+    {edge_type_t::TRUNK_LINK    , Display::TRUNK      },
+    {edge_type_t::PRIMARY       , Display::PRIMARY    },
+    {edge_type_t::PRIMARY_LINK  , Display::PRIMARY    },
+    {edge_type_t::SECONDARY     , Display::SECONDARY  },
+    {edge_type_t::SECONDARY_LINK, Display::SECONDARY  },
+    {edge_type_t::TERTIARY      , Display::TERTIARY   },
+    {edge_type_t::TERTIARY_LINK , Display::TERTIARY   },
+    {edge_type_t::UNCLASSIFIED  , Display::ROAD       },
+    {edge_type_t::RESIDENTIAL   , Display::RESIDENTIAL},
+    {edge_type_t::LIVING_STREET , Display::SLOW       },
+    {edge_type_t::SERVICE       , Display::SLOW       }
+};
 
-    static const std::unordered_map<edge_type_t, Display> display_map = {
-        {edge_type_t::MOTORWAY   , Display::MOTORWAY   },
-        {edge_type_t::TRUNK      , Display::TRUNK      },
-        {edge_type_t::PRIMARY    , Display::PRIMARY    },
-        {edge_type_t::SECONDARY  , Display::SECONDARY  },
-        {edge_type_t::TERTIARY   , Display::TERTIARY   },
-        {edge_type_t::ROAD       , Display::ROAD       },
-        {edge_type_t::RESIDENTIAL, Display::RESIDENTIAL},
-        {edge_type_t::SLOW       , Display::SLOW       }
-    };
+void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
     static const std::unordered_map<edge_type_t, bool> dashed_map = {
-        {edge_type_t::MOTORWAY   , false},
-        {edge_type_t::TRUNK      , false},
-        {edge_type_t::PRIMARY    , false},
-        {edge_type_t::SECONDARY  , false},
-        {edge_type_t::TERTIARY   , false},
-        {edge_type_t::ROAD       , false},
-        {edge_type_t::RESIDENTIAL, false},
-        {edge_type_t::SLOW       , true }
+        {edge_type_t::MOTORWAY      , false},
+        {edge_type_t::MOTORWAY_LINK , false},
+        {edge_type_t::TRUNK         , false},
+        {edge_type_t::TRUNK_LINK    , false},
+        {edge_type_t::PRIMARY       , false},
+        {edge_type_t::PRIMARY_LINK  , false},
+        {edge_type_t::SECONDARY     , false},
+        {edge_type_t::SECONDARY_LINK, false},
+        {edge_type_t::TERTIARY      , false},
+        {edge_type_t::TERTIARY_LINK , false},
+        {edge_type_t::UNCLASSIFIED  , false},
+        {edge_type_t::RESIDENTIAL   , false},
+        {edge_type_t::LIVING_STREET , true },
+        {edge_type_t::SERVICE       , true }
     };
     static const std::unordered_map<edge_type_t, int> width_map = {
-        {edge_type_t::MOTORWAY   , 10},
-        {edge_type_t::TRUNK      , 10},
-        {edge_type_t::PRIMARY    ,  7},
-        {edge_type_t::SECONDARY  ,  7},
-        {edge_type_t::TERTIARY   ,  5},
-        {edge_type_t::ROAD       ,  5},
-        {edge_type_t::RESIDENTIAL,  5},
-        {edge_type_t::SLOW       ,  5}
+        {edge_type_t::MOTORWAY      , 10},
+        {edge_type_t::MOTORWAY_LINK , 10},
+        {edge_type_t::TRUNK         , 10},
+        {edge_type_t::TRUNK_LINK    , 10},
+        {edge_type_t::PRIMARY       ,  7},
+        {edge_type_t::PRIMARY_LINK  ,  7},
+        {edge_type_t::SECONDARY     ,  7},
+        {edge_type_t::SECONDARY_LINK,  7},
+        {edge_type_t::TERTIARY      ,  5},
+        {edge_type_t::TERTIARY_LINK ,  5},
+        {edge_type_t::UNCLASSIFIED  ,  5},
+        {edge_type_t::RESIDENTIAL   ,  5},
+        {edge_type_t::LIVING_STREET ,  5},
+        {edge_type_t::SERVICE       ,  5}
     };
     static const std::unordered_map<edge_type_t, string> color_map = {
-        {edge_type_t::MOTORWAY   , "RED"},
-        {edge_type_t::TRUNK      , "PINK"},
-        {edge_type_t::PRIMARY    , "ORANGE"},
-        {edge_type_t::SECONDARY  , "YELLOW"},
-        {edge_type_t::TERTIARY   , "GRAY"},
-        {edge_type_t::ROAD       , "GRAY"},
-        {edge_type_t::RESIDENTIAL, "GRAY"},
-        {edge_type_t::SLOW       , "GRAY"}
+        {edge_type_t::MOTORWAY      , "RED"    },
+        {edge_type_t::MOTORWAY_LINK , "RED"    },
+        {edge_type_t::TRUNK         , "PINK"   },
+        {edge_type_t::TRUNK_LINK    , "PINK"   },
+        {edge_type_t::PRIMARY       , "ORANGE" },
+        {edge_type_t::PRIMARY_LINK  , "ORANGE" },
+        {edge_type_t::SECONDARY     , "YELLOW" },
+        {edge_type_t::SECONDARY_LINK, "YELLOW" },
+        {edge_type_t::TERTIARY      , "GRAY"   },
+        {edge_type_t::TERTIARY_LINK , "GRAY"   },
+        {edge_type_t::UNCLASSIFIED  , "GRAY"   },
+        {edge_type_t::RESIDENTIAL   , "GRAY"   },
+        {edge_type_t::LIVING_STREET , "GRAY"   },
+        {edge_type_t::SERVICE       , "GRAY"   }
     };
     
 
@@ -193,17 +222,6 @@ void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
 }
 
 void MapGraph::drawSpeeds(GraphViewer *gv, int fraction, int display) const{
-
-    static const std::unordered_map<edge_type_t, Display> display_map = {
-        {edge_type_t::MOTORWAY   , Display::MOTORWAY   },
-        {edge_type_t::TRUNK      , Display::TRUNK      },
-        {edge_type_t::PRIMARY    , Display::PRIMARY    },
-        {edge_type_t::SECONDARY  , Display::SECONDARY  },
-        {edge_type_t::TERTIARY   , Display::TERTIARY   },
-        {edge_type_t::ROAD       , Display::ROAD       },
-        {edge_type_t::RESIDENTIAL, Display::RESIDENTIAL},
-        {edge_type_t::SLOW       , Display::SLOW       }
-    };
     
     const int width = 5;
 
@@ -260,17 +278,6 @@ void MapGraph::drawSpeeds(GraphViewer *gv, int fraction, int display) const{
 }
 
 void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
-    static const std::unordered_map<edge_type_t, Display> display_map = {
-        {edge_type_t::MOTORWAY   , Display::MOTORWAY   },
-        {edge_type_t::TRUNK      , Display::TRUNK      },
-        {edge_type_t::PRIMARY    , Display::PRIMARY    },
-        {edge_type_t::SECONDARY  , Display::SECONDARY  },
-        {edge_type_t::TERTIARY   , Display::TERTIARY   },
-        {edge_type_t::ROAD       , Display::ROAD       },
-        {edge_type_t::RESIDENTIAL, Display::RESIDENTIAL},
-        {edge_type_t::SLOW       , Display::SLOW       }
-    };
-    
     const int width = 5;
 
     static const std::map<bool, string> color_map = {
@@ -324,17 +331,6 @@ void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
 }
 
 void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst) const{
-    static const std::unordered_map<edge_type_t, Display> display_map = {
-        {edge_type_t::MOTORWAY   , Display::MOTORWAY   },
-        {edge_type_t::TRUNK      , Display::TRUNK      },
-        {edge_type_t::PRIMARY    , Display::PRIMARY    },
-        {edge_type_t::SECONDARY  , Display::SECONDARY  },
-        {edge_type_t::TERTIARY   , Display::TERTIARY   },
-        {edge_type_t::ROAD       , Display::ROAD       },
-        {edge_type_t::RESIDENTIAL, Display::RESIDENTIAL},
-        {edge_type_t::SLOW       , Display::SLOW       }
-    };
-
     static const std::map<bool, string> color_map = {
         {true , "RED"},
         {false, "GRAY"}
@@ -345,17 +341,11 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, DWGraph::nod
         {false, 5}
     };
 
-    DUGraph G = (DUGraph)getFullGraph();
+    DWGraph G = getFullGraph();
     ShortestPathOneMany *shortestPath = new Dijkstra();   
-    shortestPath->initialize((const DWGraph *)&G, src);
+    shortestPath->initialize(&G, src);
     shortestPath->run();
-    cout << shortestPath->getPathWeight(dst) << endl;;
     std::list<DWGraph::node_t> path_list = shortestPath->getPath(dst);
-
-    for(auto u: path_list){
-        cout << u << " " << shortestPath->getPathWeight(u) << "\n";
-    }
-
     std::unordered_set<DWGraph::node_t> path(path_list.begin(), path_list.end());
 
     double lat_max = -90;

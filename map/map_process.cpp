@@ -106,22 +106,22 @@ ostream& operator<<(ostream &os, const way_t &w){
 }
 
 unordered_map<string, edge_type_t> edge_accept = {
-    {"motorway"         , edge_type_t::MOTORWAY},
-    {"motorway_link"    , edge_type_t::MOTORWAY},
-    {"trunk"            , edge_type_t::TRUNK},
-    {"trunk_link"       , edge_type_t::TRUNK},
-    {"primary"          , edge_type_t::PRIMARY},
-    {"primary_link"     , edge_type_t::PRIMARY},
-    {"secondary"        , edge_type_t::SECONDARY},
-    {"secondary_link"   , edge_type_t::SECONDARY},
-    {"tertiary"         , edge_type_t::TERTIARY},
-    {"tertiary_link"    , edge_type_t::TERTIARY},
-    {"unclassified"     , edge_type_t::ROAD},
-    {"residential"      , edge_type_t::RESIDENTIAL},
-    {"living_street"    , edge_type_t::SLOW},
-    {"road"             , edge_type_t::SLOW},
-    {"services"         , edge_type_t::SLOW},
-    {"bus_stop"         , edge_type_t::SLOW}
+    {"motorway"         , edge_type_t::MOTORWAY         },
+    {"motorway_link"    , edge_type_t::MOTORWAY_LINK    },
+    {"trunk"            , edge_type_t::TRUNK            },
+    {"trunk_link"       , edge_type_t::TRUNK_LINK       },
+    {"primary"          , edge_type_t::PRIMARY          },
+    {"primary_link"     , edge_type_t::PRIMARY_LINK     },
+    {"secondary"        , edge_type_t::SECONDARY        },
+    {"secondary_link"   , edge_type_t::SECONDARY_LINK   },
+    {"tertiary"         , edge_type_t::TERTIARY         },
+    {"tertiary_link"    , edge_type_t::TERTIARY_LINK    },
+    {"unclassified"     , edge_type_t::UNCLASSIFIED     },
+    {"residential"      , edge_type_t::RESIDENTIAL      },
+    {"living_street"    , edge_type_t::LIVING_STREET    },
+    {"road"             , edge_type_t::UNCLASSIFIED     },
+    {"services"         , edge_type_t::SERVICE          },
+    {"bus_stop"         , edge_type_t::SERVICE          }
 };
 unordered_set<string> edge_reject = {
     "steps",        "pedestrian", "footway",   "cycleway", "track",
@@ -142,10 +142,10 @@ edge_type_t get_edge_type(xml_node<> *it) {
         if (edge_accept.find(highway) != edge_accept.end()) return edge_accept[highway];
         if (highway == "service"){
             auto paccess  = find_tag(it, "access");
-            if(paccess == NULL) return edge_type_t::SLOW;
+            if(paccess == NULL) return edge_type_t::SERVICE;
             string access = paccess->first_attribute("v")->value();
             if (access == "private" || access == "no" ) return edge_type_t::NO;
-            return edge_type_t::SLOW;
+            return edge_type_t::SERVICE;
         }
     }
     

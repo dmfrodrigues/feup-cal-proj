@@ -42,6 +42,7 @@ private:
         RESIDENTIAL = 64,
         SLOW        = 128
     };
+    static const std::unordered_map<edge_type_t, Display> display_map;
 
     const DWGraph::node_t station = 1390706567;
 
