@@ -2,6 +2,7 @@
 
 #include "KosarajuV.h"
 #include "DFS.h"
+#include "Dijkstra.h"
 
 #include <fstream>
 #include <unordered_set>
@@ -98,7 +99,8 @@ DWGraph MapGraph::getFullGraph() const{
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = pos_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
             DWGraph::weight_t t_ms = SECONDS_TO_MILLIS * d / w.getMaxSpeed();
-            G.addEdge(*it1, *it2, t_ms);
+            cout << SECONDS_TO_MILLIS << " " << d << " " << w.getMaxSpeed() << " " << t_ms << "\n";
+            G.addEdge(*it2, *it1, t_ms);
         }
     }
     return G;
@@ -320,3 +322,80 @@ void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
         
     }
 }
+
+void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst) const{
+    static const std::unordered_map<edge_type_t, Display> display_map = {
+        {edge_type_t::MOTORWAY   , Display::MOTORWAY   },
+        {edge_type_t::TRUNK      , Display::TRUNK      },
+        {edge_type_t::PRIMARY    , Display::PRIMARY    },
+        {edge_type_t::SECONDARY  , Display::SECONDARY  },
+        {edge_type_t::TERTIARY   , Display::TERTIARY   },
+        {edge_type_t::ROAD       , Display::ROAD       },
+        {edge_type_t::RESIDENTIAL, Display::RESIDENTIAL},
+        {edge_type_t::SLOW       , Display::SLOW       }
+    };
+
+    static const std::map<bool, string> color_map = {
+        {true , "RED"},
+        {false, "GRAY"}
+    };
+
+    static const std::map<bool, int> width_map = {
+        {true , 10},
+        {false, 5}
+    };
+
+    DUGraph G = (DUGraph)getFullGraph();
+    ShortestPathOneMany *shortestPath = new Dijkstra();   
+    shortestPath->initialize((const DWGraph *)&G, src);
+    shortestPath->run();
+    cout << shortestPath->getPathWeight(dst) << endl;;
+    std::list<DWGraph::node_t> path_list = shortestPath->getPath(dst);
+
+    for(auto u: path_list){
+        cout << u << " " << shortestPath->getPathWeight(u) << "\n";
+    }
+
+    std::unordered_set<DWGraph::node_t> path(path_list.begin(), path_list.end());
+
+    double lat_max = -90;
+    double lon_min = +180;
+    for(const auto &u: nodes){
+        lat_max = std::max(lat_max, u.second.lat);
+        lon_min = std::min(lon_min, u.second.lon);
+    }
+    std::unordered_set<DWGraph::node_t> drawn_nodes;
+    size_t edge_id = 0;
+    for(const way_t &way: ways){
+
+        bool draw = display & display_map.at(way.edgeType);
+
+        if(!draw) continue;
+
+        DWGraph::node_t u = 0;
+        size_t i = 0;
+        for(const DWGraph::node_t &v: way.nodes){
+            if(i%fraction == 0 || i == way.nodes.size()-1){
+                if(drawn_nodes.find(v) == drawn_nodes.end()){
+                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
+                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
+                    gv->addNode(v, x, y);
+                    gv->setVertexSize(v, 1);
+                    drawn_nodes.insert(v);
+                }
+                if(u != 0){
+                    string color = color_map.at(path.count(u) && path.count(v));
+                    int width = width_map.at(path.count(u) && path.count(v));
+                    gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
+                    gv->setEdgeColor(edge_id, color);
+                    gv->setEdgeThickness(edge_id, width);
+                    ++edge_id;
+                }
+                u = v;
+            }
+            ++i;
+        }
+        
+    }
+}
+

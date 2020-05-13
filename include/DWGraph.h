@@ -11,7 +11,7 @@
 class DWGraph {
 public:
     typedef size_t node_t;
-    typedef double weight_t;
+    typedef long long weight_t;
     static constexpr weight_t INF = 1000000000;
     struct Edge{
         node_t v;

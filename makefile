@@ -37,7 +37,7 @@ $(ODIR):
 	mkdir -p $@
 
 clean:
-	make -C map clean
+	#make -C map clean
 	rm -rf $(ODIR)
 	rm -f $(ODIR)/$(TEXE)
 	rm -f $(PROG)

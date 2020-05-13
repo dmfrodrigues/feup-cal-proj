@@ -54,6 +54,7 @@ public:
     void drawRoads (GraphViewer *gv, int fraction, int display) const;
     void drawSpeeds(GraphViewer *gv, int fraction, int display) const;
     void drawSCC   (GraphViewer *gv, int fraction, int display) const;
+    void drawPath  (GraphViewer *gv, int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst) const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED
