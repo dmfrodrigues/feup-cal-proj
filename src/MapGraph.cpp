@@ -10,8 +10,10 @@
 
 #include <cmath>
 
-#define COORDMULT 50000
-#define SECONDS_TO_MILLIS 1000
+#define COORDMULT               50000       // Multiply coordinates to get integer positions
+#define SECONDS_TO_MICROS       1000000     // Convert seconds to milliseconds
+#define KMH_TO_MS               (1/3.6)     // Convert km/h to m/s
+#define SPEED_REDUCTION_FACTOR  0.75        // Reduce speed to account for intense road traffic, and the fact people not always travel at maximum speed 
 
 double MapGraph::pos_t::getDistanceSI(const MapGraph::pos_t &p1, const MapGraph::pos_t &p2){
     pos_t m = (p1+p2)/2;
@@ -54,7 +56,7 @@ MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
     if(speed != -1) return speed;
     switch(edgeType){
         case edge_type_t::MOTORWAY       : return 120;
-        case edge_type_t::MOTORWAY_LINK  : return 160;
+        case edge_type_t::MOTORWAY_LINK  : return  60;
         case edge_type_t::TRUNK          : return 100;
         case edge_type_t::TRUNK_LINK     : return  50;
         case edge_type_t::PRIMARY        : return  90;
@@ -67,6 +69,27 @@ MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
         case edge_type_t::RESIDENTIAL    : return  30;
         case edge_type_t::LIVING_STREET  : return  10;
         case edge_type_t::SERVICE        : return  20;
+        default: throw invalid_argument("");
+    }
+}
+
+MapGraph::speed_t MapGraph::way_t::getRealSpeed() const{
+    if(speed != -1) return speed;
+    switch(edgeType){
+        case edge_type_t::MOTORWAY       : return 120*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::MOTORWAY_LINK  : return  60*KMH_TO_MS;
+        case edge_type_t::TRUNK          : return 100*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::TRUNK_LINK     : return  50*KMH_TO_MS;
+        case edge_type_t::PRIMARY        : return  90*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::PRIMARY_LINK   : return  40*KMH_TO_MS;
+        case edge_type_t::SECONDARY      : return  70*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::SECONDARY_LINK : return  30*KMH_TO_MS;
+        case edge_type_t::TERTIARY       : return  50*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::TERTIARY_LINK  : return  30*KMH_TO_MS;
+        case edge_type_t::UNCLASSIFIED   : return  30*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::RESIDENTIAL    : return  30*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::LIVING_STREET  : return  10*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
+        case edge_type_t::SERVICE        : return  20*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
         default: throw invalid_argument("");
     }
 }
@@ -104,7 +127,7 @@ DWGraph MapGraph::getFullGraph() const{
         auto it1 = w.nodes.begin();
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = pos_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
-            DWGraph::weight_t t_ms = SECONDS_TO_MILLIS * d / w.getMaxSpeed();
+            DWGraph::weight_t t_ms = SECONDS_TO_MICROS * d / w.getRealSpeed();
             G.addEdge(*it2, *it1, t_ms);
         }
     }

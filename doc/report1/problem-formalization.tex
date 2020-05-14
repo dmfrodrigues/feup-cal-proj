@@ -8,7 +8,7 @@ Maps will be converted into graphs $G(V,E, w)$, where:
 \begin{itemize}
     \item Nodes $V$ represent positions on Earth.
     \item Edges $E$ represent roads traversable by automobiles.
-    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $\SI{5}{m}$, and that travelling at a maximum speed of $\SI{120}{km/h}$ a vehicle would take $\SI{0.15}{s}$ to cross it, cost will be expressed in integer milliseconds which is deemed a unit with more than enough precision, while still being tangible for human analysis, as well as fitting in a 32-bit unsigned integer.
+    \item Weight function $w$ is the time it takes to cross an edge. Considering an estimated average distance between successive nodes of about $\SI{1}{m}$, and that travelling at a maximum speed of $\SI{120}{km/h}$ a vehicle would take $\SI{0.03}{s}$ to cross it, we initially decided to express time in integer milliseconds; however, as we found out the least time between two consecutive nodes was $\SI{0.0026}{s}$ we decided to express time in integer microseconds, which is deemed a unit with more than enough precision, while still being relatively tangible for human analysis, as well as fitting in a 64-bit integer by a large margin.
 \end{itemize}
 We will have two graphs:
 \begin{itemize}

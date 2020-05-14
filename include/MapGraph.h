@@ -7,7 +7,7 @@
 
 class MapGraph {
 public:
-    typedef int speed_t;
+    typedef double speed_t;
 private:
     struct pos_t {
         double lat, lon;
@@ -30,7 +30,18 @@ private:
         std::list<DWGraph::node_t> nodes;
         speed_t speed;
         edge_type_t edgeType;
+        /**
+         * @brief Get the maximum speed in km/h
+         * 
+         * @return speed_t 
+         */
         speed_t getMaxSpeed() const;
+        /**
+         * @brief Get the real speed in m/s
+         * 
+         * @return speed_t 
+         */
+        speed_t getRealSpeed() const;
     };
     enum Display {
         MOTORWAY    = 1,
