@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
+#include "Astar.h"
 #include "DFS.h"
 #include "Dijkstra.h"
 #include "ShortestPathAll.h"
@@ -123,6 +124,21 @@ TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
     REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 3, 4   }) == shortestPath->getPath(0, 4));
     REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5      }) == shortestPath->getPath(0, 5));
     REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5, 6   }) == shortestPath->getPath(0, 6));
+}
+
+TEST_CASE("A* algorithm", "[shortestpath-astar]"){
+    DWGraph G;
+    for(int i = 0; i < 7; ++i) G.addNode(i);
+    G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
+    G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);
+    
+    Astar::heuristic_t h = [](DWGraph::node_t u)-> DWGraph::weight_t { return 0; };
+    ShortestPath *shortestPath = new Astar(h);
+    shortestPath->initialize(&G, 0, 6);
+    shortestPath->run();
+
+    REQUIRE(9 == shortestPath->getPathWeight());
+    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5, 6   }) == shortestPath->getPath());
 }
 
 TEST_CASE("Kosaraju variant testing", "[scc-kosarajuv]"){

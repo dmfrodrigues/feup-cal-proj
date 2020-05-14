@@ -1,5 +1,5 @@
-#ifndef SHORTESTPATH_H_INCLUDED
-#define SHORTESTPATH_H_INCLUDED
+#ifndef SHORTESTPATHALL_H_INCLUDED
+#define SHORTESTPATHALL_H_INCLUDED
 
 #include <list>
 
@@ -30,4 +30,4 @@ public:
     DWGraph::weight_t getPathWeight(DWGraph::node_t s, DWGraph::node_t d) const;
 };
 
-#endif //SHORTESTPATH_H_INCLUDED
+#endif //SHORTESTPATHALL_H_INCLUDED
