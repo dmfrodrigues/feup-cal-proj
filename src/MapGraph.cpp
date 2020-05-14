@@ -418,6 +418,7 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, node_t src, 
         paths[i] = std::unordered_set<node_t>(path.begin(), path.end());
         statistics_t stats = shortestPaths[i]->getStatistics();
         std::cout   << name[i] << " (" << (!visited ? pathColor[i] : visitedColor[i]) << ")\n"
+                    << "- Execution time: " << stats.execution_time << " microseconds\n"
                     << "- Analysed nodes: " << stats.analysed_nodes << "\n"
                     << "- Analysed edges: " << stats.analysed_edges << "\n"
                     << "- Total time    : " << shortestPaths[i]->getPathWeight() << " (+" << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%)\n"

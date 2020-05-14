@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <utility>
+#include <chrono>
 
 typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
@@ -12,6 +13,7 @@ typedef umap<node_t, node_t  > prev_t;
 typedef std::priority_queue<std::pair<weight_t, node_t>,
                 std::vector<std::pair<weight_t, node_t>>,
                std::greater<std::pair<weight_t, node_t>>> min_priority_queue;
+typedef std::chrono::high_resolution_clock hrc;
 #define mk(a, b) (std::make_pair((a), (b)))
 
 node_t Dijkstra::getStart() const{
@@ -28,6 +30,8 @@ void Dijkstra::initialize(const DWGraph *G, DWGraph::node_t s){
 }
 
 void Dijkstra::run(){
+    auto start_time = hrc::now();
+
     min_priority_queue Q;
     dist[s] = 0; Q.push(mk(dist[s], s)); ++stats.analysed_nodes;
     while(!Q.empty()){
@@ -42,6 +46,9 @@ void Dijkstra::run(){
             }
         }
     }
+
+    auto finish_time = hrc::now();
+    stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
 
 DWGraph::node_t Dijkstra::getPrev(DWGraph::node_t d) const{

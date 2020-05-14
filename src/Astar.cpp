@@ -1,8 +1,8 @@
 #include "Astar.h"
 
 #include <queue>
-
 #include <iostream>
+#include <chrono>
 
 typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
@@ -13,6 +13,7 @@ typedef umap<node_t, node_t  > prev_t;
 typedef std::priority_queue<std::pair<weight_t, node_t>,
                 std::vector<std::pair<weight_t, node_t>>,
                std::greater<std::pair<weight_t, node_t>>> min_priority_queue;
+typedef std::chrono::high_resolution_clock hrc;
 #define mk(a, b) (std::make_pair((a), (b)))
 
 Astar::default_heuristic::default_heuristic(){}
@@ -49,6 +50,8 @@ node_t Astar::getStart() const { return s; }
 node_t Astar::getDest () const { return d; }
 
 void Astar::run(){
+    auto start_time = hrc::now();
+
     min_priority_queue Q;
     dist[s] = 0; hdist[s] = (*h)(s); Q.push(mk(hdist[s], s)); ++stats.analysed_nodes;
     while(!Q.empty()){
@@ -65,6 +68,9 @@ void Astar::run(){
             }
         }
     }
+
+    auto finish_time = hrc::now();
+    stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
 
 node_t Astar::getPrev(node_t u) const{
