@@ -6,7 +6,6 @@ void view(int argc, const char *argv[]){
     int display  = atoi(argv[3]);
 
     GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineVertexColor("WHITE");
     gv->defineEdgeCurved(false);
     gv->defineVertexSize(0);
     gv->createWindow(1900, 1000);
@@ -20,7 +19,6 @@ void speed(int argc, const char *argv[]){
     int display  = atoi(argv[3]);
 
     GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineVertexColor("WHITE");
     gv->defineEdgeCurved(false);
     gv->defineVertexSize(0);
     gv->createWindow(1900, 1000);
@@ -34,7 +32,6 @@ void scc(int argc, const char *argv[]){
     int display  = atoi(argv[3]);
 
     GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineVertexColor("WHITE");
     gv->defineEdgeCurved(false);
     gv->defineVertexSize(0);
     gv->createWindow(1900, 1000);
@@ -48,7 +45,6 @@ void path(int argc, const char *argv[]){
     int display  = atoi(argv[3]);
 
     GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineVertexColor("WHITE");
     gv->defineEdgeCurved(false);
     gv->defineVertexSize(0);
     gv->createWindow(1900, 1000);

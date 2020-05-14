@@ -231,7 +231,6 @@ void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
                     long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
                     long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
                     gv->addNode(v, x, y);
-                    gv->setVertexSize(v, 1);
                     drawn_nodes.insert(v);
                 }
                 if(u != 0){
@@ -288,7 +287,6 @@ void MapGraph::drawSpeeds(GraphViewer *gv, int fraction, int display) const{
                     long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
                     long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
                     gv->addNode(v, x, y);
-                    gv->setVertexSize(v, 1);
                     drawn_nodes.insert(v);
                 }
                 if(u != 0){
@@ -340,7 +338,6 @@ void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
                     long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
                     long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
                     gv->addNode(v, x, y);
-                    gv->setVertexSize(v, 1);
                     drawn_nodes.insert(v);
                 }
                 if(u != 0){
@@ -450,7 +447,6 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, node_t src, 
                     long long x = +(nodes.at(v).lon-lon)*COORDMULT;
                     long long y = -(nodes.at(v).lat-lat)*COORDMULT;
                     gv->addNode(v, x, y);
-                    gv->setVertexSize(v, 1);
                     drawn_nodes.insert(v);
                 }
                 if(u != 0){
