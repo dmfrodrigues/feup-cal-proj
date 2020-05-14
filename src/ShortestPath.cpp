@@ -46,10 +46,10 @@ weight_t ShortestPath::FromOneMany::getPathWeight() const {
     return oneMany->getPathWeight(d);
 }
 
-ShortestPath::statistics_t ShortestPath::FromOneMany::getStatistics() const{
-    return statistics_t();
+statistics_t ShortestPath::FromOneMany::getStatistics() const{
+    return oneMany->getStatistics();
 }
 
 bool ShortestPath::FromOneMany::hasVisited(DWGraph::node_t u) const{
-    return false;
+    return oneMany->hasVisited(u);
 }

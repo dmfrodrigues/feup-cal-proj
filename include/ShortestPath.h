@@ -5,6 +5,7 @@
 
 #include "DWGraph.h"
 #include "ShortestPathOneMany.h"
+#include "statistics.h"
 
 class ShortestPath {
 public:
@@ -17,10 +18,6 @@ public:
     std::list<DWGraph::node_t> getPath() const;
     virtual DWGraph::weight_t getPathWeight() const = 0;
     class FromOneMany;
-    struct statistics_t {
-        size_t analysed_nodes;
-        size_t analysed_edges;
-    };
     virtual statistics_t getStatistics() const = 0;
     virtual bool hasVisited(DWGraph::node_t u) const = 0;
 };

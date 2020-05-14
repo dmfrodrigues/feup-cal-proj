@@ -29,11 +29,11 @@ void Dijkstra::initialize(const DWGraph *G, DWGraph::node_t s){
 
 void Dijkstra::run(){
     min_priority_queue Q;
-    dist[s] = 0; Q.push(mk(dist[s], s));
+    dist[s] = 0; Q.push(mk(dist[s], s)); ++stats.analysed_nodes;
     while(!Q.empty()){
-        node_t u = Q.top().second;
+        node_t u = Q.top().second; ++stats.analysed_nodes;
         Q.pop();
-        for(const Edge &e: G->getAdj(u)){
+        for(const Edge &e: G->getAdj(u)){ ++stats.analysed_edges;
             weight_t c_ = dist[u] + e.w;
             if(c_ < dist[e.v]){
                 dist[e.v] = c_;
@@ -50,4 +50,12 @@ DWGraph::node_t Dijkstra::getPrev(DWGraph::node_t d) const{
 
 weight_t Dijkstra::getPathWeight(node_t d) const{
     return dist.at(d);
+}
+
+statistics_t Dijkstra::getStatistics() const {
+    return stats;
+}
+
+bool Dijkstra::hasVisited(DWGraph::node_t u) const{
+    return (dist.at(u) != DWGraph::INF);
 }

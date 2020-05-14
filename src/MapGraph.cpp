@@ -378,7 +378,7 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, node_t src, 
     DWGraph G = getFullGraph();
 
     std::vector<std::string> name({
-        "Dijkstra's algorithm",
+        "Dijkstra's algorithm with early stop",
         "A* algorithm, " + std::to_string(int(120*SPEED_REDUCTION_FACTOR)) +"km/h time estimate [best-performance admissible heuristic]",
         "A* algorithm, 70km/h",
         "A* algorithm, 50km/h",
@@ -416,7 +416,7 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, node_t src, 
         shortestPaths[i]->run();
         std::list<node_t> path = shortestPaths[i]->getPath();
         paths[i] = std::unordered_set<node_t>(path.begin(), path.end());
-        ShortestPath::statistics_t stats = shortestPaths[i]->getStatistics();
+        statistics_t stats = shortestPaths[i]->getStatistics();
         std::cout   << name[i] << " (" << (!visited ? pathColor[i] : visitedColor[i]) << ")\n"
                     << "- Analysed nodes: " << stats.analysed_nodes << "\n"
                     << "- Analysed edges: " << stats.analysed_edges << "\n"

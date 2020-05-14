@@ -75,7 +75,7 @@ weight_t Astar::getPathWeight() const{
     return dist.at(d);
 }
 
-ShortestPath::statistics_t Astar::getStatistics() const{
+statistics_t Astar::getStatistics() const{
     return stats;
 }
 
