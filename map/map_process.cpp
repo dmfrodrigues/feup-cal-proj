@@ -121,10 +121,11 @@ unordered_map<string, edge_type_t> edge_accept = {
     {"living_street"    , edge_type_t::LIVING_STREET    },
     {"road"             , edge_type_t::UNCLASSIFIED     },
     {"services"         , edge_type_t::SERVICE          },
-    {"bus_stop"         , edge_type_t::SERVICE          }
+    {"bus_stop"         , edge_type_t::SERVICE          },
+    {"track"            , edge_type_t::SERVICE          }
 };
 unordered_set<string> edge_reject = {
-    "steps",        "pedestrian", "footway",   "cycleway", "track",
+    "steps",        "pedestrian", "footway",   "cycleway",
     "construction", "path",       "bridleway", "platform", "raceway",
     "elevator",     "proposed",   "planned",   "bus_stop"};
 unordered_set<string> service_accept = {"driveway", "parking_aisle", "alley"};
