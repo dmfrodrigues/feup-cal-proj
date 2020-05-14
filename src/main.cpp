@@ -1,62 +1,54 @@
 #include "graphviewer.h"
 #include "MapGraph.h"
 
-void view(int argc, const char *argv[]){
+void view(int argc, const char *argv[], const MapGraph &M){
+    if(argc != 4) throw invalid_argument("invalid number of arguments");
     int fraction = atoi(argv[2]);
     int display  = atoi(argv[3]);
 
-    GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineEdgeCurved(false);
-    gv->defineVertexSize(0);
-    gv->createWindow(1900, 1000);
-    MapGraph M("map/processed/AMP");
-    M.drawRoads(gv, fraction, display);
-    gv->rearrange();
+    M.drawRoads(fraction, display);
 }
 
-void speed(int argc, const char *argv[]){
+void speed(int argc, const char *argv[], const MapGraph &M){
+    if(argc != 4) throw invalid_argument("invalid number of arguments");
     int fraction = atoi(argv[2]);
     int display  = atoi(argv[3]);
 
-    GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineEdgeCurved(false);
-    gv->defineVertexSize(0);
-    gv->createWindow(1900, 1000);
-    MapGraph M("map/processed/AMP");
-    M.drawSpeeds(gv, fraction, display);
-    gv->rearrange();
+    M.drawSpeeds(fraction, display);
 }
 
-void scc(int argc, const char *argv[]){
+void scc(int argc, const char *argv[], const MapGraph &M){
+    if(argc != 4) throw invalid_argument("invalid number of arguments");
     int fraction = atoi(argv[2]);
     int display  = atoi(argv[3]);
 
-    GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineEdgeCurved(false);
-    gv->defineVertexSize(0);
-    gv->createWindow(1900, 1000);
-    MapGraph M("map/processed/AMP");
-    M.drawSCC(gv, fraction, display);
-    gv->rearrange();
+    M.drawSCC(fraction, display);
 }
 
-void path(int argc, const char *argv[]){
+void path(int argc, const char *argv[], const MapGraph &M){
+    if(argc != 6 && argc != 7) throw invalid_argument("invalid number of arguments");
     int fraction = atoi(argv[2]);
     int display  = atoi(argv[3]);
+    DWGraph::node_t sour = atoll(argv[4]);
+    DWGraph::node_t dest = atoll(argv[5]);
+    bool visited = (argc > 6 && string(argv[6]) == "-v");
 
-    GraphViewer *gv = new GraphViewer(1900, 1000, false);
-    gv->defineEdgeCurved(false);
-    gv->defineVertexSize(0);
-    gv->createWindow(1900, 1000);
-    MapGraph M("map/processed/AMP");
-    M.drawPath(gv, fraction, display, atoll(argv[4]), atoll(argv[5]), argc > 6 && string(argv[6]) == "-v");
-    gv->rearrange();
+    M.drawPath(fraction, display, sour, dest, visited);
 }
 
 int main(int argc, char *argv[]){
-    if(string(argv[1]) == "view" ) view (argc, (const char **)argv);
-    if(string(argv[1]) == "speed") speed(argc, (const char **)argv);
-    if(string(argv[1]) == "scc"  ) scc  (argc, (const char **)argv);
-    if(string(argv[1]) == "path" ) path (argc, (const char **)argv);
+    try {
+        if(argc < 2) throw invalid_argument("at least one argument must be provided");
+        MapGraph M("map/processed/AMP");
+        if(string(argv[1]) == "view" ) view (argc, (const char **)argv, M);
+        if(string(argv[1]) == "speed") speed(argc, (const char **)argv, M);
+        if(string(argv[1]) == "scc"  ) scc  (argc, (const char **)argv, M);
+        if(string(argv[1]) == "path" ) path (argc, (const char **)argv, M);
+    } catch(const invalid_argument &e){
+        cout << "Caught exception: " << e.what() << "\n";
+        cout << "Usage: ./main (view | speed | scc) FRACTION FLAGS\n"
+                "       ./main path FRACTION FLAGS [-v]\n";
+        return EXIT_FAILURE;
+    }
     return 0;
 }

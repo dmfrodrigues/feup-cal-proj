@@ -156,7 +156,17 @@ const std::unordered_map<edge_type_t, MapGraph::Display> MapGraph::display_map =
     {edge_type_t::SERVICE       , Display::SLOW       }
 };
 
-void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
+GraphViewer* createGraphViewer(int w = 1800, int h = 900){
+    GraphViewer *gv = new GraphViewer(w, h, false);
+    gv->defineEdgeCurved(false);
+    gv->defineVertexSize(0);
+    gv->createWindow(w, h);
+    return gv;
+}
+
+void MapGraph::drawRoads(int fraction, int display) const{
+    GraphViewer *gv = createGraphViewer();
+    
     static const std::unordered_map<edge_type_t, bool> dashed_map = {
         {edge_type_t::MOTORWAY      , false},
         {edge_type_t::MOTORWAY_LINK , false},
@@ -246,10 +256,12 @@ void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
         }
         
     }
+    gv->rearrange();
 }
 
-void MapGraph::drawSpeeds(GraphViewer *gv, int fraction, int display) const{
-    
+void MapGraph::drawSpeeds(int fraction, int display) const{
+    GraphViewer *gv = createGraphViewer();
+
     const int width = 5;
 
     static const std::map<speed_t, string> color_map = {
@@ -301,9 +313,12 @@ void MapGraph::drawSpeeds(GraphViewer *gv, int fraction, int display) const{
         }
         
     }
+    gv->rearrange();
 }
 
-void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
+void MapGraph::drawSCC(int fraction, int display) const{
+    GraphViewer *gv = createGraphViewer();
+    
     const int width = 5;
 
     static const std::map<bool, string> color_map = {
@@ -353,6 +368,7 @@ void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
         }
         
     }
+    gv->rearrange();
 }
 
 class MapGraph::DistanceHeuristic : public Astar::heuristic_t{
@@ -370,7 +386,8 @@ public:
     }
 };
 
-void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, node_t src, node_t dst, bool visited) const{
+void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool visited) const{
+    GraphViewer *gv = createGraphViewer();
 
     DWGraph G = getFullGraph();
 
@@ -483,7 +500,7 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, node_t src, 
             }
             ++i;
         }
-        
     }
+    gv->rearrange();
 }
 

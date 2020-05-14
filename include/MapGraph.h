@@ -63,11 +63,11 @@ private:
 public:
     MapGraph(const std::string &path);
     DWGraph getFullGraph() const;
-    void drawRoads (GraphViewer *gv, int fraction, int display) const;
-    void drawSpeeds(GraphViewer *gv, int fraction, int display) const;
-    void drawSCC   (GraphViewer *gv, int fraction, int display) const;
+    void drawRoads (int fraction, int display) const;
+    void drawSpeeds(int fraction, int display) const;
+    void drawSCC   (int fraction, int display) const;
     class DistanceHeuristic;
-    void drawPath  (GraphViewer *gv, int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst, bool visited) const;
+    void drawPath  (int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst, bool visited) const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED
