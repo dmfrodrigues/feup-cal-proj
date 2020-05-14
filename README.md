@@ -114,13 +114,13 @@ Roads are coloured red if they connect two nodes in the train station's SCC, or 
 ### Shortest path
 
 ```
-./main scc FRACTION FLAGS SOUR DEST
+./main scc FRACTION FLAGS SOUR DEST [-v]
 
 FRACTION    Fraction of nodes to draw (improves display performance).
 FLAGS       Flag which roads to draw (add them to combine).
-
-SOUR        Source (beginning) of the path we are looking for
-DEST        Destination (end) of the path we are looking for
+SOUR        Source (beginning) of the path we are looking for.
+DEST        Destination (end) of the path we are looking for.
+-v          Colour visited nodes according to the algorithms that explored them.
 ```
 
 Roads are coloured red if they connect two nodes in the shortest path between SOUR and DEST, or gray otherwise.
