@@ -42,26 +42,38 @@ make test   # Run unit tests
 
 ## Running
 
-### View
+### Interesting locations
+
+You can use some of these locations to explore most functionalities of this program:
+
+| Location        | Node number |
+|-----------------|-------------|
+| Fábrica Nortada | 286968787   |
+| Fábrica Unicer  | 7186948192  |
+
+
+### Graphical uses
+
+For all graphical uses, `FLAGS` flags which roads to draw (add them to combine):
+
+| Type of road  | Description   | Flag  |
+|---------------|---------------|-------|
+| Motorway      | Red           |     1 |
+| Trunk         | Pink          |     2 |
+| Primary       | Orange        |     4 |
+| Secondary     | Yellow        |     8 |
+| Tertiary      | Gray          |    16 |
+| Road          | Gray          |    32 |
+| Residential   | Gray          |    64 |
+| Slow          | Gray, dashed  |   128 |
+
+#### View
 
 ```
 ./main view FRACTION FLAGS
 
 FRACTION    Fraction of nodes to draw (improves display performance).
-FLAGS       Flag which roads to draw (add them to combine):
-
-            ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━┓
-            ┃ Type of road  ┃ Description   ┃ Flag  ┃
-            ┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━┩
-            │ Motorway      │ Red           │     1 │
-            │ Trunk         │ Pink          │     2 │
-            │ Primary       │ Orange        │     4 │
-            │ Secondary     │ Yellow        │     8 │
-            │ Tertiary      │ Gray          │    16 │
-            │ Road          │ Gray          │    32 │
-            │ Residential   │ Gray          │    64 │
-            │ Slow          │ Gray, dashed  │   128 │
-            └───────────────┴───────────────┴───────┘
+FLAGS       Flag which roads to draw (add them to combine).
 ```
 
 #### Examples
@@ -75,33 +87,18 @@ FLAGS       Flag which roads to draw (add them to combine):
 ./main speed FRACTION FLAGS
 
 FRACTION    Fraction of nodes to draw (improves display performance).
-FLAGS       Flag which roads to draw (add them to combine):
-
-            ┏━━━━━━━━━━━━━━━┳━━━━━━━┓
-            ┃ Type of road  ┃ Flag  ┃
-            ┡━━━━━━━━━━━━━━━╇━━━━━━━┩
-            │ Motorway      │     1 │
-            │ Trunk         │     2 │
-            │ Primary       │     4 │
-            │ Secondary     │     8 │
-            │ Tertiary      │    16 │
-            │ Road          │    32 │
-            │ Residential   │    64 │
-            │ Slow          │   128 │
-            └───────────────┴───────┘
+FLAGS       Flag which roads to draw (add them to combine).
+```
 
 Roads are coloured according to the following table:
-┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
-┃ Speed [km/h] (up to)  ┃ Colour  ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
-│                   120 │ Red     │
-│                   100 │ Orange  │
-│                    80 │ Yellow  │
-│                    60 │ Green   │
-│                    50 │ Black   │
-│                    40 │ Gray    │
-└───────────────────────┴─────────┘
-```
+| Speed [km/h] (up to)  | Colour  |
+|-----------------------|---------|
+|                   120 | Red     |
+|                   100 | Orange  |
+|                    80 | Yellow  |
+|                    60 | Green   |
+|                    50 | Black   |
+|                    40 | Gray    |
 
 ### Strongly connected components
 
@@ -109,22 +106,21 @@ Roads are coloured according to the following table:
 ./main scc FRACTION FLAGS
 
 FRACTION    Fraction of nodes to draw (improves display performance).
-FLAGS       Flag which roads to draw (add them to combine):
-
-            ┏━━━━━━━━━━━━━━━┳━━━━━━━┓
-            ┃ Type of road  ┃ Flag  ┃
-            ┡━━━━━━━━━━━━━━━╇━━━━━━━┩
-            │ Motorway      │     1 │
-            │ Trunk         │     2 │
-            │ Primary       │     4 │
-            │ Secondary     │     8 │
-            │ Tertiary      │    16 │
-            │ Road          │    32 │
-            │ Residential   │    64 │
-            │ Slow          │   128 │
-            └───────────────┴───────┘
+FLAGS       Flag which roads to draw (add them to combine).
+```
 
 Roads are coloured red if they connect two nodes in the train station's SCC, or gray otherwise.
+
+### Shortest path
+
 ```
-Nortada: 286968787
-Unicer: 7186948192
+./main scc FRACTION FLAGS SOUR DEST
+
+FRACTION    Fraction of nodes to draw (improves display performance).
+FLAGS       Flag which roads to draw (add them to combine).
+
+SOUR        Source (beginning) of the path we are looking for
+DEST        Destination (end) of the path we are looking for
+```
+
+Roads are coloured red if they connect two nodes in the shortest path between SOUR and DEST, or gray otherwise.
