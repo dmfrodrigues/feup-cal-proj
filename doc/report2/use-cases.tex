@@ -48,8 +48,10 @@ All graphical uses make use of \href{https://github.com/STEMS-group/GraphViewer}
 \end{center}
 \subsection{Strongly connected components}
 \texttt{./main scc FRACTION FLAGS} draws the road network, colouring roads red if they connect two nodes in the train station's \acrshort{SCC}, or gray if at least one of the nodes is not in the train station's \acrshort{SCC}.
+\subsection{Shortest path}
+\texttt{./main path FRACTION FLAGS SOUR DEST} draws the road network, colouring roads red if they connect two nodes in the shortest path (actually least-time path) from nodes \texttt{SOUR} to \texttt{DEST}.
+
 \section{To implement}
 \begin{itemize}
-    \item Find the shortest path from one node to another.
     \item Given a list of vans and services for a day, find the set of routes for that day.
 \end{itemize}
