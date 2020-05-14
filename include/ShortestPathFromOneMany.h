@@ -1,12 +1,12 @@
-#ifndef SHORTESTPATHFROMONEMANY_H_INCLUDED
-#define SHORTESTPATHFROMONEMANY_H_INCLUDED
+#ifndef SHORTESTPATHALLFROMONEMANY_H_INCLUDED
+#define SHORTESTPATHALLFROMONEMANY_H_INCLUDED
 
-#include "ShortestPath.h"
+#include "ShortestPathAll.h"
 
 #include <unordered_map>
 
 template<class T>
-class ShortestPathFromOneMany : public ShortestPath {
+class ShortestPathAllFromOneMany : public ShortestPathAll {
 private:
     const DWGraph *G;
     std::unordered_map<DWGraph::node_t, T> oneManys;
@@ -18,30 +18,30 @@ public:
 };
 
 template<class T>
-void ShortestPathFromOneMany<T>::initialize(const DWGraph *G){
+void ShortestPathAllFromOneMany<T>::initialize(const DWGraph *G){
     this->G = G;
     oneManys.clear();
-    for(const node_t &u: G->getNodes()){
+    for(const DWGraph::node_t &u: G->getNodes()){
         oneManys[u] = T();
         oneManys[u].initialize(G, u);
     }
 }
 
 template<class T>
-void ShortestPathFromOneMany::run(){
-    for(const node_t &s: G->getNodes()){
-        dijkstra[s].run();
+void ShortestPathAllFromOneMany<T>::run(){
+    for(const DWGraph::node_t &s: G->getNodes()){
+        oneManys[s].run();
     }
 }
 
 template<class T>
-std::list<node_t> ShortestPathFromOneMany<T>::getPath(node_t s, node_t d) const{
+std::list<DWGraph::node_t> ShortestPathAllFromOneMany<T>::getPath(DWGraph::node_t s, DWGraph::node_t d) const{
     return oneManys.at(s).getPath(d);
 }
 
 template<class T>
-weight_t ShortestPathFromOneMany<T>::getPathWeight(node_t s, node_t d) const{
+DWGraph::weight_t ShortestPathAllFromOneMany<T>::getPathWeight(DWGraph::node_t s, DWGraph::node_t d) const{
     return oneManys.at(s).getPathWeight(d);
 }
 
-#endif //SHORTESTPATHFROMONEMANY_H_INCLUDED
+#endif //SHORTESTPATHALLFROMONEMANY_H_INCLUDED
