@@ -1,5 +1,6 @@
 #include "MapGraph.h"
 
+#include "Astar.h"
 #include "KosarajuV.h"
 #include "DFS.h"
 #include "Dijkstra.h"
@@ -8,6 +9,7 @@
 #include <fstream>
 #include <unordered_set>
 #include <map>
+#include <vector>
 
 #include <cmath>
 
@@ -15,6 +17,8 @@
 #define SECONDS_TO_MICROS       1000000     // Convert seconds to milliseconds
 #define KMH_TO_MS               (1/3.6)     // Convert km/h to m/s
 #define SPEED_REDUCTION_FACTOR  0.75        // Reduce speed to account for intense road traffic, and the fact people not always travel at maximum speed 
+
+typedef DWGraph::node_t node_t;
 
 double MapGraph::pos_t::getDistanceSI(const MapGraph::pos_t &p1, const MapGraph::pos_t &p2){
     pos_t m = (p1+p2)/2;
@@ -100,7 +104,7 @@ MapGraph::MapGraph(const std::string &path){
         ifstream is(path + ".nodes");
         size_t numberNodes; is >> numberNodes;
         for(size_t i = 0; i < numberNodes; ++i){
-            DWGraph::node_t id; pos_t p; is >> id >> p.lat >> p.lon;
+            node_t id; pos_t p; is >> id >> p.lat >> p.lon;
             nodes[id] = p;
         }
     }
@@ -112,7 +116,7 @@ MapGraph::MapGraph(const std::string &path){
             is >> c >> way.speed; way.edgeType = static_cast<edge_type_t>(c);
             size_t numberNodes; is >> numberNodes;
             for(size_t j = 0; j < numberNodes; ++j){
-                DWGraph::node_t id; is >> id;
+                node_t id; is >> id;
                 way.nodes.push_back(id);
             }
             ways.push_back(way);
@@ -209,7 +213,7 @@ void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
         lat_max = std::max(lat_max, u.second.lat);
         lon_min = std::min(lon_min, u.second.lon);
     }
-    std::unordered_set<DWGraph::node_t> drawn_nodes;
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
         string color = color_map.at(way.edgeType);
@@ -219,9 +223,9 @@ void MapGraph::drawRoads(GraphViewer *gv, int fraction, int display) const{
 
         if(!draw) continue;
 
-        DWGraph::node_t u = 0;
+        node_t u = 0;
         size_t i = 0;
-        for(const DWGraph::node_t &v: way.nodes){
+        for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
                     long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
@@ -265,7 +269,7 @@ void MapGraph::drawSpeeds(GraphViewer *gv, int fraction, int display) const{
         lat_max = std::max(lat_max, u.second.lat);
         lon_min = std::min(lon_min, u.second.lon);
     }
-    std::unordered_set<DWGraph::node_t> drawn_nodes;
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
         auto it = color_map.lower_bound(way.getMaxSpeed());
@@ -276,9 +280,9 @@ void MapGraph::drawSpeeds(GraphViewer *gv, int fraction, int display) const{
 
         if(!draw) continue;
 
-        DWGraph::node_t u = 0;
+        node_t u = 0;
         size_t i = 0;
-        for(const DWGraph::node_t &v: way.nodes){
+        for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
                     long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
@@ -320,7 +324,7 @@ void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
         lat_max = std::max(lat_max, u.second.lat);
         lon_min = std::min(lon_min, u.second.lon);
     }
-    std::unordered_set<DWGraph::node_t> drawn_nodes;
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
 
@@ -328,9 +332,9 @@ void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
 
         if(!draw) continue;
 
-        DWGraph::node_t u = 0;
+        node_t u = 0;
         size_t i = 0;
-        for(const DWGraph::node_t &v: way.nodes){
+        for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
                     long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
@@ -354,31 +358,82 @@ void MapGraph::drawSCC(GraphViewer *gv, int fraction, int display) const{
     }
 }
 
-void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst) const{
-    static const std::map<bool, string> color_map = {
-        {true , "RED"},
-        {false, "GRAY"}
-    };
+class MapGraph::DistanceHeuristic : public Astar::heuristic_t{
+private:
+    const std::unordered_map<node_t, MapGraph::pos_t> &nodes;
+    MapGraph::pos_t dst_pos;
+    double factor;
+public:
+    DistanceHeuristic(const std::unordered_map<node_t, MapGraph::pos_t> &nodes,
+                      MapGraph::pos_t dst_pos,
+                      double factor): nodes(nodes), dst_pos(dst_pos), factor(factor){}
+    DWGraph::weight_t operator()(node_t u) const{
+        auto d = MapGraph::pos_t::getDistanceSI(dst_pos, nodes.at(u));
+        return d*factor;
+    }
+};
 
-    static const std::map<bool, int> width_map = {
-        {true , 10},
-        {false, 5}
-    };
+void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, node_t src, node_t dst, bool visited) const{
 
     DWGraph G = getFullGraph();
-    ShortestPath *shortestPath = new ShortestPath::FromOneMany(new Dijkstra());   
-    shortestPath->initialize(&G, src, dst);
-    shortestPath->run();
-    std::list<DWGraph::node_t> path_list = shortestPath->getPath();
-    std::unordered_set<DWGraph::node_t> path(path_list.begin(), path_list.end());
 
-    double lat_max = -90;
-    double lon_min = +180;
-    for(const auto &u: nodes){
-        lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon);
+    std::vector<std::string> name({
+        "Dijkstra's algorithm",
+        "A* algorithm, " + std::to_string(int(120*SPEED_REDUCTION_FACTOR)) +"km/h time estimate [best-performance admissible heuristic]",
+        "A* algorithm, 70km/h",
+        "A* algorithm, 50km/h",
+        "A* algorithm, 30km/h"
+    });
+
+    std::vector<ShortestPath*> shortestPaths({
+        new Astar(),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(120*KMH_TO_MS*SPEED_REDUCTION_FACTOR))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(70*KMH_TO_MS))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(50*KMH_TO_MS))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(30*KMH_TO_MS)))
+    });
+
+    std::vector<std::string> pathColor({
+        "BLACK",
+        "BLACK",
+        "MAGENTA",
+        "BLUE",
+        "CYAN"
+    });
+
+    std::vector<std::string> visitedColor({
+        "PINK",
+        "RED",
+        "MAGENTA",
+        "BLUE",
+        "CYAN"
+    });
+
+    std::vector<std::unordered_set<node_t> > paths(shortestPaths.size());
+
+    for(size_t i = 0; i < shortestPaths.size(); ++i){
+        shortestPaths[i]->initialize(&G, src, dst);
+        shortestPaths[i]->run();
+        std::list<node_t> path = shortestPaths[i]->getPath();
+        paths[i] = std::unordered_set<node_t>(path.begin(), path.end());
+        ShortestPath::statistics_t stats = shortestPaths[i]->getStatistics();
+        std::cout   << name[i] << " (" << (!visited ? pathColor[i] : visitedColor[i]) << ")\n"
+                    << "- Analysed nodes: " << stats.analysed_nodes << "\n"
+                    << "- Analysed edges: " << stats.analysed_edges << "\n"
+                    << "- Total time    : " << shortestPaths[i]->getPathWeight() << " (+" << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%)\n"
+                    << "- Nodes in path : " << paths[i].size() << "\n";
     }
-    std::unordered_set<DWGraph::node_t> drawn_nodes;
+
+    double lat_min = 90, lat_max = -90;
+    double lon_min = +180, lon_max = -180;
+    for(const auto &u: nodes){
+        lat_min = std::min(lat_min, u.second.lat); lat_max = std::max(lat_max, u.second.lat);
+        lon_min = std::min(lon_min, u.second.lon); lon_max = std::max(lon_max, u.second.lon);
+    }
+    double lat = (lat_max+lat_min)/2;
+    double lon = (lon_max+lon_min)/2;
+
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
 
@@ -386,24 +441,46 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, DWGraph::nod
 
         if(!draw) continue;
 
-        DWGraph::node_t u = 0;
+        node_t u = 0;
         size_t i = 0;
-        for(const DWGraph::node_t &v: way.nodes){
+        for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
+                    long long x = +(nodes.at(v).lon-lon)*COORDMULT;
+                    long long y = -(nodes.at(v).lat-lat)*COORDMULT;
                     gv->addNode(v, x, y);
                     gv->setVertexSize(v, 1);
                     drawn_nodes.insert(v);
                 }
                 if(u != 0){
-                    string color = color_map.at(path.count(u) && path.count(v));
-                    int width = width_map.at(path.count(u) && path.count(v));
+                    string color = "";
+                    int width = 4;
+
+                    if(!visited){
+                        for(size_t i = 0; i < shortestPaths.size() && color == ""; ++i){
+                            if(paths[i].count(u) && paths[i].count(v)){
+                                color = pathColor[i];
+                                width = 12;
+                            }
+                        }
+                    } else {
+                        if(paths[0].count(u) && paths[0].count(v)){
+                            color = pathColor[0];
+                            width = 12;
+                        }
+                        for(long i = shortestPaths.size()-1; i >= 0 && color == ""; --i){
+                            if(shortestPaths[i]->hasVisited(u) && shortestPaths[i]->hasVisited(v)){
+                                color = visitedColor[i];
+                            }
+                        }
+                    }
+                    if(color == "") color = "LIGHT_GRAY";
+
                     gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
                     gv->setEdgeColor(edge_id, color);
                     gv->setEdgeThickness(edge_id, width);
                     ++edge_id;
+                    
                 }
                 u = v;
             }

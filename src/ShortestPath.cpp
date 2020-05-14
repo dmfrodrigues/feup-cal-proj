@@ -3,6 +3,8 @@
 typedef DWGraph::node_t     node_t;
 typedef DWGraph::weight_t   weight_t;
 
+ShortestPath::~ShortestPath(){}
+
 std::list<node_t> ShortestPath::getPath() const{
     std::list<node_t> res;
     node_t d = getDest();
@@ -42,4 +44,12 @@ node_t ShortestPath::FromOneMany::getPrev(node_t u) const {
 
 weight_t ShortestPath::FromOneMany::getPathWeight() const {
     return oneMany->getPathWeight(d);
+}
+
+ShortestPath::statistics_t ShortestPath::FromOneMany::getStatistics() const{
+    return statistics_t();
+}
+
+bool ShortestPath::FromOneMany::hasVisited(DWGraph::node_t u) const{
+    return false;
 }

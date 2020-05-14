@@ -53,7 +53,7 @@ void path(int argc, const char *argv[]){
     gv->defineVertexSize(0);
     gv->createWindow(1900, 1000);
     MapGraph M("map/processed/AMP");
-    M.drawPath(gv, fraction, display, atoll(argv[4]), atoll(argv[5]));
+    M.drawPath(gv, fraction, display, atoll(argv[4]), atoll(argv[5]), argc > 6 && string(argv[6]) == "-v");
     gv->rearrange();
 }
 

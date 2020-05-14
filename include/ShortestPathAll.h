@@ -18,8 +18,8 @@ public:
 
 class ShortestPathAll::FromOneMany : public ShortestPathAll {
 private:
-    ShortestPathOneMany *oneMany = NULL;
-    const DWGraph *G = NULL;
+    ShortestPathOneMany *oneMany = nullptr;
+    const DWGraph *G = nullptr;
     std::unordered_map<DWGraph::node_t, std::unordered_map<DWGraph::node_t, DWGraph::weight_t> > dist;
     std::unordered_map<DWGraph::node_t, std::unordered_map<DWGraph::node_t, DWGraph::node_t  > > prev;
 public:

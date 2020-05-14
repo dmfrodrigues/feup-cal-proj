@@ -132,17 +132,17 @@ unordered_set<string> service_reject = {"campground", "emergency_access",
                                         "drive-through"};
 edge_type_t get_edge_type(xml_node<> *it) {
     auto parea = find_tag(it, "area");
-    if (parea != NULL && string(parea->first_attribute("v")->value()) == "yes") return edge_type_t::NO;
+    if (parea != nullptr && string(parea->first_attribute("v")->value()) == "yes") return edge_type_t::NO;
     
     /* highway */
     auto phighway = find_tag(it, "highway");{
-        if (phighway == NULL) return edge_type_t::NO;
+        if (phighway == nullptr) return edge_type_t::NO;
         string highway = phighway->first_attribute("v")->value();
         if (edge_reject.find(highway) != edge_reject.end()) return edge_type_t::NO;
         if (edge_accept.find(highway) != edge_accept.end()) return edge_accept[highway];
         if (highway == "service"){
             auto paccess  = find_tag(it, "access");
-            if(paccess == NULL) return edge_type_t::SERVICE;
+            if(paccess == nullptr) return edge_type_t::SERVICE;
             string access = paccess->first_attribute("v")->value();
             if (access == "private" || access == "no" ) return edge_type_t::NO;
             return edge_type_t::SERVICE;
@@ -157,7 +157,7 @@ edge_type_t get_edge_type(xml_node<> *it) {
 
 int main(int argc, char *argv[]) {
     assert(argc == 2);
-    char *text = NULL; {
+    char *text = nullptr; {
         string all = "";
         string buf;
         while (getline(cin, buf)) {
