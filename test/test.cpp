@@ -3,7 +3,7 @@
 
 #include "DFS.h"
 #include "Dijkstra.h"
-#include "ShortestPathAllFromOneMany.h"
+#include "ShortestPathAll.h"
 #include "Kosaraju.h"
 #include "KosarajuV.h"
 
@@ -104,7 +104,7 @@ TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
     G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
     G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);
     
-    ShortestPathAll *shortestPath = new ShortestPathAllFromOneMany<Dijkstra>();
+    ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra());
     shortestPath->initialize(&G);
     shortestPath->run();
 

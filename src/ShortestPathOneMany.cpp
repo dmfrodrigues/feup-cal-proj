@@ -1,0 +1,11 @@
+#include "ShortestPathOneMany.h"
+
+std::list<DWGraph::node_t> ShortestPathOneMany::getPath(DWGraph::node_t d) const{
+    std::list<DWGraph::node_t> res;
+    while(d != getStart()){
+        res.push_front(d);
+        d = getPrev(d);
+    }
+    res.push_front(d);
+    return res;
+}

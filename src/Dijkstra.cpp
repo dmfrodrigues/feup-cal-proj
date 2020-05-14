@@ -14,6 +14,10 @@ typedef std::priority_queue<std::pair<weight_t, node_t>,
                std::greater<std::pair<weight_t, node_t>>> min_priority_queue;
 #define mk(a, b) (std::make_pair((a), (b)))
 
+node_t Dijkstra::getStart() const{
+    return s;
+}
+
 void Dijkstra::initialize(const DWGraph *G, DWGraph::node_t s){
     this->s = s;
     this->G = G;
@@ -40,14 +44,8 @@ void Dijkstra::run(){
     }
 }
 
-std::list<node_t> Dijkstra::getPath(node_t d) const{
-    std::list<node_t> res;
-    while(d != s){
-        res.push_front(d);
-        d = prev.at(d);
-    }
-    res.push_front(d);
-    return res;
+DWGraph::node_t Dijkstra::getPrev(DWGraph::node_t d) const{
+    return prev.at(d);
 }
 
 weight_t Dijkstra::getPathWeight(node_t d) const{

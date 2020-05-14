@@ -3,6 +3,7 @@
 #include "KosarajuV.h"
 #include "DFS.h"
 #include "Dijkstra.h"
+#include "ShortestPath.h"
 
 #include <fstream>
 #include <unordered_set>
@@ -365,10 +366,10 @@ void MapGraph::drawPath(GraphViewer *gv, int fraction, int display, DWGraph::nod
     };
 
     DWGraph G = getFullGraph();
-    ShortestPathOneMany *shortestPath = new Dijkstra();   
-    shortestPath->initialize(&G, src);
+    ShortestPath *shortestPath = new ShortestPath::FromOneMany(new Dijkstra());   
+    shortestPath->initialize(&G, src, dst);
     shortestPath->run();
-    std::list<DWGraph::node_t> path_list = shortestPath->getPath(dst);
+    std::list<DWGraph::node_t> path_list = shortestPath->getPath();
     std::unordered_set<DWGraph::node_t> path(path_list.begin(), path_list.end());
 
     double lat_max = -90;
