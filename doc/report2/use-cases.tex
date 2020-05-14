@@ -54,7 +54,7 @@ The A* versions are distinguished by the maximum speed they assume a car can go.
 \begin{center}
     \begin{tabular}{l | l | l}
         \textbf{Algorithm}            & \textbf{Path colour} & \textbf{Visited nodes colour} \\ \hline
-        Dijkstra's algorithm          & Black                & Pink                          \\
+        Dijkstra's algorithm with \hyperref[alg:dijkstra-early-stop]{early stop} & Black                & Pink                          \\
         A* algorithm, $\SI{90}{km/h}$ & Black                & Red                           \\
         A* algorithm, $\SI{70}{km/h}$ & Magenta              & Magenta                       \\
         A* algorithm, $\SI{50}{km/h}$ & Blue                 & Blue                          \\

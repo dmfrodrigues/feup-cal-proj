@@ -127,7 +127,7 @@ Roads are coloured according to the following table:
 
 | Algorithm            | Path colour | Visited nodes colour |
 |----------------------|-------------|----------------------|
-| Dijkstra's algorithm | Black       | Pink                 |
+| Dijkstra's algorithm with early stop | Black       | Pink                 |
 | A* algorithm, 90km/h | Black       | Red                  |
 | A* algorithm, 70km/h | Magenta     | Magenta              |
 | A* algorithm, 50km/h | Blue        | Blue                 |
