@@ -48,6 +48,8 @@ You can use some of these locations to explore most functionalities of this prog
 
 | Location                      | Municipality      | Node number   |
 |-------------------------------|-------------------|---------------|
+| Monte Crasto                  | Gondomar          | 2454698517    |
+| Casa Branca de Gramido        | Gondomar          | 1551005098    |
 | Maia city hall                | Maia              | 5272120014    |
 | Porto Airport                 | Maia              | 4102094652    |
 | SONAE                         | Maia              | 5702537845    |
@@ -61,6 +63,7 @@ You can use some of these locations to explore most functionalities of this prog
 | FEUP                          | Porto             | 4523960191    |
 | Palácio de Cristal            | Porto             | 3391598673    |
 | São João Baptista Fortress    | Porto             | 4567051363    |
+| Serra de Santa Justa          | Valongo           | 6426059706    |
 | Afurada marina                | Vila Nova de Gaia | 1143316550    |
 | Monastery of Serra do Pilar   | Vila Nova de Gaia | 3398946056    |
 | Sandeman                      | Vila Nova de Gaia | 1143316550    |
