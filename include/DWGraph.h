@@ -17,7 +17,7 @@ public:
     struct Edge{
         node_t v;
         weight_t w;
-        Edge(node_t v, weight_t w):v(v),w(w){}
+        Edge(node_t v, weight_t w);
     };
 private:
     std::list<node_t> nodes;

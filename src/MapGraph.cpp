@@ -65,8 +65,9 @@ MapGraph::MapGraph(const std::string &path){
         ifstream is(path + ".nodes");
         size_t numberNodes; is >> numberNodes;
         for(size_t i = 0; i < numberNodes; ++i){
-            node_t id; coord_t p; is >> id >> p.lat >> p.lon;
-            nodes[id] = p;
+            coord_t::deg_t lat, lon;
+            node_t id; is >> id >> lat >> lon;
+            nodes[id] = coord_t(lat, lon);
         }
     }
     {
@@ -83,6 +84,17 @@ MapGraph::MapGraph(const std::string &path){
             ways.push_back(way);
         }
     }
+    // {
+    //     coord_t::deg_t lat_min = 90, lat_max = -90;
+    //     coord_t::deg_t lon_min = +180, lon_max = -180;
+    //     for(const auto &u: nodes){
+    //         lat_min = std::min(lat_min, u.second.getLat()); lat_max = std::max(lat_max, u.second.getLat());
+    //         lon_min = std::min(lon_min, u.second.getLon()); lon_max = std::max(lon_max, u.second.getLon());
+    //     }
+    //     min_coord = coord_t(lat_max, lon_min);
+    //     max_coord = coord_t(lat_min, lon_max);
+    //     mean_coord = (min_coord + max_coord)/2;
+    // }
 }
 
 DWGraph MapGraph::getFullGraph() const{
@@ -198,8 +210,8 @@ void MapGraph::drawRoads(int fraction, int display) const{
     double lat_max = -90;
     double lon_min = +180;
     for(const auto &u: nodes){
-        lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon);
+        lat_max = std::max(lat_max, u.second.getLat());
+        lon_min = std::min(lon_min, u.second.getLon());
     }
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
@@ -216,8 +228,8 @@ void MapGraph::drawRoads(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
+                    long long x = +(nodes.at(v).getLon()-lon_min)*COORDMULT;
+                    long long y = -(nodes.at(v).getLat()-lat_max)*COORDMULT;
                     gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
                 }
@@ -255,8 +267,8 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
     double lat_max = -90;
     double lon_min = +180;
     for(const auto &u: nodes){
-        lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon);
+        lat_max = std::max(lat_max, u.second.getLat());
+        lon_min = std::min(lon_min, u.second.getLon());
     }
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
@@ -274,8 +286,8 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
+                    long long x = +(nodes.at(v).getLon()-lon_min)*COORDMULT;
+                    long long y = -(nodes.at(v).getLat()-lat_max)*COORDMULT;
                     gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
                 }
@@ -314,8 +326,8 @@ void MapGraph::drawSCC(int fraction, int display) const{
     double lat_max = -90;
     double lon_min = +180;
     for(const auto &u: nodes){
-        lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon);
+        lat_max = std::max(lat_max, u.second.getLat());
+        lon_min = std::min(lon_min, u.second.getLon());
     }
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
@@ -330,8 +342,8 @@ void MapGraph::drawSCC(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
+                    long long x = +(nodes.at(v).getLon()-lon_min)*COORDMULT;
+                    long long y = -(nodes.at(v).getLat()-lat_max)*COORDMULT;
                     gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
                 }
@@ -422,8 +434,8 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
     double lat_min = 90, lat_max = -90;
     double lon_min = +180, lon_max = -180;
     for(const auto &u: nodes){
-        lat_min = std::min(lat_min, u.second.lat); lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon); lon_max = std::max(lon_max, u.second.lon);
+        lat_min = std::min(lat_min, u.second.getLat()); lat_max = std::max(lat_max, u.second.getLat());
+        lon_min = std::min(lon_min, u.second.getLon()); lon_max = std::max(lon_max, u.second.getLon());
     }
     double lat = (lat_max+lat_min)/2;
     double lon = (lon_max+lon_min)/2;
@@ -441,8 +453,8 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat)*COORDMULT;
+                    long long x = +(nodes.at(v).getLon()-lon)*COORDMULT;
+                    long long y = -(nodes.at(v).getLat()-lat)*COORDMULT;
                     gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
                 }

@@ -1,5 +1,7 @@
 #include "DWGraph.h"
 
+DWGraph::Edge::Edge(node_t v, weight_t w):v(v),w(w){}
+
 void DWGraph::assert_integrity() const{
     if(nodes.size() != adj.size()) throw std::logic_error("");
     std::unordered_set<node_t> nodes_s(nodes.begin(), nodes.end());
