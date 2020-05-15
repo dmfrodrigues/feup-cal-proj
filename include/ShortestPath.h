@@ -25,7 +25,7 @@ public:
 class ShortestPath::FromOneMany : public ShortestPath{
 private:
     ShortestPathOneMany *oneMany = nullptr;
-    const DWGraph *G;
+    const DWGraph *G = nullptr;
     DWGraph::node_t s, d;
 public:
     FromOneMany(ShortestPathOneMany *oneMany);

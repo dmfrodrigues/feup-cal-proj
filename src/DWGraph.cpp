@@ -1,5 +1,7 @@
 #include "DWGraph.h"
 
+DWGraph::Edge::Edge(node_t v_, weight_t w_):v(v_),w(w_){}
+
 void DWGraph::assert_integrity() const{
     if(nodes.size() != adj.size()) throw std::logic_error("");
     std::unordered_set<node_t> nodes_s(nodes.begin(), nodes.end());
@@ -19,6 +21,10 @@ void DWGraph::addNode(node_t u){
         throw std::invalid_argument("Node already exists");
     nodes.push_back(u);
     adj[u] = std::list<Edge>();
+}
+
+bool DWGraph::hasNode(node_t u) const{
+    return (adj.count(u));
 }
 
 void DWGraph::addEdge(node_t u, node_t v, weight_t w){

@@ -40,10 +40,10 @@ int main(int argc, char *argv[]){
     try {
         if(argc < 2) throw invalid_argument("at least one argument must be provided");
         MapGraph M("map/processed/AMP");
-        if(string(argv[1]) == "view" ) view (argc, (const char **)argv, M);
-        if(string(argv[1]) == "speed") speed(argc, (const char **)argv, M);
-        if(string(argv[1]) == "scc"  ) scc  (argc, (const char **)argv, M);
-        if(string(argv[1]) == "path" ) path (argc, (const char **)argv, M);
+        if(string(argv[1]) == "view" ) view (argc, const_cast<const char **>(argv), M);
+        if(string(argv[1]) == "speed") speed(argc, const_cast<const char **>(argv), M);
+        if(string(argv[1]) == "scc"  ) scc  (argc, const_cast<const char **>(argv), M);
+        if(string(argv[1]) == "path" ) path (argc, const_cast<const char **>(argv), M);
     } catch(const invalid_argument &e){
         cout << "Caught exception: " << e.what() << "\n";
         cout << "Usage: ./main (view | speed | scc) FRACTION FLAGS\n"

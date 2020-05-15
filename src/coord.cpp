@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+coord_t::coord_t(){}
+coord_t::coord_t(coord_t::deg_t lat_, coord_t::deg_t lon_): lat(lat_),lon(lon_){}
+
 double coord_t::getDistanceSI(const coord_t &p1, const coord_t &p2){
     coord_t m = (p1+p2)/2;
     double dlat = p2.lat - p1.lat;
@@ -12,17 +15,11 @@ double coord_t::getDistanceSI(const coord_t &p1, const coord_t &p2){
 }
 
 coord_t coord_t::operator+(const coord_t &p) const{
-    coord_t ret;
-    ret.lat = lat + p.lat;
-    ret.lon = lon + p.lon;
-    return ret;
+    return coord_t(lat+p.lat, lon+p.lon);
 }
 
 coord_t coord_t::operator/(double d) const{
-    coord_t ret = *this;
-    ret.lat /= d;
-    ret.lon /= d;
-    return ret;
+    return coord_t(lat/d, lon/d);
 }
 
 double coord_t::getMetersPerLatDeg() const{
@@ -39,3 +36,6 @@ double coord_t::getMetersPerLonDeg() const{
           -    93.5  *cos(3*phi)
           +     0.118*cos(5*phi);
 }
+
+coord_t::deg_t coord_t::getLat() const{ return lat; }
+coord_t::deg_t coord_t::getLon() const{ return lon; }

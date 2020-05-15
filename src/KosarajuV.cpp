@@ -2,13 +2,13 @@
 
 typedef DUGraph::node_t node_t;
 
-KosarajuV::KosarajuV(Reachability *r){
-    this->r = r;
+KosarajuV::KosarajuV(Reachability *r_){
+    this->r = r_;
 }
 
-void KosarajuV::initialize(const DUGraph *G, node_t s){
-    this->G = G;
-    this->s = s;
+void KosarajuV::initialize(const DUGraph *G_, node_t s_){
+    this->G = G_;
+    this->s = s_;
     this->isSCC.clear();
 }
 
