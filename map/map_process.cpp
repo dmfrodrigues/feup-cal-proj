@@ -49,11 +49,22 @@ private:
     }
 
     dir_t get_dir(xml_node<> *it){
-        auto p = find_tag(it, "oneway");
-        if(!p) return dir_t::Both;
-        if(string(p->first_attribute("v")->value()) == "yes") return dir_t::Front;
-        if(string(p->first_attribute("v")->value()) == "no") return dir_t::Both;
-        if(string(p->first_attribute("v")->value()) == "reversible") return dir_t::Both;
+        // Oneway
+        auto poneway = find_tag(it, "oneway");
+        if(poneway != nullptr){
+            string oneway = poneway->first_attribute("v")->value();
+            if(oneway == "yes") return dir_t::Front;
+            if(oneway == "no") return dir_t::Both;
+            if(oneway == "reversible") return dir_t::Both;
+        }
+        // Roundabouts
+        auto pjunction = find_tag(it, "junction");
+        if(pjunction != nullptr){
+            string junction = pjunction->first_attribute("v")->value();
+            if(junction == "roundabout" || 
+               junction == "circular") return dir_t::Front;
+        }
+        // Return
         return dir_t::Both;
     }
 
