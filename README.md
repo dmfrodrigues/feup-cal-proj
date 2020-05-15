@@ -46,11 +46,26 @@ make test   # Run unit tests
 
 You can use some of these locations to explore most functionalities of this program:
 
-| Location        | Node number |
-|-----------------|-------------|
-| Fábrica Nortada | 286968787   |
-| Fábrica Unicer  | 7186948192  |
-
+| Location                      | Municipality      | Node number   |
+|-------------------------------|-------------------|---------------|
+| Maia city hall                | Maia              | 5272120014    |
+| Porto Airport                 | Maia              | 4102094652    |
+| SONAE                         | Maia              | 5702537845    |
+| Zoo Maia                      | Maia              | 4551001973    |
+| EXPONOR                       | Matosinhos        | 1436599811    |
+| Fábrica Unicer                | Matosinhos        | 7186948192    |
+| NorteShopping                 | Matosinhos        | 4606348154    |
+| Port of Leixões               | Matosinhos        | 4612166056    |
+| Fábrica Nortada               | Porto             | 286968787     |
+| FCUP                          | Porto             | 128672575     |
+| FEUP                          | Porto             | 4523960191    |
+| Palácio de Cristal            | Porto             | 3391598673    |
+| São João Baptista Fortress    | Porto             | 4567051363    |
+| Afurada marina                | Vila Nova de Gaia | 1143316550    |
+| Monastery of Serra do Pilar   | Vila Nova de Gaia | 3398946056    |
+| Sandeman                      | Vila Nova de Gaia | 1143316550    |
+| Senhor da Pedra beach         | Vila Nova de Gaia | 4764305642    |
+| Zoo Santo Inácio              | Vila Nova de Gaia | 1324797708    |
 
 ### Graphical uses
 
@@ -125,10 +140,10 @@ DEST        Destination (end) of the path we are looking for.
 
 Roads are coloured according to the following table:
 
-| Algorithm            | Path colour | Visited nodes colour |
-|----------------------|-------------|----------------------|
+| Algorithm                            | Path colour | Visited nodes colour |
+|--------------------------------------|-------------|----------------------|
 | Dijkstra's algorithm with early stop | Black       | Pink                 |
-| A* algorithm, 90km/h | Black       | Red                  |
-| A* algorithm, 70km/h | Magenta     | Magenta              |
-| A* algorithm, 50km/h | Blue        | Blue                 |
-| A* algorithm, 30km/h | Cyan        | Cyan                 |
+| A* algorithm, 90km/h                 | Black       | Red                  |
+| A* algorithm, 70km/h                 | Magenta     | Magenta              |
+| A* algorithm, 50km/h                 | Blue        | Blue                 |
+| A* algorithm, 30km/h                 | Cyan        | Cyan                 |
