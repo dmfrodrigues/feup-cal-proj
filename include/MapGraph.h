@@ -42,6 +42,7 @@ private:
     const DWGraph::node_t station = 1390706567;
 
     std::unordered_map<DWGraph::node_t, coord_t> nodes;
+    coord_t min_coord, max_coord, mean_coord;
     std::list<way_t> ways;
 public:
     MapGraph(const std::string &path);
