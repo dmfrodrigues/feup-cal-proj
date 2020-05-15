@@ -1,5 +1,17 @@
 #include "DWGraph.h"
 
+void DWGraph::assert_integrity() const{
+    if(nodes.size() != adj.size()) throw std::logic_error("");
+    std::unordered_set<node_t> nodes_s(nodes.begin(), nodes.end());
+    if(nodes.size() != nodes_s.size()) throw std::logic_error("");
+    for(const auto &Adj: adj){
+        if(!nodes_s.count(Adj.first)) throw std::logic_error("");
+        for(const auto &e: Adj.second){
+            if(!nodes_s.count(e.v)) throw std::logic_error("");
+        }
+    }
+}
+
 DWGraph::DWGraph(){}
 
 void DWGraph::addNode(node_t u){

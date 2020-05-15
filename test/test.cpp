@@ -132,8 +132,7 @@ TEST_CASE("A* algorithm", "[shortestpath-astar]"){
     G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
     G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);
     
-    Astar::heuristic_t h = [](DWGraph::node_t u)-> DWGraph::weight_t { return 0; };
-    ShortestPath *shortestPath = new Astar(h);
+    ShortestPath *shortestPath = new Astar();
     shortestPath->initialize(&G, 0, 6);
     shortestPath->run();
 

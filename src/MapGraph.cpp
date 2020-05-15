@@ -139,6 +139,23 @@ DWGraph MapGraph::getFullGraph() const{
     return G;
 }
 
+DWGraph MapGraph::getConnectedGraph() const{
+    DWGraph G = getFullGraph();
+    DUGraph Gu = (DUGraph)G;
+    SCCnode *scc = new KosarajuV(new DFS());
+    scc->initialize(&Gu, station);
+    scc->run();
+    std::list<DWGraph::node_t> nodes_to_remove;
+    for(const DUGraph::node_t &u: Gu.getNodes()){
+        if(!scc->is_scc(u)){
+            nodes_to_remove.push_back(u);
+        }
+    }
+    delete scc;
+    G.removeNodes(nodes_to_remove.begin(), nodes_to_remove.end());
+    return G;
+}
+
 const std::unordered_map<edge_type_t, MapGraph::Display> MapGraph::display_map = {
     {edge_type_t::MOTORWAY      , Display::MOTORWAY   },
     {edge_type_t::MOTORWAY_LINK , Display::MOTORWAY   },
@@ -326,10 +343,12 @@ void MapGraph::drawSCC(int fraction, int display) const{
         {false, "GRAY"}
     };
 
-    DUGraph G = (DUGraph)getFullGraph();
-    SCCnode *scc = new KosarajuV(new DFS());   
-    scc->initialize(&G, station);
-    scc->run();
+    DWGraph G  = getFullGraph();
+    std::unordered_set<DWGraph::node_t> connected_nodes; {
+        DWGraph Gu = getConnectedGraph();
+        const std::list<DWGraph::node_t> &l = Gu.getNodes();
+        connected_nodes = std::unordered_set<DWGraph::node_t>(l.begin(), l.end());
+    }
 
     double lat_max = -90;
     double lon_min = +180;
@@ -356,7 +375,7 @@ void MapGraph::drawSCC(int fraction, int display) const{
                     drawn_nodes.insert(v);
                 }
                 if(u != 0){
-                    string color = color_map.at(scc->is_scc(u) && scc->is_scc(v));
+                    string color = color_map.at(connected_nodes.count(u) && connected_nodes.count(v));
                     gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
                     gv->setEdgeColor(edge_id, color);
                     gv->setEdgeThickness(edge_id, width);
@@ -389,7 +408,7 @@ public:
 void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool visited) const{
     GraphViewer *gv = createGraphViewer();
 
-    DWGraph G = getFullGraph();
+    DWGraph G = getConnectedGraph();
 
     std::vector<std::string> name({
         "Dijkstra's algorithm with early stop",
@@ -502,5 +521,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
         }
     }
     gv->rearrange();
+
+    for(ShortestPath *p: shortestPaths) delete p;
 }
 

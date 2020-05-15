@@ -63,6 +63,7 @@ private:
 public:
     MapGraph(const std::string &path);
     DWGraph getFullGraph() const;
+    DWGraph getConnectedGraph() const;
     void drawRoads (int fraction, int display) const;
     void drawSpeeds(int fraction, int display) const;
     void drawSCC   (int fraction, int display) const;
