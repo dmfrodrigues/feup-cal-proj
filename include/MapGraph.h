@@ -4,28 +4,12 @@
 #include "DWGraph.h"
 #include "graphviewer.h"
 #include "EdgeType.h"
+#include "coord.h"
 
 class MapGraph {
 public:
     typedef double speed_t;
 private:
-    struct pos_t {
-        double lat, lon;
-        /**
-         * @brief Get distance between two positions in SI units (meters).
-         * 
-         * @param p1        First position
-         * @param p2        Second position
-         * @return double   Distance between them in meters
-         */
-        static double getDistanceSI(const pos_t &p1, const pos_t &p2);
-
-        pos_t operator+(const pos_t &p) const;
-        pos_t operator/(double d) const;
-    private:
-        double getMetersPerLatDeg() const;
-        double getMetersPerLonDeg() const;
-    };
     struct way_t {
         std::list<DWGraph::node_t> nodes;
         speed_t speed;
@@ -57,7 +41,7 @@ private:
 
     const DWGraph::node_t station = 1390706567;
 
-    std::unordered_map<DWGraph::node_t, pos_t> nodes;
+    std::unordered_map<DWGraph::node_t, coord_t> nodes;
     std::list<way_t> ways;
     DWGraph G;
 public:

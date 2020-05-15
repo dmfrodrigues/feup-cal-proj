@@ -11,51 +11,12 @@
 #include <map>
 #include <vector>
 
-#include <cmath>
-
 #define COORDMULT               50000       // Multiply coordinates to get integer positions
 #define SECONDS_TO_MICROS       1000000     // Convert seconds to milliseconds
 #define KMH_TO_MS               (1/3.6)     // Convert km/h to m/s
 #define SPEED_REDUCTION_FACTOR  0.75        // Reduce speed to account for intense road traffic, and the fact people not always travel at maximum speed 
 
 typedef DWGraph::node_t node_t;
-
-double MapGraph::pos_t::getDistanceSI(const MapGraph::pos_t &p1, const MapGraph::pos_t &p2){
-    pos_t m = (p1+p2)/2;
-    double dlat = p2.lat - p1.lat;
-    double dlon = p2.lon - p1.lon;
-    double dx = m.getMetersPerLatDeg() * dlat;
-    double dy = m.getMetersPerLonDeg() * dlon;
-    return sqrt(dx*dx + dy*dy);
-}
-
-MapGraph::pos_t MapGraph::pos_t::operator+(const MapGraph::pos_t &p) const{
-    pos_t ret;
-    ret.lat = lat + p.lat;
-    ret.lon = lon + p.lon;
-    return ret;
-}
-
-MapGraph::pos_t MapGraph::pos_t::operator/(double d) const{
-    pos_t ret = *this;
-    ret.lat /= d;
-    ret.lon /= d;
-    return ret;
-}
-
-double MapGraph::pos_t::getMetersPerLatDeg() const{
-    double phi = lat*M_PI/180;
-    return 111132.92
-          -   559.82  *cos(2*phi)
-          +     1.175 *cos(4*phi)
-          -     0.0023*cos(6*phi);
-}
-double MapGraph::pos_t::getMetersPerLonDeg() const{
-    double phi = lat*M_PI/180;
-    return 111412.84 *cos(  phi)
-          -    93.5  *cos(3*phi)
-          +     0.118*cos(5*phi);
-}
 
 MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
     if(speed != -1) return speed;
@@ -104,7 +65,7 @@ MapGraph::MapGraph(const std::string &path){
         ifstream is(path + ".nodes");
         size_t numberNodes; is >> numberNodes;
         for(size_t i = 0; i < numberNodes; ++i){
-            node_t id; pos_t p; is >> id >> p.lat >> p.lon;
+            node_t id; coord_t p; is >> id >> p.lat >> p.lon;
             nodes[id] = p;
         }
     }
@@ -131,7 +92,7 @@ DWGraph MapGraph::getFullGraph() const{
         if(w.nodes.size() < 2) continue;
         auto it1 = w.nodes.begin();
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
-            auto d = pos_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
+            auto d = coord_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
             DWGraph::weight_t t_ms = SECONDS_TO_MICROS * d / w.getRealSpeed();
             G.addEdge(*it2, *it1, t_ms);
         }
@@ -392,15 +353,15 @@ void MapGraph::drawSCC(int fraction, int display) const{
 
 class MapGraph::DistanceHeuristic : public Astar::heuristic_t{
 private:
-    const std::unordered_map<node_t, MapGraph::pos_t> &nodes;
-    MapGraph::pos_t dst_pos;
+    const std::unordered_map<node_t, coord_t> &nodes;
+    coord_t dst_pos;
     double factor;
 public:
-    DistanceHeuristic(const std::unordered_map<node_t, MapGraph::pos_t> &nodes,
-                      MapGraph::pos_t dst_pos,
+    DistanceHeuristic(const std::unordered_map<node_t, coord_t> &nodes,
+                      coord_t dst_pos,
                       double factor): nodes(nodes), dst_pos(dst_pos), factor(factor){}
     DWGraph::weight_t operator()(node_t u) const{
-        auto d = MapGraph::pos_t::getDistanceSI(dst_pos, nodes.at(u));
+        auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
         return d*factor;
     }
 };
