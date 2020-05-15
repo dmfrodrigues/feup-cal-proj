@@ -23,6 +23,10 @@ void DWGraph::addNode(node_t u){
     adj[u] = std::list<Edge>();
 }
 
+bool DWGraph::hasNode(node_t u) const{
+    return (adj.count(u));
+}
+
 void DWGraph::addEdge(node_t u, node_t v, weight_t w){
     if(adj.find(u) == adj.end() || adj.find(v) == adj.end())
         throw std::invalid_argument("Node does not exist");

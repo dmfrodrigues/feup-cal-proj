@@ -28,6 +28,7 @@ public:
     void addNode(node_t u);
     template<class iterator_t>
     void removeNodes(iterator_t it1, iterator_t it2);
+    bool hasNode(node_t u) const;
     void addEdge(node_t u, node_t v, weight_t w);
     const std::list<node_t>& getNodes() const;
     const std::list<Edge>& getAdj(node_t u) const;
