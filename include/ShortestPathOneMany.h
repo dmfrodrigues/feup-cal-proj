@@ -10,6 +10,7 @@ class ShortestPathOneMany {
 private:
     virtual DWGraph::node_t getStart() const = 0;
 public:
+    virtual ~ShortestPathOneMany();
     virtual void initialize(const DWGraph *G, DWGraph::node_t s) = 0;
     virtual void run() = 0;
     virtual DWGraph::node_t getPrev(DWGraph::node_t d) const = 0;

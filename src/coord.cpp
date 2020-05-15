@@ -3,7 +3,7 @@
 #include <cmath>
 
 coord_t::coord_t(){}
-coord_t::coord_t(coord_t::deg_t lat, coord_t::deg_t lon): lat(lat),lon(lon){}
+coord_t::coord_t(coord_t::deg_t lat_, coord_t::deg_t lon_): lat(lat_),lon(lon_){}
 
 double coord_t::getDistanceSI(const coord_t &p1, const coord_t &p2){
     coord_t m = (p1+p2)/2;

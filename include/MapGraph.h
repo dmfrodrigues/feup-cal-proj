@@ -43,7 +43,6 @@ private:
 
     std::unordered_map<DWGraph::node_t, coord_t> nodes;
     std::list<way_t> ways;
-    DWGraph G;
 public:
     MapGraph(const std::string &path);
     DWGraph getFullGraph() const;

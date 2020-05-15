@@ -20,20 +20,20 @@ Astar::default_heuristic::default_heuristic(){}
 
 const Astar::default_heuristic Astar::h_default;
 
-DWGraph::weight_t Astar::default_heuristic::operator()(DWGraph::node_t u) const{
+DWGraph::weight_t Astar::default_heuristic::operator()(DWGraph::node_t) const{
     return 0;
 }
 
-Astar::Astar(const Astar::heuristic_t *h){
-    this->h = h;
+Astar::Astar(const Astar::heuristic_t *h_){
+    this->h = h_;
 }
 
 Astar::Astar():Astar(&h_default){}
 
-void Astar::initialize(const DWGraph *G, node_t s, node_t d){
-    this->G = G;
-    this->s = s;
-    this->d = d;
+void Astar::initialize(const DWGraph *G_, node_t s_, node_t d_){
+    this->G = G_;
+    this->s = s_;
+    this->d = d_;
     dist.clear();
     hdist.clear();
     prev.clear();

@@ -1,6 +1,6 @@
 #include "DWGraph.h"
 
-DWGraph::Edge::Edge(node_t v, weight_t w):v(v),w(w){}
+DWGraph::Edge::Edge(node_t v_, weight_t w_):v(v_),w(w_){}
 
 void DWGraph::assert_integrity() const{
     if(nodes.size() != adj.size()) throw std::logic_error("");
