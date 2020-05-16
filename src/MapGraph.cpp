@@ -5,6 +5,7 @@
 #include "DFS.h"
 #include "Dijkstra.h"
 #include "ShortestPath.h"
+#include "MapViewer.h"
 
 #include <fstream>
 #include <unordered_set>
@@ -158,11 +159,8 @@ const std::unordered_map<edge_type_t, MapGraph::Display> MapGraph::display_map =
     {edge_type_t::SERVICE       , Display::SLOW       }
 };
 
-GraphViewer* createGraphViewer(int w = 1800, int h = 900){
-    GraphViewer *gv = new GraphViewer(w, h, false);
-    if(!gv->defineEdgeCurved(false))    throw std::runtime_error("");
-    if(!gv->defineVertexSize(0))        throw std::runtime_error("");
-    if(!gv->createWindow(w, h))         throw std::runtime_error("");
+MapViewer* createMapViewer(coord_t min_coord, coord_t max_coord, int w = 1800, int h = 900){
+    MapViewer *gv = new MapViewer(w, h, min_coord, max_coord);
     return gv;
 }
 
@@ -216,9 +214,9 @@ void MapGraph::drawRoads(int fraction, int display) const{
         {edge_type_t::SERVICE       , "GRAY"   }
     };
 
-    GraphViewer *gv = createGraphViewer();
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
     
-    std::unordered_map<node_t, int> drawn_nodes;
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
         string color = color_map.at(way.edgeType);
@@ -233,17 +231,11 @@ void MapGraph::drawRoads(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    int x = +(nodes.at(v).getLon()-mean_coord.getLon())*COORDMULT;
-                    int y = -(nodes.at(v).getLat()-mean_coord.getLat())*COORDMULT;
-                    drawn_nodes[v] = drawn_nodes.size();
-                    if(!gv->addNode(drawn_nodes[v], x, y)) throw std::runtime_error("");
+                    drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
-                    if(!gv->addEdge(edge_id, drawn_nodes.at(u), drawn_nodes.at(v), EdgeType::UNDIRECTED))   throw std::runtime_error("");
-                    if(!gv->setEdgeColor(edge_id, color))                   throw std::runtime_error("");
-                    if(!gv->setEdgeThickness(edge_id, width))               throw std::runtime_error("");
-                    if(!gv->setEdgeDashed(edge_id, dashed))                 throw std::runtime_error("");
-                    ++edge_id;
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width, dashed);
                 }
                 u = v;
             }
@@ -251,7 +243,7 @@ void MapGraph::drawRoads(int fraction, int display) const{
         }
         
     }
-    if(!gv->rearrange()) throw std::runtime_error("");
+    gv->rearrange();
 }
 
 void MapGraph::drawSpeeds(int fraction, int display) const{
@@ -265,9 +257,9 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
         { 40, "GRAY"}
     };
 
-    GraphViewer *gv = createGraphViewer();
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
 
-    std::unordered_map<node_t, int> drawn_nodes;
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
         string color; {
@@ -284,16 +276,11 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    int x = +(nodes.at(v).getLon()-mean_coord.getLon())*COORDMULT;
-                    int y = -(nodes.at(v).getLat()-mean_coord.getLat())*COORDMULT;
-                    drawn_nodes[v] = drawn_nodes.size();
-                    if(!gv->addNode(drawn_nodes[v], x, y)) throw std::runtime_error("");
+                    drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
-                    if(!gv->addEdge(edge_id, drawn_nodes.at(u), drawn_nodes.at(v), EdgeType::UNDIRECTED))   throw std::runtime_error("");
-                    if(!gv->setEdgeColor(edge_id, color))                   throw std::runtime_error("");
-                    if(!gv->setEdgeThickness(edge_id, width))               throw std::runtime_error("");
-                    ++edge_id;
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
                 }
                 u = v;
             }
@@ -301,7 +288,7 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
         }
         
     }
-    if(!gv->rearrange()) throw std::runtime_error("");
+    gv->rearrange();
 }
 
 void MapGraph::drawSCC(int fraction, int display) const{
@@ -318,9 +305,9 @@ void MapGraph::drawSCC(int fraction, int display) const{
         connected_nodes = std::unordered_set<DWGraph::node_t>(l.begin(), l.end());
     }
 
-    GraphViewer *gv = createGraphViewer();
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
 
-    std::unordered_map<node_t, int> drawn_nodes;
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
 
@@ -333,17 +320,12 @@ void MapGraph::drawSCC(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    int x = +(nodes.at(v).getLon()-mean_coord.getLon())*COORDMULT;
-                    int y = -(nodes.at(v).getLat()-mean_coord.getLat())*COORDMULT;
-                    drawn_nodes[v] = drawn_nodes.size();
-                    if(!gv->addNode(drawn_nodes[v], x, y)) throw std::runtime_error("");
+                    drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
                     string color = color_map.at(connected_nodes.count(u) && connected_nodes.count(v));
-                    if(!gv->addEdge(edge_id, drawn_nodes.at(u), drawn_nodes.at(v), EdgeType::UNDIRECTED))   throw std::runtime_error("");
-                    if(!gv->setEdgeColor(edge_id, color))                   throw std::runtime_error("");
-                    if(!gv->setEdgeThickness(edge_id, width))               throw std::runtime_error("");
-                    ++edge_id;
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
                 }
                 u = v;
             }
@@ -351,7 +333,7 @@ void MapGraph::drawSCC(int fraction, int display) const{
         }
         
     }
-    if(!gv->rearrange()) throw std::runtime_error("");;
+    gv->rearrange();
 }
 
 class MapGraph::DistanceHeuristic : public Astar::heuristic_t{
@@ -420,9 +402,9 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     << "- Nodes in path : " << paths[i].size() << "\n";
     }
 
-    GraphViewer *gv = createGraphViewer();
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
 
-    std::unordered_map<node_t, int> drawn_nodes;
+    std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
 
@@ -436,10 +418,8 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
             if(!G.hasNode(v)) break;
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    int x = +(nodes.at(v).getLon()-mean_coord.getLon())*COORDMULT;
-                    int y = -(nodes.at(v).getLat()-mean_coord.getLat())*COORDMULT;
-                    drawn_nodes[v] = drawn_nodes.size();
-                    if(!gv->addNode(drawn_nodes[v], x, y)) throw std::runtime_error("");
+                    drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
                     string color = "";
@@ -465,18 +445,14 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     }
                     if(color == "") color = "LIGHT_GRAY";
 
-                    if(!gv->addEdge(edge_id, drawn_nodes.at(u), drawn_nodes.at(v), EdgeType::UNDIRECTED))   throw std::runtime_error("");
-                    if(!gv->setEdgeColor(edge_id, color))                   throw std::runtime_error("");
-                    if(!gv->setEdgeThickness(edge_id, width))               throw std::runtime_error("");
-                    ++edge_id;
-
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
                 }
                 u = v;
             }
             ++i;
         }
     }
-    if(!gv->rearrange()) throw std::runtime_error("");
+    gv->rearrange();
 
     for(ShortestPath *p: shortestPaths) delete p;
 }
