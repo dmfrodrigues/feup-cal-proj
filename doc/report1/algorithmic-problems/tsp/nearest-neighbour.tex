@@ -1,7 +1,7 @@
 \subsection{Nearest neighbour algorithm} \label{algorithm-tsp-nn}
 The \acrfull*{NN} algorithm is a \gls{greedy} \gls{constructive} heuristic method for solving the travelling salesman problem.
 Starting at the origin $s$, at each step we visit the city nearest to the previous one and add it to the solution until all cities are visited ($S = V$), at which point we finally add $s$ as the final node.
-Therefore the memory complexity of this algorithm is $\Theta (|V|)$, and the time complexity of $\Theta (|V|^{2})$ \cite{reinelt}.\par
+Therefore the memory complexity of this algorithm is $O(|V|)$, and the time complexity of $O(|V|^{2})$ \cite{reinelt}.\par
 Let $\overline{S}$ be the complement of $S$ where the universe is $V$.
 \begin{algorithm}[h]
     \caption{Nearest-neighbour algorithm}

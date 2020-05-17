@@ -27,7 +27,7 @@ We will rather present an argument as to why these recurrencies are valid. A sta
 \end{itemize}
 \subsubsection{Complexity analysis}
 There are $2^{|V|}$ subsets of $V$, and $|V|$ possibilities for $v$, meaning there are at most $|V| \cdot 2^{|V|}$ states. Some of these states are not valid or unreachable, but they don't ammount to a value that effectively reduces the time and memory complexities.\par
-To find the value of a state $(S,v)$, we will iterate over $|S|$ other states. Since $|S|$ is at most $|V|$, we have a total time complexity of $\Theta (|V|^2 \cdot 2^{|V|})$. The memory complexity for this algorithm is $\Theta (|V| \cdot 2^{|V|})$, since we need to store the result for each state.\par
+To find the value of a state $(S,v)$, we will iterate over $|S|$ other states. Since $|S|$ is at most $|V|$, we have a total time complexity of $O(|V|^2 \cdot 2^{|V|})$. The memory complexity for this algorithm is $O(|V| \cdot 2^{|V|})$, since we need to store the result for each state.\par
 States of the forms $(S, v)\colon v \not \in S$ are not valid; these ammount to approximately half the states, so we can claim we have approximately $|V|\cdot 2^{|V|-1}$ valid states, and we will have to perform around $|V|^2\cdot 2^{|V|-1}$ operations.\par
 \subsubsection{Remarks}
 We will have to perform approximately $|V|^2\cdot 2^{|V|-1}$ operations. Using the rule-of-thumb that a computer can perform $10^8$ serial operations per second, and assuming as maximum van capacity the legal limit for european driving license category D1 (light buses with a maximum of 16 seats, not including driver)\cite{dir-2006-126-ec}, we can execute this algorithm in about $\SI{0.08}{s}$, which is acceptable if this algorithm is run only a few times.
