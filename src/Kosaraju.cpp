@@ -5,33 +5,33 @@ typedef DUGraph::node_t node_t;
 
 Kosaraju::Kosaraju(){}
 
-void Kosaraju::initialize(const DUGraph *G_){
-    this->G = G_;
+void Kosaraju::initialize(const DUGraph *G){
+    this->G = G;
     S.clear();
     SCCs.clear();
 }
 
-void Kosaraju::DFS_K(const DUGraph *G_, DUGraph::node_t u){
+void Kosaraju::DFS_K(DUGraph::node_t u){
     if (S.find(u) != S.end()) return;
     S.insert(u);
-    for (node_t v : G_->getAdj(u)) DFS_K(G_,v);
+    for (node_t v : G->getAdj(u)) DFS_K(v);
     L.push(u);
 }
 
-void Kosaraju::assign(const DUGraph *G_, DUGraph::node_t u, DUGraph::node_t root){
+void Kosaraju::assign(DUGraph::node_t u, DUGraph::node_t root){
     if (SCCs.find(u) != SCCs.end()) return;
     SCCs[u] = root;
-    DUGraph temp = G_->getTranspose();
+    DUGraph temp = G->getTranspose();
     for (node_t v : temp.getAdj(u)) {
-        assign(G_, v, root);
+        assign(v, root);
     }
 }
 
 void Kosaraju::run(){
-    for (node_t u : G->getNodes()) DFS_K(G,u);
+    for (node_t u : G->getNodes()) DFS_K(u);
     while(!L.empty()){
         node_t u = L.top();
-        assign(G,u,u);
+        assign(u,u);
         L.pop();
     }   
 }

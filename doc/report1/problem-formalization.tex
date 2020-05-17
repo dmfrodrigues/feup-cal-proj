@@ -65,7 +65,8 @@ The limits of index variables are implicitly limited to the sequences' sizes.
     \end{enumerate}
 \end{enumerate}
 \section{Objective function} \label{problem-formalization-objective}
-Let $pick(c)$ be the event where $c$ is picked up, and $drop(c)$ the event where $c$ is dropped off. Our objective function is
+Our objective is to minimize the time each client needlessly needs to wait to arrive to his/her destination.\par
+More formally, let $pick(c)$ be the event where $c$ is picked up, and $drop(c)$ the event where $c$ is dropped off. Our objective function is
 \begin{alignat*}{2}
     \text{Total time it took}        ~~& T        &&= \sum_{c \text{ client}}{drop(c).t - pick(c).t} \\
     \text{Minimum time it could take}~~& T_{\min} &&= \sum_{c \text{ client}}{dist(node(drop(c)), node(pick(c)))} \\

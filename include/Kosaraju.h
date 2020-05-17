@@ -13,8 +13,8 @@ private:
 public:
     Kosaraju();
     void initialize(const DUGraph *G);
-    void DFS_K(const DUGraph *G, DUGraph::node_t u);
-    void assign(const DUGraph *G, DUGraph::node_t u, DUGraph::node_t root);
+    void DFS_K(DUGraph::node_t u);
+    void assign(DUGraph::node_t u, DUGraph::node_t root);
     void run();
     DUGraph::node_t get_scc(DUGraph::node_t u) const;
 };
