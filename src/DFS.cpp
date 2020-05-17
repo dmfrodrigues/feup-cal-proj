@@ -1,8 +1,8 @@
 #include "DFS.h"
 
-void DFS::initialize(const DUGraph *G, DUGraph::node_t s){
-    this->G = G;
-    this->s = s;
+void DFS::initialize(const DUGraph *G_, DUGraph::node_t s_){
+    this->G = G_;
+    this->s = s_;
     R.clear();
     for (DUGraph::node_t x : G->getNodes()) R[x] = false;
 }

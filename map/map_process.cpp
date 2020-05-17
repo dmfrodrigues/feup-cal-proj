@@ -49,11 +49,22 @@ private:
     }
 
     dir_t get_dir(xml_node<> *it){
-        auto p = find_tag(it, "oneway");
-        if(!p) return dir_t::Both;
-        if(string(p->first_attribute("v")->value()) == "yes") return dir_t::Front;
-        if(string(p->first_attribute("v")->value()) == "no") return dir_t::Both;
-        if(string(p->first_attribute("v")->value()) == "reversible") return dir_t::Both;
+        // Oneway
+        auto poneway = find_tag(it, "oneway");
+        if(poneway != nullptr){
+            string oneway = poneway->first_attribute("v")->value();
+            if(oneway == "yes") return dir_t::Front;
+            if(oneway == "no") return dir_t::Both;
+            if(oneway == "reversible") return dir_t::Both;
+        }
+        // Roundabouts
+        auto pjunction = find_tag(it, "junction");
+        if(pjunction != nullptr){
+            string junction = pjunction->first_attribute("v")->value();
+            if(junction == "roundabout" || 
+               junction == "circular") return dir_t::Front;
+        }
+        // Return
         return dir_t::Both;
     }
 
@@ -106,25 +117,26 @@ ostream& operator<<(ostream &os, const way_t &w){
 }
 
 unordered_map<string, edge_type_t> edge_accept = {
-    {"motorway"         , edge_type_t::MOTORWAY},
-    {"motorway_link"    , edge_type_t::MOTORWAY},
-    {"trunk"            , edge_type_t::TRUNK},
-    {"trunk_link"       , edge_type_t::TRUNK},
-    {"primary"          , edge_type_t::PRIMARY},
-    {"primary_link"     , edge_type_t::PRIMARY},
-    {"secondary"        , edge_type_t::SECONDARY},
-    {"secondary_link"   , edge_type_t::SECONDARY},
-    {"tertiary"         , edge_type_t::TERTIARY},
-    {"tertiary_link"    , edge_type_t::TERTIARY},
-    {"unclassified"     , edge_type_t::ROAD},
-    {"residential"      , edge_type_t::RESIDENTIAL},
-    {"living_street"    , edge_type_t::SLOW},
-    {"road"             , edge_type_t::SLOW},
-    {"services"         , edge_type_t::SLOW},
-    {"bus_stop"         , edge_type_t::SLOW}
+    {"motorway"         , edge_type_t::MOTORWAY         },
+    {"motorway_link"    , edge_type_t::MOTORWAY_LINK    },
+    {"trunk"            , edge_type_t::TRUNK            },
+    {"trunk_link"       , edge_type_t::TRUNK_LINK       },
+    {"primary"          , edge_type_t::PRIMARY          },
+    {"primary_link"     , edge_type_t::PRIMARY_LINK     },
+    {"secondary"        , edge_type_t::SECONDARY        },
+    {"secondary_link"   , edge_type_t::SECONDARY_LINK   },
+    {"tertiary"         , edge_type_t::TERTIARY         },
+    {"tertiary_link"    , edge_type_t::TERTIARY_LINK    },
+    {"unclassified"     , edge_type_t::UNCLASSIFIED     },
+    {"residential"      , edge_type_t::RESIDENTIAL      },
+    {"living_street"    , edge_type_t::LIVING_STREET    },
+    {"road"             , edge_type_t::UNCLASSIFIED     },
+    {"services"         , edge_type_t::SERVICE          },
+    {"bus_stop"         , edge_type_t::SERVICE          },
+    {"track"            , edge_type_t::SERVICE          }
 };
 unordered_set<string> edge_reject = {
-    "steps",        "pedestrian", "footway",   "cycleway", "track",
+    "steps",        "pedestrian", "footway",   "cycleway",
     "construction", "path",       "bridleway", "platform", "raceway",
     "elevator",     "proposed",   "planned",   "bus_stop"};
 unordered_set<string> service_accept = {"driveway", "parking_aisle", "alley"};
@@ -132,20 +144,20 @@ unordered_set<string> service_reject = {"campground", "emergency_access",
                                         "drive-through"};
 edge_type_t get_edge_type(xml_node<> *it) {
     auto parea = find_tag(it, "area");
-    if (parea != NULL && string(parea->first_attribute("v")->value()) == "yes") return edge_type_t::NO;
+    if (parea != nullptr && string(parea->first_attribute("v")->value()) == "yes") return edge_type_t::NO;
     
     /* highway */
     auto phighway = find_tag(it, "highway");{
-        if (phighway == NULL) return edge_type_t::NO;
+        if (phighway == nullptr) return edge_type_t::NO;
         string highway = phighway->first_attribute("v")->value();
         if (edge_reject.find(highway) != edge_reject.end()) return edge_type_t::NO;
         if (edge_accept.find(highway) != edge_accept.end()) return edge_accept[highway];
         if (highway == "service"){
             auto paccess  = find_tag(it, "access");
-            if(paccess == NULL) return edge_type_t::SLOW;
+            if(paccess == nullptr) return edge_type_t::SERVICE;
             string access = paccess->first_attribute("v")->value();
             if (access == "private" || access == "no" ) return edge_type_t::NO;
-            return edge_type_t::SLOW;
+            return edge_type_t::SERVICE;
         }
     }
     
@@ -157,7 +169,7 @@ edge_type_t get_edge_type(xml_node<> *it) {
 
 int main(int argc, char *argv[]) {
     assert(argc == 2);
-    char *text = NULL; {
+    char *text = nullptr; {
         string all = "";
         string buf;
         while (getline(cin, buf)) {

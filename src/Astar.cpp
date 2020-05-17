@@ -1,7 +1,7 @@
-#include "Dijkstra.h"
+#include "Astar.h"
 
 #include <queue>
-#include <utility>
+#include <iostream>
 #include <chrono>
 
 typedef DWGraph::node_t node_t;
@@ -16,33 +16,55 @@ typedef std::priority_queue<std::pair<weight_t, node_t>,
 typedef std::chrono::high_resolution_clock hrc;
 #define mk(a, b) (std::make_pair((a), (b)))
 
-node_t Dijkstra::getStart() const{
-    return s;
+Astar::default_heuristic::default_heuristic(){}
+
+const Astar::default_heuristic Astar::h_default;
+
+DWGraph::weight_t Astar::default_heuristic::operator()(DWGraph::node_t) const{
+    return 0;
 }
 
-void Dijkstra::initialize(const DWGraph *G_, DWGraph::node_t s_){
-    this->s = s_;
+Astar::Astar(const Astar::heuristic_t *h_){
+    this->h = h_;
+}
+
+Astar::Astar():Astar(&h_default){}
+
+void Astar::initialize(const DWGraph *G_, node_t s_, node_t d_){
     this->G = G_;
+    this->s = s_;
+    this->d = d_;
+    dist.clear();
+    hdist.clear();
+    prev.clear();
     for(const node_t &u: G->getNodes()){
         dist[u] = DWGraph::INF;
+        hdist[u] = DWGraph::INF;
         prev[u] = -1;
     }
+    stats = statistics_t();
 }
 
-void Dijkstra::run(){
+node_t Astar::getStart() const { return s; }
+
+node_t Astar::getDest () const { return d; }
+
+void Astar::run(){
     auto start_time = hrc::now();
 
     min_priority_queue Q;
-    dist[s] = 0; Q.push(mk(dist[s], s)); ++stats.analysed_nodes;
+    dist[s] = 0; hdist[s] = (*h)(s); Q.push(mk(hdist[s], s)); ++stats.analysed_nodes;
     while(!Q.empty()){
         node_t u = Q.top().second; ++stats.analysed_nodes;
         Q.pop();
+        if(u == d) break;
         for(const Edge &e: G->getAdj(u)){ ++stats.analysed_edges;
             weight_t c_ = dist[u] + e.w;
             if(c_ < dist[e.v]){
                 dist[e.v] = c_;
+                hdist[e.v] = c_ + (*h)(e.v);
                 prev[e.v] = u;
-                Q.push(mk(dist[e.v], e.v));
+                Q.push(mk(hdist[e.v], e.v));
             }
         }
     }
@@ -51,18 +73,18 @@ void Dijkstra::run(){
     stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
 
-DWGraph::node_t Dijkstra::getPrev(DWGraph::node_t d) const{
-    return prev.at(d);
+node_t Astar::getPrev(node_t u) const{
+    return prev.at(u);
 }
 
-weight_t Dijkstra::getPathWeight(node_t d) const{
+weight_t Astar::getPathWeight() const{
     return dist.at(d);
 }
 
-statistics_t Dijkstra::getStatistics() const {
+statistics_t Astar::getStatistics() const{
     return stats;
 }
 
-bool Dijkstra::hasVisited(DWGraph::node_t u) const{
+bool Astar::hasVisited(DWGraph::node_t u) const{
     return (dist.at(u) != DWGraph::INF);
 }
