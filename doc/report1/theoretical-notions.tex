@@ -1,14 +1,5 @@
 \chapter{Theoretical notions} \label{theoretical-notions}
 This short chapter presents some basic notions and definitions on Computer Science, which ought to be useful in the following chapters.
-\section{Set theory} \label{set-theory}
-\begin{definition}[Partition]
-    A partition $P$ of a universe $U$ is a family of sets such that:
-    \begin{alignat*}{2}
-        \text{($P$ does not contain the empty set)}          ~~& \emptyset \not \in P\\
-        \text{(The union of the sets in $P$ is the universe)}~~& \bigcup_{S \in P}{S} = U\\
-        \text{(The sets are pairwise disjoint)}              ~~& \forall S, T \in P,~A \neq B \implies A \cap B = \emptyset
-    \end{alignat*}
-\end{definition}
 \section{Complexity analysis} \label{complexity-analysis}
 Complexity analysis is the process of identifying the computational complexity of an algorithm, describing in a more or less precise way the asymptotic growth of the amount of resources (e.g., time and memory) an algorithm requires.
 \begin{definition}[Big-$O$ notation] $f(n) \in O(g(n))$ means that $g$ is an upper bound of $f$.
