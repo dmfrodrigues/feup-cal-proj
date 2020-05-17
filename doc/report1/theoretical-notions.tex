@@ -16,25 +16,8 @@ Complexity analysis is the process of identifying the computational complexity o
         O(g(n))=\{f(n) \mid \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \leq c\cdot g(n)\}
     \end{equation*}
 \end{definition}
-\begin{definition}[Big-$\Omega$ notation] $f(n) \in \Omega(g(n))$ means that $g$ is a lower bound of $f$.
-    \begin{equation*}
-        \Omega(g(n))=\{f(n) \mid \exists c \in \mathbb{R}^+ \colon \exists n_0 \in \mathbb{N} \colon \forall n \geq n_0, f(n) \geq c\cdot g(n)\}
-    \end{equation*}
-\end{definition}
-\begin{definition}[Big-$\Theta$ notation] $f(n) \in \Theta(g(n))$ means that $g$ is a strict upper and lower bound of $f$.
-    \begin{equation*}
-        \Theta(g(n))=O(g(n)) \cap \Omega(g(n))
-    \end{equation*}
-\end{definition}
-We will not put excessive emphasis on exaggerated formalism, so we will by default use the big-$O$ notation.
 \section{Classes of problems} \label{classes-problems}
 Although we will not go into much detail over the definition of a \acrfull*{TM}, one should know that, for practical reasons, the C++ language is Turing-complete, which in layman's terms means everytime something applies to a Turing machine it also applies to C++.
-\begin{definition}[Problem]
-    Binary relation on a set $I$ of problem \emph{instances} and a set $S$ of problem \emph{solutions}.
-\end{definition}
-\begin{definition}[Decision problem]
-    Problem where the solution can be a \emph{yes} or a \emph{no}; $S=\{0,1\}$
-\end{definition}
 \begin{definition}[P]
     Set of all decision problems that can be \textbf{solved in time polynomial} in the problem instance's size by a deterministic \acrshort{TM}.
 \end{definition}
@@ -51,12 +34,8 @@ Although we will not go into much detail over the definition of a \acrfull*{TM},
 \section{Graphs} \label{graphs}
 \subsection{Definitions}
 \begin{definition}[Directed weighted graph]
-    A directed weighted graph $G$ is a triple $(V, E, w)$, where:
-    \begin{itemize}
-        \item $V$ is the finite set of \textbf{nodes}.
-        \item $E \subseteq V^2$ is the set of \textbf{edges}, where each edge is a pair $(u,v)$ describing an origin and destination.
-        \item $w: E \rightarrow \mathbb{R}^+$ is the \textbf{cost function} that maps each edge to a traversal cost.
-    \end{itemize}
+    A directed weighted graph $G$ is a triple $(V, E, w)$, where
+    $V$ is the finite set of \textbf{nodes}, $E \subseteq V^2$ is the set of \textbf{edges} (where each edge is a pair $(u,v)$ describing an origin and destination), and $w: E \rightarrow \mathbb{R}^+$ is the \textbf{cost function} that maps each edge to a traversal cost.
 \end{definition}
 \begin{definition}[Transpose graph]
     The transpose graph $G^T(V, E^T)$ of a graph $G(V, E)$ is similar to $G$ but with reversed edge directions:
@@ -86,10 +65,10 @@ Although we will not go into much detail over the definition of a \acrfull*{TM},
     $\langle p^1, p^2 \rangle$ is the concatenation of $p^1$ and $p^2$.
     \begin{equation*}
         \langle p^1, p^2 \rangle = \begin{dcases}
-            \langle p^1_1, p^1_2,...,p^1_{|p^1|}, p^2_1,p^2_2,...,p^2_{|p^2|} \rangle & : p_1,p_2 \in P_G \\
-            \langle p^1_1, p^1_2,...,p^1_{|p^1|}, p^2                         \rangle & : p_1 \in P_G \wedge p_2 \in V \\
-            \langle p^1, p^2_1, p^2_2,..., p^2_{|p^2|}                        \rangle & : p_1 \in V \wedge p_2 \in P_G \\
-            \langle p^1, p^2                                                  \rangle & : p_1,p_2 \in V \\
+            \langle p^1_1, p^1_2,...,p^1_{|p^1|}, p^2_1,p^2_2,...,p^2_{|p^2|} \rangle & : p^1,p^2 \in P_G \\
+            \langle p^1_1, p^1_2,...,p^1_{|p^1|}, p^2                         \rangle & : p^1 \in P_G \wedge p^2 \in V \\
+            \langle p^1, p^2_1, p^2_2,..., p^2_{|p^2|}                        \rangle & : p^1 \in V \wedge p^2 \in P_G \\
+            \langle p^1, p^2                                                  \rangle & : p^1,p^2 \in V \\
         \end{dcases}
     \end{equation*}
 \end{definition}
