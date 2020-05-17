@@ -6,7 +6,7 @@ typedef DWGraph::Edge Edge;
 
 
 
-void FloydWarshall::initialize(const DWGraph *G) {
+void FloydWarshall::initialize() {
 
     for (size_t i = 0; i < G->getNodes().size(); ++i) {
         for (size_t j = 0; j < G->getNodes().size(); ++j) {
@@ -30,7 +30,7 @@ void FloydWarshall::initialize(const DWGraph *G) {
         for (it2 = G->getNodes().begin(), j = 0; it2 != G->getNodes().end(); ++it2, ++j) {
 
             if (i != j) {
-                this->dist[i][j] = pathWeight(G, *it1, *it2);
+                this->dist[i][j] = pathWeight(*it1, *it2);
                 this->next[i][j] = j;
             }
         }
@@ -53,9 +53,9 @@ void FloydWarshall::run() {
     }
 }
 
-weight_t FloydWarshall::pathWeight(const DWGraph *G, DWGraph::node_t u, DWGraph::node_t v) {
+weight_t FloydWarshall::pathWeight(DWGraph::node_t u, DWGraph::node_t v) {
 
-    for (const Edge &e : G->getAdj(u)) {
+    for (const Edge &e : this->G->getAdj(u)) {
         if (e.v == v) {
             return e.w;
         }
@@ -63,26 +63,22 @@ weight_t FloydWarshall::pathWeight(const DWGraph *G, DWGraph::node_t u, DWGraph:
     return DWGraph::INF;
 }
 
-std::list<DWGraph::node_t> FloydWarshall::getPath () {
+std::list<DWGraph::node_t> FloydWarshall::getPath(DWGraph::node_t i, DWGraph::node_t j) {
 
     std::list<DWGraph::node_t> result;
 
-    for (size_t i = 0; i < this->next.size(); ++i) {
-        for (size_t j = 0; j < this->next.size(); ++j) {
-            if (i != j) {
-                size_t u = i + 1;
-                size_t v = j + 1;
+    size_t u = i;
+    size_t v = j;
 
-                result.push_back(u);
+    result.push_back(u);
+    printf("%d ", u);
 
-                do {
-                    u = next[u - 1][v - 1];
-                    result.push_back(u);
+    do {
+        u = next[u - 1][v - 1];
+        result.push_back(u);
+        printf("%d ", u);
 
-                } while (u != v);
-            }
-        }
-    }
+    } while (u != v);
 
     return result;
 }

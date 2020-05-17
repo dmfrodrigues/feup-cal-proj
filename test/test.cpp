@@ -7,7 +7,9 @@
 #include "ShortestPathAll.h"
 #include "Kosaraju.h"
 #include "KosarajuV.h"
+#include "FloydWarshall.h"
 
+/*
 TEST_CASE("Depth-First Search", "[reachability-dfs]"){
     DUGraph G;  
     for (size_t i = 0 ; i < 9 ; i++) G.addNode(i);
@@ -71,7 +73,22 @@ TEST_CASE("DFS on transpose", "[dfs-transpose]"){
     REQUIRE(r->is_reachable(7) == false);
     REQUIRE(r->is_reachable(8) == false);
 }
+*/
 
+TEST_CASE("Floyd-Warshall", "[floyd-warshall]") {
+    DWGraph G;
+    for(int i = 0; i < 4; ++i) G.addNode(i);
+    G.addEdge(0, 2, -2); G.addEdge(2, 3, 2); G.addEdge(3, 1, -1); G.addEdge(1, 0, 4);
+    G.addEdge(1, 2, 3);
+
+    FloydWarshall *fw = new FloydWarshall();
+    fw->initialize();
+    fw->run();
+
+    // REQUIRE(2 == fw->getPath(0, 2).size());
+}
+
+/*
 TEST_CASE("Dijkstra's algorithm", "[shortestpath-dijkstra]"){
     DWGraph G;
     for(int i = 0; i < 7; ++i) G.addNode(i);
@@ -185,3 +202,4 @@ TEST_CASE("Classic Kosaraju testing", "[SCC-KOSARAJU]"){
 
     REQUIRE(k.get_scc(8) == 8);
 }
+*/
