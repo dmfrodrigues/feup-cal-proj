@@ -10,12 +10,12 @@ std::list<DWGraph::node_t> ShortestPathAll::getPath(DWGraph::node_t s, DWGraph::
     return res;
 }
 
-ShortestPathAll::FromOneMany::FromOneMany(ShortestPathOneMany *oneMany){
-    this->oneMany = oneMany;
+ShortestPathAll::FromOneMany::FromOneMany(ShortestPathOneMany *oneMany_){
+    this->oneMany = oneMany_;
 }
 
-void ShortestPathAll::FromOneMany::initialize(const DWGraph *G){
-    this->G = G;
+void ShortestPathAll::FromOneMany::initialize(const DWGraph *G_){
+    this->G = G_;
 }
 
 void ShortestPathAll::FromOneMany::run(){

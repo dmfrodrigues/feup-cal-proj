@@ -5,6 +5,7 @@
 #include "DFS.h"
 #include "Dijkstra.h"
 #include "ShortestPath.h"
+#include "MapViewer.h"
 
 #include <fstream>
 #include <unordered_set>
@@ -19,7 +20,12 @@
 typedef DWGraph::node_t node_t;
 
 MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
+    
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wfloat-equal"
     if(speed != -1) return speed;
+    #pragma GCC diagnostic pop
+
     switch(edgeType){
         case edge_type_t::MOTORWAY       : return 120;
         case edge_type_t::MOTORWAY_LINK  : return  60;
@@ -35,12 +41,18 @@ MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
         case edge_type_t::RESIDENTIAL    : return  30;
         case edge_type_t::LIVING_STREET  : return  10;
         case edge_type_t::SERVICE        : return  20;
-        default: throw invalid_argument("");
+        case edge_type_t::NO             : throw invalid_argument("");
+        default                          : throw invalid_argument("");
     }
 }
 
 MapGraph::speed_t MapGraph::way_t::getRealSpeed() const{
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wfloat-equal"
     if(speed != -1) return speed;
+    #pragma GCC diagnostic pop
+
     switch(edgeType){
         case edge_type_t::MOTORWAY       : return 120*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
         case edge_type_t::MOTORWAY_LINK  : return  60*KMH_TO_MS;
@@ -56,7 +68,8 @@ MapGraph::speed_t MapGraph::way_t::getRealSpeed() const{
         case edge_type_t::RESIDENTIAL    : return  30*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
         case edge_type_t::LIVING_STREET  : return  10*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
         case edge_type_t::SERVICE        : return  20*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
-        default: throw invalid_argument("");
+        case edge_type_t::NO             : throw invalid_argument("");
+        default                          : throw invalid_argument("");
     }
 }
 
@@ -65,8 +78,9 @@ MapGraph::MapGraph(const std::string &path){
         ifstream is(path + ".nodes");
         size_t numberNodes; is >> numberNodes;
         for(size_t i = 0; i < numberNodes; ++i){
-            node_t id; coord_t p; is >> id >> p.lat >> p.lon;
-            nodes[id] = p;
+            coord_t::deg_t lat, lon;
+            node_t id; is >> id >> lat >> lon;
+            nodes[id] = coord_t(lat, lon);
         }
     }
     {
@@ -82,6 +96,17 @@ MapGraph::MapGraph(const std::string &path){
             }
             ways.push_back(way);
         }
+    }
+    {
+        coord_t::deg_t lat_min = 90, lat_max = -90;
+        coord_t::deg_t lon_min = +180, lon_max = -180;
+        for(const auto &u: nodes){
+            lat_min = std::min(lat_min, u.second.getLat()); lat_max = std::max(lat_max, u.second.getLat());
+            lon_min = std::min(lon_min, u.second.getLon()); lon_max = std::max(lon_max, u.second.getLon());
+        }
+        min_coord = coord_t(lat_max, lon_min);
+        max_coord = coord_t(lat_min, lon_max);
+        mean_coord = (min_coord + max_coord)/2;
     }
 }
 
@@ -134,17 +159,12 @@ const std::unordered_map<edge_type_t, MapGraph::Display> MapGraph::display_map =
     {edge_type_t::SERVICE       , Display::SLOW       }
 };
 
-GraphViewer* createGraphViewer(int w = 1800, int h = 900){
-    GraphViewer *gv = new GraphViewer(w, h, false);
-    gv->defineEdgeCurved(false);
-    gv->defineVertexSize(0);
-    gv->createWindow(w, h);
+MapViewer* createMapViewer(coord_t min_coord, coord_t max_coord, int w = 1800, int h = 900){
+    MapViewer *gv = new MapViewer(w, h, min_coord, max_coord);
     return gv;
 }
 
 void MapGraph::drawRoads(int fraction, int display) const{
-    GraphViewer *gv = createGraphViewer();
-    
     static const std::unordered_map<edge_type_t, bool> dashed_map = {
         {edge_type_t::MOTORWAY      , false},
         {edge_type_t::MOTORWAY_LINK , false},
@@ -193,14 +213,9 @@ void MapGraph::drawRoads(int fraction, int display) const{
         {edge_type_t::LIVING_STREET , "GRAY"   },
         {edge_type_t::SERVICE       , "GRAY"   }
     };
-    
 
-    double lat_max = -90;
-    double lon_min = +180;
-    for(const auto &u: nodes){
-        lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon);
-    }
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
+    
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
@@ -216,17 +231,11 @@ void MapGraph::drawRoads(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
-                    gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
-                    gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
-                    gv->setEdgeColor(edge_id, color);
-                    gv->setEdgeThickness(edge_id, width);
-                    gv->setEdgeDashed(edge_id, dashed);
-                    ++edge_id;
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width, dashed);
                 }
                 u = v;
             }
@@ -238,10 +247,7 @@ void MapGraph::drawRoads(int fraction, int display) const{
 }
 
 void MapGraph::drawSpeeds(int fraction, int display) const{
-    GraphViewer *gv = createGraphViewer();
-
-    const int width = 5;
-
+    static const int width = 5;
     static const std::map<speed_t, string> color_map = {
         {120, "RED"},
         {100, "ORANGE"},
@@ -250,21 +256,17 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
         { 50, "BLACK"},
         { 40, "GRAY"}
     };
-    
 
-    double lat_max = -90;
-    double lon_min = +180;
-    for(const auto &u: nodes){
-        lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon);
-    }
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
+
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
-        auto it = color_map.lower_bound(way.getMaxSpeed());
-        if(it == color_map.end()) throw invalid_argument("");
-        string color = it->second;
-
+        string color; {
+            auto it = color_map.lower_bound(way.getMaxSpeed());
+            if(it == color_map.end()) throw invalid_argument("");
+            color = it->second;
+        }
         bool draw = display & display_map.at(way.edgeType);
 
         if(!draw) continue;
@@ -274,16 +276,11 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
-                    gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
-                    gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
-                    gv->setEdgeColor(edge_id, color);
-                    gv->setEdgeThickness(edge_id, width);
-                    ++edge_id;
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
                 }
                 u = v;
             }
@@ -295,10 +292,7 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
 }
 
 void MapGraph::drawSCC(int fraction, int display) const{
-    GraphViewer *gv = createGraphViewer();
-    
-    const int width = 5;
-
+    static const int width = 5;
     static const std::map<bool, string> color_map = {
         {true , "RED"},
         {false, "GRAY"}
@@ -311,12 +305,8 @@ void MapGraph::drawSCC(int fraction, int display) const{
         connected_nodes = std::unordered_set<DWGraph::node_t>(l.begin(), l.end());
     }
 
-    double lat_max = -90;
-    double lon_min = +180;
-    for(const auto &u: nodes){
-        lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon);
-    }
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
+
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
@@ -330,17 +320,12 @@ void MapGraph::drawSCC(int fraction, int display) const{
         for(const node_t &v: way.nodes){
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon_min)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat_max)*COORDMULT;
-                    gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
                     string color = color_map.at(connected_nodes.count(u) && connected_nodes.count(v));
-                    gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
-                    gv->setEdgeColor(edge_id, color);
-                    gv->setEdgeThickness(edge_id, width);
-                    ++edge_id;
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
                 }
                 u = v;
             }
@@ -357,9 +342,9 @@ private:
     coord_t dst_pos;
     double factor;
 public:
-    DistanceHeuristic(const std::unordered_map<node_t, coord_t> &nodes,
-                      coord_t dst_pos,
-                      double factor): nodes(nodes), dst_pos(dst_pos), factor(factor){}
+    DistanceHeuristic(const std::unordered_map<node_t, coord_t> &nodes_,
+                      coord_t dst_pos_,
+                      double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){}
     DWGraph::weight_t operator()(node_t u) const{
         auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
         return d*factor;
@@ -367,8 +352,6 @@ public:
 };
 
 void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool visited) const{
-    GraphViewer *gv = createGraphViewer();
-
     DWGraph G = getConnectedGraph();
 
     std::vector<std::string> name({
@@ -419,14 +402,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     << "- Nodes in path : " << paths[i].size() << "\n";
     }
 
-    double lat_min = 90, lat_max = -90;
-    double lon_min = +180, lon_max = -180;
-    for(const auto &u: nodes){
-        lat_min = std::min(lat_min, u.second.lat); lat_max = std::max(lat_max, u.second.lat);
-        lon_min = std::min(lon_min, u.second.lon); lon_max = std::max(lon_max, u.second.lon);
-    }
-    double lat = (lat_max+lat_min)/2;
-    double lon = (lon_max+lon_min)/2;
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
 
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
@@ -439,21 +415,20 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
         node_t u = 0;
         size_t i = 0;
         for(const node_t &v: way.nodes){
+            if(!G.hasNode(v)) break;
             if(i%fraction == 0 || i == way.nodes.size()-1){
                 if(drawn_nodes.find(v) == drawn_nodes.end()){
-                    long long x = +(nodes.at(v).lon-lon)*COORDMULT;
-                    long long y = -(nodes.at(v).lat-lat)*COORDMULT;
-                    gv->addNode(v, x, y);
                     drawn_nodes.insert(v);
+                    gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
                     string color = "";
                     int width = 4;
 
                     if(!visited){
-                        for(size_t i = 0; i < shortestPaths.size() && color == ""; ++i){
-                            if(paths[i].count(u) && paths[i].count(v)){
-                                color = pathColor[i];
+                        for(size_t j = 0; j < shortestPaths.size() && color == ""; ++j){
+                            if (paths[j].count(u) && paths[j].count(v)){
+                                color = pathColor[j];
                                 width = 12;
                             }
                         }
@@ -462,19 +437,15 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                             color = pathColor[0];
                             width = 12;
                         }
-                        for(long i = shortestPaths.size()-1; i >= 0 && color == ""; --i){
-                            if(shortestPaths[i]->hasVisited(u) && shortestPaths[i]->hasVisited(v)){
-                                color = visitedColor[i];
+                        for(long j = shortestPaths.size()-1; j >= 0 && color == ""; --j){
+                            if (shortestPaths[j]->hasVisited(u) && shortestPaths[j]->hasVisited(v)){
+                                color = visitedColor[j];
                             }
                         }
                     }
                     if(color == "") color = "LIGHT_GRAY";
 
-                    gv->addEdge(edge_id, u, v, EdgeType::UNDIRECTED);
-                    gv->setEdgeColor(edge_id, color);
-                    gv->setEdgeThickness(edge_id, width);
-                    ++edge_id;
-                    
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
                 }
                 u = v;
             }

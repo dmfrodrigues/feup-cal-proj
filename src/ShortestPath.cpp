@@ -16,14 +16,14 @@ std::list<node_t> ShortestPath::getPath() const{
     return res;
 }
 
-ShortestPath::FromOneMany::FromOneMany(ShortestPathOneMany *oneMany){
-    this->oneMany = oneMany;
+ShortestPath::FromOneMany::FromOneMany(ShortestPathOneMany *oneMany_){
+    this->oneMany = oneMany_;
 }
 
-void ShortestPath::FromOneMany::initialize(const DWGraph *G, node_t s, node_t d){
-    this->G = G;
-    this->s = s;
-    this->d = d;
+void ShortestPath::FromOneMany::initialize(const DWGraph *G_, node_t s_, node_t d_){
+    this->G = G_;
+    this->s = s_;
+    this->d = d_;
     oneMany->initialize(G, s);
 }
 void ShortestPath::FromOneMany::run(){
