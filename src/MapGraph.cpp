@@ -8,6 +8,7 @@
 #include "MapViewer.h"
 
 #include <fstream>
+#include <iomanip>
 #include <unordered_set>
 #include <map>
 #include <vector>
@@ -356,7 +357,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
 
     std::vector<std::string> name({
         "Dijkstra's algorithm with early stop",
-        "A* algorithm, " + std::to_string(int(120*SPEED_REDUCTION_FACTOR)) +"km/h time estimate [best-performance admissible heuristic]",
+        "A* algorithm, " + std::to_string(int(120*SPEED_REDUCTION_FACTOR)) +"km/h",
         "A* algorithm, 70km/h",
         "A* algorithm, 50km/h",
         "A* algorithm, 30km/h"
@@ -388,18 +389,24 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
 
     std::vector<std::unordered_set<node_t> > paths(shortestPaths.size());
 
+    std::cout << std::setfill(' ');
+    std::cout << "| Algorithm                                | Colour     | Execution time (micros) | Analysed nodes | Analysed edges | Total time (micros) | Increase in total time | Nodes in path |\n"
+              << "|------------------------------------------|------------|-------------------------|----------------|----------------|---------------------|------------------------|---------------|\n";
+
     for(size_t i = 0; i < shortestPaths.size(); ++i){
         shortestPaths[i]->initialize(&G, src, dst);
         shortestPaths[i]->run();
         std::list<node_t> path = shortestPaths[i]->getPath();
         paths[i] = std::unordered_set<node_t>(path.begin(), path.end());
         statistics_t stats = shortestPaths[i]->getStatistics();
-        std::cout   << name[i] << " (" << (!visited ? pathColor[i] : visitedColor[i]) << ")\n"
-                    << "- Execution time: " << stats.execution_time << " microseconds\n"
-                    << "- Analysed nodes: " << stats.analysed_nodes << "\n"
-                    << "- Analysed edges: " << stats.analysed_edges << "\n"
-                    << "- Total time    : " << shortestPaths[i]->getPathWeight() << " (+" << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%)\n"
-                    << "- Nodes in path : " << paths[i].size() << "\n";
+        std::cout   <<  "| " << std::setw(40) << name[i]
+                    << " | " << std::setw(10) << (!visited ? pathColor[i] : visitedColor[i])
+                    << " | " << std::setw(23) << stats.execution_time
+                    << " | " << std::setw(14) << stats.analysed_nodes
+                    << " | " << std::setw(14) << stats.analysed_edges
+                    << " | " << std::setw(19) << shortestPaths[i]->getPathWeight()
+                    << " | " << std::setw(21) << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%"
+                    << " | " << std::setw(13) << paths[i].size() << " |\n";
     }
 
     MapViewer *gv = createMapViewer(min_coord, max_coord);
