@@ -3,15 +3,18 @@
 #define COORDMULT               50000       // Multiply coordinates to get integer positions
 
 MapViewer::MapViewer(window_t w, window_t h, coord_t min_, coord_t max_):
-    GraphViewer(w, h, false), min(min_), max(max_), mean((min_+max_)/2){
+    GraphViewer(w, h, false), min(min_), max(max_){
     if(!GraphViewer::defineEdgeCurved(false))   throw std::runtime_error("");
     if(!GraphViewer::defineVertexSize(0))       throw std::runtime_error("");
     if(!GraphViewer::createWindow(w, h))        throw std::runtime_error("");
+    coord_t mean = (min+max)/2;
+    coord_t size(double(h)/COORDMULT, double(w)/COORDMULT);
+    nw_corner = mean + coord_t(size.getLat()/2, -size.getLon()/2);
 }
 
 void MapViewer::addNode(node_t i, coord_t c){
-    window_t x = (window_t)(double)(+(c.getLon() - mean.getLon())*COORDMULT);
-    window_t y = (window_t)(double)(-(c.getLat() - mean.getLat())*COORDMULT);
+    window_t x = (window_t)(double)(+(c.getLon() - nw_corner.getLon())*COORDMULT);
+    window_t y = (window_t)(double)(-(c.getLat() - nw_corner.getLat())*COORDMULT);
     if(!GraphViewer::addNode(nodes[i] = next_id++, x, y))   throw std::runtime_error("");
 }
 

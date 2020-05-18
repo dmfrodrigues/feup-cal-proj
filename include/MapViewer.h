@@ -10,7 +10,7 @@ public:
     typedef long long edge_t;
 private:
     const coord_t min, max;
-    const coord_t mean;
+    coord_t nw_corner;
     std::unordered_map<node_t, int> nodes;
     int next_id = 0;
 public:
