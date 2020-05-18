@@ -1,4 +1,4 @@
-\chapter{Implemented use cases} \label{use-cases}
+\chapter{Implemented use cases} \label{implemented-use-cases}
 \section{Graphical uses}
 All graphical uses make use of \href{https://github.com/STEMS-group/GraphViewer}{GraphViewer}, and are of the form \texttt{./main \textit{cmd} FRACTION FLAGS}, where:
 \begin{itemize}
@@ -75,6 +75,14 @@ This is not always true, as we found by calling \texttt{./main path 1 255 476430
                             A* algorithm, 30km/h &       $ 86426$ &       $163414$ &            $18.6807\%$ \\
     \end{tabular}
 \end{center}
+\begin{figure}[h]
+    \centering
+    \write18{ if [ ! -f 5Iqs37c.png ] ; then wget https://i.imgur.com/5Iqs37c.png ; fi ; }
+    \includegraphics[scale=0.24]{5Iqs37c}
+    \caption{Shortest path between \textit{Senhor da Pedra} to \textit{Serra de Santa Justa}, showing nodes explored by each algorithm.}
+    \label{fig:srpedra-stajusta}
+\end{figure}
+One can easily check the large number of nodes and edges explored by the Blue and Cyan algorithms are in the region surrounded by the second half of the optimal path, corresponding to Campanhã and north Gondomar, figure \ref{fig:srpedra-stajusta}. This unusual occurence may originate from the fact the Blue and Cyan algorithms use greedier heuristics than other algorithms, so they are more likely to explore nodes in a near-straight line to \textit{Serra de Santa Justa} after crossing Freixo Bridge, right through the urban areas of Gondomar, but since all edges in that area are suburban roads there is no particularly good path, and thus these algorithms will explore almost all nodes. On the other hand, using a less greedy heuristic will only minorly contribute to a preference for a straight line to the destination, meaning they will most likely follow globally faster routes (highways and trunk roads) and finish the search while having explored a lot less nodes (in fact, the Magenta algorithm explores only $17.6\%$ of the nodes and $16.2\%$ of the edges that the Cyan algorithm explores).
 \section{To implement}
 \begin{itemize}
     \item Given a list of vans and services for a day, find the set of routes for that day.
