@@ -8,6 +8,8 @@
 #include "Kosaraju.h"
 #include "KosarajuV.h"
 #include "Tarjan.h"
+#include "FloydWarshall.h"
+
 
 TEST_CASE("Depth-First Search", "[reachability-dfs]"){
     DUGraph G;  
@@ -72,6 +74,36 @@ TEST_CASE("DFS on transpose", "[dfs-transpose]"){
     REQUIRE(r->is_reachable(7) == false);
     REQUIRE(r->is_reachable(8) == false);
 }
+
+
+TEST_CASE("Floyd-Warshall", "[floyd-warshall]") {
+    DWGraph G;
+    for(int i = 0; i < 4; ++i) G.addNode(i);
+    G.addEdge(0, 2, -2); G.addEdge(2, 3, 2); G.addEdge(3, 1, -1); G.addEdge(1, 0, 4);
+    G.addEdge(1, 2, 3);
+
+    FloydWarshall *fw = new FloydWarshall(&G);
+    fw->initialize();
+    fw->run();
+
+    REQUIRE(std::list<DWGraph::node_t>({0, 2, 3, 1})    == fw->getPath(0, 1));
+    REQUIRE(std::list<DWGraph::node_t>({0, 2})          == fw->getPath(0, 2));
+    REQUIRE(std::list<DWGraph::node_t>({0, 2, 3})       == fw->getPath(0, 3));
+
+    REQUIRE(std::list<DWGraph::node_t>({1, 0})          == fw->getPath(1, 0));
+    REQUIRE(std::list<DWGraph::node_t>({1, 0, 2})       == fw->getPath(1, 2));
+    REQUIRE(std::list<DWGraph::node_t>({1, 0, 2, 3})    == fw->getPath(1, 3));
+
+    REQUIRE(std::list<DWGraph::node_t>({2, 3, 1, 0})    == fw->getPath(2, 0));
+    REQUIRE(std::list<DWGraph::node_t>({2, 3, 1})       == fw->getPath(2, 1));
+    REQUIRE(std::list<DWGraph::node_t>({2, 3})          == fw->getPath(2, 3));
+
+    REQUIRE(std::list<DWGraph::node_t>({3, 1, 0})       == fw->getPath(3, 0));
+    REQUIRE(std::list<DWGraph::node_t>({3, 1})          == fw->getPath(3, 1));
+    REQUIRE(std::list<DWGraph::node_t>({3, 1, 0, 2})    == fw->getPath(3, 2));
+    
+}
+
 
 TEST_CASE("Dijkstra's algorithm", "[shortestpath-dijkstra]"){
     DWGraph G;
