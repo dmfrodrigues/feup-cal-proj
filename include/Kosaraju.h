@@ -12,7 +12,7 @@ private:
     std::unordered_map<DUGraph::node_t, DUGraph::node_t> SCCs;
 public:
     Kosaraju();
-    void initialize(const DUGraph *G_);
+    void initialize(const DUGraph *G);
     void DFS_K(DUGraph::node_t u);
     void assign(DUGraph::node_t u, DUGraph::node_t root);
     void run();
