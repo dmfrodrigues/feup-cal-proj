@@ -2,6 +2,15 @@
 
 #include <fstream>
 
+Client::Client(std::string clientName, int NIF, int numPeople, InterestingNode dest, long long int arrival, bool direction){
+	this->clientName = clientName;
+	this->NIF = NIF;
+	this->numPeople = numPeople;
+	this->dest = dest;
+	this->arrival = arrival;
+	this->direction = direction;
+}
+
 std::string Client::getClientName() const {
 	return clientName;
 }

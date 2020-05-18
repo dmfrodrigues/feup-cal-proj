@@ -21,7 +21,8 @@ private:
 
 public:
     Client();
-
+    Client(std::string clientName, int NIF, int numPeople, InterestingNode dest, long long int arrival, bool direction);
+    
 	std::string getClientName() const;
 	int getNIF() const;
 	int getNumPeople() const;
