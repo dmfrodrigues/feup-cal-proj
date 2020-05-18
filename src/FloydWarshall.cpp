@@ -4,23 +4,34 @@ typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
 typedef DWGraph::Edge Edge;
 
+using namespace std;
+#include <iostream>
 
+FloydWarshall::FloydWarshall(const DWGraph *G) {
+    this->G = G;
+}
 
 void FloydWarshall::initialize() {
+    
+    std::vector<weight_t> v(this->G->getNodes().size(), DWGraph::INF);
+    std::vector<std::vector<weight_t>> dist_(this->G->getNodes().size(), v);
 
-    for (size_t i = 0; i < G->getNodes().size(); ++i) {
-        for (size_t j = 0; j < G->getNodes().size(); ++j) {
-            this->dist[i][j] = DWGraph::INF;
-            this->next[i][j] = NULL;
-        }
-    }
+    this->dist = dist_;
 
+    std::vector<weight_t> v2(this->G->getNodes().size(), (weight_t) NULL);
+    std::vector<std::vector<weight_t>> next_(this->G->getNodes().size(), v2);
+
+    this->next = next_;    
+    
+    
     // weight of a path from a node to itself is 0
     for (size_t i = 0; i < G->getNodes().size(); ++i) {
         this->dist[i][i] = 0;
         this->next[i][i] = i;
     }
 
+
+    
     std::list<node_t>::const_iterator it1;
     std::list<node_t>::const_iterator it2;
     int i;
@@ -36,6 +47,7 @@ void FloydWarshall::initialize() {
         }
     }
 }
+
 
 void FloydWarshall::run() {
     size_t nNodes = this->G->getNodes().size();
@@ -53,6 +65,8 @@ void FloydWarshall::run() {
     }
 }
 
+
+
 weight_t FloydWarshall::pathWeight(DWGraph::node_t u, DWGraph::node_t v) {
 
     for (const Edge &e : this->G->getAdj(u)) {
@@ -63,6 +77,8 @@ weight_t FloydWarshall::pathWeight(DWGraph::node_t u, DWGraph::node_t v) {
     return DWGraph::INF;
 }
 
+
+
 std::list<DWGraph::node_t> FloydWarshall::getPath(DWGraph::node_t i, DWGraph::node_t j) {
 
     std::list<DWGraph::node_t> result;
@@ -71,15 +87,16 @@ std::list<DWGraph::node_t> FloydWarshall::getPath(DWGraph::node_t i, DWGraph::no
     size_t v = j;
 
     result.push_back(u);
-    printf("%d ", u);
+    // printf("%d ", u);
 
     do {
-        u = next[u - 1][v - 1];
+        u = next[u][v];
         result.push_back(u);
-        printf("%d ", u);
+        // printf("%d ", u);
 
     } while (u != v);
 
+    // printf("\n");
+    
     return result;
 }
-

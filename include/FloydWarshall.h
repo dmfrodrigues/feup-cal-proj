@@ -1,7 +1,7 @@
 #ifndef FLOYDWARSHALL_H_INCLUDED
 #define FLOYDWARSHALL_H_INCLUDED
 
-#include "ShortestPathOneMany.h"
+#include "DWGraph.h"
 
 #include <vector>
 
@@ -11,6 +11,7 @@ private:
     std::vector< std::vector<DWGraph::weight_t> > dist;
     std::vector< std::vector<long long> > next;
 public:
+    FloydWarshall(const DWGraph *G);
     void initialize();
     void run();
 
