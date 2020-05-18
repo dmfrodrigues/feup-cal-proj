@@ -26,23 +26,23 @@ bool Client::getDirection() const {
     return direction;
 }
 
-std::vector<Client> Client::getClientsFromFile(std::string filename){
-    std::vector<Client> result;
+// std::vector<Client> Client::getClientsFromFile(std::string filename){
+//     std::vector<Client> result;
     
-    std::ifstream ifs("resources/" + filename);
-	if(!ifs.is_open()) return result;
+//     std::ifstream ifs("resources/" + filename);
+// 	if(!ifs.is_open()) return result;
 
-	int N;
-	ifs >> N;
+// 	int N;
+// 	ifs >> N;
 
-	std::string name;
-	int nif, npersons;
-    DUGraph::node_t node;
-    long long int t; 
-	for (size_t i = 0 ; i < N; i++) {
-		Client c;
-        ifs >> c;
-		result.push_back(c);
-	}
-	return result;
-}
+// 	std::string name;
+// 	int nif, npersons;
+//     DUGraph::node_t node;
+//     long long int t; 
+// 	for (size_t i = 0 ; i < N; i++) {
+// 		Client c;
+//         ifs >> c;
+// 		result.push_back(c);
+// 	}
+// 	return result;
+// }
