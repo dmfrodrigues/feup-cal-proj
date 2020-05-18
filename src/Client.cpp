@@ -14,7 +14,7 @@ int Client::getNumPeople() const {
 	return numPeople;
 }
 
-DUGraph::node_t Client::getDest() const {
+InterestingNode Client::getDest() const {
 	return dest;
 }
 

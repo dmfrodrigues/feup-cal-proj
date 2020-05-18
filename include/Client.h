@@ -2,6 +2,7 @@
 #define CLIENT_H_INCLUDED
 
 #include "DUGraph.h"
+#include "InterestingNode.h"
 
 #include <string>
 #include <vector>
@@ -13,7 +14,7 @@ private:
 	int NIF;
 	int numPeople;
 
-	DUGraph::node_t dest;
+	InterestingNode dest;
 	long long int arrival;
 
 	bool direction;
@@ -24,7 +25,7 @@ public:
 	std::string getClientName() const;
 	int getNIF() const;
 	int getNumPeople() const;
-	DUGraph::node_t getDest() const;
+	InterestingNode getDest() const;
 	long long int getArrival() const;
     bool getDirection() const;
 
