@@ -1,0 +1,81 @@
+\chapter{Implemented use cases} \label{use-cases}
+\section{Graphical uses}
+All graphical uses make use of \href{https://github.com/STEMS-group/GraphViewer}{GraphViewer}, and are of the form \texttt{./main \textit{cmd} FRACTION FLAGS}, where:
+\begin{itemize}
+    \item \texttt{FRACTION} is the fraction of roads to draw; more specifically, if \texttt{FRACTION} is $k$, for a given way $w$ the nodes $w_0, w_k, w_{2k},...,w_{|w|}$ are drawn. Thus, the higher the number, the greater the performance is, but also less nodes/edges are drawn.
+    \item \texttt{FLAGS} flags which roads are to be drawn (add them to combine):
+    \begin{center}
+        \begin{tabular}{l | r}
+            \textbf{Type of road} & \textbf{Flag} \\ \hline
+            Motorway     &    1 \\
+            Trunk        &    2 \\
+            Primary      &    4 \\
+            Secondary    &    8 \\
+            Tertiary     &   16 \\
+            Road         &   32 \\
+            Residential  &   64 \\
+            Slow         &  128
+        \end{tabular}
+    \end{center}
+\end{itemize}
+\subsection{View}
+\texttt{./main view FRACTION FLAGS} draws the road network, colouring roads according to their designated role (highway, residential, ...). Roads are drawn according to the following scheme:
+\begin{center}
+    \begin{tabular}{l | l}
+        \textbf{Type of road} & \textbf{Colour} \\ \hline
+        Motorway              & Red          \\
+        Trunk                 & Pink         \\
+        Primary               & Orange       \\
+        Secondary             & Yellow       \\
+        Tertiary              & Gray         \\
+        Road                  & Gray         \\
+        Residential           & Gray         \\
+        Slow                  & Gray, dashed
+    \end{tabular}
+\end{center}
+\subsection{Speed}
+\texttt{./main speed FRACTION FLAGS} draws the road network, colouring roads according to their maximum allowed speed. Roads are drawn according to the following scheme:
+\begin{center}
+    \begin{tabular}{r | l}
+        \textbf{Speed [$\SI{}{km/h}$] (up to)} & \textbf{Colour} \\ \hline
+                                  120 & Red             \\
+                                  100 & Orange          \\
+                                   80 & Yellow          \\
+                                   60 & Green           \\
+                                   50 & Black           \\
+                                   40 & Gray            
+    \end{tabular}
+\end{center}
+\subsection{Strongly connected components}
+\texttt{./main scc FRACTION FLAGS} draws the road network, colouring roads red if they connect two nodes in the train station's \acrshort{SCC}, or gray if at least one of the nodes is not in the train station's \acrshort{SCC}.
+\subsection{Shortest path}
+\texttt{./main path FRACTION FLAGS SOUR DEST [-v]} draws the road network, colouring the shortest path (actually least-time path) from nodes \texttt{SOUR} to \texttt{DEST} found by different algorithms. Using the option \texttt{-v} ignores all paths other than the optimal path, and colours nodes if they were explored by certain algorithms.\par
+The A* versions are distinguished by the maximum speed they assume a car can go. This is just a method to guarantee we have admissible (only A* algorithm $\SI{90}{km/h}$) and non-admissible heuristics.
+\begin{center}
+    \begin{tabular}{l | l | l}
+        \textbf{Algorithm}            & \textbf{Path colour} & \textbf{Visited nodes colour} \\ \hline
+        Dijkstra's algorithm with \hyperref[alg:dijkstra-early-stop]{early stop} & Black                & Pink                          \\
+        A* algorithm, $\SI{90}{km/h}$ & Black                & Red                           \\
+        A* algorithm, $\SI{70}{km/h}$ & Magenta              & Magenta                       \\
+        A* algorithm, $\SI{50}{km/h}$ & Blue                 & Blue                          \\
+        A* algorithm, $\SI{30}{km/h}$ & Cyan                 & Cyan                          
+    \end{tabular}
+\end{center}
+If \texttt{-v} is not used and a road belongs to more than one of the paths found by the different algorithms, that road is coloured with the colour of the best path (e.g., a road belongs to the Blue and Magenta paths, then it is coloured magenta).\par
+If \texttt{-v} is used and a road is explored by more than one of the algorithms, that road is coloured with the colour of the worst path (e.g., a road is explored by the Blue and Magenta algorithms, then it is coloured blue).\par
+The colouring scheme for \texttt{-v} is based on the assumption that algorithms providing better answers explore more nodes, so to visualize all sets of explored edges we may assume in most cases that the set of edges explored by a worse algorithm are a subset of edges explored by a better algorithm, and then the user may assume, for instance, that all nodes painted in Blue were explored by the Magenta, Red and Pink algorithms.\par
+This is not always true, as we found by calling \texttt{./main path 1 255 4764305642 6426059706 -v} (from \textit{Senhor da Pedra} to \textit{Serra de Santa Justa}), which yields the following statistics table:
+\begin{center}
+    \begin{tabular}{l | r | r | r}
+        Algorithm                                & Analysed nodes & Analysed edges & Increase in total time \\ \hline
+            Dijkstra's algorithm with early stop &       $185422$ &       $338315$ &            $      0\%$ \\
+                            A* algorithm, 90km/h &       $ 56607$ &       $ 98639$ &            $      0\%$ \\
+                            A* algorithm, 70km/h &       $ 15220$ &       $ 26438$ &            $ 8.9411\%$ \\
+                            A* algorithm, 50km/h &       $ 61507$ &       $111975$ &            $ 8.9411\%$ \\
+                            A* algorithm, 30km/h &       $ 86426$ &       $163414$ &            $18.6807\%$ \\
+    \end{tabular}
+\end{center}
+\section{To implement}
+\begin{itemize}
+    \item Given a list of vans and services for a day, find the set of routes for that day.
+\end{itemize}
