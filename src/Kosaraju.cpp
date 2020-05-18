@@ -4,8 +4,8 @@ typedef DUGraph::node_t node_t;
 
 Kosaraju::Kosaraju(){}
 
-void Kosaraju::initialize(const DUGraph *G){
-    this->G = G;
+void Kosaraju::initialize(const DUGraph *G_){
+    this->G = G_;
     this->S.clear();
     this->SCCs.clear();
 }

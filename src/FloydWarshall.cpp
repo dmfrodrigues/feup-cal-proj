@@ -7,8 +7,8 @@ typedef DWGraph::Edge Edge;
 using namespace std;
 #include <iostream>
 
-FloydWarshall::FloydWarshall(const DWGraph *G) {
-    this->G = G;
+FloydWarshall::FloydWarshall(const DWGraph *G_) {
+    this->G = G_;
 }
 
 void FloydWarshall::initialize() {
