@@ -1,14 +1,13 @@
 #include "Kosaraju.h"
-#include <iostream>
 
 typedef DUGraph::node_t node_t;
 
 Kosaraju::Kosaraju(){}
 
-void Kosaraju::initialize(const DUGraph *G){
-    this->G = G;
-    S.clear();
-    SCCs.clear();
+void Kosaraju::initialize(const DUGraph *G_){
+    this->G = G_;
+    this->S.clear();
+    this->SCCs.clear();
 }
 
 void Kosaraju::DFS_K(DUGraph::node_t u){

@@ -7,6 +7,7 @@
 #include "ShortestPathAll.h"
 #include "Kosaraju.h"
 #include "KosarajuV.h"
+#include "Tarjan.h"
 
 TEST_CASE("Depth-First Search", "[reachability-dfs]"){
     DUGraph G;  
@@ -184,4 +185,25 @@ TEST_CASE("Classic Kosaraju testing", "[SCC-KOSARAJU]"){
     REQUIRE(k.get_scc(7) == 7);
 
     REQUIRE(k.get_scc(8) == 8);
+}
+
+TEST_CASE("Tarjan testing", "[SCC-TARJAN]"){
+    DUGraph Graph;  
+    for (size_t i = 0 ; i < 9 ; i++) Graph.addNode(i);
+    Graph.addEdge(0,1); Graph.addEdge(1,2); Graph.addEdge(2,3); Graph.addEdge(2,4); Graph.addEdge(3,0);
+    Graph.addEdge(4,5); Graph.addEdge(5,6); Graph.addEdge(6,4); Graph.addEdge(7,6); Graph.addEdge(7,8);
+
+    Tarjan t; 
+    t.initialize(&Graph); 
+    t.run();
+    REQUIRE(t.get_scc(0) == t.get_scc(1));
+    REQUIRE(t.get_scc(0) == t.get_scc(2));
+    REQUIRE(t.get_scc(0) == t.get_scc(3));
+
+    REQUIRE(t.get_scc(4) == t.get_scc(5));
+    REQUIRE(t.get_scc(4) == t.get_scc(6));
+
+    REQUIRE(t.get_scc(7) == 7);
+
+    REQUIRE(t.get_scc(8) == 8);
 }
