@@ -69,6 +69,10 @@ bool Dijkstra::hasVisited(DWGraph::node_t u) const{
 
 Dijkstra* Dijkstra::clone() const{
     Dijkstra *ret = new Dijkstra();
-    ret->initialize(G, s);
+    ret->G = G;
+    ret->s = s;
+    ret->dist = dist;
+    ret->prev = prev;
+    ret->stats = stats;
     return ret;
 }

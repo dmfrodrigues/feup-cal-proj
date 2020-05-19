@@ -524,7 +524,7 @@ void MapGraph::drawReduced() const{
     DWGraph::DWGraph G = getReducedGraph();
 
     std::cout << "Starting" << std::endl;
-    ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra(), 8);
+    ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra(), 12);
     shortestPath->initialize(&G);
     shortestPath->run();
     std::cout << "Done in " << shortestPath->getStatistics().execution_time << std::endl;

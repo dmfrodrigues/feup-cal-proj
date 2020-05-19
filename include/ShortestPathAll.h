@@ -27,7 +27,7 @@ private:
     size_t nthreads;
     std::vector< std::queue<DWGraph::node_t> > threads_nodes;
     std::vector< std::thread > threads;
-    ShortestPathOneMany *oneMany = nullptr;
+    std::vector<ShortestPathOneMany*> oneManys;
     const DWGraph::DWGraph *G = nullptr;
     std::unordered_map<DWGraph::node_t, id_t> node2id;
     std::unordered_map<id_t, DWGraph::node_t> id2node;

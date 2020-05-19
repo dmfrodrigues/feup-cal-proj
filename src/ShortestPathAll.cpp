@@ -1,6 +1,7 @@
 #include "ShortestPathAll.h"
 
 #include <chrono>
+#include "shared_queue.h"
 
 #include <iostream>
 
@@ -22,8 +23,11 @@ std::list<node_t> ShortestPathAll::getPath(node_t s, node_t d) const{
 }
 
 ShortestPathAll::FromOneMany::FromOneMany(ShortestPathOneMany *oneMany_, size_t nthreads_){
-    this->oneMany = oneMany_;
     this->nthreads = nthreads_;
+    oneManys = std::vector<ShortestPathOneMany*>(nthreads);
+    for(size_t i = 0; i < nthreads; ++i){
+        oneManys[i] = oneMany_->clone();
+    }
 }
 
 void ShortestPathAll::FromOneMany::initialize(const DWGraph::DWGraph *G_){
@@ -42,12 +46,11 @@ void ShortestPathAll::FromOneMany::initialize(const DWGraph::DWGraph *G_){
     prev = std::vector< std::vector<id_t> >(id, std::vector<id_t>(id));
     // Threads
     threads_nodes = std::vector< std::queue<node_t> >(nthreads);
-    std::queue<node_t> Q; for(const node_t &u: V) Q.push(u);
+    shared_queue<node_t> Q; for(const node_t &u: V) Q.push(u);
     for(size_t i = 0; i < nthreads; ++i){
-        const size_t N = Q.size()/(nthreads-i);
+        const size_t N = (Q.size())/(nthreads-i);
         for(size_t n = 0; n < N; ++n){
-            threads_nodes[i].push(Q.front());
-            Q.pop();
+            threads_nodes[i].push(Q.pop());
         }
     }
 }
@@ -56,10 +59,10 @@ void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, 
     auto &Q = p->threads_nodes[i];
     while(!Q.empty()){
         node_t s = Q.front(); Q.pop();
-        p->oneMany->initialize(p->G, s);
-        p->oneMany->run();
+        p->oneManys[i]->initialize(p->G, s);
+        p->oneManys[i]->run();
         for(const node_t &d: p->G->getNodes()){
-            p->prev[p->node2id.at(s)][p->node2id.at(d)] = p->node2id.at(p->oneMany->getPrev(d));
+            p->prev[p->node2id.at(s)][p->node2id.at(d)] = p->node2id.at(p->oneManys[i]->getPrev(d));
         }
     }
 }
@@ -67,10 +70,15 @@ void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, 
 void ShortestPathAll::FromOneMany::run(){
     auto start_time = hrc::now();
 
-    for(size_t i = 0; i < nthreads; ++i){
-        //threads.push_back(std::thread(thread_func, i));
-        thread_func(this, i);
+    for(size_t i = 0; i < nthreads-1; ++i){
+        threads.push_back(std::thread(thread_func, this, i));
+        //thread_func(this, i);
     }
+
+    thread_func(this, nthreads-1);
+
+    for(size_t i = 0; i < nthreads-1; ++i)
+        threads[i].join();
 
     auto finish_time = hrc::now();
     stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
