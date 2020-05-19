@@ -20,7 +20,7 @@ node_t Dijkstra::getStart() const{
     return s;
 }
 
-void Dijkstra::initialize(const DWGraph *G_, DWGraph::node_t s_){
+void Dijkstra::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_){
     this->s = s_;
     this->G = G_;
     for(const node_t &u: G->getNodes()){

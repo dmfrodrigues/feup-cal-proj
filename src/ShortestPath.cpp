@@ -20,7 +20,7 @@ ShortestPath::FromOneMany::FromOneMany(ShortestPathOneMany *oneMany_){
     this->oneMany = oneMany_;
 }
 
-void ShortestPath::FromOneMany::initialize(const DWGraph *G_, node_t s_, node_t d_){
+void ShortestPath::FromOneMany::initialize(const DWGraph::DWGraph *G_, node_t s_, node_t d_){
     this->G = G_;
     this->s = s_;
     this->d = d_;

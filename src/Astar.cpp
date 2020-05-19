@@ -30,7 +30,7 @@ Astar::Astar(const Astar::heuristic_t *h_){
 
 Astar::Astar():Astar(&h_default){}
 
-void Astar::initialize(const DWGraph *G_, node_t s_, node_t d_){
+void Astar::initialize(const DWGraph::DWGraph *G_, node_t s_, node_t d_){
     this->G = G_;
     this->s = s_;
     this->d = d_;
@@ -58,7 +58,7 @@ void Astar::run(){
         node_t u = Q.top().second; ++stats.analysed_nodes;
         Q.pop();
         if(u == d) break;
-        for(const Edge &e: G->getAdj(u)){ ++stats.analysed_edges;
+        for(Edge e: G->getAdj(u)){ ++stats.analysed_edges;
             weight_t c_ = dist[u] + e.w;
             if(c_ < dist[e.v]){
                 dist[e.v] = c_;

@@ -11,7 +11,7 @@ private:
     virtual DWGraph::node_t getStart() const = 0;
 public:
     virtual ~ShortestPathOneMany();
-    virtual void initialize(const DWGraph *G, DWGraph::node_t s) = 0;
+    virtual void initialize(const DWGraph::DWGraph *G, DWGraph::node_t s) = 0;
     virtual void run() = 0;
     virtual DWGraph::node_t getPrev(DWGraph::node_t d) const = 0;
     virtual std::list<DWGraph::node_t> getPath(DWGraph::node_t d) const;

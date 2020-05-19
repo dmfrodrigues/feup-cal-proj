@@ -18,7 +18,7 @@ private:
     };
     static const default_heuristic h_default;
     const heuristic_t *h;
-    const DWGraph *G;
+    const DWGraph::DWGraph *G;
     DWGraph::node_t s, d;
     std::unordered_map<DWGraph::node_t, DWGraph::weight_t> dist;
     std::unordered_map<DWGraph::node_t, DWGraph::weight_t> hdist;
@@ -27,7 +27,7 @@ private:
 public:
     Astar(const heuristic_t *h);
     Astar();
-    void initialize(const DWGraph *G, DWGraph::node_t s, DWGraph::node_t d);
+    void initialize(const DWGraph::DWGraph *G, DWGraph::node_t s, DWGraph::node_t d);
     DWGraph::node_t getStart() const;
     DWGraph::node_t getDest () const;
     void run();

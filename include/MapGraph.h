@@ -46,8 +46,9 @@ private:
     std::list<way_t> ways;
 public:
     MapGraph(const std::string &path);
-    DWGraph getFullGraph() const;
-    DWGraph getConnectedGraph() const;
+    DWGraph::DWGraph getFullGraph() const;
+    DWGraph::DWGraph getConnectedGraph() const;
+    DWGraph::DWGraph getReducedGraph() const;
     void drawRoads (int fraction, int display) const;
     void drawSpeeds(int fraction, int display) const;
     void drawSCC   (int fraction, int display) const;
