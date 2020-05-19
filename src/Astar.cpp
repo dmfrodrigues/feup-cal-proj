@@ -40,7 +40,7 @@ void Astar::initialize(const DWGraph::DWGraph *G_, node_t s_, node_t d_){
     for(const node_t &u: G->getNodes()){
         dist[u] = DWGraph::INF;
         hdist[u] = DWGraph::INF;
-        prev[u] = -1;
+        prev[u] = DWGraph::INVALID_NODE;
     }
     stats = statistics_t();
 }

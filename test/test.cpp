@@ -110,26 +110,48 @@ TEST_CASE("Dijkstra's algorithm", "[shortestpath-dijkstra]"){
     for(int i = 0; i < 7; ++i) G.addNode(i);
     G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
     G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);
-    
-    ShortestPathOneMany *shortestPath = new Dijkstra();
-    shortestPath->initialize(&G, 0);
-    shortestPath->run();
+    {
+        ShortestPathOneMany *shortestPath = new Dijkstra();
+        shortestPath->initialize(&G, 0);
+        shortestPath->run();
 
-    REQUIRE(0 == shortestPath->getPathWeight(0));
-    REQUIRE(1 == shortestPath->getPathWeight(1));
-    REQUIRE(3 == shortestPath->getPathWeight(2));
-    REQUIRE(4 == shortestPath->getPathWeight(3));
-    REQUIRE(6 == shortestPath->getPathWeight(4));
-    REQUIRE(5 == shortestPath->getPathWeight(5));
-    REQUIRE(9 == shortestPath->getPathWeight(6));
+        REQUIRE(std::list<DWGraph::node_t>({0               }) == shortestPath->getPath(0));
+        REQUIRE(std::list<DWGraph::node_t>({0, 1            }) == shortestPath->getPath(1));
+        REQUIRE(std::list<DWGraph::node_t>({0, 1, 2         }) == shortestPath->getPath(2));
+        REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 3      }) == shortestPath->getPath(3));
+        REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 3, 4   }) == shortestPath->getPath(4));
+        REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5      }) == shortestPath->getPath(5));
+        REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5, 6   }) == shortestPath->getPath(6));
 
-    REQUIRE(std::list<DWGraph::node_t>({0               }) == shortestPath->getPath(0));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1            }) == shortestPath->getPath(1));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2         }) == shortestPath->getPath(2));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 3      }) == shortestPath->getPath(3));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 3, 4   }) == shortestPath->getPath(4));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5      }) == shortestPath->getPath(5));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5, 6   }) == shortestPath->getPath(6));
+        REQUIRE(0 == shortestPath->getPathWeight(0));
+        REQUIRE(1 == shortestPath->getPathWeight(1));
+        REQUIRE(3 == shortestPath->getPathWeight(2));
+        REQUIRE(4 == shortestPath->getPathWeight(3));
+        REQUIRE(6 == shortestPath->getPathWeight(4));
+        REQUIRE(5 == shortestPath->getPathWeight(5));
+        REQUIRE(9 == shortestPath->getPathWeight(6));
+    }
+    {
+        ShortestPathOneMany *shortestPath = new Dijkstra();
+        shortestPath->initialize(&G, 1);
+        shortestPath->run();
+
+        REQUIRE(std::list<DWGraph::node_t>({                }) == shortestPath->getPath(0));
+        REQUIRE(std::list<DWGraph::node_t>({1               }) == shortestPath->getPath(1));
+        REQUIRE(std::list<DWGraph::node_t>({1, 2            }) == shortestPath->getPath(2));
+        REQUIRE(std::list<DWGraph::node_t>({1, 2, 3         }) == shortestPath->getPath(3));
+        REQUIRE(std::list<DWGraph::node_t>({1, 2, 3, 4      }) == shortestPath->getPath(4));
+        REQUIRE(std::list<DWGraph::node_t>({1, 2, 5         }) == shortestPath->getPath(5));
+        REQUIRE(std::list<DWGraph::node_t>({1, 2, 5, 6      }) == shortestPath->getPath(6));
+
+        REQUIRE(DWGraph::INF == shortestPath->getPathWeight(0));
+        REQUIRE(0 == shortestPath->getPathWeight(1));
+        REQUIRE(2 == shortestPath->getPathWeight(2));
+        REQUIRE(3 == shortestPath->getPathWeight(3));
+        REQUIRE(5 == shortestPath->getPathWeight(4));
+        REQUIRE(4 == shortestPath->getPathWeight(5));
+        REQUIRE(8 == shortestPath->getPathWeight(6));
+    }
 }
 
 TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
@@ -138,17 +160,25 @@ TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
     G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
     G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);
     
-    ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra());
+    ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra(), 8);
     shortestPath->initialize(&G);
     shortestPath->run();
 
-    REQUIRE(0 == shortestPath->getPathWeight(0, 0));
-    REQUIRE(1 == shortestPath->getPathWeight(0, 1));
-    REQUIRE(3 == shortestPath->getPathWeight(0, 2));
-    REQUIRE(4 == shortestPath->getPathWeight(0, 3));
-    REQUIRE(6 == shortestPath->getPathWeight(0, 4));
-    REQUIRE(5 == shortestPath->getPathWeight(0, 5));
-    REQUIRE(9 == shortestPath->getPathWeight(0, 6));
+    std::vector< std::vector<DWGraph::weight_t> > dist = {
+        {0, 1, 3, 4, 6, 5, 9},
+        {DWGraph::INF, 0, 2, 3, 5, 4, 8},
+        {DWGraph::INF, DWGraph::INF, 0, 1, 3, 2, 6},
+        {DWGraph::INF, DWGraph::INF, DWGraph::INF, 0, 2, 5, 9},
+        {DWGraph::INF, DWGraph::INF, DWGraph::INF, DWGraph::INF, 0, 3, 7},
+        {DWGraph::INF, DWGraph::INF, DWGraph::INF, DWGraph::INF, DWGraph::INF, 0, 4},
+        {DWGraph::INF, DWGraph::INF, DWGraph::INF, DWGraph::INF, DWGraph::INF, DWGraph::INF, 0}
+    };
+
+    for(size_t s = 0; s < dist.size(); ++s){
+        for(size_t d = 0; d < dist[s].size(); ++d){
+            REQUIRE(dist[s][d] == shortestPath->getPathWeight(s, d));
+        }
+    }
 
     REQUIRE(std::list<DWGraph::node_t>({0               }) == shortestPath->getPath(0, 0));
     REQUIRE(std::list<DWGraph::node_t>({0, 1            }) == shortestPath->getPath(0, 1));

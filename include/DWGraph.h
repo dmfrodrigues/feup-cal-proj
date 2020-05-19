@@ -10,9 +10,10 @@
 #include "DUGraph.h"
 
 namespace DWGraph {
-    typedef size_t node_t;
+    typedef long long node_t;
+    static constexpr node_t INVALID_NODE = -1;
     typedef long long weight_t;
-    static constexpr weight_t INF = 1000000000;
+    static constexpr weight_t INF = 1000000000000;
     struct Edge{
         node_t v;
         weight_t w;

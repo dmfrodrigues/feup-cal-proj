@@ -85,6 +85,7 @@ DWGraph::DWGraph DWGraph::DWGraph::getTranspose() const{
 }
 
 DWGraph::weight_t DWGraph::DWGraph::getPathWeight(const std::list<node_t> &path) const{
+    if(path.empty()) return INF;
     weight_t ret = 0;
     auto it = path.begin();
     auto prev = it++;

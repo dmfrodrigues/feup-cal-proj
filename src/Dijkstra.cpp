@@ -25,7 +25,7 @@ void Dijkstra::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_){
     this->G = G_;
     for(const node_t &u: G->getNodes()){
         dist[u] = DWGraph::INF;
-        prev[u] = -1;
+        prev[u] = DWGraph::INVALID_NODE;
     }
 }
 
@@ -33,7 +33,7 @@ void Dijkstra::run(){
     auto start_time = hrc::now();
 
     min_priority_queue Q;
-    dist[s] = 0; Q.push(mk(dist[s], s)); ++stats.analysed_nodes;
+    dist[s] = 0; prev[s] = s; Q.push(mk(dist[s], s)); ++stats.analysed_nodes;
     while(!Q.empty()){
         node_t u = Q.top().second; ++stats.analysed_nodes;
         Q.pop();
@@ -65,4 +65,10 @@ statistics_t Dijkstra::getStatistics() const {
 
 bool Dijkstra::hasVisited(DWGraph::node_t u) const{
     return (dist.at(u) != DWGraph::INF);
+}
+
+Dijkstra* Dijkstra::clone() const{
+    Dijkstra *ret = new Dijkstra();
+    ret->initialize(G, s);
+    return ret;
 }
