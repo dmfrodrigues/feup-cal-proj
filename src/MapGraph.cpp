@@ -19,6 +19,7 @@
 #define SPEED_REDUCTION_FACTOR  0.75        // Reduce speed to account for intense road traffic, and the fact people not always travel at maximum speed 
 
 typedef DWGraph::node_t node_t;
+typedef DWGraph::weight_t weight_t;
 
 MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
     
@@ -119,7 +120,7 @@ DWGraph::DWGraph MapGraph::getFullGraph() const{
         auto it1 = w.nodes.begin();
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = coord_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
-            DWGraph::weight_t t_ms = SECONDS_TO_MICROS * d / w.getRealSpeed();
+            weight_t t_ms = SECONDS_TO_MICROS * d / w.getRealSpeed();
             G.addEdge(*it2, *it1, t_ms);
         }
     }
@@ -132,7 +133,7 @@ DWGraph::DWGraph MapGraph::getConnectedGraph() const{
     SCCnode *scc = new KosarajuV(new DFS());
     scc->initialize(&Gu, station);
     scc->run();
-    std::list<DWGraph::node_t> nodes_to_remove;
+    std::list<node_t> nodes_to_remove;
     for(const DUGraph::node_t &u: Gu.getNodes()){
         if(!scc->is_scc(u)){
             nodes_to_remove.push_back(u);
@@ -337,10 +338,10 @@ void MapGraph::drawSCC(int fraction, int display) const{
     };
 
     DWGraph::DWGraph G  = getFullGraph();
-    std::unordered_set<DWGraph::node_t> connected_nodes; {
+    std::unordered_set<node_t> connected_nodes; {
         DWGraph::DWGraph Gu = getConnectedGraph();
-        const std::list<DWGraph::node_t> &l = Gu.getNodes();
-        connected_nodes = std::unordered_set<DWGraph::node_t>(l.begin(), l.end());
+        const auto &l = Gu.getNodes();
+        connected_nodes = std::unordered_set<node_t>(l.begin(), l.end());
     }
 
     MapViewer *gv = createMapViewer(min_coord, max_coord);
@@ -383,7 +384,7 @@ public:
     DistanceHeuristic(const std::unordered_map<node_t, coord_t> &nodes_,
                       coord_t dst_pos_,
                       double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){}
-    DWGraph::weight_t operator()(node_t u) const{
+    weight_t operator()(node_t u) const{
         auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
         return d*factor;
     }
@@ -501,3 +502,22 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
     for(ShortestPath *p: shortestPaths) delete p;
 }
 
+void MapGraph::drawReduced() const{
+    MapViewer *mv = createMapViewer(min_coord, max_coord);
+
+    long long edge_id = 0;
+
+    DWGraph::DWGraph G = getReducedGraph();
+    const auto &V = G.getNodes();
+    for(const node_t &u: V){
+        mv->addNode(u, nodes.at(u));
+    }
+    for(const node_t &u: V){
+        for(const DWGraph::Edge &e: G.getAdj(u)){
+            mv->addEdge(edge_id++, u, e.v, EdgeType::DIRECTED, "GRAY", 7);
+        }
+    }
+
+    mv->rearrange();
+
+}

@@ -17,13 +17,22 @@ namespace DWGraph {
         node_t v;
         weight_t w;
         Edge(node_t v, weight_t w);
-        bool operator<(const Edge &e) const{
-            return v < e.v;
+        bool operator==(const Edge &e) const{
+            return v == e.v;
         }
     };
+}
+
+namespace std{
+    template<> struct hash<DWGraph::Edge>{
+        std::size_t operator()(const DWGraph::Edge &e) const{
+            return std::hash<DWGraph::node_t>()(e.v);
+        }
+    };
+}
+
+namespace DWGraph{
     class DWGraph {
-    public:
-        
     private:
         std::list<node_t> nodes;
         std::unordered_map< node_t, std::list< Edge > > adj;
