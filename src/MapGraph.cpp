@@ -6,6 +6,7 @@
 #include "Dijkstra.h"
 #include "ShortestPath.h"
 #include "MapViewer.h"
+#include "ShortestPathAll.h"
 
 #include <fstream>
 #include <iomanip>
@@ -520,11 +521,11 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
 }
 
 void MapGraph::drawReduced() const{
-    MapViewer *mv = createMapViewer(min_coord, max_coord);
+    DWGraph::DWGraph G = getReducedGraph();
 
+    MapViewer *mv = createMapViewer(min_coord, max_coord);
     long long edge_id = 0;
 
-    DWGraph::DWGraph G = getReducedGraph();
     const auto &V = G.getNodes();
     for(const node_t &u: V){
         mv->addNode(u, nodes.at(u));
@@ -536,5 +537,4 @@ void MapGraph::drawReduced() const{
     }
 
     mv->rearrange();
-
 }

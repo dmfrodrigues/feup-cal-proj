@@ -3,6 +3,7 @@
 typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
 typedef DWGraph::Edge Edge;
+typedef std::chrono::high_resolution_clock hrc;
 
 FloydWarshall::FloydWarshall() {}
 
@@ -23,8 +24,9 @@ void FloydWarshall::initialize(const DWGraph::DWGraph *G_) {
     
 }
 
-
 void FloydWarshall::run() {
+    auto start_time = hrc::now();
+
     const auto &V = G->getNodes();
 
     for(const node_t &u: V){
@@ -51,6 +53,9 @@ void FloydWarshall::run() {
             }
         }
     }
+
+    auto finish_time = hrc::now();
+    stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
 
 DWGraph::node_t FloydWarshall::getPrev(DWGraph::node_t s, DWGraph::node_t d) const{
@@ -59,4 +64,8 @@ DWGraph::node_t FloydWarshall::getPrev(DWGraph::node_t s, DWGraph::node_t d) con
 
 weight_t FloydWarshall::getPathWeight(DWGraph::node_t u, DWGraph::node_t v) const{
     return dist[node2id.at(u)][node2id.at(v)];
+}
+
+statistics_t FloydWarshall::getStatistics() const {
+    return stats;
 }

@@ -15,7 +15,8 @@ LIB_GV=$(LDIR_GV)/libgraphviewer.a
 
 IFLAGS =$(IDIR) $(IDIR_GV)
 
-CFLAGS_PARANOID=-g -O -Wall -pedantic -Wunused-result  \
+CFLAGS_OPTIMIZE=-Ofast -fno-signed-zeros -fno-trapping-math -frename-registers -funroll-loops
+CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result  \
     -pedantic-errors -Wextra -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
     -Wdisabled-optimization \
@@ -36,8 +37,8 @@ CFLAGS_PARANOID=-g -O -Wall -pedantic -Wunused-result  \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
     -Wvolatile-register-var  -Wwrite-strings #-Werror -Weffc++ -Waggregate-return -Wpadded 
-#CFLAGS =-Wall -g $(IFLAGS)#-O3
-CFLAGS=$(CFLAGS_PARANOID) $(IFLAGS)
+#CFLAGS =-Wall -pthread -g $(CFLAGS_OPTIMIZE) $(IFLAGS)
+CFLAGS=$(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE) $(IFLAGS)
 
 all: data $(PROG)
 
@@ -47,7 +48,7 @@ data:
 O_FILES=$(ODIR)/Astar.o $(ODIR)/coord.o $(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/FloydWarshall.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/Kosaraju.o $(ODIR)/KosarajuV.o $(ODIR)/Tarjan.o $(ODIR)/MapGraph.o $(ODIR)/MapViewer.o $(ODIR)/SCCnode.o $(ODIR)/ShortestPath.o $(ODIR)/ShortestPathAll.o $(ODIR)/ShortestPathOneMany.o
 
 $(PROG): $(O_FILES) $(LIB_GV) $(ODIR)/main.o
-	$(CC) $(O_FILES) $(ODIR)/main.o -o $(PROG) -L$(LDIR_GV) -lgraphviewer
+	$(CC) $(CFLAGS) $(O_FILES) $(ODIR)/main.o -o $(PROG) -L$(LDIR_GV) -lgraphviewer
 
 $(LIB_GV):
 	make -C GraphViewer

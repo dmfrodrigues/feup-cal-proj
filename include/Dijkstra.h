@@ -20,6 +20,7 @@ public:
     DWGraph::weight_t getPathWeight(DWGraph::node_t d) const;
     statistics_t getStatistics() const;
     bool hasVisited(DWGraph::node_t u) const;
+    Dijkstra* clone() const;
 };
 
 #endif //DIJKSTRA_H_INCLUDED

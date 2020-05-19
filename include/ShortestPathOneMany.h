@@ -18,6 +18,7 @@ public:
     virtual DWGraph::weight_t getPathWeight(DWGraph::node_t d) const = 0;
     virtual statistics_t getStatistics() const = 0;
     virtual bool hasVisited(DWGraph::node_t u) const = 0;
+    virtual ShortestPathOneMany* clone() const = 0;
 };
 
 #endif //SHORTESTPATHONEMANY_H_INCLUDED
