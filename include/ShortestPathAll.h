@@ -23,20 +23,17 @@ public:
 
 class ShortestPathAll::FromOneMany : public ShortestPathAll {
 private:
-    typedef uint16_t id_t;
-    static const id_t INVALID_ID;
     size_t nthreads;
     shared_queue<DWGraph::node_t> Q;
     std::vector< std::thread > threads;
-    std::vector<ShortestPathOneMany*> oneManys;
+    const ShortestPathOneMany *oneMany;
+    std::unordered_map<DWGraph::node_t, ShortestPathOneMany*> oneManys;
     const DWGraph::DWGraph *G = nullptr;
-    std::unordered_map<DWGraph::node_t, id_t> node2id;
-    std::unordered_map<id_t, DWGraph::node_t> id2node;
-    std::vector< std::vector<id_t> > prev;
     statistics_t stats;
     static void thread_func(ShortestPathAll::FromOneMany *p, size_t i);
 public:
     FromOneMany(ShortestPathOneMany *oneMany, size_t nthreads);
+    void initialize(const DWGraph::DWGraph *G, const std::unordered_set<DWGraph::node_t> &nodes);
     void initialize(const DWGraph::DWGraph *G);
     void run();
     DWGraph::node_t getPrev(DWGraph::node_t s, DWGraph::node_t d) const;
