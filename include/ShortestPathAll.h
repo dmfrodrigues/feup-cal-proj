@@ -8,6 +8,7 @@
 
 #include "DWGraph.h"
 #include "ShortestPathOneMany.h"
+#include "shared_queue.h"
 
 class ShortestPathAll {
 public:
@@ -25,7 +26,7 @@ private:
     typedef uint16_t id_t;
     static const id_t INVALID_ID;
     size_t nthreads;
-    std::vector< std::queue<DWGraph::node_t> > threads_nodes;
+    shared_queue<DWGraph::node_t> Q;
     std::vector< std::thread > threads;
     std::vector<ShortestPathOneMany*> oneManys;
     const DWGraph::DWGraph *G = nullptr;

@@ -1,7 +1,6 @@
 #include "ShortestPathAll.h"
 
 #include <chrono>
-#include "shared_queue.h"
 
 #include <iostream>
 
@@ -44,21 +43,20 @@ void ShortestPathAll::FromOneMany::initialize(const DWGraph::DWGraph *G_){
     id2node[INVALID_ID] = DWGraph::INVALID_NODE;
     // Prev
     prev = std::vector< std::vector<id_t> >(id, std::vector<id_t>(id));
-    // Threads
-    threads_nodes = std::vector< std::queue<node_t> >(nthreads);
-    shared_queue<node_t> Q; for(const node_t &u: V) Q.push(u);
-    for(size_t i = 0; i < nthreads; ++i){
-        const size_t N = (Q.size())/(nthreads-i);
-        for(size_t n = 0; n < N; ++n){
-            threads_nodes[i].push(Q.pop());
-        }
+    // Queue
+    for(const node_t &u: V){
+        Q.push(u);
     }
 }
 
 void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, size_t i){
-    auto &Q = p->threads_nodes[i];
-    while(!Q.empty()){
-        node_t s = Q.front(); Q.pop();
+    node_t s;
+    while(true){
+        try{
+            s = p->Q.pop();
+        } catch(const std::logic_error &e) {
+            return;
+        }
         p->oneManys[i]->initialize(p->G, s);
         p->oneManys[i]->run();
         for(const node_t &d: p->G->getNodes()){
