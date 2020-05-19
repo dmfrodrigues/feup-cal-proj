@@ -38,7 +38,7 @@ public:
     }
 
     friend std::ostream& operator<< (std::ostream& os, Client& c){
-        os << c.clientName << c.NIF << c.dest << c.arrival << c.direction;
+        os << c.clientName << " " << c.NIF << " " << c.numPeople << " " << c.dest.getNode() << " " << c.arrival << " " << c.direction;
         return os;
     }
 };
