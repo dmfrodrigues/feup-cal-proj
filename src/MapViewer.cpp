@@ -18,7 +18,7 @@ void MapViewer::addNode(node_t i, coord_t c){
     if(!GraphViewer::addNode(nodes[i] = next_id++, x, y))   throw std::runtime_error("");
 }
 
-void MapViewer::addEdge(edge_t i, node_t u, node_t v, int edge_type, string color, window_t w, bool dashed){
+void MapViewer::addEdge(edge_t i, node_t u, node_t v, int edge_type, std::string color, window_t w, bool dashed){
     if(!GraphViewer::addEdge((int)i, nodes[u], nodes[v], edge_type))    throw std::runtime_error("");
     if(!GraphViewer::setEdgeColor((int)i, color))                       throw std::runtime_error("");
     if(!GraphViewer::setEdgeThickness((int)i, w))                       throw std::runtime_error("");

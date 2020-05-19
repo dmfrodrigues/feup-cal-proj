@@ -4,9 +4,6 @@ typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
 typedef DWGraph::Edge Edge;
 
-using namespace std;
-#include <iostream>
-
 FloydWarshall::FloydWarshall() {}
 
 void FloydWarshall::initialize(const DWGraph::DWGraph *G_) {

@@ -43,8 +43,8 @@ MapGraph::speed_t MapGraph::way_t::getMaxSpeed() const{
         case edge_type_t::RESIDENTIAL    : return  30;
         case edge_type_t::LIVING_STREET  : return  10;
         case edge_type_t::SERVICE        : return  20;
-        case edge_type_t::NO             : throw invalid_argument("");
-        default                          : throw invalid_argument("");
+        case edge_type_t::NO             : throw std::invalid_argument("");
+        default                          : throw std::invalid_argument("");
     }
 }
 
@@ -70,14 +70,14 @@ MapGraph::speed_t MapGraph::way_t::getRealSpeed() const{
         case edge_type_t::RESIDENTIAL    : return  30*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
         case edge_type_t::LIVING_STREET  : return  10*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
         case edge_type_t::SERVICE        : return  20*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
-        case edge_type_t::NO             : throw invalid_argument("");
-        default                          : throw invalid_argument("");
+        case edge_type_t::NO             : throw std::invalid_argument("");
+        default                          : throw std::invalid_argument("");
     }
 }
 
 MapGraph::MapGraph(const std::string &path){
     {
-        ifstream is(path + ".nodes");
+        std::ifstream is(path + ".nodes");
         size_t numberNodes; is >> numberNodes;
         for(size_t i = 0; i < numberNodes; ++i){
             coord_t::deg_t lat, lon;
@@ -86,7 +86,7 @@ MapGraph::MapGraph(const std::string &path){
         }
     }
     {
-        ifstream is(path + ".edges");
+        std::ifstream is(path + ".edges");
         size_t numberWays; is >> numberWays; 
         for(size_t i = 0; i < numberWays; ++i){
             way_t way; char c;
@@ -146,8 +146,8 @@ DWGraph::DWGraph MapGraph::getConnectedGraph() const{
 
 DWGraph::DWGraph MapGraph::getReducedGraph() const{
     DWGraph::DWGraph G = getConnectedGraph();
-    cout << "Nodes: " << G.getNodes().size() << "\n"
-         << "Edges: " << G.getNumberEdges() << "\n";
+    std::cout << "Nodes: " << G.getNodes().size() << "\n"
+              << "Edges: " << G.getNumberEdges() << "\n";
     
     size_t prev_nodes;
     do{
@@ -191,8 +191,8 @@ DWGraph::DWGraph MapGraph::getReducedGraph() const{
                 }
             }
         }
-        cout << "Nodes: " << G.getNodes().size() << "\n"
-            << "Edges: " << G.getNumberEdges() << "\n";
+        std::cout << "Nodes: " << G.getNodes().size() << "\n"
+                  << "Edges: " << G.getNumberEdges() << "\n";
     } while(prev_nodes != G.getNodes().size());
 
     return G;
@@ -253,7 +253,7 @@ void MapGraph::drawRoads(int fraction, int display) const{
         {edge_type_t::LIVING_STREET ,  5},
         {edge_type_t::SERVICE       ,  5}
     };
-    static const std::unordered_map<edge_type_t, string> color_map = {
+    static const std::unordered_map<edge_type_t, std::string> color_map = {
         {edge_type_t::MOTORWAY      , "RED"    },
         {edge_type_t::MOTORWAY_LINK , "RED"    },
         {edge_type_t::TRUNK         , "PINK"   },
@@ -275,7 +275,7 @@ void MapGraph::drawRoads(int fraction, int display) const{
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
-        string color = color_map.at(way.edgeType);
+        std::string color = color_map.at(way.edgeType);
         int width = width_map.at(way.edgeType);
         bool dashed = dashed_map.at(way.edgeType);
         bool draw = display & display_map.at(way.edgeType);
@@ -304,7 +304,7 @@ void MapGraph::drawRoads(int fraction, int display) const{
 
 void MapGraph::drawSpeeds(int fraction, int display) const{
     static const int width = 5;
-    static const std::map<speed_t, string> color_map = {
+    static const std::map<speed_t, std::string> color_map = {
         {120, "RED"},
         {100, "ORANGE"},
         { 80, "YELLOW"},
@@ -318,9 +318,9 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
     std::unordered_set<node_t> drawn_nodes;
     size_t edge_id = 0;
     for(const way_t &way: ways){
-        string color; {
+        std::string color; {
             auto it = color_map.lower_bound(way.getMaxSpeed());
-            if(it == color_map.end()) throw invalid_argument("");
+            if(it == color_map.end()) throw std::invalid_argument("");
             color = it->second;
         }
         bool draw = display & display_map.at(way.edgeType);
@@ -349,7 +349,7 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
 
 void MapGraph::drawSCC(int fraction, int display) const{
     static const int width = 5;
-    static const std::map<bool, string> color_map = {
+    static const std::map<bool, std::string> color_map = {
         {true , "RED"},
         {false, "GRAY"}
     };
@@ -380,7 +380,7 @@ void MapGraph::drawSCC(int fraction, int display) const{
                     gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
-                    string color = color_map.at(connected_nodes.count(u) && connected_nodes.count(v));
+                    std::string color = color_map.at(connected_nodes.count(u) && connected_nodes.count(v));
                     gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
                 }
                 u = v;
@@ -484,7 +484,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     gv->addNode(v, nodes.at(v));
                 }
                 if(u != 0){
-                    string color = "";
+                    std::string color = "";
                     int width = 4;
 
                     if(!visited){
