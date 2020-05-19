@@ -32,8 +32,8 @@ void FloydWarshall::initialize() {
 
 
     
-    std::list<node_t>::const_iterator it1;
-    std::list<node_t>::const_iterator it2;
+    std::unordered_set<node_t>::const_iterator it1;
+    std::unordered_set<node_t>::const_iterator it2;
     int i;
     int j;
 
