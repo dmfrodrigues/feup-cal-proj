@@ -12,6 +12,10 @@ private:
 
 public:
 
+    DUGraph::node_t getNode() const {
+        return node;
+    }
+
     friend std::istream& operator>> (std::istream& is, InterestingNode& n){
         is >> n.name >> n.node;
         return is;
