@@ -24,9 +24,7 @@ std::list<node_t> ShortestPathAll::getPath(node_t s, node_t d) const{
 ShortestPathAll::FromOneMany::FromOneMany(ShortestPathOneMany *oneMany_, size_t nthreads_){
     this->nthreads = nthreads_;
     oneManys = std::vector<ShortestPathOneMany*>(nthreads);
-    for(size_t i = 0; i < nthreads; ++i){
-        oneManys[i] = oneMany_->clone();
-    }
+    for(size_t i = 0; i < nthreads; ++i) oneManys[i] = oneMany_->clone();
 }
 
 void ShortestPathAll::FromOneMany::initialize(const DWGraph::DWGraph *G_){
@@ -41,14 +39,8 @@ void ShortestPathAll::FromOneMany::initialize(const DWGraph::DWGraph *G_){
     }
     node2id[DWGraph::INVALID_NODE] = INVALID_ID;
     id2node[INVALID_ID] = DWGraph::INVALID_NODE;
-    // Prev
-    prev = std::vector< std::vector<id_t> >(id, std::vector<id_t>(id));
-    // Queue
-    for(const node_t &u: V){
-        Q.push(u);
-        if(Q.size() >= 2417) break;    
-    }
-    std::cout << "Q.size()=" << Q.size() << std::endl;
+    prev = std::vector< std::vector<id_t> >(id, std::vector<id_t>(id));                         // Prev
+    for(const node_t &u: V) Q.push(u);                                                          // Queue
 }
 
 void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, size_t i){
@@ -69,17 +61,9 @@ void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, 
 
 void ShortestPathAll::FromOneMany::run(){
     auto start_time = hrc::now();
-
-    for(size_t i = 0; i < nthreads-1; ++i){
-        threads.push_back(std::thread(thread_func, this, i));
-        //thread_func(this, i);
-    }
-
+    for(size_t i = 0; i < nthreads-1; ++i) threads.push_back(std::thread(thread_func, this, i));
     thread_func(this, nthreads-1);
-
-    for(size_t i = 0; i < nthreads-1; ++i)
-        threads[i].join();
-
+    for(size_t i = 0; i < nthreads-1; ++i) threads[i].join();
     auto finish_time = hrc::now();
     stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
