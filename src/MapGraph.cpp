@@ -523,12 +523,6 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
 void MapGraph::drawReduced() const{
     DWGraph::DWGraph G = getReducedGraph();
 
-    std::cout << "Starting" << std::endl;
-    ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra(), 12);
-    shortestPath->initialize(&G);
-    shortestPath->run();
-    std::cout << "Done in " << shortestPath->getStatistics().execution_time << std::endl;
-    /*
     MapViewer *mv = createMapViewer(min_coord, max_coord);
     long long edge_id = 0;
 
@@ -543,5 +537,4 @@ void MapGraph::drawReduced() const{
     }
 
     mv->rearrange();
-    */
 }
