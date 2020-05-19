@@ -7,96 +7,59 @@ typedef DWGraph::Edge Edge;
 using namespace std;
 #include <iostream>
 
-FloydWarshall::FloydWarshall(const DWGraph::DWGraph *G_) {
+FloydWarshall::FloydWarshall() {}
+
+void FloydWarshall::initialize(const DWGraph::DWGraph *G_) {
     this->G = G_;
-}
-
-void FloydWarshall::initialize() {
     
-    std::vector<weight_t> v(this->G->getNodes().size(), DWGraph::INF);
-    std::vector<std::vector<weight_t>> dist_(this->G->getNodes().size(), v);
+    const auto &V = G->getNodes();
 
-    this->dist = dist_;
-
-    std::vector<weight_t> v2(this->G->getNodes().size(), (weight_t) NULL);
-    std::vector<std::vector<weight_t>> next_(this->G->getNodes().size(), v2);
-
-    this->next = next_;    
-    
-    
-    // weight of a path from a node to itself is 0
-    for (size_t i = 0; i < G->getNodes().size(); ++i) {
-        this->dist[i][i] = 0;
-        this->next[i][i] = i;
+    id_t id = 0;
+    for(const node_t &u: V){
+        node2id[u] = id;
+        id2node[id] = u;
+        ++id;
     }
 
-
+    dist = std::vector< std::vector<DWGraph::weight_t> >(V.size(),std::vector<DWGraph::weight_t>(V.size(), DWGraph::INF));
+    prev = std::vector< std::vector<DWGraph::node_t  > >(V.size(),std::vector<DWGraph::node_t  >(V.size()));
     
-    std::unordered_set<node_t>::const_iterator it1;
-    std::unordered_set<node_t>::const_iterator it2;
-    int i;
-    int j;
-
-    for (it1 = G->getNodes().begin(), i = 0; it1 != G->getNodes().end(); ++it1, ++i) {
-        for (it2 = G->getNodes().begin(), j = 0; it2 != G->getNodes().end(); ++it2, ++j) {
-
-            if (i != j) {
-                this->dist[i][j] = pathWeight(*it1, *it2);
-                this->next[i][j] = j;
-            }
-        }
-    }
 }
 
 
 void FloydWarshall::run() {
-    size_t nNodes = this->G->getNodes().size();
+    const auto &V = G->getNodes();
 
-    for (size_t k = 0; k < nNodes; ++k) {
-        for (size_t i = 0; i <  nNodes; ++i) {
-            for (size_t j = 0; j < nNodes; ++j) {
-                weight_t new_weight = this->dist[i][k] + this->dist[k][j];
-                if (this->dist[i][j] > new_weight) {
-                    this->dist[i][j] = new_weight;
-                    this->next[i][j] = this->next[i][k];
+    for(const node_t &u: V){
+        id_t u_id = node2id[u];
+        dist[u_id][u_id] = 0;
+        prev[u_id][u_id] = u_id;
+        for(const Edge &e: G->getAdj(u)){
+            id_t v_id = node2id[e.v];
+            if(e.w < dist[u_id][v_id]){
+                dist[u_id][v_id] = e.w;
+                prev[u_id][v_id] = u_id;
+            }
+        }
+    }
+
+    for (size_t k = 0; k < V.size(); ++k) {
+        for (size_t i = 0; i <  V.size(); ++i) {
+            for (size_t j = 0; j < V.size(); ++j) {
+                weight_t c_ = dist[i][k] + dist[k][j];
+                if (c_ < dist[i][j]) {
+                    dist[i][j] = c_;
+                    prev[i][j] = prev[k][j];
                 }
             }
         }
     }
 }
 
-
-
-weight_t FloydWarshall::pathWeight(DWGraph::node_t u, DWGraph::node_t v) {
-
-    for (const Edge &e : this->G->getAdj(u)) {
-        if (e.v == v) {
-            return e.w;
-        }
-    }
-    return DWGraph::INF;
+DWGraph::node_t FloydWarshall::getPrev(DWGraph::node_t s, DWGraph::node_t d) const{
+    return id2node.at(prev[node2id.at(s)][node2id.at(d)]);
 }
 
-
-
-std::list<DWGraph::node_t> FloydWarshall::getPath(DWGraph::node_t i, DWGraph::node_t j) {
-
-    std::list<DWGraph::node_t> result;
-
-    size_t u = i;
-    size_t v = j;
-
-    result.push_back(u);
-    // printf("%d ", u);
-
-    do {
-        u = next[u][v];
-        result.push_back(u);
-        // printf("%d ", u);
-
-    } while (u != v);
-
-    // printf("\n");
-    
-    return result;
+weight_t FloydWarshall::getPathWeight(DWGraph::node_t u, DWGraph::node_t v) const{
+    return dist[node2id.at(u)][node2id.at(v)];
 }

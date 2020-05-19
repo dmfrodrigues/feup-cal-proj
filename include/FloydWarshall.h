@@ -1,22 +1,25 @@
 #ifndef FLOYDWARSHALL_H_INCLUDED
 #define FLOYDWARSHALL_H_INCLUDED
 
+#include "ShortestPathAll.h"
 #include "DWGraph.h"
 
 #include <vector>
 
-class FloydWarshall {
+class FloydWarshall: public ShortestPathAll {
 private:
     const DWGraph::DWGraph *G;
+    typedef size_t id_t;
+    std::unordered_map<DWGraph::node_t, id_t> node2id;
+    std::unordered_map<id_t, DWGraph::node_t> id2node;
     std::vector< std::vector<DWGraph::weight_t> > dist;
-    std::vector< std::vector<long long> > next;
+    std::vector< std::vector<DWGraph::node_t  > > prev;
 public:
-    FloydWarshall(const DWGraph::DWGraph *G);
-    void initialize();
+    FloydWarshall();
+    void initialize(const DWGraph::DWGraph *G);
     void run();
-
-    DWGraph::weight_t pathWeight(DWGraph::node_t u, DWGraph::node_t v);
-    std::list<DWGraph::node_t> getPath(DWGraph::node_t i, DWGraph::node_t j);
+    DWGraph::node_t getPrev(DWGraph::node_t s, DWGraph::node_t d) const;
+    DWGraph::weight_t getPathWeight(DWGraph::node_t u, DWGraph::node_t v) const;
 };
 
 #endif //FLOYDWARSHALL_H_INCLUDED
