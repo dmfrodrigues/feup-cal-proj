@@ -46,7 +46,9 @@ void ShortestPathAll::FromOneMany::initialize(const DWGraph::DWGraph *G_){
     // Queue
     for(const node_t &u: V){
         Q.push(u);
+        if(Q.size() >= 2417) break;    
     }
+    std::cout << "Q.size()=" << Q.size() << std::endl;
 }
 
 void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, size_t i){
