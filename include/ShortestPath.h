@@ -10,7 +10,7 @@
 class ShortestPath {
 public:
     virtual ~ShortestPath();
-    virtual void initialize(const DWGraph *G, DWGraph::node_t s, DWGraph::node_t d) = 0;
+    virtual void initialize(const DWGraph::DWGraph *G, DWGraph::node_t s, DWGraph::node_t d) = 0;
     virtual DWGraph::node_t getStart() const = 0;
     virtual DWGraph::node_t getDest () const = 0;
     virtual void run() = 0;
@@ -25,11 +25,11 @@ public:
 class ShortestPath::FromOneMany : public ShortestPath{
 private:
     ShortestPathOneMany *oneMany = nullptr;
-    const DWGraph *G = nullptr;
+    const DWGraph::DWGraph *G = nullptr;
     DWGraph::node_t s, d;
 public:
     FromOneMany(ShortestPathOneMany *oneMany);
-    virtual void initialize(const DWGraph *G, DWGraph::node_t s, DWGraph::node_t d);
+    virtual void initialize(const DWGraph::DWGraph *G, DWGraph::node_t s, DWGraph::node_t d);
     virtual void run();
     virtual DWGraph::node_t getStart() const;
     virtual DWGraph::node_t getDest () const;

@@ -25,9 +25,9 @@ const std::list<DUGraph::node_t>& DUGraph::getAdj(DUGraph::node_t u) const{
 
 DUGraph DUGraph::getTranspose() const{
     DUGraph ret;
-    for(const node_t u: getNodes()) ret.addNode(u);
-    for(const node_t u: getNodes())
-        for(const node_t v: getAdj(u))
+    for(const node_t &u: getNodes()) ret.addNode(u);
+    for(const node_t &u: getNodes())
+        for(const node_t &v: getAdj(u))
             ret.addEdge(v, u);
     return ret;
 }

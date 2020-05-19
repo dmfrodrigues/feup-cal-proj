@@ -77,7 +77,7 @@ TEST_CASE("DFS on transpose", "[dfs-transpose]"){
 
 
 TEST_CASE("Floyd-Warshall", "[floyd-warshall]") {
-    DWGraph G;
+    DWGraph::DWGraph G;
     for(int i = 0; i < 4; ++i) G.addNode(i);
     G.addEdge(0, 2, -2); G.addEdge(2, 3, 2); G.addEdge(3, 1, -1); G.addEdge(1, 0, 4);
     G.addEdge(1, 2, 3);
@@ -106,7 +106,7 @@ TEST_CASE("Floyd-Warshall", "[floyd-warshall]") {
 
 
 TEST_CASE("Dijkstra's algorithm", "[shortestpath-dijkstra]"){
-    DWGraph G;
+    DWGraph::DWGraph G;
     for(int i = 0; i < 7; ++i) G.addNode(i);
     G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
     G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);
@@ -133,7 +133,7 @@ TEST_CASE("Dijkstra's algorithm", "[shortestpath-dijkstra]"){
 }
 
 TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
-    DWGraph G;
+    DWGraph::DWGraph G;
     for(int i = 0; i < 7; ++i) G.addNode(i);
     G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
     G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);
@@ -160,7 +160,7 @@ TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
 }
 
 TEST_CASE("A* algorithm", "[shortestpath-astar]"){
-    DWGraph G;
+    DWGraph::DWGraph G;
     for(int i = 0; i < 7; ++i) G.addNode(i);
     G.addEdge(0, 1, 1); G.addEdge(1, 2, 2); G.addEdge(0, 3, 5); G.addEdge(3, 4, 2);
     G.addEdge(2, 3, 1); G.addEdge(2, 5, 2); G.addEdge(4, 5, 3); G.addEdge(5, 6, 4);

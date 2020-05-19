@@ -64,6 +64,8 @@ clean:
 	rm -f $(ODIR)/$(TEXE)
 	rm -f $(PROG)
 
-test: $(PROG) $(TDIR)/test.cpp $(O_FILES)
-	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(O_FILES) $(TDIR)/test.cpp -o $(TEXE) -L$(LDIR_GV) -lgraphviewer
+test: $(TEXE)
 	$(TEXE)
+
+$(TEXE): $(PROG) $(TDIR)/test.cpp $(O_FILES)
+	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(O_FILES) $(TDIR)/test.cpp -o $(TEXE) -L$(LDIR_GV) -lgraphviewer

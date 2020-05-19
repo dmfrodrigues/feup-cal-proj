@@ -7,11 +7,11 @@
 
 class FloydWarshall {
 private:
-    const DWGraph *G;
+    const DWGraph::DWGraph *G;
     std::vector< std::vector<DWGraph::weight_t> > dist;
     std::vector< std::vector<long long> > next;
 public:
-    FloydWarshall(const DWGraph *G);
+    FloydWarshall(const DWGraph::DWGraph *G);
     void initialize();
     void run();
 

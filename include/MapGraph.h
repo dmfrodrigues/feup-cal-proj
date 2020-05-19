@@ -46,13 +46,15 @@ private:
     std::list<way_t> ways;
 public:
     MapGraph(const std::string &path);
-    DWGraph getFullGraph() const;
-    DWGraph getConnectedGraph() const;
+    DWGraph::DWGraph getFullGraph() const;
+    DWGraph::DWGraph getConnectedGraph() const;
+    DWGraph::DWGraph getReducedGraph() const;
     void drawRoads (int fraction, int display) const;
     void drawSpeeds(int fraction, int display) const;
     void drawSCC   (int fraction, int display) const;
     class DistanceHeuristic;
     void drawPath  (int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst, bool visited) const;
+    void drawReduced() const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED
