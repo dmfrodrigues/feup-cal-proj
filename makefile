@@ -15,6 +15,7 @@ LIB_GV=$(LDIR_GV)/libgraphviewer.a
 
 IFLAGS =$(IDIR) $(IDIR_GV)
 
+CFLAGS_OPTIMIZE=-Ofast -fno-signed-zeros -fno-trapping-math -frename-registers -funroll-loops
 CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result  \
     -pedantic-errors -Wextra -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
@@ -35,9 +36,9 @@ CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result  \
     -Wunknown-pragmas  -Wunreachable-code -Wunused \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
-    -Wvolatile-register-var  -Wwrite-strings -O3 #-Werror -Weffc++ -Waggregate-return -Wpadded 
-#CFLAGS =-Wall -pthread -g $(IFLAGS) -O3
-CFLAGS=$(CFLAGS_PARANOID) $(IFLAGS)
+    -Wvolatile-register-var  -Wwrite-strings #-Werror -Weffc++ -Waggregate-return -Wpadded 
+#CFLAGS =-Wall -pthread -g $(CFLAGS_OPTIMIZE) $(IFLAGS)
+CFLAGS=$(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE) $(IFLAGS)
 
 all: data $(PROG)
 

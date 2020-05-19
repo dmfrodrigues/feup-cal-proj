@@ -6,12 +6,13 @@
 #include <unordered_map>
 #include <list>
 #include <utility>
+#include <limits>
 
 #include "DUGraph.h"
 
 namespace DWGraph {
     typedef long long node_t;
-    static constexpr node_t INVALID_NODE = -1;
+    static const node_t INVALID_NODE =std::numeric_limits<node_t>::max();
     typedef long long weight_t;
     static constexpr weight_t INF = 1000000000000;
     struct Edge{

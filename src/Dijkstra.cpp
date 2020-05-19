@@ -1,3 +1,5 @@
+#pragma GCC target("tune=native")
+
 #include "Dijkstra.h"
 
 #include <queue>
