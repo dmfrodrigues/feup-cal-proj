@@ -35,8 +35,8 @@ CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result  \
     -Wunknown-pragmas  -Wunreachable-code -Wunused \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
-    -Wvolatile-register-var  -Wwrite-strings #-Werror -Weffc++ -Waggregate-return -Wpadded 
-#CFLAGS =-Wall -pthread -g $(IFLAGS)#-O3
+    -Wvolatile-register-var  -Wwrite-strings -O3 #-Werror -Weffc++ -Waggregate-return -Wpadded 
+#CFLAGS =-Wall -pthread -g $(IFLAGS) -O3
 CFLAGS=$(CFLAGS_PARANOID) $(IFLAGS)
 
 all: data $(PROG)
