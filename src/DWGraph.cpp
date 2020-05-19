@@ -29,9 +29,15 @@ void DWGraph::DWGraph::addNode(node_t u){
 }
 
 void DWGraph::DWGraph::removeNode(node_t u){
-    for(const auto &e: adj[u]){
-
+    for(const Edge &e: adj.at(u)){
+        pred.at(e.v).erase(u);
     }
+    for(const node_t &v: pred.at(u)){
+        adj.at(v).erase(Edge(u, 0));
+    }
+    nodes.erase(u);
+    adj.erase(u);
+    pred.erase(u);
 }
 
 bool DWGraph::DWGraph::hasNode(node_t u) const{
@@ -39,10 +45,18 @@ bool DWGraph::DWGraph::hasNode(node_t u) const{
 }
 
 void DWGraph::DWGraph::addEdge(node_t u, node_t v, weight_t w){
-    if(adj.find(u) == adj.end() || adj.find(v) == adj.end())
-        throw std::invalid_argument("Node does not exist");
-    adj[u].insert(Edge(v, w));
-    pred[v].insert(u);
+    Edge e(v, w);
+    if(adj.at(u).count(e)) throw std::invalid_argument("Edge already exists");
+    adj.at(u).insert(e);
+    pred.at(v).insert(u);
+}
+
+void DWGraph::DWGraph::addBestEdge(node_t u, node_t v, weight_t w){
+    Edge e(v, w);
+    auto it = adj.at(u).find(e);
+    if(it != adj.at(u).end()) e.w = std::min(e.w, it->w);
+    adj.at(u).insert(e);
+    pred.at(v).insert(u);
 }
 
 const std::unordered_set<DWGraph::node_t>& DWGraph::DWGraph::getNodes() const{
@@ -67,6 +81,19 @@ DWGraph::DWGraph DWGraph::DWGraph::getTranspose() const{
     for(const node_t &u: getNodes())
         for(const Edge &e: getAdj(u))
             ret.addEdge(e.v, u, e.w);
+    return ret;
+}
+
+DWGraph::weight_t DWGraph::DWGraph::getPathWeight(const std::list<node_t> &path) const{
+    weight_t ret = 0;
+    auto it = path.begin();
+    auto prev = it++;
+    for(; it != path.end(); ++it, ++prev){
+        const node_t &u = *prev, &v = *it;
+        auto it2 = adj.at(u).find(Edge(v, 0));
+        if(it2 == adj.at(u).end()) throw std::invalid_argument("No such edge");
+        ret += it2->w;
+    }
     return ret;
 }
 

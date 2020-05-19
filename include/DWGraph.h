@@ -46,10 +46,12 @@ namespace DWGraph{
         void removeNode(node_t u);
         bool hasNode(node_t u) const;
         void addEdge(node_t u, node_t v, weight_t w);
+        void addBestEdge(node_t u, node_t v, weight_t w);
         const std::unordered_set<node_t>& getNodes() const;
         const std::unordered_set<Edge>& getAdj(node_t u) const;
         size_t getNumberEdges() const;
         DWGraph getTranspose() const;
+        weight_t getPathWeight(const std::list<node_t> &path) const;
         explicit operator DUGraph() const;
     };
 }

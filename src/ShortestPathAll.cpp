@@ -34,5 +34,5 @@ DWGraph::node_t ShortestPathAll::FromOneMany::getPrev(DWGraph::node_t s, DWGraph
 }
 
 DWGraph::weight_t ShortestPathAll::FromOneMany::getPathWeight(DWGraph::node_t s, DWGraph::node_t d) const{
-    return dist.at(s).at(d);
+    return G->getPathWeight(getPath(s, d));
 }

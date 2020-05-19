@@ -149,35 +149,52 @@ DWGraph::DWGraph MapGraph::getReducedGraph() const{
     cout << "Nodes: " << G.getNodes().size() << "\n"
          << "Edges: " << G.getNumberEdges() << "\n";
     
-    DWGraph::DWGraph GT = G.getTranspose();
-    const auto &V = G.getNodes();
-    for(const node_t &u: V){
-        const auto &desc = G.getAdj(u);
-        const auto &pred = GT.getAdj(u);
+    size_t prev_nodes;
+    do{
+        prev_nodes = G.getNodes().size();
 
-        if(u == 2889100217){
-            cout << "desc = ";
-            for(const auto &e: desc) cout << e.v << " ";
-            cout << "\n";
-            cout << "pred = ";
-            for(const auto &e: pred) cout << e.v << " ";
-            cout << "\n";
+        DWGraph::DWGraph GT = G.getTranspose();
+        auto V = G.getNodes();
+        for(const node_t &u: V){
+            const auto &desc = G.getAdj(u);
+            const auto &pred = GT.getAdj(u);
+
+            // Remove one-way streets
+            if(desc.size() == 1 && pred.size() == 1 && desc.begin()->v != pred.begin()->v){
+                //cout << "Deleting one-way street through " << u << endl;
+                const node_t a = pred.begin()->v;
+                const node_t b = desc.begin()->v;
+                const weight_t w = pred.begin()->w + desc.begin()->w;
+                G.addBestEdge(a, b, w); GT.addBestEdge(b, a, w);
+                G.removeNode(u); GT.removeNode(u);
+            } else
+            if(desc.size() == 2 && pred.size() == 2){
+                auto it = desc.begin();
+                const DWGraph::Edge ua_f = *(it++); // Edge from u to a in forward notation
+                const DWGraph::Edge ub_f = *(it++); // Edge from u to b in forward notation
+                const node_t a = ua_f.v;
+                const node_t b = ub_f.v;
+                const weight_t w_ua = ua_f.w;
+                const weight_t w_ub = ub_f.w;
+                auto it1 = pred.find(ua_f);
+                auto it2 = pred.find(ub_f);
+                if(it1 != pred.end() && it2 != pred.end()){
+                    const DWGraph::Edge au_b = *it1; // Edge from a to u in backwards notation
+                    const DWGraph::Edge bu_b = *it2; // Edge from b to u in backwards notation
+                    const weight_t w_au = au_b.w;
+                    const weight_t w_bu = bu_b.w;
+                    const weight_t w_ab = w_au+w_ub;
+                    const weight_t w_ba = w_bu+w_ua;
+                    G.addBestEdge(a, b, w_ab); GT.addBestEdge(b, a, w_ab);
+                    G.addBestEdge(b, a, w_ba); GT.addBestEdge(a, b, w_ba);
+                    G.removeNode(u); GT.removeNode(u);
+                }
+            }
         }
+        cout << "Nodes: " << G.getNodes().size() << "\n"
+            << "Edges: " << G.getNumberEdges() << "\n";
+    } while(prev_nodes != G.getNodes().size());
 
-        // Remove one-way streets
-        if(desc.size() == 1 && pred.size() == 1 && desc.begin()->v != pred.begin()->v){
-            cout << "Deleting one-way street through " << u << endl;
-            const DWGraph::node_t a = pred.begin()->v;
-            const DWGraph::node_t b = desc.begin()->v;
-            const DWGraph::weight_t w = pred.begin()->w + desc.begin()->w;
-            G.addEdge(a, b, w); GT.addEdge(b, a, w);
-            G.removeNode(u); GT.removeNode(u);
-        }
-
-    }
-
-    cout << "Nodes: " << G.getNodes().size() << "\n"
-         << "Edges: " << G.getNumberEdges() << "\n";
     return G;
 }
 
