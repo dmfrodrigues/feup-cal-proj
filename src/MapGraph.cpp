@@ -150,10 +150,10 @@ DWGraph::DWGraph MapGraph::getReducedGraph() const{
          << "Edges: " << G.getNumberEdges() << "\n";
     
     DWGraph::DWGraph GT = G.getTranspose();
-    std::list<DWGraph::node_t> V = G.getNodes();
+    const auto &V = G.getNodes();
     for(const node_t &u: V){
-        const std::list<DWGraph::Edge> &desc = G.getAdj(u);
-        const std::list<DWGraph::Edge> &pred = GT.getAdj(u);
+        const auto &desc = G.getAdj(u);
+        const auto &pred = GT.getAdj(u);
 
         if(u == 2889100217){
             cout << "desc = ";

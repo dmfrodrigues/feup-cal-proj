@@ -34,8 +34,8 @@ namespace std{
 namespace DWGraph{
     class DWGraph {
     private:
-        std::list<node_t> nodes;
-        std::unordered_map< node_t, std::list< Edge > > adj;
+        std::unordered_set<node_t> nodes;
+        std::unordered_map< node_t, std::unordered_set< Edge > > adj;
         std::unordered_map< node_t, std::unordered_set< node_t> > pred;
         void assert_integrity() const;
     public:
@@ -46,8 +46,8 @@ namespace DWGraph{
         void removeNode(node_t u);
         bool hasNode(node_t u) const;
         void addEdge(node_t u, node_t v, weight_t w);
-        const std::list<node_t>& getNodes() const;
-        const std::list<Edge>& getAdj(node_t u) const;
+        const std::unordered_set<node_t>& getNodes() const;
+        const std::unordered_set<Edge>& getAdj(node_t u) const;
         size_t getNumberEdges() const;
         DWGraph getTranspose() const;
         explicit operator DUGraph() const;

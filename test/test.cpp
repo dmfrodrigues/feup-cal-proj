@@ -82,8 +82,8 @@ TEST_CASE("Floyd-Warshall", "[floyd-warshall]") {
     G.addEdge(0, 2, -2); G.addEdge(2, 3, 2); G.addEdge(3, 1, -1); G.addEdge(1, 0, 4);
     G.addEdge(1, 2, 3);
 
-    FloydWarshall *fw = new FloydWarshall(&G);
-    fw->initialize();
+    FloydWarshall *fw = new FloydWarshall();
+    fw->initialize(&G);
     fw->run();
 
     REQUIRE(std::list<DWGraph::node_t>({0, 2, 3, 1})    == fw->getPath(0, 1));

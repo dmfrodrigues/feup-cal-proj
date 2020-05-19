@@ -15,7 +15,7 @@ public:
     virtual DWGraph::node_t getDest () const = 0;
     virtual void run() = 0;
     virtual DWGraph::node_t getPrev(DWGraph::node_t u) const = 0;
-    std::list<DWGraph::node_t> getPath() const;
+    virtual std::list<DWGraph::node_t> getPath() const final;
     virtual DWGraph::weight_t getPathWeight() const = 0;
     class FromOneMany;
     virtual statistics_t getStatistics() const = 0;

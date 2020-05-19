@@ -38,7 +38,7 @@ or the length of the shortest path from $i$ to $j$ via $k$ (i.e., from $i$ to $k
                     \State {$c' \gets dist(i,k)^{(k-1)} + dist(k,j)^{(k-1)}$}
                     \If {$c' < dist(i,j)^{(k)}$}
                         \State {$dist(i,j)^{(k)} \gets c'$}
-                        \State {$prev(i,j)^{(k)} \gets prev(i,k)^{(k)}$}
+                        \State {$prev(i,j)^{(k)} \gets prev(k,j)^{(k)}$}
                     \EndIf
                 \EndFor
             \EndFor
