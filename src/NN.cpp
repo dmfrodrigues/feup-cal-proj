@@ -45,6 +45,9 @@ node_t NN::findClosest(node_t u) {
             }
         }
     }
-
     return minimizer;
+}
+
+std::list<DWGraph::node_t> NN::getTour() const {
+    return this->path;
 }
