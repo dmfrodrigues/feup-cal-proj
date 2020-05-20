@@ -7,12 +7,23 @@ PROCESSED_DIR=./processed
 
 all: processed/AMP.nodes
 
-processed/AMP.nodes: map_process.cpp original/map.xml | $(PROCESSED_DIR)
-	$(CC) $(IDIR_RAPIDXML) $(IDIR) map_process.cpp -o $(PROG)
+$(PROG): map_process.cpp ../obj/coord.o ../obj/encoded_string.o ../obj/point.o
+	$(CC) $(IDIR_RAPIDXML) $(IDIR) ../obj/coord.o ../obj/encoded_string.o map_process.cpp ../obj/point.o -o $(PROG)
+
+processed/AMP.nodes: $(PROG) original/map.xml | $(PROCESSED_DIR)
 	$(PROG) $(PROCESSED_DIR)/AMP < original/map.xml
 
 $(PROCESSED_DIR):
 	mkdir -p $@
+
+../obj/coord.o:
+	make -C .. ./obj/coord.o
+
+../obj/encoded_string.o:
+	make -C .. ./obj/encoded_string.o
+
+../obj/point.o:
+	make -C .. ./obj/point.o
 
 clean:
 	rm -rf $(PROCESSED_DIR)

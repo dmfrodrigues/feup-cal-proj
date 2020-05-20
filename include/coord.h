@@ -1,6 +1,8 @@
 #ifndef COORD_H_INCLUDED
 #define COORD_H_INCLUDED
 
+#include <iostream>
+
 class coord_t {
 public:
     typedef double deg_t;
@@ -25,6 +27,8 @@ public:
     coord_t operator/(double d) const;
     deg_t getLat() const;
     deg_t getLon() const;
+    friend std::istream& operator>>(std::istream &is,       coord_t &c);
+    friend std::ostream& operator<<(std::ostream &os, const coord_t &c);
 };
 
 #endif //COORD_H_INCLUDED
