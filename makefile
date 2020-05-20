@@ -47,6 +47,7 @@ LFLAGS =-L$(GV_LDIR)      -l$(GV_LIB) \
 		-L$(UTILS_LDIR)   -l$(UTILS_LIB) \
 		-L$(STRUCTS_LDIR) -l$(STRUCTS_LIB) \
 		-L$(ALGS_LDIR)    -l$(ALGS_LIB)
+LREQUIREMENTS=$(GV_FLIB) $(UTILS_FLIB) $(STRUCTS_FLIB) $(ALGS_FLIB)
 
 CFLAGS_OPTIMIZE=-Ofast -fno-signed-zeros -fno-trapping-math -frename-registers -funroll-loops
 CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result -pedantic-errors -Wextra -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wconversion -Wdisabled-optimization \
@@ -56,14 +57,14 @@ CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result -pedantic-errors 
     -Wunknown-pragmas  -Wunreachable-code -Wunused -Wunused-function  -Wunused-label  -Wunused-parameter -Wunused-value  -Wunused-variable  -Wvariadic-macros \
     -Wvolatile-register-var  -Wwrite-strings #-Werror -Weffc++ -Waggregate-return -Wpadded 
 #CFLAGS =-Wall -pthread -g $(CFLAGS_OPTIMIZE) $(IFLAGS)
-CFLAGS=$(IFLAGS) $(LFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
+CFLAGS=$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
 
 data:
 	make -C map
 
 O_FILES=$(ODIR)/MapGraph.o $(ODIR)/MapViewer.o#$(ODIR)/Client.o $(ODIR)/Van.o
 
-$(PROG): $(O_FILES) $(SDIR)/main.cpp $(GV_FLIB) $(UTILS_FLIB) $(STRUCTS_FLIB) $(ALGS_FLIB)
+$(PROG): $(O_FILES) $(SDIR)/main.cpp $(LREQUIREMENTS)
 	$(CC) $(CFLAGS) $(O_FILES) $(SDIR)/main.cpp -o $(PROG) $(LFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/%.cpp | $(ODIR)
@@ -74,11 +75,11 @@ $(ODIR):
 
 clean:
 	rm -rf $(ODIR)
-	rm -f $(ODIR)/$(TEXE)
 	rm -f $(PROG)
 
 cleanall:
 	make clean
+	make -C utils clean
 	make -C structures clean
 	make -C algorithms clean
 	make -C map clean
@@ -88,4 +89,4 @@ test: $(TEXE)
 	$(TEXE)
 
 $(TEXE): $(PROG) $(TDIR)/test.cpp $(O_FILES)
-	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(O_FILES) $(TDIR)/test.cpp -o $(TEXE) -L$(LDIR_GV) -lgraphviewer
+	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(O_FILES) $(TDIR)/test.cpp -o $(TEXE) $(LFLAGS)

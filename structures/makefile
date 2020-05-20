@@ -27,7 +27,7 @@ CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result -pedantic-errors 
     -Wunknown-pragmas  -Wunreachable-code -Wunused -Wunused-function  -Wunused-label  -Wunused-parameter -Wunused-value  -Wunused-variable  -Wvariadic-macros \
     -Wvolatile-register-var  -Wwrite-strings #-Werror -Weffc++ -Waggregate-return -Wpadded 
 #CFLAGS =-Wall -pthread -g $(CFLAGS_OPTIMIZE) $(IFLAGS)
-CFLAGS=$(IFLAGS) $(LFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
+CFLAGS=$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
 
 O_FILES=$(ODIR)/coord.o $(ODIR)/DUGraph.o $(ODIR)/DWGraph.o $(ODIR)/point.o 
 
