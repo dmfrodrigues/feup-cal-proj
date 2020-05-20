@@ -7,12 +7,17 @@ PROCESSED_DIR=./processed
 
 all: processed/AMP.nodes
 
-processed/AMP.nodes: map_process.cpp original/map.xml | $(PROCESSED_DIR)
-	$(CC) $(IDIR_RAPIDXML) $(IDIR) map_process.cpp -o $(PROG)
+$(PROG): map_process.cpp ../obj/coord.o
+	$(CC) $(IDIR_RAPIDXML) $(IDIR) ../obj/coord.o map_process.cpp -o $(PROG)
+
+processed/AMP.nodes: $(PROG) original/map.xml | $(PROCESSED_DIR)
 	$(PROG) $(PROCESSED_DIR)/AMP < original/map.xml
 
 $(PROCESSED_DIR):
 	mkdir -p $@
+
+../obj/coord.o:
+	make -C .. ./obj/coord.o
 
 clean:
 	rm -rf $(PROCESSED_DIR)

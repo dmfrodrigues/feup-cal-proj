@@ -39,3 +39,14 @@ double coord_t::getMetersPerLonDeg() const{
 
 coord_t::deg_t coord_t::getLat() const{ return lat; }
 coord_t::deg_t coord_t::getLon() const{ return lon; }
+
+std::istream& operator>>(std::istream &is,       coord_t &c){
+    return (is >> c.lat >> c.lon);
+}
+
+std::ostream& operator<<(std::ostream &os, const coord_t &c){
+    auto prev_precision = os.precision(10);
+    os << std::fixed << c.lat << " " << c.lon;
+    os.precision(prev_precision);
+    return os;
+}

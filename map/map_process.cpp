@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include "rapidxml.hpp"
 #include "EdgeType.h"
+#include "coord.h"
+#include "DWGraph.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -20,23 +22,6 @@ enum dir_t {
 };
 
 typedef string node_id_t;
-
-struct node_t{
-    node_id_t id;
-    double lat;
-    double lon;
-    node_t(xml_node<> *it){
-        id = it->first_attribute("id")->value();
-        lat = atof(it->first_attribute("lat")->value());
-        lon = atof(it->first_attribute("lon")->value());
-    }
-};
-
-ostream& operator<<(ostream &os, const node_t &u){
-    os << fixed << setprecision(10);
-    os << u.id << " " << u.lat << " " << u.lon;
-    return os;
-}
 
 typedef int speed_t;
 
@@ -193,18 +178,22 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    list<node_t> nodes;{
-        for (auto it = doc.first_node()->first_node("node"); string(it->name()) == "node"; it = it->next_sibling()) {
-            node_t node(it);
-            if(node_ids.find(node.id) != node_ids.end()){
-                nodes.push_back(node);
+    std::unordered_map<long long, coord_t> nodes;{
+        for (auto it = doc.first_node()->first_node("node");
+          string(it->name()) == "node";
+          it = it->next_sibling()) {
+            DWGraph::node_t u = atoll(it->first_attribute("id")->value());
+            coord_t coord(atof(it->first_attribute("lat")->value()),
+                          atof(it->first_attribute("lon")->value()));
+            if(node_ids.count(to_string(u))){
+                nodes[u] = coord;
             }            
         }
     }
     {
         ofstream os(string(argv[1]) + ".nodes");
         os << nodes.size() << "\n";
-        for(const node_t &u: nodes) os << u << "\n";
+        for(const std::pair<DWGraph::node_t, coord_t> &u: nodes) os << u.first << " " << u.second << "\n";
     }
     {
         ofstream os(string(argv[1]) + ".edges");
