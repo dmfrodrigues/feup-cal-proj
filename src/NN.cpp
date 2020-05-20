@@ -38,8 +38,8 @@ node_t NN::findClosest(node_t u) {
     for (const Edge &e: G->getAdj(u)) {
         // node cannot be the starting node (s) and must not have yet been visited
         if (e.v != this->s && (visited.find(e.v) == visited.end()) ) {
-            // if (minimizer == NULL) {minimizer = e.v; weight = e.w;}
-            if (e.w < weight) {
+            if (minimizer == NULL) {minimizer = e.v; weight = e.w;}
+            else if (e.w < weight) {
                 minimizer = e.v;
                 weight = e.w;
             }
