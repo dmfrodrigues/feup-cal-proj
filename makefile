@@ -76,12 +76,12 @@ $(ODIR):
 clean:
 	rm -rf $(ODIR)
 	rm -f $(PROG)
+	make -C structures clean
+	make -C algorithms clean
 
 cleanall:
 	make clean
 	make -C utils clean
-	make -C structures clean
-	make -C algorithms clean
 	make -C map clean
 	make -C GraphViewer clean
 

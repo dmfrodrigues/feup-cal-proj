@@ -35,9 +35,10 @@ git submodule update --init --recursive # If for the first time
 ### Make commands
 
 ```sh
-make        # Compile all dependencies (including GraphViewer)
-make clean  # Cleanup all files (except GraphViewer)
-make test   # Run unit tests
+make            # Compile all dependencies and libraries
+make clean      # Cleanup files (except submodules and map/)
+make cleanall   # Cleanup all files
+make test       # Run unit tests
 ```
 
 ## Running
