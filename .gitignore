@@ -25,3 +25,4 @@ main
 *.edges
 *.points
 *.png
+lib*.a

@@ -1,30 +1,39 @@
+PROCESSED_DIR=./processed
+all: $(PROCESSED_DIR)/AMP.nodes
+
 PROG=./map_process
 CC=g++
-IDIR_RAPIDXML=-I./rapidxml
-IDIR=-I../include
+IDIR_RAPIDXML=./rapidxml
 
-PROCESSED_DIR=./processed
+UTILS_LIB =utils
+UTILS_DIR =../utils
+UTILS_IDIR=$(UTILS_DIR)/include
+UTILS_LDIR=$(UTILS_DIR)/lib
+UTILS_FLIB=$(UTILS_LDIR)/lib$(UTILS_LIB).a
+$(UTILS_FLIB):
+	make -C $(UTILS_DIR)
 
-all: processed/AMP.nodes
+STRUCTS_LIB =structures
+STRUCTS_DIR =../structures
+STRUCTS_IDIR=$(STRUCTS_DIR)/include
+STRUCTS_LDIR=$(STRUCTS_DIR)/lib
+STRUCTS_FLIB=$(STRUCTS_LDIR)/lib$(STRUCTS_LIB).a
+$(STRUCTS_FLIB):
+	make -C $(STRUCTS_DIR)
 
-$(PROG): map_process.cpp ../obj/coord.o ../obj/encoded_string.o ../obj/point.o
-	$(CC) $(IDIR_RAPIDXML) $(IDIR) ../obj/coord.o ../obj/encoded_string.o map_process.cpp ../obj/point.o -o $(PROG)
+IFLAGS =-I$(IDIR_RAPIDXML) -I$(UTILS_IDIR) -I$(STRUCTS_IDIR)
+LFLAGS =-L$(UTILS_LDIR) -l$(UTILS_LIB) \
+	-L$(STRUCTS_LDIR) -l$(STRUCTS_LIB)
 
-processed/AMP.nodes: $(PROG) original/map.xml | $(PROCESSED_DIR)
+$(PROG): map_process.cpp $(UTILS_FLIB) $(STRUCTS_FLIB)
+	$(CC) $(IFLAGS) map_process.cpp $(LFLAGS) -o $(PROG)
+
+$(PROCESSED_DIR)/AMP.nodes: $(PROG) original/map.xml | $(PROCESSED_DIR)
 	$(PROG) $(PROCESSED_DIR)/AMP < original/map.xml
 
 $(PROCESSED_DIR):
 	mkdir -p $@
 
-../obj/coord.o:
-	make -C .. ./obj/coord.o
-
-../obj/encoded_string.o:
-	make -C .. ./obj/encoded_string.o
-
-../obj/point.o:
-	make -C .. ./obj/point.o
-
 clean:
 	rm -rf $(PROCESSED_DIR)
-	rm $(PROG)
+	rm -f $(PROG)
