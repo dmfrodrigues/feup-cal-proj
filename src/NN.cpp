@@ -6,9 +6,13 @@ typedef DWGraph::Edge Edge;
 typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
 
+NN::NN() {}
+
 void NN::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_) {
     this->G = G_;
     this->s = s_;
+    this->path.clear();
+    this->visited.clear();
 
     this->path.push_back(this->s);
     this->visited.clear();
@@ -18,10 +22,11 @@ void NN::run() {
 
     node_t currentNode = this->s;
 
-    for (size_t i = 0; i < G->getNodes().size(); ++i) {
+    for (size_t i = 0; i < G->getNodes().size() - 1; ++i) {
 
         // find u' (minimal dist from the set of non visited)
         node_t u_ = findClosest(currentNode);
+        // printf("Iter: %d\tNode: %lld\n", i, u_);
         this->path.push_back(u_);
         this->visited.insert(u_);
         currentNode = u_;
