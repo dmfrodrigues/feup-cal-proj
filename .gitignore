@@ -23,4 +23,5 @@ obj/
 main
 *.nodes
 *.edges
+*.points
 *.png
