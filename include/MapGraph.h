@@ -54,6 +54,7 @@ public:
     void drawSCC   (int fraction, int display) const;
     class DistanceHeuristic;
     void drawPath  (int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst, bool visited) const;
+    void drawPath  (int fraction, int display, coord_t src, coord_t dst, bool visited) const;
     void drawReduced() const;
 };
 

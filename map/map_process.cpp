@@ -123,14 +123,13 @@ unordered_map<string, edge_type_t> edge_accept = {
     {"residential"      , edge_type_t::RESIDENTIAL      },
     {"living_street"    , edge_type_t::LIVING_STREET    },
     {"road"             , edge_type_t::UNCLASSIFIED     },
-    {"services"         , edge_type_t::SERVICE          },
     {"bus_stop"         , edge_type_t::SERVICE          },
     {"track"            , edge_type_t::SERVICE          }
 };
 unordered_set<string> edge_reject = {
     "steps",        "pedestrian", "footway",   "cycleway",
     "construction", "path",       "bridleway", "platform", "raceway",
-    "elevator",     "proposed",   "planned",   "bus_stop"};
+    "elevator",     "proposed",   "planned",   "bus_stop", "services"};
 unordered_set<string> service_accept = {"driveway", "parking_aisle", "alley"};
 unordered_set<string> service_reject = {"campground", "emergency_access",
                                         "drive-through"};
@@ -237,7 +236,8 @@ int main(int argc, char *argv[]) {
                 p.setName(pname->first_attribute("v")->value());
                 way_t way(it, edge_type_t::NO);
                 p.setCoord(way.get_mean_coord(nodes_all));
-                points.push_back(p);
+                if(p.getName() == "Porto - Campanhã") points.push_front(p);
+                else points.push_back(p);
             }
         }
     }

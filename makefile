@@ -1,6 +1,8 @@
 PROG   =main
 all: $(PROG) data
 
+FORCE:
+
 CC     =g++
 
 SDIR   =./src
@@ -14,7 +16,7 @@ GV_DIR =./GraphViewer
 GV_IDIR=$(GV_DIR)/cpp
 GV_LDIR=$(GV_DIR)/lib
 GV_FLIB=$(GV_LDIR)/lib$(GV_LIB).a
-$(GV_FLIB):
+$(GV_FLIB): FORCE
 	make -C $(GV_DIR)
 
 UTILS_LIB =utils
@@ -22,7 +24,7 @@ UTILS_DIR =./utils
 UTILS_IDIR=$(UTILS_DIR)/include
 UTILS_LDIR=$(UTILS_DIR)/lib
 UTILS_FLIB=$(UTILS_LDIR)/lib$(UTILS_LIB).a
-$(UTILS_FLIB):
+$(UTILS_FLIB): FORCE
 	make -C $(UTILS_DIR)
 
 STRUCTS_LIB =structures
@@ -30,7 +32,7 @@ STRUCTS_DIR =./structures
 STRUCTS_IDIR=$(STRUCTS_DIR)/include
 STRUCTS_LDIR=$(STRUCTS_DIR)/lib
 STRUCTS_FLIB=$(STRUCTS_LDIR)/lib$(STRUCTS_LIB).a
-$(STRUCTS_FLIB):
+$(STRUCTS_FLIB): FORCE
 	make -C $(STRUCTS_DIR)
 
 ALGS_LIB =algorithms
@@ -38,7 +40,7 @@ ALGS_DIR =./algorithms
 ALGS_IDIR=$(ALGS_DIR)/include
 ALGS_LDIR=$(ALGS_DIR)/lib
 ALGS_FLIB=$(ALGS_LDIR)/lib$(ALGS_LIB).a
-$(ALGS_FLIB):
+$(ALGS_FLIB): FORCE
 	make -C $(ALGS_DIR)
 
 IFLAGS =-I$(IDIR) -I$(GV_IDIR) -I$(UTILS_IDIR) -I$(STRUCTS_IDIR) -I$(ALGS_IDIR)
@@ -59,7 +61,7 @@ CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result -pedantic-errors 
 #CFLAGS =-Wall -pthread -g $(CFLAGS_OPTIMIZE) $(IFLAGS)
 CFLAGS=$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
 
-data:
+data: FORCE
 	make -C map
 
 O_FILES=$(ODIR)/MapGraph.o $(ODIR)/MapViewer.o#$(ODIR)/Client.o $(ODIR)/Van.o
