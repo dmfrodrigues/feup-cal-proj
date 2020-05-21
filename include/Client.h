@@ -1,8 +1,7 @@
 #ifndef CLIENT_H_INCLUDED
 #define CLIENT_H_INCLUDED
 
-#include "DUGraph.h"
-#include "InterestingNode.h"
+#include "coord.h"
 
 #include <string>
 #include <vector>
@@ -14,19 +13,19 @@ private:
 	int NIF;
 	int numPeople;
 
-	InterestingNode dest;
+	coord_t dest;
 	long long int arrival;
 
 	bool direction;
 
 public:
     Client();
-    Client(std::string clientName, int NIF, int numPeople, InterestingNode dest, long long int arrival, bool direction);
+    Client(std::string clientName, int NIF, int numPeople, coord_t dest, long long int arrival, bool direction);
     
 	std::string getClientName() const;
 	int getNIF() const;
 	int getNumPeople() const;
-	InterestingNode getDest() const;
+	coord_t getDest() const;
 	long long int getArrival() const;
     bool getDirection() const;
 
@@ -38,7 +37,7 @@ public:
     }
 
     friend std::ostream& operator<< (std::ostream& os, Client& c){
-        os << c.clientName << " " << c.NIF << " " << c.numPeople << " " << c.dest.getNode() << " " << c.arrival << " " << c.direction;
+        os << c.clientName << " " << c.NIF << " " << c.numPeople << " " << c.dest << " " << c.arrival << " " << c.direction;
         return os;
     }
 };

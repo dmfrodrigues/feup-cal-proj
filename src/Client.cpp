@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-Client::Client(std::string clientName, int NIF, int numPeople, InterestingNode dest, long long int arrival, bool direction){
+Client::Client(std::string clientName, int NIF, int numPeople, coord_t dest, long long int arrival, bool direction){
 	this->clientName = clientName;
 	this->NIF = NIF;
 	this->numPeople = numPeople;
@@ -23,7 +23,7 @@ int Client::getNumPeople() const {
 	return numPeople;
 }
 
-InterestingNode Client::getDest() const {
+coord_t Client::getDest() const {
 	return dest;
 }
 
