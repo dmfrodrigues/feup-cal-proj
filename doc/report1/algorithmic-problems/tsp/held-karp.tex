@@ -1,18 +1,22 @@
 \subsection{Held-Karp algorithm} \label{algorithm-tsp-heldkarp}
-The Held-Karp algorithm is a \gls{dynamic programming} approach to problems similar to the \acrlong*{TSP}, proposed in 1962 independently by Richard Bellman \cite{bellman62} and by Michael Held and Richard Karp \cite{held-karp62}. The main idea is that the current state can be uniquely described by the city $v$ we are at, and the set $S$ of cities we have already visited (except for $s$, which will be the last city to be visited), and for each state we know the minimum cost $D(S,v)$ of reaching $v$ after having visited all cities in $S$. The algorithm then relies on a trivial recurrent formula (although the version we present is \gls{iterative}) to express the links between states, where the solution is $D(V, s)$:
+The Held-Karp algorithm is a \gls{dynamic programming} approach to problems similar to the \acrlong*{TSP}, proposed in 1962 independently by Richard Bellman \cite{bellman62} and by Michael Held and Richard Karp \cite{held-karp62}. The main idea is that the current state can be uniquely described by the city $v$ we are at, and the set $S$ of cities we have already visited including $v$ (except for $s$, which will be the last city to be visited), and for each state we know the minimum cost $D(S,v)$ of reaching $v$ after having visited all cities in $S$ including $v$. The algorithm then relies on a trivial recurrent formula to express the links between states, where the solution is $D(V, s)$:
 \begin{algorithm}[H]
     \caption{Held-Karp algorithm}
     \label{alg:held-karp}
     \begin{algorithmic}[1]
-        \For {$S \in \mathscr{P}(V),\,v \in V$} {$D(S,v)=\infty$}
+        \For {$S \in \mathscr{P}(V),\,v \in V$} {$D(S,v)=\infty$, $P(S,v)=\text{NULL}$}
         \EndFor
         \Function{HK}{$S=0$, $v=s$}
             \If {$D(S,v) \neq \infty$} \Return $D(S,v)$
             \EndIf
             \If {$S = \{v\}$} \Return {$D(S,v) \gets w(0, s, v)$} \Comment{$D(\{v\}, v)=w(\emptyset, s, v)$}
             \EndIf
-            \For {$u \in S$}
-                \State {$D(S,v) \gets \min\{D(S,v), \Call{HK}{S\backslash \{u\},u})$} \Comment{$D(S, v)=\min_{u \in S}\{D(S\backslash \{v\}, u) + w(S\backslash\{v\},u,v)\}$}
+            \For {$u \in S \backslash \{u\}$}
+                \State {$c \gets \Call{HK}{S \backslash \{v\}, u} + w(S \backslash \{v\}, u, v)$}
+                \If{$c < D(S,v)$}
+                    \State {$P(S,v) \gets (S\backslash \{v\}, u)$}
+                    \State {$D(S,v) \gets c$} \Comment{$D(S, v)=\min_{u \in S}\{D(S\backslash \{v\}, u) + w(S\backslash\{v\},u,v)\}$}
+                \EndIf
             \EndFor
             \State \Return {$D(S,v)$}
         \EndFunction
