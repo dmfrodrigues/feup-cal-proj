@@ -402,7 +402,7 @@ private:
 public:
     DistanceHeuristic(const std::unordered_map<node_t, coord_t> &nodes_,
                       coord_t dst_pos_,
-                      double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){ std::cout << "factor is " << factor_ << std::endl; }
+                      double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){}
     weight_t operator()(node_t u) const{
         auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
         return d*factor;
@@ -465,7 +465,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     << " | " << std::setw(21) << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%"
                     << " | " << std::setw(13) << paths[i].size() << " |\n";
     }
-    /*
+    
     MapViewer *gv = createMapViewer(min_coord, max_coord);
 
     std::unordered_set<node_t> drawn_nodes;
@@ -517,7 +517,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
         }
     }
     gv->rearrange();
-    */
+    
     for(ShortestPath *p: shortestPaths) delete p;
 }
 
