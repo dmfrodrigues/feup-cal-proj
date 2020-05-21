@@ -115,6 +115,7 @@ MapGraph::MapGraph(const std::string &path){
 }
 
 DWGraph::DWGraph MapGraph::getFullGraph() const{
+    double max_factor = 1000000000;
     DWGraph::DWGraph G;
     for(const auto &p: nodes) G.addNode(p.first);
     for(const way_t &w: ways){
@@ -122,10 +123,11 @@ DWGraph::DWGraph MapGraph::getFullGraph() const{
         auto it1 = w.nodes.begin();
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = coord_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
-            weight_t t_micros = (SECONDS_TO_MICROS * d) / w.getRealSpeed();
-            G.addEdge(*it2, *it1, t_micros);
+            double factor = double(SECONDS_TO_MICROS)/(w.getRealSpeed());
+            min_factor = std::min(min_factor, factor);
+            G.addEdge(*it2, *it1, d*factor);
         }
-    }
+    } std::cout << "min_factor=" << min_factor << std::endl;
     return G;
 }
 
@@ -402,7 +404,7 @@ private:
 public:
     DistanceHeuristic(const std::unordered_map<node_t, coord_t> &nodes_,
                       coord_t dst_pos_,
-                      double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){}
+                      double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){ std::cout << "factor is " << factor_ << std::endl; }
     weight_t operator()(node_t u) const{
         auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
         return d*factor;
@@ -465,7 +467,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     << " | " << std::setw(21) << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%"
                     << " | " << std::setw(13) << paths[i].size() << " |\n";
     }
-
+    /*
     MapViewer *gv = createMapViewer(min_coord, max_coord);
 
     std::unordered_set<node_t> drawn_nodes;
@@ -517,7 +519,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
         }
     }
     gv->rearrange();
-
+    */
     for(ShortestPath *p: shortestPaths) delete p;
 }
 
