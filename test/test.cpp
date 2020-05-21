@@ -10,6 +10,7 @@
 #include "Tarjan.h"
 #include "FloydWarshall.h"
 #include "NN.h"
+#include "HeldKarp.h"
 
 
 TEST_CASE("Depth-First Search", "[reachability-dfs]"){
@@ -302,4 +303,35 @@ TEST_CASE("Nearest Neighbour", "[NN]"){
     nn.initialize(&G, 4);
     nn.run();
     REQUIRE(std::list<DWGraph::node_t>({4, 0, 1, 3, 2, 4}) == nn.getTour() );
+}
+
+std::vector< std::vector< DWGraph::weight_t> > *W = nullptr;
+TEST_CASE("Held-Karp algorithm", "[tsp-heldkarp]"){
+    DWGraph::DWGraph G;
+    for(int i = 0; i < 4; ++i) G.addNode(i);
+                        G.addEdge(1, 0,  2);G.addEdge(2, 0,  9);G.addEdge(3, 0, 10);
+    G.addEdge(0, 1,  1);                    G.addEdge(2, 1,  6);G.addEdge(3, 1,  4);
+    G.addEdge(0, 2, 15);G.addEdge(1, 2,  7);                    G.addEdge(3, 2,  8);
+    G.addEdge(0, 3,  6);G.addEdge(1, 3, 12);G.addEdge(2, 3, 12);
+    W = new std::vector< std::vector< DWGraph::weight_t> >({
+        { 0, 2,  9, 10},
+        { 1, 0,  6,  4},
+        {15, 7,  0,  8},
+        { 6, 3, 12,  0}
+    });
+    HeldKarp::weight_function w = [](const std::unordered_set<DWGraph::node_t> &S, DWGraph::node_t u, DWGraph::node_t v)->DWGraph::weight_t { return W->at(u).at(v); };
+    REQUIRE(w({}, 0, 2) == 9);
+    REQUIRE(w({}, 2, 3) == 8);
+    REQUIRE(w({}, 3, 1) == 3);
+    REQUIRE(w({}, 1, 0) == 1);
+    
+    TravellingSalesman *tsp = new HeldKarp(w);
+    tsp->initialize(&G, 0);
+    tsp->run();
+    auto path = tsp->getTour();
+    REQUIRE(std::list<DWGraph::node_t>({0, 2, 3, 1, 0}) == path);
+    std::vector<DWGraph::node_t> v(path.begin(), path.end());
+    DWGraph::weight_t total_weight = 0;
+    for(int i = 1; i < v.size(); ++i) total_weight += w({}, v[i-1], v[i]);
+    REQUIRE(total_weight == 21);
 }
