@@ -37,7 +37,7 @@ void ShortestPathAll::FromOneMany::initialize(const DWGraph::DWGraph *G_){
     initialize(G_, G_->getNodes());
 }
 
-void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, size_t i){
+void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p){
     node_t s;
     while(true){
         try{
@@ -51,8 +51,8 @@ void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p, 
 
 void ShortestPathAll::FromOneMany::run(){
     auto start_time = hrc::now();
-    for(size_t i = 0; i < nthreads-1; ++i) threads.push_back(std::thread(thread_func, this, i));
-    thread_func(this, nthreads-1);
+    for(size_t i = 0; i < nthreads-1; ++i) threads.push_back(std::thread(thread_func, this));
+    thread_func(this);
     for(size_t i = 0; i < nthreads-1; ++i) threads[i].join();
     auto finish_time = hrc::now();
     stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();

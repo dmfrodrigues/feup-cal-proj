@@ -26,17 +26,25 @@ void scc(int argc, const char *argv[], const MapGraph &M){
 }
 
 void path(int argc, const char *argv[], const MapGraph &M){
-    if(argc != 6 && argc != 7) throw std::invalid_argument("invalid number of arguments");
+    if(argc != 6 && argc != 7 && argc != 8 && argc != 9) throw std::invalid_argument("invalid number of arguments");
     int fraction = atoi(argv[2]);
     int display  = atoi(argv[3]);
-    DWGraph::node_t sour = atoll(argv[4]);
-    DWGraph::node_t dest = atoll(argv[5]);
-    bool visited = (argc > 6 && std::string(argv[6]) == "-v");
+    if(argc == 6 || argc == 7){
+        DWGraph::node_t sour = atoll(argv[4]);
+        DWGraph::node_t dest = atoll(argv[5]);
+        bool visited = (argc > 6 && std::string(argv[6]) == "-v");
 
-    M.drawPath(fraction, display, sour, dest, visited);
+        M.drawPath(fraction, display, sour, dest, visited);
+    } else {
+        coord_t sour(atof(argv[4]), atof(argv[5]));
+        coord_t dest(atof(argv[6]), atof(argv[7]));
+        bool visited = (argc > 8 && std::string(argv[8]) == "-v");
+
+        M.drawPath(fraction, display, sour, dest, visited);
+    }
 }
 
-void reduced(int argc, const char *argv[], const MapGraph &M){
+void reduced(int, const char *[], const MapGraph &M){
     M.drawReduced();
 }
 

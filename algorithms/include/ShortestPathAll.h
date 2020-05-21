@@ -30,7 +30,7 @@ private:
     std::unordered_map<DWGraph::node_t, ShortestPathOneMany*> oneManys;
     const DWGraph::DWGraph *G = nullptr;
     statistics_t stats;
-    static void thread_func(ShortestPathAll::FromOneMany *p, size_t i);
+    static void thread_func(ShortestPathAll::FromOneMany *p);
 public:
     FromOneMany(ShortestPathOneMany *oneMany, size_t nthreads);
     void initialize(const DWGraph::DWGraph *G, const std::unordered_set<DWGraph::node_t> &nodes);

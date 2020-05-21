@@ -20,6 +20,8 @@ void DWGraph::DWGraph::assert_integrity() const{
 
 DWGraph::DWGraph::DWGraph(){}
 
+DWGraph::DWGraph::~DWGraph(){}
+
 void DWGraph::DWGraph::addNode(node_t u){
     if(adj.find(u) != adj.end())
         throw std::invalid_argument("Node already exists");

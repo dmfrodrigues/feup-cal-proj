@@ -39,7 +39,7 @@ private:
     };
     static const std::unordered_map<edge_type_t, Display> display_map;
 
-    const DWGraph::node_t station = 1390706567;
+    static const DWGraph::node_t station = 1390706567;
 
     std::unordered_map<DWGraph::node_t, coord_t> nodes;
     coord_t min_coord, max_coord, mean_coord;
@@ -54,6 +54,7 @@ public:
     void drawSCC   (int fraction, int display) const;
     class DistanceHeuristic;
     void drawPath  (int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst, bool visited) const;
+    void drawPath  (int fraction, int display, coord_t src, coord_t dst, bool visited) const;
     void drawReduced() const;
 };
 

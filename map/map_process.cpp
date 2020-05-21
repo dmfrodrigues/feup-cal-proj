@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
 #include "rapidxml.hpp"
 #include "EdgeType.h"
+#include "coord.h"
+#include "encoded_string.h"
+#include "DWGraph.h"
+#include "point.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -13,38 +17,19 @@ xml_node<> *find_tag(xml_node<> *p, const string &k) {
     return ret;
 }
 
-enum dir_t {
-    Front = 1,
-    Both = 0,
-    Back = -1
-};
-
-typedef string node_id_t;
-
-struct node_t{
-    node_id_t id;
-    double lat;
-    double lon;
-    node_t(xml_node<> *it){
-        id = it->first_attribute("id")->value();
-        lat = atof(it->first_attribute("lat")->value());
-        lon = atof(it->first_attribute("lon")->value());
-    }
-};
-
-ostream& operator<<(ostream &os, const node_t &u){
-    os << fixed << setprecision(10);
-    os << u.id << " " << u.lat << " " << u.lon;
-    return os;
-}
-
 typedef int speed_t;
 
-class way_t : public list<node_id_t> {
+class way_t : public list<DWGraph::node_t> {
+public:
+    enum dir_t {
+        Front = 1,
+        Both = 0,
+        Back = -1
+    };
 private:
     void get_way(xml_node<> *it){
         for(auto j = it->first_node("nd"); string(j->name()) == "nd"; j = j->next_sibling()){
-            this->push_back(j->first_attribute("ref")->value());
+            this->push_back(atoll(j->first_attribute("ref")->value()));
         }
     }
 
@@ -97,16 +82,23 @@ public:
             default: throw invalid_argument("");
         }
     }
+    coord_t get_mean_coord(const std::unordered_map<DWGraph::node_t, coord_t> &nodes) const{
+        coord_t ret(0,0);
+        for(auto it = begin(); it != end(); ++it){
+            ret = ret + nodes.at(*it);
+        }
+        return ret/double(size());
+    }
 };
 
 ostream& operator<<(ostream &os, const way_t &w){
-    if(w.dir == dir_t::Front || w.dir == dir_t::Both){
+    if(w.dir == way_t::dir_t::Front || w.dir == way_t::dir_t::Both){
         os << char(w.edgeType) << " " << w.speed << " " << w.size();
         for(auto it = w.begin(); it != w.end(); ++it){
             os << "\n" << *it;
         }
     }
-    if(w.dir == dir_t::Back || w.dir == dir_t::Both){
+    if(w.dir == way_t::dir_t::Back || w.dir == way_t::dir_t::Both){
         os << "\n" << char(w.edgeType) << " " << w.speed << " " << w.size();
         for(auto it = w.rbegin(); it != w.rend(); ++it){
             os << "\n" << *it;
@@ -131,14 +123,13 @@ unordered_map<string, edge_type_t> edge_accept = {
     {"residential"      , edge_type_t::RESIDENTIAL      },
     {"living_street"    , edge_type_t::LIVING_STREET    },
     {"road"             , edge_type_t::UNCLASSIFIED     },
-    {"services"         , edge_type_t::SERVICE          },
     {"bus_stop"         , edge_type_t::SERVICE          },
     {"track"            , edge_type_t::SERVICE          }
 };
 unordered_set<string> edge_reject = {
     "steps",        "pedestrian", "footway",   "cycleway",
     "construction", "path",       "bridleway", "platform", "raceway",
-    "elevator",     "proposed",   "planned",   "bus_stop"};
+    "elevator",     "proposed",   "planned",   "bus_stop", "services"};
 unordered_set<string> service_accept = {"driveway", "parking_aisle", "alley"};
 unordered_set<string> service_reject = {"campground", "emergency_access",
                                         "drive-through"};
@@ -181,7 +172,8 @@ int main(int argc, char *argv[]) {
     xml_document<> doc;
     doc.parse<0>(text);
 
-    set<node_id_t> node_ids;
+    unordered_map<long long, coord_t> nodes, nodes_all;
+
     list<way_t> ways;
     
     {
@@ -189,23 +181,28 @@ int main(int argc, char *argv[]) {
             edge_type_t t = get_edge_type(it);
             if (t == edge_type_t::NO) continue;
             way_t way(it, t); ways.push_back(way);
-            node_ids.insert(way.begin(), way.end());
+            for(const DWGraph::node_t &u: way) nodes[u];
         }
     }
 
-    list<node_t> nodes;{
-        for (auto it = doc.first_node()->first_node("node"); string(it->name()) == "node"; it = it->next_sibling()) {
-            node_t node(it);
-            if(node_ids.find(node.id) != node_ids.end()){
-                nodes.push_back(node);
-            }            
+    /** Insert missing coordinates in nodes */ {
+        for (auto it = doc.first_node()->first_node("node");
+          string(it->name()) == "node";
+          it = it->next_sibling()) {
+            DWGraph::node_t u = atoll(it->first_attribute("id")->value());
+            coord_t coord(atof(it->first_attribute("lat")->value()),
+                          atof(it->first_attribute("lon")->value()));
+            nodes_all[u] = coord;
+            if(nodes.count(u)) nodes[u] = coord;
         }
     }
+    // Print nodes
     {
         ofstream os(string(argv[1]) + ".nodes");
         os << nodes.size() << "\n";
-        for(const node_t &u: nodes) os << u << "\n";
+        for(const std::pair<DWGraph::node_t, coord_t> &u: nodes) os << u.first << " " << u.second << "\n";
     }
+    // Print ways/edges
     {
         ofstream os(string(argv[1]) + ".edges");
         size_t sz = 0;
@@ -213,11 +210,43 @@ int main(int argc, char *argv[]) {
             sz += w.getNumWays();
         }
         os << sz << "\n";
-        int i = 0;
         for(const way_t &w: ways){
             os << w << "\n";
         }
     }
     
+    list<point_t> points; {
+        // Nodes
+        for (auto it = doc.first_node()->first_node("node"); string(it->name()) == "node"; it = it->next_sibling()) {
+            auto pname = find_tag(it, "name");
+            if(pname != NULL){
+                point_t p;
+                p.setName(pname->first_attribute("v")->value());
+                p.setCoord(coord_t(atof(it->first_attribute("lat")->value()),
+                                   atof(it->first_attribute("lon")->value())));
+                points.push_back(p);
+            }
+        }
+        // Ways
+        for (auto it = doc.first_node()->first_node("way"); string(it->name()) == "way"; it = it->next_sibling()) {
+            auto pname = find_tag(it, "name");
+            if(pname != NULL){
+                point_t p;
+                p.setName(pname->first_attribute("v")->value());
+                way_t way(it, edge_type_t::NO);
+                p.setCoord(way.get_mean_coord(nodes_all));
+                if(p.getName() == "Porto - Campanhã") points.push_front(p);
+                else points.push_back(p);
+            }
+        }
+    }
+    // Print points of interest
+    {
+        ofstream os(string(argv[1]) + ".points");
+        os << points.size() << "\n";
+        for(const auto &p: points){
+            os << p << "\n";
+        }
+    }
     return 0;
 }

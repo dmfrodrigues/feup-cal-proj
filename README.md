@@ -35,9 +35,10 @@ git submodule update --init --recursive # If for the first time
 ### Make commands
 
 ```sh
-make        # Compile all dependencies (including GraphViewer)
-make clean  # Cleanup all files (except GraphViewer)
-make test   # Run unit tests
+make            # Compile all dependencies and libraries
+make clean      # Cleanup files (except submodules and map/)
+make cleanall   # Cleanup all files
+make test       # Run unit tests
 ```
 
 ## Running
@@ -147,6 +148,6 @@ Roads are coloured according to the following table:
 |--------------------------------------|-------------|----------------------|
 | Dijkstra's algorithm with early stop | Black       | Pink                 |
 | A* algorithm, 90km/h                 | Black       | Red                  |
-| A* algorithm, 70km/h                 | Magenta     | Magenta              |
-| A* algorithm, 50km/h                 | Blue        | Blue                 |
-| A* algorithm, 30km/h                 | Cyan        | Cyan                 |
+| A* algorithm, 60km/h                 | Magenta     | Magenta              |
+| A* algorithm, 30km/h                 | Blue        | Blue                 |
+| A* algorithm, 10km/h                 | Cyan        | Cyan                 |

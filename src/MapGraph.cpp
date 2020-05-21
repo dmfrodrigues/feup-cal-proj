@@ -7,6 +7,7 @@
 #include "ShortestPath.h"
 #include "MapViewer.h"
 #include "ShortestPathAll.h"
+#include "VStripes.h"
 
 #include <fstream>
 #include <iomanip>
@@ -16,7 +17,7 @@
 
 #define COORDMULT               50000       // Multiply coordinates to get integer positions
 #define SECONDS_TO_MICROS       1000000     // Convert seconds to milliseconds
-#define KMH_TO_MS               (1/3.6)     // Convert km/h to m/s
+#define KMH_TO_MS               (1.0/3.6)   // Convert km/h to m/s
 #define SPEED_REDUCTION_FACTOR  0.75        // Reduce speed to account for intense road traffic, and the fact people not always travel at maximum speed 
 
 typedef DWGraph::node_t node_t;
@@ -53,7 +54,7 @@ MapGraph::speed_t MapGraph::way_t::getRealSpeed() const{
 
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wfloat-equal"
-    if(speed != -1) return speed;
+    if(speed != -1) return speed*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
     #pragma GCC diagnostic pop
 
     switch(edgeType){
@@ -121,8 +122,8 @@ DWGraph::DWGraph MapGraph::getFullGraph() const{
         auto it1 = w.nodes.begin();
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = coord_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
-            weight_t t_ms = SECONDS_TO_MICROS * d / w.getRealSpeed();
-            G.addEdge(*it2, *it1, t_ms);
+            double factor = double(SECONDS_TO_MICROS)/(w.getRealSpeed());
+            G.addEdge(*it2, *it1, weight_t(d*factor));
         }
     }
     return G;
@@ -404,7 +405,7 @@ public:
                       double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){}
     weight_t operator()(node_t u) const{
         auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
-        return d*factor;
+        return weight_t(d*factor);
     }
 };
 
@@ -413,23 +414,23 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
 
     std::vector<std::string> name({
         "Dijkstra's algorithm with early stop",
-        "A* algorithm, " + std::to_string(int(120*SPEED_REDUCTION_FACTOR)) +"km/h",
-        "A* algorithm, 70km/h",
-        "A* algorithm, 50km/h",
-        "A* algorithm, 30km/h"
+        "A* algorithm, 90km/h",
+        "A* algorithm, 60km/h",
+        "A* algorithm, 30km/h",
+        "A* algorithm, 10km/h"
     });
 
     std::vector<ShortestPath*> shortestPaths({
         new Astar(),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(120*KMH_TO_MS*SPEED_REDUCTION_FACTOR))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(70*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(50*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(30*KMH_TO_MS)))
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(60.0*KMH_TO_MS))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(30.0*KMH_TO_MS))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(10.0*KMH_TO_MS)))
     });
 
     std::vector<std::string> pathColor({
         "BLACK",
-        "BLACK",
+        "RED",
         "MAGENTA",
         "BLUE",
         "CYAN"
@@ -461,10 +462,10 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     << " | " << std::setw(14) << stats.analysed_nodes
                     << " | " << std::setw(14) << stats.analysed_edges
                     << " | " << std::setw(19) << shortestPaths[i]->getPathWeight()
-                    << " | " << std::setw(21) << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%"
+                    << " | " << std::setw(21) << 100.0*((double)shortestPaths[i]->getPathWeight()/(double)shortestPaths[0]->getPathWeight()-1.0) << "%"
                     << " | " << std::setw(13) << paths[i].size() << " |\n";
     }
-
+    
     MapViewer *gv = createMapViewer(min_coord, max_coord);
 
     std::unordered_set<node_t> drawn_nodes;
@@ -516,8 +517,36 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
         }
     }
     gv->rearrange();
-
+    
     for(ShortestPath *p: shortestPaths) delete p;
+}
+
+// ./main path 1 255 1160030583 5284172068
+void MapGraph::drawPath(int fraction, int display, coord_t src, coord_t dst, bool visited) const{
+    DWGraph::DWGraph G = getConnectedGraph();
+    std::list<coord_t> nodes_list;
+    for(const node_t &u: G.getNodes()) nodes_list.push_back(nodes.at(u));
+
+    ClosestPoint *closestPoint = new VStripes(0.025);
+    closestPoint->initialize(nodes_list);
+    closestPoint->run();
+
+    coord_t src_closest = closestPoint->getClosestPoint(src);
+    coord_t dst_closest = closestPoint->getClosestPoint(dst);
+
+    node_t src_node = DWGraph::INVALID_NODE;
+    node_t dst_node = DWGraph::INVALID_NODE;
+    
+    for(const auto &p: nodes){
+        if(p.second == src_closest) src_node = p.first;
+        if(p.second == dst_closest) dst_node = p.first;
+    }
+    if(src_node == DWGraph::INVALID_NODE || dst_node == DWGraph::INVALID_NODE) throw std::invalid_argument("No such node");
+
+    std::cout << "Source      (" << src << ") transformed into node " << src_node << " (" << src_closest << ")" << std::endl;
+    std::cout << "Destination (" << dst << ") transformed into node " << dst_node << " (" << dst_closest << ")" << std::endl;
+
+    drawPath(fraction, display, src_node, dst_node, visited);
 }
 
 void MapGraph::drawReduced() const{
