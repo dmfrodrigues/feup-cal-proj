@@ -87,7 +87,7 @@ public:
         for(auto it = begin(); it != end(); ++it){
             ret = ret + nodes.at(*it);
         }
-        return ret/size();
+        return ret/double(size());
     }
 };
 
@@ -210,7 +210,6 @@ int main(int argc, char *argv[]) {
             sz += w.getNumWays();
         }
         os << sz << "\n";
-        int i = 0;
         for(const way_t &w: ways){
             os << w << "\n";
         }

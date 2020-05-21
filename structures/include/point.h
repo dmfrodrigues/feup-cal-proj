@@ -9,8 +9,8 @@
 
 class point_t {
 private:
-    encoded_string name;
-    coord_t coord;
+    encoded_string name = "";
+    coord_t coord = coord_t();
 public:
     point_t();
 
