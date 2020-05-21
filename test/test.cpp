@@ -9,6 +9,7 @@
 #include "KosarajuV.h"
 #include "Tarjan.h"
 #include "FloydWarshall.h"
+#include "NN.h"
 
 
 TEST_CASE("Depth-First Search", "[reachability-dfs]"){
@@ -268,4 +269,37 @@ TEST_CASE("Tarjan testing", "[SCC-TARJAN]"){
     REQUIRE(t.get_scc(7) == 7);
 
     REQUIRE(t.get_scc(8) == 8);
+}
+
+
+TEST_CASE("Nearest Neighbour", "[NN]"){
+    DWGraph::DWGraph G;
+    for(int i = 0; i < 5; ++i) G.addNode(i);
+    G.addEdge(0, 1, 132); G.addEdge(0, 2, 217); G.addEdge(0, 3, 164); G.addEdge(0, 4, 58);
+    G.addEdge(1, 0, 132); G.addEdge(1, 2, 290); G.addEdge(1, 3, 201); G.addEdge(1, 4, 79);
+    G.addEdge(2, 0, 217); G.addEdge(2, 1, 290); G.addEdge(2, 3, 113); G.addEdge(2, 4, 303);
+    G.addEdge(3, 0, 164); G.addEdge(3, 1, 201); G.addEdge(3, 2, 113); G.addEdge(3, 4, 196);
+    G.addEdge(4, 0, 58); G.addEdge(4, 1, 79); G.addEdge(4, 2, 303); G.addEdge(4, 3, 196);
+
+    NN nn;
+
+    nn.initialize(&G, 0);
+    nn.run();
+    REQUIRE(std::list<DWGraph::node_t>({0, 4, 1, 3, 2, 0}) == nn.getTour() );
+    
+    nn.initialize(&G, 1);
+    nn.run();
+    REQUIRE(std::list<DWGraph::node_t>({1, 4, 0, 3, 2, 1}) == nn.getTour() );
+
+    nn.initialize(&G, 2);
+    nn.run();
+    REQUIRE(std::list<DWGraph::node_t>({2, 3, 0, 4, 1, 2}) == nn.getTour() );
+
+    nn.initialize(&G, 3);
+    nn.run();
+    REQUIRE(std::list<DWGraph::node_t>({3, 2, 0, 4, 1, 3}) == nn.getTour() );
+
+    nn.initialize(&G, 4);
+    nn.run();
+    REQUIRE(std::list<DWGraph::node_t>({4, 0, 1, 3, 2, 4}) == nn.getTour() );
 }
