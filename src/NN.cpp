@@ -5,6 +5,7 @@
 typedef DWGraph::Edge Edge;
 typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
+typedef std::chrono::high_resolution_clock hrc;
 
 NN::NN() {}
 
@@ -19,6 +20,7 @@ void NN::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_) {
 }
 
 void NN::run() {
+    auto start_time = hrc::now();
 
     node_t currentNode = this->s;
 
@@ -33,6 +35,9 @@ void NN::run() {
     }
     // back to the starting node
     this->path.push_back(this->s);
+
+    auto finish_time = hrc::now();
+    stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
 
 node_t NN::findClosest(node_t u) {
@@ -55,4 +60,8 @@ node_t NN::findClosest(node_t u) {
 
 std::list<DWGraph::node_t> NN::getTour() const {
     return this->path;
+}
+
+statistics_t NN::getStatistics() const {
+    return stats;
 }
