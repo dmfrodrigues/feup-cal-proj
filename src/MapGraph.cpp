@@ -54,7 +54,7 @@ MapGraph::speed_t MapGraph::way_t::getRealSpeed() const{
 
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wfloat-equal"
-    if(speed != -1) return speed;
+    if(speed != -1) return speed*KMH_TO_MS*SPEED_REDUCTION_FACTOR;
     #pragma GCC diagnostic pop
 
     switch(edgeType){
@@ -115,7 +115,6 @@ MapGraph::MapGraph(const std::string &path){
 }
 
 DWGraph::DWGraph MapGraph::getFullGraph() const{
-    double max_factor = 1000000000;
     DWGraph::DWGraph G;
     for(const auto &p: nodes) G.addNode(p.first);
     for(const way_t &w: ways){
@@ -124,10 +123,9 @@ DWGraph::DWGraph MapGraph::getFullGraph() const{
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = coord_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
             double factor = double(SECONDS_TO_MICROS)/(w.getRealSpeed());
-            min_factor = std::min(min_factor, factor);
             G.addEdge(*it2, *it1, d*factor);
         }
-    } std::cout << "min_factor=" << min_factor << std::endl;
+    }
     return G;
 }
 
