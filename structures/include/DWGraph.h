@@ -42,6 +42,7 @@ namespace DWGraph{
         void assert_integrity() const;
     public:
         DWGraph();
+        ~DWGraph();
         void addNode(node_t u);
         template<class iterator_t>
         void removeNodes(iterator_t it1, iterator_t it2);

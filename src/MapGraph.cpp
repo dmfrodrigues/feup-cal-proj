@@ -123,7 +123,7 @@ DWGraph::DWGraph MapGraph::getFullGraph() const{
         for(auto it2 = it1++; it1 != w.nodes.end(); ++it1, ++it2){
             auto d = coord_t::getDistanceSI(nodes.at(*it1), nodes.at(*it2));
             double factor = double(SECONDS_TO_MICROS)/(w.getRealSpeed());
-            G.addEdge(*it2, *it1, d*factor);
+            G.addEdge(*it2, *it1, weight_t(d*factor));
         }
     }
     return G;
@@ -405,7 +405,7 @@ public:
                       double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){}
     weight_t operator()(node_t u) const{
         auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
-        return d*factor;
+        return weight_t(d*factor);
     }
 };
 
@@ -462,7 +462,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
                     << " | " << std::setw(14) << stats.analysed_nodes
                     << " | " << std::setw(14) << stats.analysed_edges
                     << " | " << std::setw(19) << shortestPaths[i]->getPathWeight()
-                    << " | " << std::setw(21) << 100.0*((double)shortestPaths[i]->getPathWeight()/shortestPaths[0]->getPathWeight()-1.0) << "%"
+                    << " | " << std::setw(21) << 100.0*((double)shortestPaths[i]->getPathWeight()/(double)shortestPaths[0]->getPathWeight()-1.0) << "%"
                     << " | " << std::setw(13) << paths[i].size() << " |\n";
     }
     

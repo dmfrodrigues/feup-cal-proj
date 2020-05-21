@@ -44,7 +44,7 @@ void path(int argc, const char *argv[], const MapGraph &M){
     }
 }
 
-void reduced(int argc, const char *argv[], const MapGraph &M){
+void reduced(int, const char *[], const MapGraph &M){
     M.drawReduced();
 }
 
