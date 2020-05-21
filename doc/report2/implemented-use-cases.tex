@@ -56,33 +56,14 @@ The A* versions are distinguished by the maximum speed they assume a car can go.
         \textbf{Algorithm}            & \textbf{Path colour} & \textbf{Visited nodes colour} \\ \hline
         Dijkstra's algorithm with \hyperref[alg:dijkstra-early-stop]{early stop} & Black                & Pink                          \\
         A* algorithm, $\SI{90}{km/h}$ & Black                & Red                           \\
-        A* algorithm, $\SI{70}{km/h}$ & Magenta              & Magenta                       \\
-        A* algorithm, $\SI{50}{km/h}$ & Blue                 & Blue                          \\
-        A* algorithm, $\SI{30}{km/h}$ & Cyan                 & Cyan                          
+        A* algorithm, $\SI{60}{km/h}$ & Magenta              & Magenta                       \\
+        A* algorithm, $\SI{30}{km/h}$ & Blue                 & Blue                          \\
+        A* algorithm, $\SI{10}{km/h}$ & Cyan                 & Cyan                          
     \end{tabular}
 \end{center}
 If \texttt{-v} is not used and a road belongs to more than one of the paths found by the different algorithms, that road is coloured with the colour of the best path (e.g., a road belongs to the Blue and Magenta paths, then it is coloured magenta).\par
 If \texttt{-v} is used and a road is explored by more than one of the algorithms, that road is coloured with the colour of the worst path (e.g., a road is explored by the Blue and Magenta algorithms, then it is coloured blue).\par
-The colouring scheme for \texttt{-v} is based on the assumption that algorithms providing better answers explore more nodes, so to visualize all sets of explored edges we may assume in most cases that the set of edges explored by a worse algorithm are a subset of edges explored by a better algorithm, and then the user may assume, for instance, that all nodes painted in Blue were explored by the Magenta, Red and Pink algorithms.\par
-This is not always true, as we found by calling \texttt{./main path 1 255 4764305642 6426059706 -v} (from \textit{Senhor da Pedra} to \textit{Serra de Santa Justa}), which yields the following statistics table:
-\begin{center}
-    \begin{tabular}{l | r | r | r}
-        Algorithm                                & Analysed nodes & Analysed edges & Increase in total time \\ \hline
-            Dijkstra's algorithm with early stop &       $185422$ &       $338315$ &            $      0\%$ \\
-                            A* algorithm, 90km/h &       $ 56607$ &       $ 98639$ &            $      0\%$ \\
-                            A* algorithm, 70km/h &       $ 15220$ &       $ 26438$ &            $ 8.9411\%$ \\
-                            A* algorithm, 50km/h &       $ 61507$ &       $111975$ &            $ 8.9411\%$ \\
-                            A* algorithm, 30km/h &       $ 86426$ &       $163414$ &            $18.6807\%$ \\
-    \end{tabular}
-\end{center}
-\begin{figure}[h]
-    \centering
-    \write18{ if [ ! -f 5Iqs37c.png ] ; then wget https://i.imgur.com/5Iqs37c.png ; fi ; }
-    \includegraphics[scale=0.24]{5Iqs37c}
-    \caption{Shortest path between \textit{Senhor da Pedra} to \textit{Serra de Santa Justa}, showing nodes explored by each algorithm.}
-    \label{fig:srpedra-stajusta}
-\end{figure}
-One can easily check the large number of nodes and edges explored by the Blue and Cyan algorithms are in the region surrounded by the second half of the optimal path, corresponding to Campanhã and north Gondomar, figure \ref{fig:srpedra-stajusta}. This unusual occurence may originate from the fact the Blue and Cyan algorithms use greedier heuristics than other algorithms, so they are more likely to explore nodes in a near-straight line to \textit{Serra de Santa Justa} after crossing Freixo Bridge, right through the urban areas of Gondomar, but since all edges in that area are suburban roads there is no particularly good path, and thus these algorithms will explore almost all nodes. On the other hand, using a less greedy heuristic will only minorly contribute to a preference for a straight line to the destination, meaning they will most likely follow globally faster routes (highways and trunk roads) and finish the search while having explored a lot less nodes (in fact, the Magenta algorithm explores only $17.6\%$ of the nodes and $16.2\%$ of the edges that the Cyan algorithm explores).
+The colouring scheme for \texttt{-v} is based on the assumption that algorithms providing better answers explore more nodes, so to visualize all sets of explored edges we may assume in most cases that the set of edges explored by a worse algorithm are a subset of edges explored by a better algorithm, and then the user may assume, for instance, that all nodes painted in Blue were explored by the Magenta, Red and Pink algorithms.
 \section{To implement}
 \begin{itemize}
     \item Given a list of vans and services for a day, find the set of routes for that day.

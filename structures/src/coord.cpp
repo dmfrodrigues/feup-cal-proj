@@ -36,8 +36,8 @@ bool coord_t::operator==(const coord_t &c) const{
 }
 
 double coord_t::getMetersPerLatDeg() const{
-    // double phi = lat*M_PI/180.0;
-    const double phi = 41.2*M_PI/180.0;
+    double phi = lat*M_PI/180.0;
+    // const double phi = 41.2*M_PI/180.0;
     return 111132.92
           -   559.82  *cos(2*phi)
           +     1.175 *cos(4*phi)
@@ -45,8 +45,8 @@ double coord_t::getMetersPerLatDeg() const{
 }
 
 double coord_t::getMetersPerLonDeg() const{
-    // double phi = lat*M_PI/180.0;
-    const double phi = 41.2*M_PI/180.0;
+    double phi = lat*M_PI/180.0;
+    // const double phi = 41.2*M_PI/180.0;
     return 111412.84 *cos(  phi)
           -    93.5  *cos(3*phi)
           +     0.118*cos(5*phi);

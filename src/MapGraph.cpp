@@ -415,17 +415,17 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
     std::vector<std::string> name({
         "Dijkstra's algorithm with early stop",
         "A* algorithm, 90km/h",
-        "A* algorithm, 70km/h",
-        "A* algorithm, 50km/h",
-        "A* algorithm, 30km/h"
+        "A* algorithm, 60km/h",
+        "A* algorithm, 30km/h",
+        "A* algorithm, 10km/h"
     });
 
     std::vector<ShortestPath*> shortestPaths({
         new Astar(),
         new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(70.0*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(50.0*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(30.0*KMH_TO_MS)))
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(60.0*KMH_TO_MS))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(30.0*KMH_TO_MS))),
+        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(10.0*KMH_TO_MS)))
     });
 
     std::vector<std::string> pathColor({
