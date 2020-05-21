@@ -6,7 +6,7 @@
 
 #include <unordered_set>
 
-class NN : public TravellingSalesman {
+class NearestNeighbour : public TravellingSalesman {
 private:
     const DWGraph::DWGraph *G;
     DWGraph::node_t s;
@@ -16,7 +16,7 @@ private:
     
     DWGraph::node_t findClosest(DWGraph::node_t u);
 public:
-    NN();
+    NearestNeighbour();
     void initialize(const DWGraph::DWGraph *G, DWGraph::node_t s);
     void run();
     std::list<DWGraph::node_t> getTour() const;

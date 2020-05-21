@@ -9,7 +9,7 @@
 #include "KosarajuV.h"
 #include "Tarjan.h"
 #include "FloydWarshall.h"
-#include "NN.h"
+#include "NearestNeighbour.h"
 
 
 TEST_CASE("Depth-First Search", "[reachability-dfs]"){
@@ -281,25 +281,25 @@ TEST_CASE("Nearest Neighbour", "[NN]"){
     G.addEdge(3, 0, 164); G.addEdge(3, 1, 201); G.addEdge(3, 2, 113); G.addEdge(3, 4, 196);
     G.addEdge(4, 0, 58); G.addEdge(4, 1, 79); G.addEdge(4, 2, 303); G.addEdge(4, 3, 196);
 
-    NN nn;
+    NearestNeighbour nearestNeighbour;
 
-    nn.initialize(&G, 0);
-    nn.run();
-    REQUIRE(std::list<DWGraph::node_t>({0, 4, 1, 3, 2, 0}) == nn.getTour() );
+    nearestNeighbour.initialize(&G, 0);
+    nearestNeighbour.run();
+    REQUIRE(std::list<DWGraph::node_t>({0, 4, 1, 3, 2, 0}) == nearestNeighbour.getTour() );
     
-    nn.initialize(&G, 1);
-    nn.run();
-    REQUIRE(std::list<DWGraph::node_t>({1, 4, 0, 3, 2, 1}) == nn.getTour() );
+    nearestNeighbour.initialize(&G, 1);
+    nearestNeighbour.run();
+    REQUIRE(std::list<DWGraph::node_t>({1, 4, 0, 3, 2, 1}) == nearestNeighbour.getTour() );
 
-    nn.initialize(&G, 2);
-    nn.run();
-    REQUIRE(std::list<DWGraph::node_t>({2, 3, 0, 4, 1, 2}) == nn.getTour() );
+    nearestNeighbour.initialize(&G, 2);
+    nearestNeighbour.run();
+    REQUIRE(std::list<DWGraph::node_t>({2, 3, 0, 4, 1, 2}) == nearestNeighbour.getTour() );
 
-    nn.initialize(&G, 3);
-    nn.run();
-    REQUIRE(std::list<DWGraph::node_t>({3, 2, 0, 4, 1, 3}) == nn.getTour() );
+    nearestNeighbour.initialize(&G, 3);
+    nearestNeighbour.run();
+    REQUIRE(std::list<DWGraph::node_t>({3, 2, 0, 4, 1, 3}) == nearestNeighbour.getTour() );
 
-    nn.initialize(&G, 4);
-    nn.run();
-    REQUIRE(std::list<DWGraph::node_t>({4, 0, 1, 3, 2, 4}) == nn.getTour() );
+    nearestNeighbour.initialize(&G, 4);
+    nearestNeighbour.run();
+    REQUIRE(std::list<DWGraph::node_t>({4, 0, 1, 3, 2, 4}) == nearestNeighbour.getTour() );
 }

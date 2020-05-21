@@ -1,4 +1,4 @@
-#include "NN.h"
+#include "NearestNeighbour.h"
 
 #include <utility>
 
@@ -7,9 +7,9 @@ typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
 typedef std::chrono::high_resolution_clock hrc;
 
-NN::NN() {}
+NearestNeighbour::NearestNeighbour() {}
 
-void NN::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_) {
+void NearestNeighbour::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_) {
     this->G = G_;
     this->s = s_;
     this->path.clear();
@@ -19,7 +19,7 @@ void NN::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_) {
     this->visited.clear();
 }
 
-void NN::run() {
+void NearestNeighbour::run() {
     auto start_time = hrc::now();
 
     node_t currentNode = this->s;
@@ -40,7 +40,7 @@ void NN::run() {
     stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
 
-node_t NN::findClosest(node_t u) {
+node_t NearestNeighbour::findClosest(node_t u) {
 
     node_t minimizer = -1;
     weight_t weight = DWGraph::INF;
@@ -58,10 +58,10 @@ node_t NN::findClosest(node_t u) {
     return minimizer;
 }
 
-std::list<DWGraph::node_t> NN::getTour() const {
+std::list<DWGraph::node_t> NearestNeighbour::getTour() const {
     return this->path;
 }
 
-statistics_t NN::getStatistics() const {
+statistics_t NearestNeighbour::getStatistics() const {
     return stats;
 }
