@@ -9,12 +9,13 @@
 class Ride{
 private:
     class Event{
+    public:
+        enum event_type:short{ cu = -1, cv = 0, c = 1};
     private:
         long long int time;
         event_type a;
         long long c;
-    public:
-        enum event_type:short{ cu = -1, cv = 0, c = 1};
+    
     };
 
     Van v;
