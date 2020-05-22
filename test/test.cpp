@@ -272,40 +272,52 @@ TEST_CASE("Tarjan testing", "[SCC-TARJAN]"){
     REQUIRE(t.get_scc(8) == 8);
 }
 
+class regular_weight : public TravellingSalesman::weight_function{
+private:
+    const std::vector< std::vector<DWGraph::weight_t> > M;
+public:
+    regular_weight(const std::vector< std::vector<DWGraph::weight_t> > &M_):M(M_){}
+    DWGraph::weight_t operator()(const std::unordered_set<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const{
+        return M[u][v];
+    }
+};
 
 TEST_CASE("Nearest Neighbour", "[NN]"){
-    DWGraph::DWGraph G;
-    for(int i = 0; i < 5; ++i) G.addNode(i);
-    G.addEdge(0, 1, 132); G.addEdge(0, 2, 217); G.addEdge(0, 3, 164); G.addEdge(0, 4, 58);
-    G.addEdge(1, 0, 132); G.addEdge(1, 2, 290); G.addEdge(1, 3, 201); G.addEdge(1, 4, 79);
-    G.addEdge(2, 0, 217); G.addEdge(2, 1, 290); G.addEdge(2, 3, 113); G.addEdge(2, 4, 303);
-    G.addEdge(3, 0, 164); G.addEdge(3, 1, 201); G.addEdge(3, 2, 113); G.addEdge(3, 4, 196);
-    G.addEdge(4, 0, 58); G.addEdge(4, 1, 79); G.addEdge(4, 2, 303); G.addEdge(4, 3, 196);
+    std::vector< std::vector<DWGraph::weight_t> > M = {
+        {  0, 132, 217, 164,  58},
+        {132,   0, 290, 201,  79},
+        {217, 290,   0, 113, 303},
+        {164, 201, 113,   0, 196},
+        { 58,  79, 303, 196,   0}
+    };
+    std::list<DWGraph::node_t> nodes({0,1,2,3,4});
+    regular_weight w(M);
 
-    NearestNeighbour nearestNeighbour;
-
-    nearestNeighbour.initialize(&G, 0);
-    nearestNeighbour.run();
-    REQUIRE(std::list<DWGraph::node_t>({0, 4, 1, 3, 2, 0}) == nearestNeighbour.getTour() );
+    TravellingSalesman *tsp = new NearestNeighbour();
     
-    nearestNeighbour.initialize(&G, 1);
-    nearestNeighbour.run();
-    REQUIRE(std::list<DWGraph::node_t>({1, 4, 0, 3, 2, 1}) == nearestNeighbour.getTour() );
+    tsp->initialize(&nodes, 0, &w);
+    tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({0, 4, 1, 3, 2, 0}) == tsp->getTour() );
 
-    nearestNeighbour.initialize(&G, 2);
-    nearestNeighbour.run();
-    REQUIRE(std::list<DWGraph::node_t>({2, 3, 0, 4, 1, 2}) == nearestNeighbour.getTour() );
+    tsp->initialize(&nodes, 1, &w);
+    tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({1, 4, 0, 3, 2, 1}) == tsp->getTour() );
 
-    nearestNeighbour.initialize(&G, 3);
-    nearestNeighbour.run();
-    REQUIRE(std::list<DWGraph::node_t>({3, 2, 0, 4, 1, 3}) == nearestNeighbour.getTour() );
+    tsp->initialize(&nodes, 2, &w);
+    tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({2, 3, 0, 4, 1, 2}) == tsp->getTour() );
 
-    nearestNeighbour.initialize(&G, 4);
-    nearestNeighbour.run();
-    REQUIRE(std::list<DWGraph::node_t>({4, 0, 1, 3, 2, 4}) == nearestNeighbour.getTour() );
+    tsp->initialize(&nodes, 3, &w);
+    tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({3, 2, 0, 4, 1, 3}) == tsp->getTour() );
+
+    tsp->initialize(&nodes, 4, &w);
+    tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({4, 0, 1, 3, 2, 4}) == tsp->getTour() );
+
+    delete tsp;
 }
 
-std::vector< std::vector< DWGraph::weight_t> > *W = nullptr;
 TEST_CASE("Held-Karp algorithm", "[tsp-heldkarp]"){
     DWGraph::DWGraph G;
     for(int i = 0; i < 4; ++i) G.addNode(i);
@@ -313,20 +325,32 @@ TEST_CASE("Held-Karp algorithm", "[tsp-heldkarp]"){
     G.addEdge(0, 1,  1);                    G.addEdge(2, 1,  6);G.addEdge(3, 1,  4);
     G.addEdge(0, 2, 15);G.addEdge(1, 2,  7);                    G.addEdge(3, 2,  8);
     G.addEdge(0, 3,  6);G.addEdge(1, 3, 12);G.addEdge(2, 3, 12);
-    W = new std::vector< std::vector< DWGraph::weight_t> >({
+    std::vector< std::vector< DWGraph::weight_t> > W({
         { 0, 2,  9, 10},
         { 1, 0,  6,  4},
         {15, 7,  0,  8},
         { 6, 3, 12,  0}
     });
-    HeldKarp::weight_function w = [](const std::unordered_set<DWGraph::node_t> &S, DWGraph::node_t u, DWGraph::node_t v)->DWGraph::weight_t { return W->at(u).at(v); };
+    regular_weight w(W);
     REQUIRE(w({}, 0, 2) == 9);
     REQUIRE(w({}, 2, 3) == 8);
     REQUIRE(w({}, 3, 1) == 3);
     REQUIRE(w({}, 1, 0) == 1);
     
-    TravellingSalesman *tsp = new HeldKarp(w);
-    tsp->initialize(&G, 0);
+    std::list<DWGraph::node_t> nodes({0,1,2,3});
+
+    HeldKarp *tsp = new HeldKarp();
+
+    tsp->initialize(&nodes, 0, &w);
+                                                                                                             REQUIRE(tsp->HK(0b0001, 0) ==  0);  
+                                                                          REQUIRE(tsp->HK(0b0011, 1) ==  2); 
+                                       REQUIRE(tsp->HK(0b0101, 2) ==  9);                                     
+    REQUIRE(tsp->HK(0b1001, 3) == 10);                                                                        
+                                       REQUIRE(tsp->HK(0b0111, 2) ==  8); REQUIRE(tsp->HK(0b0111, 1) == 16);  
+    REQUIRE(tsp->HK(0b1011, 3) ==  6);                                    REQUIRE(tsp->HK(0b1011, 1) == 13);  
+    
+    REQUIRE(tsp->HK(0b1101, 3) == 17); REQUIRE(tsp->HK(0b1101, 2) == 22);                                     
+    REQUIRE(tsp->HK(0b1111, 3) == 16); REQUIRE(tsp->HK(0b1111, 2) == 18); REQUIRE(tsp->HK(0b1111, 1) == 20);  
     tsp->run();
     auto path = tsp->getTour();
     REQUIRE(std::list<DWGraph::node_t>({0, 2, 3, 1, 0}) == path);
@@ -334,4 +358,13 @@ TEST_CASE("Held-Karp algorithm", "[tsp-heldkarp]"){
     DWGraph::weight_t total_weight = 0;
     for(int i = 1; i < v.size(); ++i) total_weight += w({}, v[i-1], v[i]);
     REQUIRE(total_weight == 21);
+
+    tsp->initialize(&nodes, 1, &w); tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({1, 0, 2, 3, 1}) == tsp->getTour());
+
+    tsp->initialize(&nodes, 2, &w); tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({2, 3, 1, 0, 2}) == tsp->getTour());
+
+    tsp->initialize(&nodes, 3, &w); tsp->run();
+    REQUIRE(std::list<DWGraph::node_t>({3, 1, 0, 2, 3}) == tsp->getTour());
 }

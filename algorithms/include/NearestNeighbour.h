@@ -8,8 +8,9 @@
 
 class NearestNeighbour : public TravellingSalesman {
 private:
-    const DWGraph::DWGraph *G;
+    const std::list<DWGraph::node_t> *nodes = nullptr;
     DWGraph::node_t s;
+    weight_function *w = nullptr;
     std::list<DWGraph::node_t> path;
     std::unordered_set<DWGraph::node_t> visited;
     statistics_t stats;
@@ -17,7 +18,7 @@ private:
     DWGraph::node_t findClosest(DWGraph::node_t u);
 public:
     NearestNeighbour();
-    void initialize(const DWGraph::DWGraph *G, DWGraph::node_t s);
+    void initialize(const std::list<DWGraph::node_t> *nodes, DWGraph::node_t s, weight_function *w);
     void run();
     std::list<DWGraph::node_t> getTour() const;
     statistics_t getStatistics() const;
