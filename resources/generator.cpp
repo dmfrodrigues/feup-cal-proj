@@ -7,16 +7,16 @@
 
 void generator(int argc, const char *argv[]){
 
-    if (argc != 3) throw std::invalid_argument("invalid number of arguments");
-    std::string interesting_path = argv[1];
-    int n_res = atoi(argv[2]);
+    if (argc != 2) throw std::invalid_argument("invalid number of arguments");
+    int n_res = atoi(argv[1]);
 
     srand(time(NULL));
 
     //Read interesting nodes
     std::vector<point_t> nodes;
-    std::ifstream ifs (interesting_path);
+    std::ifstream ifs ("../map/processed/AMP.points");
     if (!ifs.is_open()) throw std::runtime_error("Could not open interesting nodes file");
+    int ignore_first_line; ifs >> ignore_first_line;
     while(!ifs.eof()){
         point_t n;
         ifs >> n;
@@ -30,7 +30,7 @@ void generator(int argc, const char *argv[]){
     //Write random client
     std::string output_filename = "clients_" + std::to_string(rand() % 99999 + 999) + ".txt";
     std::ofstream ofs (output_filename);
-    if (!ofs.is_open()) throw std::runtime_error("Could not open output file");
+    if (!ofs.is_open()) throw std::runtime_error("Could not create output file");
 
     for (int i = 0 ; i < n_res ; ++i){
         Client temp(names_list.at(rand() % names_list.size()), rand() % 90000000 + 100000000, rand() % 11 + 1, nodes.at(rand() % nodes.size()).getCoord(), rand() % 86400000000, rand() % 2);
