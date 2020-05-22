@@ -12,15 +12,7 @@ private:
     class Event{
     public:
         Event();
-        enum event_type:short{ cu = -1, cv = 0, c = 1};
-        friend std::istream& operator>> (std::istream& is, Event& e){
-            is >> e.time >> e.a >> e.c;
-            return is;
-        }
-        friend std::ostream& operator<< (std::ostream& os, Event& e){
-            os << e.time << " " << e.a << " " << e.c;
-            return os;
-        }
+        enum event_type:short{ ecu = -1, ecv = 0, ec = 1};
     private:
         long long int time;
         event_type a;
