@@ -39,7 +39,7 @@ $(PROG): map_process.cpp $(UTILS_FLIB) $(STRUCTS_FLIB)
 	$(CC) $(CFLAGS) map_process.cpp $(LFLAGS) -o $(PROG)
 
 $(PROCESSED_DIR)/AMP.nodes: $(PROG) original/map.xml | $(PROCESSED_DIR)
-	# $(PROG) $(PROCESSED_DIR)/AMP < original/map.xml
+	$(PROG) $(PROCESSED_DIR)/AMP < original/map.xml
 
 $(PROCESSED_DIR):
 	mkdir -p $@
