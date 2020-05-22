@@ -1,5 +1,6 @@
 #include "graphviewer.h"
 #include "MapGraph.h"
+#include "Iteration1.h"
 
 void view(int argc, const char *argv[], const MapGraph &M){
     if(argc != 4) throw std::invalid_argument("invalid number of arguments");
@@ -48,15 +49,31 @@ void reduced(int, const char *[], const MapGraph &M){
     M.drawReduced();
 }
 
+void iteration1(int argc, const char *argv[], const MapGraph &M){
+    if(argc != 5) throw std::invalid_argument("invalid number of arguments");
+    
+    std::string vans_path = argv[2];
+    std::string clients_path = argv[3];
+    std::string rides_path = argv[4];
+
+    Iteration *it = new Iteration1();
+    it->initialize(&M, vans_path, clients_path, rides_path);
+    it->run();
+
+    delete it;
+}
+
 int main(int argc, char *argv[]){
     try {
         if(argc < 2) throw std::invalid_argument("at least one argument must be provided");
         MapGraph M("map/processed/AMP");
-        if(std::string(argv[1]) == "view" ) view (argc, const_cast<const char **>(argv), M);
-        if(std::string(argv[1]) == "speed") speed(argc, const_cast<const char **>(argv), M);
-        if(std::string(argv[1]) == "scc"  ) scc  (argc, const_cast<const char **>(argv), M);
-        if(std::string(argv[1]) == "path" ) path (argc, const_cast<const char **>(argv), M);
-        if(std::string(argv[1]) == "reduced") reduced(argc, const_cast<const char **>(argv), M);
+        std::string opt = argv[1];
+        if(opt == "view"      ) view      (argc, const_cast<const char **>(argv), M);
+        if(opt == "speed"     ) speed     (argc, const_cast<const char **>(argv), M);
+        if(opt == "scc"       ) scc       (argc, const_cast<const char **>(argv), M);
+        if(opt == "path"      ) path      (argc, const_cast<const char **>(argv), M);
+        if(opt == "reduced"   ) reduced   (argc, const_cast<const char **>(argv), M);
+        if(opt == "iteration1") iteration1(argc, const_cast<const char **>(argv), M);
     } catch(const std::invalid_argument &e){
         std::cout << "Caught exception: " << e.what() << "\n";
         std::cout << "Usage: ./main (view | speed | scc) FRACTION FLAGS\n"
