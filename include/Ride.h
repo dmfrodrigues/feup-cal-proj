@@ -5,12 +5,14 @@
 #include "Client.h"
 
 #include <vector>
+#include <iostream>
 
-class Ride{
+class Ride {
 private:
     class Event{
     public:
-        enum event_type:short{ cu = -1, cv = 0, c = 1};
+        Event();
+        enum event_type:short{ ecu = -1, ecv = 0, ec = 1};
     private:
         long long int time;
         event_type a;
@@ -22,9 +24,8 @@ private:
     std::vector<Client> C;
     std::vector<Event> e;
 
-    friend std::istream& operator>> (std::istream& is, Ride& c);
-
-    friend std::ostream& operator<< (std::ostream& os, Ride& c);
+public:
+    Ride();
 };
 
 

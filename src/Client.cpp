@@ -2,13 +2,13 @@
 
 #include <fstream>
 
-Client::Client(std::string clientName, int NIF, int numPeople, coord_t dest, long long int arrival, bool direction){
-	this->clientName = clientName;
-	this->NIF = NIF;
-	this->numPeople = numPeople;
-	this->dest = dest;
-	this->arrival = arrival;
-	this->direction = direction;
+Client::Client(std::string clientName_, int NIF_, int numPeople_, coord_t dest_, long long int arrival_, bool direction_){
+	this->clientName = clientName_;
+	this->NIF = NIF_;
+	this->numPeople = numPeople_;
+	this->dest = dest_;
+	this->arrival = arrival_;
+	this->direction = direction_;
 }
 
 std::string Client::getClientName() const {
