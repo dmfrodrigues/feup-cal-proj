@@ -134,13 +134,20 @@ Roads are coloured red if they connect two nodes in the train station's SCC, or 
 
 ```
 ./main scc FRACTION FLAGS SOUR DEST [-v]
+./main scc FRACTION FLAGS SOUR_LAT SOUR_LON DEST_LAT DEST_LON [-v]
 
 FRACTION    Fraction of nodes to draw (improves display performance).
 FLAGS       Flag which roads to draw (add them to combine).
-SOUR        Source (beginning) of the path we are looking for.
+SOUR        Source node (beginning) of the path we are looking for.
+SOUR_LAT    Latitude of the source coordinate.
+SOUR_LON    Longitude of the source coordinate.
 DEST        Destination (end) of the path we are looking for.
+DEST_LAT    Latitude of the destination coordinate.
+DEST_LON    Longitude of the destination coordinate.
 -v          Colour visited nodes according to the algorithms that explored them.
 ```
+
+You can use either `./main scc FRACTION FLAGS SOUR DEST [-v]` or `./main scc FRACTION FLAGS SOUR_LAT SOUR_LON DEST_LAT DEST_LON [-v]`, where the second option is similar to the first, with only the extra step of finding, for the source and destination coordinates, the closest nodes of the graph that are connected to the train station.
 
 Roads are coloured according to the following table:
 
@@ -151,3 +158,11 @@ Roads are coloured according to the following table:
 | A* algorithm, 60km/h                 | Magenta     | Magenta              |
 | A* algorithm, 30km/h                 | Blue        | Blue                 |
 | A* algorithm, 10km/h                 | Cyan        | Cyan                 |
+
+#### Examples
+
+- To get paths between FEUP and FCUP, you can run either of
+```sh
+./main path 1 255 4523960191 128672575
+./main path 1 255 41.1777 -8.598 41.1522 -8.6361
+```

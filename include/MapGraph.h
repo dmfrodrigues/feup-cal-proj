@@ -5,6 +5,7 @@
 #include "graphviewer.h"
 #include "EdgeType.h"
 #include "coord.h"
+#include "ClosestPoint.h"
 
 class MapGraph {
 public:
@@ -40,12 +41,16 @@ private:
     static const std::unordered_map<edge_type_t, Display> display_map;
 
     DWGraph::node_t station = DWGraph::INVALID_NODE;
+    DWGraph::DWGraph fullGraph;
+    DWGraph::DWGraph connectedGraph;
+    ClosestPoint *closestPoint = nullptr;
 
     std::unordered_map<DWGraph::node_t, coord_t> nodes;
     coord_t min_coord, max_coord, mean_coord;
     std::list<way_t> ways;
 public:
     MapGraph(const std::string &path);
+    ~MapGraph();
     DWGraph::DWGraph getFullGraph() const;
     DWGraph::DWGraph getConnectedGraph() const;
     DWGraph::DWGraph getReducedGraph() const;

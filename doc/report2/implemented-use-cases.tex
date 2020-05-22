@@ -50,6 +50,9 @@ All graphical uses make use of \href{https://github.com/STEMS-group/GraphViewer}
 \texttt{./main scc FRACTION FLAGS} draws the road network, colouring roads red if they connect two nodes in the train station's \acrshort{SCC}, or gray if at least one of the nodes is not in the train station's \acrshort{SCC}.
 \subsection{Shortest path}
 \texttt{./main path FRACTION FLAGS SOUR DEST [-v]} draws the road network, colouring the shortest path (actually least-time path) from nodes \texttt{SOUR} to \texttt{DEST} found by different algorithms. Using the option \texttt{-v} ignores all paths other than the optimal path, and colours nodes if they were explored by certain algorithms.\par
+
+\texttt{./main scc FRACTION FLAGS SOUR\_LAT SOUR\_LON DEST\_LAT DEST\_LON [-v]} is similar to the above usage, except you can provide latitude and longitude coordinates for the source and destination, and an extra step will be performed to find the corresponding source and destination nodes that are 1. closest to the provided coordinates, and 2. connected to the train station.\par
+
 The A* versions are distinguished by the maximum speed they assume a car can go. This is just a method to guarantee we have admissible (only A* algorithm $\SI{90}{km/h}$) and non-admissible heuristics.
 \begin{center}
     \begin{tabular}{l | l | l}

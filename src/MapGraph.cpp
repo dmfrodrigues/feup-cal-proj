@@ -112,6 +112,7 @@ MapGraph::MapGraph(const std::string &path){
         max_coord = coord_t(lat_min, lon_max);
         mean_coord = (min_coord + max_coord)/2;
     }
+    fullGraph = getFullGraph();
     {
         coord_t station_coord; {
             std::ifstream is(path + ".points");
@@ -119,15 +120,15 @@ MapGraph::MapGraph(const std::string &path){
             is >> station_coord;
         }
 
-        DWGraph::DWGraph G = getFullGraph();
+        DWGraph::DWGraph G = fullGraph;
         std::list<coord_t> nodes_list;
         for(const node_t &u: G.getNodes()) nodes_list.push_back(nodes.at(u));
 
-        ClosestPoint *closestPoint = new VStripes(0.025);
-        closestPoint->initialize(nodes_list);
-        closestPoint->run();
+        ClosestPoint *closestPoint_initial = new VStripes(0.025);
+        closestPoint_initial->initialize(nodes_list);
+        closestPoint_initial->run();
 
-        coord_t station_closest = closestPoint->getClosestPoint(station_coord);
+        coord_t station_closest = closestPoint_initial->getClosestPoint(station_coord);
         
         station = DWGraph::INVALID_NODE;
         
@@ -138,6 +139,20 @@ MapGraph::MapGraph(const std::string &path){
 
         std::cout << "Station node: " << station << std::endl;
     }
+    connectedGraph = getConnectedGraph();
+    {
+        DWGraph::DWGraph G = connectedGraph;
+        std::list<coord_t> nodes_list;
+        for(const node_t &u: G.getNodes()) nodes_list.push_back(nodes.at(u));
+
+        closestPoint = new VStripes(0.025);
+        closestPoint->initialize(nodes_list);
+        closestPoint->run();
+    }
+}
+
+MapGraph::~MapGraph(){
+    delete closestPoint;
 }
 
 DWGraph::DWGraph MapGraph::getFullGraph() const{
@@ -156,7 +171,7 @@ DWGraph::DWGraph MapGraph::getFullGraph() const{
 }
 
 DWGraph::DWGraph MapGraph::getConnectedGraph() const{
-    DWGraph::DWGraph G = getFullGraph();
+    DWGraph::DWGraph G = fullGraph;
     DUGraph Gu = (DUGraph)G;
     SCCnode *scc = new KosarajuV(new DFS());
     scc->initialize(&Gu, station);
@@ -173,7 +188,7 @@ DWGraph::DWGraph MapGraph::getConnectedGraph() const{
 }
 
 DWGraph::DWGraph MapGraph::getReducedGraph() const{
-    DWGraph::DWGraph G = getConnectedGraph();
+    DWGraph::DWGraph G = connectedGraph;
     std::cout << "Nodes: " << G.getNodes().size() << "\n"
               << "Edges: " << G.getNumberEdges() << "\n";
     
@@ -382,9 +397,9 @@ void MapGraph::drawSCC(int fraction, int display) const{
         {false, "GRAY"}
     };
 
-    DWGraph::DWGraph G  = getFullGraph();
+    DWGraph::DWGraph G  = fullGraph;
     std::unordered_set<node_t> connected_nodes; {
-        DWGraph::DWGraph Gu = getConnectedGraph();
+        DWGraph::DWGraph Gu = connectedGraph;
         const auto &l = Gu.getNodes();
         connected_nodes = std::unordered_set<node_t>(l.begin(), l.end());
     }
@@ -436,7 +451,7 @@ public:
 };
 
 void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool visited) const{
-    DWGraph::DWGraph G = getConnectedGraph();
+    DWGraph::DWGraph G = connectedGraph;
 
     std::vector<std::string> name({
         "Dijkstra's algorithm with early stop",
@@ -547,15 +562,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
     for(ShortestPath *p: shortestPaths) delete p;
 }
 
-// ./main path 1 255 1160030583 5284172068
 void MapGraph::drawPath(int fraction, int display, coord_t src, coord_t dst, bool visited) const{
-    DWGraph::DWGraph G = getConnectedGraph();
-    std::list<coord_t> nodes_list;
-    for(const node_t &u: G.getNodes()) nodes_list.push_back(nodes.at(u));
-
-    ClosestPoint *closestPoint = new VStripes(0.025);
-    closestPoint->initialize(nodes_list);
-    closestPoint->run();
 
     coord_t src_closest = closestPoint->getClosestPoint(src);
     coord_t dst_closest = closestPoint->getClosestPoint(dst);
