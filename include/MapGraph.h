@@ -39,7 +39,7 @@ private:
     };
     static const std::unordered_map<edge_type_t, Display> display_map;
 
-    static const DWGraph::node_t station = 1390706567;
+    DWGraph::node_t station = DWGraph::INVALID_NODE;
 
     std::unordered_map<DWGraph::node_t, coord_t> nodes;
     coord_t min_coord, max_coord, mean_coord;

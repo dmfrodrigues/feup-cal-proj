@@ -112,6 +112,32 @@ MapGraph::MapGraph(const std::string &path){
         max_coord = coord_t(lat_min, lon_max);
         mean_coord = (min_coord + max_coord)/2;
     }
+    {
+        coord_t station_coord; {
+            std::ifstream is(path + ".points");
+            size_t numberPoints; is >> numberPoints;
+            is >> station_coord;
+        }
+
+        DWGraph::DWGraph G = getFullGraph();
+        std::list<coord_t> nodes_list;
+        for(const node_t &u: G.getNodes()) nodes_list.push_back(nodes.at(u));
+
+        ClosestPoint *closestPoint = new VStripes(0.025);
+        closestPoint->initialize(nodes_list);
+        closestPoint->run();
+
+        coord_t station_closest = closestPoint->getClosestPoint(station_coord);
+        
+        station = DWGraph::INVALID_NODE;
+        
+        for(const auto &p: nodes){
+            if(p.second == station_closest) station = p.first;
+        }
+        if(station == DWGraph::INVALID_NODE) throw std::invalid_argument("No such node");
+
+        std::cout << "Station node: " << station << std::endl;
+    }
 }
 
 DWGraph::DWGraph MapGraph::getFullGraph() const{
