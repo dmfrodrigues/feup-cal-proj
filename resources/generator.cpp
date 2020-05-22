@@ -1,5 +1,5 @@
-#include "InterestingNode.h"
 #include "Client.h"
+#include "point.h"
 
 #include <stdexcept> 
 #include <vector>
@@ -14,11 +14,11 @@ void generator(int argc, const char *argv[]){
     srand(time(NULL));
 
     //Read interesting nodes
-    std::vector<InterestingNode> nodes;
+    std::vector<point_t> nodes;
     std::ifstream ifs (interesting_path);
     if (!ifs.is_open()) throw std::runtime_error("Could not open interesting nodes file");
     while(!ifs.eof()){
-        InterestingNode n;
+        point_t n;
         ifs >> n;
         nodes.push_back(n);
     }
@@ -33,7 +33,7 @@ void generator(int argc, const char *argv[]){
     if (!ofs.is_open()) throw std::runtime_error("Could not open output file");
 
     for (int i = 0 ; i < n_res ; ++i){
-        Client temp(names_list.at(rand() % names_list.size()), rand() % 90000000 + 100000000, rand() % 11 + 1, nodes.at(rand() % nodes.size()), rand() % 86400000000, rand() % 2);
+        Client temp(names_list.at(rand() % names_list.size()), rand() % 90000000 + 100000000, rand() % 11 + 1, nodes.at(rand() % nodes.size()).getCoord(), rand() % 86400000000, rand() % 2);
         ofs << temp << std::endl;
     }
     ofs.close();
