@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+Client::Client(){}
+
 Client::Client(std::string clientName_, int NIF_, int numPeople_, coord_t dest_, long long int arrival_, bool direction_){
 	this->clientName = clientName_;
 	this->NIF = NIF_;

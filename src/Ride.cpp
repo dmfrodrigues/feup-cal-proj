@@ -1,5 +1,9 @@
 #include "Ride.h"
 
+Ride::Event::Event(){}
+
+Ride::Ride(){}
+
 std::istream& operator>> (std::istream& is, Ride& r){
         is >> r.v;
         
