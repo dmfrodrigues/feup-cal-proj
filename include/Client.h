@@ -31,15 +31,9 @@ public:
 
     //std::vector<Client> getClientsFromFile(std::string filename);
 
-    friend std::istream& operator>> (std::istream& is, Client& c){
-        is >> c.clientName >> c.NIF >> c.dest >> c.arrival >> c.direction;
-        return is;
-    }
+    friend std::istream& operator>> (std::istream& is, Client& c);
 
-    friend std::ostream& operator<< (std::ostream& os, Client& c){
-        os << c.clientName << " " << c.NIF << " " << c.numPeople << " " << c.dest << " " << c.arrival << " " << c.direction;
-        return os;
-    }
+    friend std::ostream& operator<< (std::ostream& os, Client& c);
 };
 
 #endif //CLIENT_H_INCLUDED

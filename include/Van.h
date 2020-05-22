@@ -13,15 +13,11 @@ public:
 
 	int getCapacity();
 
-    friend std::istream& operator>> (std::istream& is, Van& v){
-        is >> v.license >> v.capacity;
-        return is;
-    }
+    //std::vector<Van> getVansFromFile(std::string filename);
 
-    friend std::ostream& operator<< (std::ostream& os, Van& v){
-        os << v.license << v.capacity;
-        return os;
-    } 
+    friend std::istream& operator>> (std::istream& is, Van& v);
+
+    friend std::ostream& operator<< (std::ostream& os, Van& v);
 };
 
 
