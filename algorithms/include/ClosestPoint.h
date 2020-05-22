@@ -6,6 +6,7 @@
 
 class ClosestPoint {
 public:
+    virtual ~ClosestPoint();
     virtual void initialize(const std::list<coord_t> &points) = 0;
     virtual void run() = 0;
     virtual coord_t getClosestPoint(coord_t p) const = 0;
