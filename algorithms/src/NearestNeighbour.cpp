@@ -9,9 +9,10 @@ typedef std::chrono::high_resolution_clock hrc;
 
 NearestNeighbour::NearestNeighbour() {}
 
-void NearestNeighbour::initialize(const DWGraph::DWGraph *G_, DWGraph::node_t s_) {
-    this->G = G_;
+void NearestNeighbour::initialize(const std::list<DWGraph::node_t> *nodes_, DWGraph::node_t s_, weight_function *w_) {
+    this->nodes = nodes_;
     this->s = s_;
+    this->w = w_;
     this->path.clear();
     this->visited.clear();
 
@@ -24,14 +25,11 @@ void NearestNeighbour::run() {
 
     node_t currentNode = this->s;
 
-    for (size_t i = 0; i < G->getNodes().size() - 1; ++i) {
-
-        // find u' (minimal dist from the set of non visited)
-        node_t u_ = findClosest(currentNode);
-        // printf("Iter: %d\tNode: %lld\n", i, u_);
-        this->path.push_back(u_);
-        this->visited.insert(u_);
-        currentNode = u_;
+    for (size_t i = 0; i < nodes->size() - 1; ++i) {
+        node_t u = findClosest(currentNode);
+        this->path.push_back(u);
+        this->visited.insert(u);
+        currentNode = u;
     }
     // back to the starting node
     this->path.push_back(this->s);
@@ -42,24 +40,23 @@ void NearestNeighbour::run() {
 
 node_t NearestNeighbour::findClosest(node_t u) {
 
-    node_t minimizer = -1;
-    weight_t weight = DWGraph::INF;
+    node_t ret = DWGraph::INVALID_NODE;
+    weight_t c = DWGraph::INF;
 
-    for (const Edge &e: G->getAdj(u)) {
-        // node cannot be the starting node (s) and must not have yet been visited
-        if (e.v != this->s && (visited.find(e.v) == visited.end()) ) {
-            // if (minimizer == NULL) {minimizer = e.v; weight = e.w;}
-            if (e.w < weight) {
-                minimizer = e.v;
-                weight = e.w;
+    for (const node_t &v: *nodes) { if(v == u || v == s) continue;       // node cannot be the starting node (s)
+        if (!visited.count(v)) {                                        // and must not have yet been visited
+            weight_t c_ = w->operator()(visited, u, v);
+            if (c_ < c) {
+                c = c_;
+                ret = v;
             }
         }
     }
-    return minimizer;
+    return ret;
 }
 
 std::list<DWGraph::node_t> NearestNeighbour::getTour() const {
-    return this->path;
+    return path;
 }
 
 statistics_t NearestNeighbour::getStatistics() const {
