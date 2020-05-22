@@ -46,10 +46,11 @@ $(ALGS_FLIB): FORCE
 IFLAGS =-I$(IDIR) -I$(GV_IDIR) -I$(UTILS_IDIR) -I$(STRUCTS_IDIR) -I$(ALGS_IDIR)
 
 LFLAGS =-L$(GV_LDIR)      -l$(GV_LIB) \
-		-L$(UTILS_LDIR)   -l$(UTILS_LIB) \
+		-L$(ALGS_LDIR)    -l$(ALGS_LIB) \
 		-L$(STRUCTS_LDIR) -l$(STRUCTS_LIB) \
-		-L$(ALGS_LDIR)    -l$(ALGS_LIB)
-LREQUIREMENTS=$(GV_FLIB) $(UTILS_FLIB) $(STRUCTS_FLIB) $(ALGS_FLIB)
+		-L$(UTILS_LDIR)   -l$(UTILS_LIB)
+
+LREQUIREMENTS=$(GV_FLIB) $(ALGS_FLIB) $(STRUCTS_FLIB) $(UTILS_FLIB)
 
 CFLAGS_OPTIMIZE=-Ofast -fno-signed-zeros -fno-trapping-math -frename-registers -funroll-loops
 CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result -pedantic-errors -Wextra -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wconversion -Wdisabled-optimization \
