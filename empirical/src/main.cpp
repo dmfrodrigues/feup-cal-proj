@@ -13,6 +13,8 @@
 #include <vector>
 #include <chrono>
 
+#define NRUNS 5
+
 typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
 typedef std::vector<weight_t> VI;
@@ -78,9 +80,13 @@ int main(){
     for (size_t i = 0 ; i < sizes.size() ; ++i){
         std::cout << i << std::endl;
         ShortestPathOneMany *shortestPath = new Dijkstra();
-        shortestPath->initialize(generators.at(i).getDWGraph(), 1);
-        shortestPath->run();
-        dijkstraTimes.push_back(std::make_pair(sizes.at(i),shortestPath->getStatistics().execution_time));
+        long long time = 0;
+        for(int n = 0; n < NRUNS; ++n){
+            shortestPath->initialize(generators.at(i).getDWGraph(), 1);
+            shortestPath->run();
+            time += shortestPath->getStatistics().execution_time;
+        }
+        dijkstraTimes.push_back(std::make_pair(sizes.at(i),time/NRUNS));
     }
     std::cout << "Outputing to file\n";
     ofs << "Dijkstra\n";
