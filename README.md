@@ -95,12 +95,12 @@ FRACTION    Fraction of nodes to draw (improves display performance).
 FLAGS       Flag which roads to draw (add them to combine).
 ```
 
-#### Examples
+##### Examples
 
 - To see all types of roads with a fraction of 5, run `./main view 5 255`
 - To see all main roads with a fraction of 3, run `./main view 3 15`
 
-### Speed
+#### Speed
 
 ```
 ./main speed FRACTION FLAGS
@@ -119,7 +119,7 @@ Roads are coloured according to the following table:
 |                    50 | Black   |
 |                    40 | Gray    |
 
-### Strongly connected components
+#### Strongly connected components
 
 ```
 ./main scc FRACTION FLAGS
@@ -130,7 +130,7 @@ FLAGS       Flag which roads to draw (add them to combine).
 
 Roads are coloured red if they connect two nodes in the train station's SCC, or gray otherwise.
 
-### Shortest path
+#### Shortest path
 
 ```
 ./main scc FRACTION FLAGS SOUR DEST [-v]
@@ -159,10 +159,27 @@ Roads are coloured according to the following table:
 | A* algorithm, 30km/h                 | Blue        | Blue                 |
 | A* algorithm, 10km/h                 | Cyan        | Cyan                 |
 
-#### Examples
+##### Examples
 
 - To get paths between FEUP and FCUP, you can run either of
 ```sh
 ./main path 1 255 4523960191 128672575
 ./main path 1 255 41.1777 -8.598 41.1522 -8.6361
+```
+
+### Iteration 1
+
+```
+./main iteration1 CLIENTS VANS RIDES
+
+CLIENTS     Clients file path (input).
+VANS        Vans file path (input).
+RIDES       Rides file path (output).
+```
+
+#### Examples
+
+- To get all rides serving clients in `resources/it1_01.clients`, using vans `resources/it1_01.vans` and outputting those rides to `resources/it1_01.rides`, run
+```sh
+./main iteration1 resources/it1_01.vans resources/it1_01.clients resources/it1_01.rides
 ```

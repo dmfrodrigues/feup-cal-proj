@@ -24,7 +24,7 @@ main
 *.nodes
 *.edges
 *.points
-*.clients
+clients_*.clients
 *.vans
 *.rides
 *.png

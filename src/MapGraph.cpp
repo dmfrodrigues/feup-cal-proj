@@ -84,7 +84,9 @@ MapGraph::MapGraph(const std::string &path){
         for(size_t i = 0; i < numberNodes; ++i){
             coord_t::deg_t lat, lon;
             node_t id; is >> id >> lat >> lon;
-            nodes[id] = coord_t(lat, lon);
+            coord_t c(lat, lon);
+            nodes[id] = c;
+            coord2node[c] = id;
         }
     }
     {
@@ -154,6 +156,8 @@ MapGraph::MapGraph(const std::string &path){
 MapGraph::~MapGraph(){
     delete closestPoint;
 }
+
+DWGraph::node_t MapGraph::getStationNode() const { return station; }
 
 DWGraph::DWGraph MapGraph::getFullGraph() const{
     DWGraph::DWGraph G;
@@ -239,6 +243,12 @@ DWGraph::DWGraph MapGraph::getReducedGraph() const{
     } while(prev_nodes != G.getNodes().size());
 
     return G;
+}
+
+DWGraph::node_t MapGraph::getClosestNode(coord_t c) const{
+    coord_t closest = closestPoint->getClosestPoint(c);
+    node_t node = coord2node.at(closest);
+    return node;
 }
 
 const std::unordered_map<edge_type_t, MapGraph::Display> MapGraph::display_map = {
@@ -564,20 +574,11 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
 
 void MapGraph::drawPath(int fraction, int display, coord_t src, coord_t dst, bool visited) const{
 
-    coord_t src_closest = closestPoint->getClosestPoint(src);
-    coord_t dst_closest = closestPoint->getClosestPoint(dst);
+    node_t src_node = getClosestNode(src);
+    node_t dst_node = getClosestNode(dst);
 
-    node_t src_node = DWGraph::INVALID_NODE;
-    node_t dst_node = DWGraph::INVALID_NODE;
-    
-    for(const auto &p: nodes){
-        if(p.second == src_closest) src_node = p.first;
-        if(p.second == dst_closest) dst_node = p.first;
-    }
-    if(src_node == DWGraph::INVALID_NODE || dst_node == DWGraph::INVALID_NODE) throw std::invalid_argument("No such node");
-
-    std::cout << "Source      (" << src << ") transformed into node " << src_node << " (" << src_closest << ")" << std::endl;
-    std::cout << "Destination (" << dst << ") transformed into node " << dst_node << " (" << dst_closest << ")" << std::endl;
+    std::cout << "Source      (" << src << ") transformed into node " << src_node << std::endl;
+    std::cout << "Destination (" << dst << ") transformed into node " << dst_node << std::endl;
 
     drawPath(fraction, display, src_node, dst_node, visited);
 }

@@ -9,10 +9,10 @@ typedef DWGraph::weight_t weight_t;
 
 class weight_func : public TravellingSalesman::weight_function {
 private:
-    int N;
+    size_t N;
     const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths = nullptr;
 public:
-    weight_func(int N_, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths_){
+    weight_func(size_t N_, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths_){
         N = N_;
         shortestPaths = shortestPaths_;
     }
@@ -41,33 +41,67 @@ void RoutingHeuristic::initialize(const std::list<std::pair<Client, node_t> > *c
     shortestPaths = shortestPaths_;
 
     rides.clear();
+
+    {
+        node2client.clear();
+        for(const auto &c: vclients){
+            node2client.insert(std::make_pair(c.second, c.first));
+        }
+    }
 }
 
 void RoutingHeuristic::run(){
+    rides.clear();
     while(!clients.empty()){
-        std::pair<weight_t, Van> v = vans.top(); vans.pop();
         Ride r;
+
+        std::pair<weight_t, Van> v = vans.top(); vans.pop();
         r.setVan(v.second);
+
         weight_t start_time = std::max(v.first, clients.front().first.getArrival());
-
+        weight_t leave_station_time = start_time;
         std::list<node_t> nodes; nodes.push_back(station);
-
         while(r.getClients().size() < v.second.getCapacity() &&
               !clients.empty() && clients.front().first.getArrival() < start_time+Dt){
-            r.addClient(clients.front().first);
-            nodes.push_back(clients.front().second);
-            clients.pop();
+            auto c = clients.front(); clients.pop();
+            r.addClient(c.first);
+            nodes.push_back(c.second);
+            leave_station_time = std::max(leave_station_time, c.first.getArrival());
         }
 
         TravellingSalesman::weight_function *w = new weight_func(nodes.size(), &shortestPaths);
-
         TravellingSalesman *tsp = new HeldKarp();
-
         tsp->initialize(&nodes, station, w);
         tsp->run();
+        {
+            std::list<node_t> tour_list = tsp->getTour();
+            std::vector<node_t> tour(tour_list.begin(), tour_list.end());
+
+            weight_t curr_time = leave_station_time;
+            r.leaveStation(station, curr_time);
+            
+            for(size_t i = 1; i < tour.size()-1; ++i){
+                const node_t &fr = tour[i-1], &to = tour[i];
+                curr_time += shortestPaths.at(fr)->getPathWeight(to);
+
+                auto it = node2client.find(to);
+                Client c = it->second;
+                node2client.erase(it);
+
+                r.dropClient(c, curr_time);
+            }
+            curr_time += shortestPaths.at(tour[tour.size()-2])->getPathWeight(station);
+            r.arriveStation(station, curr_time);
+
+            v.first = curr_time;
+        }
+
+        rides.push_back(r);
 
         delete tsp;
         delete w;
+
+        vans.push(v);
     }
 }
 

@@ -1,7 +1,7 @@
 #include "Van.h"
 
 
-int Van::getCapacity() {
+unsigned Van::getCapacity() {
 	return capacity;
 }
 
@@ -30,7 +30,7 @@ std::istream& operator>> (std::istream& is, Van& v){
         return is;
     }
 
-std::ostream& operator<< (std::ostream& os, Van& v){
-	os << v.license << v.capacity;
+std::ostream& operator<< (std::ostream& os, const Van& v){
+	os << v.license << " " << v.capacity;
 	return os;
 } 
