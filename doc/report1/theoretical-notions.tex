@@ -132,7 +132,3 @@ Let us denote by $SCC(u)$ the \acrfull{SCC} that node $u$ belongs to.
 \begin{proof}
 Let $p$ be a path that makes $x \leadsto y$ true, and let $q$ be a path that makes $y \leadsto z$ true. The path $r = \langle p[1:|p|], q[2:|q|] \rangle = \langle x, p_2, p_3,...,p_{|p|-1},y,q_2,q_3,...,q_{|q|-1}, z \rangle$ makes $x \leadsto z$ trivially true.
 \end{proof}
-\section{Data structures}
-\subsection{Stack}
-A stack is a sequencial data structure, where the most recently inserted element is the first to be removed (much like a stack of books, which we only interact with through the top of the stack).\par
-We consider a stack $L$ has its top on the left side, and elements \emph{before} $u$ are closer to the top of the stack (or to the left of $u$). Thus, let $Before(v)$ be the set of nodes that are before $v$ in $L$, let $After(v)$ be the set of nodes that are after $v$ in $L$

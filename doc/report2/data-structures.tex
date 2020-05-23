@@ -1,0 +1,25 @@
+\chapter{Data Structures} \label{data-structures}
+
+\section{Stack}
+A stack is a sequencial data structure, where the most recently inserted element is the first to be removed (much like a stack of books, which we only interact with through the top of the stack).\par
+We consider a stack $L$ has its top on the left side, and elements \emph{before} $u$ are closer to the top of the stack (or to the left of $u$). Thus, let $Before(v)$ be the set of nodes that are before $v$ in $L$, let $After(v)$ be the set of nodes that are after $v$ in $L$.
+
+\section{Unordered Map}
+The unordered map data structure is an associative container that is made up of key-value pairs (with unique keys). It is part of the C++ Standard Library and will be used due to its average constant-time complexity of its operations of search, insertion and removal of elements, a consequence of an implementation based on hash tables.
+
+\section{List}
+The list container that will be used is the one implemented in the Standard Library as doubly-linked lists which are characterized by keeping links to both the previous and the following element of the list, allowing it to be iterated forwards and backwards and provide constant-time insertions and erase operations, making it appropriate to represent groups of nodes.
+
+\section{Vector}
+A vector is a sequence container that internally uses a dynamically allocated array to store its elements (Standard Library). Vectors may allocate extra space for future expansion consuming more memory than arrays but have the edge in storage management/growth and have a constant-time complexity not only for insertions and removals at the end (amortized) but also for random access, being a good alternative for situations where the total number of elements is undetermined at the start.
+
+\section{Struct}
+The struct is a data structure useful to group elements of diferent data types. Its data members are stored in an ordered sequence, opposing the union where the memory reserved can fit only one but any of it's elements.
+
+\section{Graph}
+In generic terms, the representation of graphs will be based on the existence of Nodes that connect with each other via Edges.
+In the case of an Directed Unweighted Graph (class DUGraph) the nodes of a graph will be stored in a list and it's adjacency matrix will be represented by an unordered map whose key is the node id and the value is a list of nodes, providing low lookup time as described in the previous data structures.
+The Directed Weighted Graph (class DWGraph) introduces a weight element distinguishing itself
+from the DUG while retaining some common elements.
+
+O QUE É QUE O UNORDERED MAP PRED SIGNIFICA?
