@@ -3,14 +3,16 @@
 typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
 
-Ride::Event(DWGraph::weight_t t_, event_type a_, Client c_){
+Ride::Event::Event(){}
+
+Ride::Event::Event(DWGraph::weight_t t_, Event::event_type a_, Client c_){
     if (a_ == event_type::BE_THERE) throw std::invalid_argument("");
     this->t = t_;
     this ->a = a_;
     this->c = c_;
 }
 
-Ride::Event(DWGraph::weight_t t_, event_type a_, DWGraph::node_t u_){
+Ride::Event::Event(DWGraph::weight_t t_, Event::event_type a_, DWGraph::node_t u_){
     if (a_ != event_type::BE_THERE) throw std::invalid_argument("");
     this->t = t_;
     this ->a = a_;
@@ -70,5 +72,36 @@ std::ostream& operator<< (std::ostream& os, const Ride& r){
     for (size_t i = 0 ; i < r.C.size() ; ++i) os << "\n" << r.C.at(i);
     os << r.e.size() << std::endl;
     for (size_t i = 0 ; i < r.e.size() ; ++i) os << "\n" << r.e.at(i);
+    return os;
+}
+
+std::istream& operator>> (std::istream& is, Ride::Event::event_type& e){
+    short x; is >> x;
+    e = static_cast<Ride::Event::event_type>(x);
+    return is;
+}
+std::ostream& operator<< (std::ostream& os, const Ride::Event::event_type& e){
+    os << e;
+    return os;
+}
+
+std::istream& operator>> (std::istream& is, Ride::Event& e){
+    is >> e.t >> e.a;
+    switch(e.a){
+        case -1: is >> e.c; break;
+        case  0: is >> e.u; break;
+        case +1: is >> e.c; break;
+        default:            break;
+    }
+    return is;
+}
+std::ostream& operator<< (std::ostream& os, const Ride::Event& e){
+    os << e.t << " " << e.a << " ";
+    switch(e.a){
+        case -1: os << e.c; break;
+        case  0: os << e.u; break;
+        case +1: os << e.c; break;
+        default:            break;
+    }
     return os;
 }
