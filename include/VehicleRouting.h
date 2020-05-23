@@ -12,7 +12,7 @@
 
 class VehicleRouting {
 public:
-    ~VehicleRouting();
+    virtual ~VehicleRouting();
     virtual void initialize(const std::list<std::pair<Client, DWGraph::node_t> > *clients, const std::list<Van> *vans, DWGraph::node_t station, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths) = 0;
     virtual void run() = 0;
     virtual const std::vector< Ride >& getGroups() const = 0;
