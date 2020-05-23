@@ -38,6 +38,10 @@ void Ride::leaveStation(node_t station, weight_t t){
     e.push_back(Event(t, Event::event_type::BE_THERE, station));
 }
 
+void Ride::arriveStation(node_t station, weight_t t){
+    e.push_back(Event(t, Event::event_type::BE_THERE, station));
+}
+
 void Ride::dropClient(Client c, weight_t t){
     e.push_back(Event(t, Event::event_type::DROP_CLIENT, c));
 }

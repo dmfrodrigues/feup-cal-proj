@@ -47,6 +47,7 @@ public:
     const std::vector<Client>& getClients() const;
 
     void leaveStation(DWGraph::node_t station, DWGraph::weight_t t);
+    void arriveStation(DWGraph::node_t station, DWGraph::weight_t t);
 
     void dropClient(Client c, DWGraph::weight_t t);
 
