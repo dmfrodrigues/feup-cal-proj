@@ -88,9 +88,10 @@ int main(){
 
     {
         std::cout << "Running Held-Karp" << std::endl;
-        std::vector<size_t> sizes({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+        std::vector<size_t> sizes({2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
         std::vector<std::pair<int, long long>> heldKarpTimes;
         for (size_t i = 0 ; i < sizes.size() ; ++i){
+            std::cout << i << std::endl;
             const size_t &sz = sizes[i];
             std::list<node_t> nodes;{
                 for(node_t u = 0; u < node_t(sz); ++u)
