@@ -1,6 +1,7 @@
 #include "Client.h"
 
 #include <fstream>
+#include <iomanip>
 
 Client::Client(){}
 
@@ -36,30 +37,12 @@ bool Client::operator<(const Client &c) const{
 	return (arrival < c.arrival);
 }
 
-// std::vector<Client> Client::getClientsFromFile(std::string filename){
-//  std::vector<Client> result;
-    
-//  std::ifstream ifs("resources/" + filename);
-// 	if(!ifs.is_open()) throw std::runtime_error("Could not open clients requests file");
-
-// 	std::string name;
-// 	int nif, npersons;
-//  DUGraph::node_t node;
-//  long long int t; 
-// 	while(!ifs.eof()) {
-// 		Client c;
-//      ifs >> c;
-// 		result.push_back(c);
-// 	}
-// 	return result;
-// }
-
 std::istream& operator>> (std::istream& is, Client& c){
-        is >> c.clientName >> c.NIF >> c.dest >> c.arrival >> c.direction;
-        return is;
-    }
+	is >> c.clientName >> c.NIF >> c.dest >> c.arrival >> c.direction;
+	return is;
+}
 
 std::ostream& operator<< (std::ostream& os, const Client& c){
-	os << c.clientName << "\t" << c.NIF << "\t" << c.dest << "\t" << c.arrival << "\t" << c.direction;
+	os << std::left << std::setw(16) << c.clientName << "\t" << c.NIF << "\t" << c.dest << "\t" << c.arrival << "\t" << c.direction;
 	return os;
 }

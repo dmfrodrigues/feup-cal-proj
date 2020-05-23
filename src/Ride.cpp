@@ -74,7 +74,7 @@ std::ostream& operator<< (std::ostream& os, const Ride& r){
 	os << r.v;
     os << "\n" << r.C.size();
     for (size_t i = 0 ; i < r.C.size() ; ++i) os << "\n" << r.C.at(i);
-    os << r.e.size() << std::endl;
+    os << "\n" << r.e.size();
     for (size_t i = 0 ; i < r.e.size() ; ++i) os << "\n" << r.e.at(i);
     return os;
 }
@@ -90,7 +90,10 @@ std::ostream& operator<< (std::ostream& os, const Ride::Event::event_type& e){
 }
 
 std::istream& operator>> (std::istream& is, Ride::Event& e){
-    is >> e.t >> e.a;
+    is >> e.t;
+    short a;
+    is >> a;
+    e.a = static_cast<Ride::Event::event_type>(a);
     switch(e.a){
         case -1: is >> e.c; break;
         case  0: is >> e.u; break;
@@ -100,7 +103,7 @@ std::istream& operator>> (std::istream& is, Ride::Event& e){
     return is;
 }
 std::ostream& operator<< (std::ostream& os, const Ride::Event& e){
-    os << e.t << " " << e.a << " ";
+    os << e.t << " " << static_cast<short>(e.a) << " ";
     switch(e.a){
         case -1: os << e.c; break;
         case  0: os << e.u; break;

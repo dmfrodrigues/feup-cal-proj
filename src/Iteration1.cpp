@@ -69,7 +69,7 @@ void Iteration1::run(){
     {
         std::vector< Ride > rides = vrp->getGroups();
         std::ofstream os(rides_path);
-        os << rides.size();
+        os << rides.size() << "\n";
         for(const Ride &r: rides){
             os << r << "\n";
         }
