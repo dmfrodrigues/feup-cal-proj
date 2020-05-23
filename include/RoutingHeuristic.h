@@ -5,6 +5,7 @@
 
 #include "DWGraph.h"
 #include <queue>
+#include <map>
 
 class RoutingHeuristic : public VehicleRouting {
 private:
@@ -15,6 +16,7 @@ private:
     DWGraph::weight_t Dt;
     DWGraph::node_t station;
     std::queue<std::pair<Client, DWGraph::node_t> > clients;
+    std::multimap<DWGraph::node_t, Client> node2client;
     min_priority_queue vans;
     std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths;
     std::vector<Ride> rides;

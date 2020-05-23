@@ -41,22 +41,32 @@ void RoutingHeuristic::initialize(const std::list<std::pair<Client, node_t> > *c
     shortestPaths = shortestPaths_;
 
     rides.clear();
+
+    {
+        node2client.clear();
+        for(const auto &c: vclients){
+            node2client.insert(std::make_pair(c.second, c.first));
+        }
+    }
 }
 
 void RoutingHeuristic::run(){
+
     while(!clients.empty()){
         std::pair<weight_t, Van> v = vans.top(); vans.pop();
         Ride r;
         r.setVan(v.second);
         weight_t start_time = std::max(v.first, clients.front().first.getArrival());
+        weight_t leave_station_time = start_time;
 
         std::list<node_t> nodes; nodes.push_back(station);
 
         while(r.getClients().size() < v.second.getCapacity() &&
               !clients.empty() && clients.front().first.getArrival() < start_time+Dt){
-            r.addClient(clients.front().first);
-            nodes.push_back(clients.front().second);
-            clients.pop();
+            auto c = clients.front(); clients.pop();
+            r.addClient(c.first);
+            nodes.push_back(c.second);
+            leave_station_time = std::max(leave_station_time, c.first.getArrival());
         }
 
         TravellingSalesman::weight_function *w = new weight_func(nodes.size(), &shortestPaths);
@@ -65,6 +75,25 @@ void RoutingHeuristic::run(){
 
         tsp->initialize(&nodes, station, w);
         tsp->run();
+
+        {
+            std::list<node_t> tour_list = tsp->getTour();
+            std::vector<node_t> tour(tour_list.begin(), tour_list.end());
+
+            weight_t curr_time = leave_station_time;
+            r.leaveStation(station, curr_time);
+            
+            for(size_t i = 1; i < tour.size(); ++i){
+                const node_t &u = tour[i-1], &v = tour[i];
+                curr_time += shortestPaths.at(u)->getPathWeight(v);
+
+                auto it = node2client.find(v);
+                Client c = it->second;
+                node2client.erase(it);
+
+                r.dropClient(c, curr_time);
+            }
+        }
 
         delete tsp;
         delete w;
