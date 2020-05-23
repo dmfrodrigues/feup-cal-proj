@@ -11,7 +11,7 @@
 #include "shared_queue.h"
 
 /**
- * @brief Shortest Path Between Each Pair of Vertices
+ * @brief Shortest Path Between Each Pair of Vertices Interface
  * 
  */
 class ShortestPathAll {

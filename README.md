@@ -183,3 +183,8 @@ RIDES       Rides file path (output).
 ```sh
 ./main iteration1 resources/it1_01.vans resources/it1_01.clients resources/it1_01.rides
 ```
+
+Other examples:
+```sh
+./main iteration1 resources/it1_01.vans resources/it1_02.clients resources/it1_02.rides
+```
