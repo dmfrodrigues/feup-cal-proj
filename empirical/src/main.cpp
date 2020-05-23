@@ -49,17 +49,22 @@ int main(){
         std::cout << i << std::endl;
         DFS r;
         DUGraph g = DUGraph(*generators.at(i).getDWGraph());
-        auto start_time = hrc::now();
         KosarajuV k(&r);
-        k.initialize(&g, 1);
-        k.run();
-        auto finish_time = hrc::now();
-        long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
-        kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time));
+
+        long long time = 0;
+        for(int n = 0; n < NRUNS; ++n){
+            auto start_time = hrc::now();
+            k.initialize(&g, 1);
+            k.run();    
+            auto finish_time = hrc::now();
+            time += std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+        }
+
+        kosarajuTimes.push_back(std::make_pair(sizes.at(i), time/NRUNS));
     }
     std::cout << "Outputing to file\n";
-    ofs << "Kosaraju" << std::endl;
-    for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << "," << std::endl;
+    ofs << "Kosaraju\n";
+    for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << ",\n";
     
 
     // std::cout << "Running A* on graphs...\n";
@@ -127,7 +132,7 @@ int main(){
             delete tsp;
         }
         std::cout << "Outputing to file\n";
-        std::cout << "Held-Karp\n";
+        ofs << "Held-Karp\n";
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
 
