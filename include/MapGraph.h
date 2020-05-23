@@ -7,6 +7,8 @@
 #include "coord.h"
 #include "ClosestPoint.h"
 
+#include <map>
+
 class MapGraph {
 public:
     typedef double speed_t;
@@ -46,6 +48,7 @@ private:
     ClosestPoint *closestPoint = nullptr;
 
     std::unordered_map<DWGraph::node_t, coord_t> nodes;
+    std::map<coord_t, DWGraph::node_t> coord2node;
     coord_t min_coord, max_coord, mean_coord;
     std::list<way_t> ways;
 public:
@@ -54,6 +57,7 @@ public:
     DWGraph::DWGraph getFullGraph() const;
     DWGraph::DWGraph getConnectedGraph() const;
     DWGraph::DWGraph getReducedGraph() const;
+    DWGraph::node_t getClosestNode(coord_t c) const;
     void drawRoads (int fraction, int display) const;
     void drawSpeeds(int fraction, int display) const;
     void drawSCC   (int fraction, int display) const;
