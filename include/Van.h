@@ -19,7 +19,7 @@ public:
 
     friend std::istream& operator>> (std::istream& is, Van& v);
 
-    friend std::ostream& operator<< (std::ostream& os, Van& v);
+    friend std::ostream& operator<< (std::ostream& os, const Van& v);
 };
 
 

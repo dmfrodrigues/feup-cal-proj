@@ -64,7 +64,7 @@ std::istream& operator>> (std::istream& is, Client& c){
         return is;
     }
 
-std::ostream& operator<< (std::ostream& os, Client& c){
+std::ostream& operator<< (std::ostream& os, const Client& c){
 	os << c.clientName << " " << c.NIF << " " << c.numPeople << " " << c.dest << " " << c.arrival << " " << c.direction;
 	return os;
 }

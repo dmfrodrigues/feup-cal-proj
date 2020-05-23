@@ -30,7 +30,7 @@ private:
             }    
             return is;
         }
-        friend std::ostream& operator<< (std::ostream& os, event_type& e){
+        friend std::ostream& operator<< (std::ostream& os, const event_type& e){
             switch(e){
                 case event_type::ecu:
                     os << -1;
@@ -51,7 +51,7 @@ private:
             is >> e.t >> e.a >> e.c;
             return is;
         }
-        friend std::ostream& operator<< (std::ostream& os, Event& e){
+        friend std::ostream& operator<< (std::ostream& os, const Event& e){
             os << e.t << e.a << e.c;
             return os;
         }
@@ -76,7 +76,7 @@ public:
 
     friend std::istream& operator>> (std::istream& is, Ride& r);
 
-    friend std::ostream& operator<< (std::ostream& os, Ride& r);
+    friend std::ostream& operator<< (std::ostream& os, const Ride& r);
 };
 
 
