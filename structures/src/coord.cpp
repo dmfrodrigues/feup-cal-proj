@@ -35,6 +35,14 @@ bool coord_t::operator==(const coord_t &c) const{
     #pragma GCC diagnostic pop
 }
 
+bool coord_t::operator<(const coord_t &c) const{
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wfloat-equal"
+    if(lat != c.lat) return (lat < c.lat);
+    return (lon < c.lon);
+    #pragma GCC diagnostic pop
+}
+
 double coord_t::getMetersPerLatDeg() const{
     double phi = lat*M_PI/180.0;
     // const double phi = 41.2*M_PI/180.0;

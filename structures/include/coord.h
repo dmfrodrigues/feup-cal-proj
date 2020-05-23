@@ -28,6 +28,7 @@ public:
     coord_t operator+(const coord_t &p) const;
     coord_t operator/(double d) const;
     bool operator==(const coord_t &c) const;
+    bool operator< (const coord_t &c) const;
     deg_t getLat() const;
     deg_t getLon() const;
     friend std::istream& operator>>(std::istream &is,       coord_t &c);
