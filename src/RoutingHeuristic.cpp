@@ -54,12 +54,13 @@ void RoutingHeuristic::run(){
     rides.clear();
     while(!clients.empty()){
         Ride r;
+
+        std::pair<weight_t, Van> v = vans.top(); vans.pop();
         r.setVan(v.second);
+
         weight_t start_time = std::max(v.first, clients.front().first.getArrival());
         weight_t leave_station_time = start_time;
-
         std::list<node_t> nodes; nodes.push_back(station);
-
         while(r.getClients().size() < v.second.getCapacity() &&
               !clients.empty() && clients.front().first.getArrival() < start_time+Dt){
             auto c = clients.front(); clients.pop();
@@ -69,12 +70,9 @@ void RoutingHeuristic::run(){
         }
 
         TravellingSalesman::weight_function *w = new weight_func(nodes.size(), &shortestPaths);
-
         TravellingSalesman *tsp = new HeldKarp();
-
         tsp->initialize(&nodes, station, w);
         tsp->run();
-
         {
             std::list<node_t> tour_list = tsp->getTour();
             std::vector<node_t> tour(tour_list.begin(), tour_list.end());
