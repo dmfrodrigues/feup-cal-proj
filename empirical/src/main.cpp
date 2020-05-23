@@ -1,6 +1,8 @@
 #include "GraphGenerator.h"
 #include "DFS.h"
 #include "KosarajuV.h"
+#include "Astar.h"
+#include "ShortestPath.h"
 
 #include <iostream>
 #include <fstream>
@@ -38,6 +40,19 @@ int main(){
     std::cout << "Outputing to file\n";
     ofs << "Kosaraju\n";
     for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << ",\n";
+
+
+    std::cout << "Running A* on graphs...\n";
+    std::vector<std::pair<int, long long>> astarTimes;
+    for (size_t i = 0 ; i < sizes.size() ; ++i) {
+        //ShortestPath *shortestPath = new Astar();
+        //shortestPath->initialize(&generators.at(i).getDWGraph(), 1, 6); <- Pick u and v
+        //shortestPath->run();
+        //astarTimes.push_back(std::make_pair(sizes.at(i),shortestPath->getStatistics().execution_time));
+    }
+    std::cout << "Outputing to file\n";
+    std::cout << "A*\n";
+    for (std::pair<int, long long> pair : astarTimes) ofs << pair.first << "," << pair.second << ",\n";
 
     ofs.close();
     return 0;
