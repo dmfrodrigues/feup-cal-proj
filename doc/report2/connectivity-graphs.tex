@@ -1,0 +1,4 @@
+\chapter{Connectivity of the graphs used} \label{connectivity-graphs}
+During a first visual inspection of the graphs it was obvious that not every road  would be able to reach the train station, being the pre-processing of the graphs a necessity.
+For this effect, we used the \hyperref[algorithm-scc-kosaraju-v]{Variant of the Kosaraju algorithm} that was mentioned in the Algorithmic Problems chapter, which we thought to be the most reliable option.
+Using the method getConnectedGraph (MapGraph.cpp) that applies to the original graph this processing, we obtain a graph that is made up of 209872 nodes, which is a decrease close to 2 per cent of the number of nodes when comparing to the  213367 that the graph returned by getFullGraph (MapGraph.cpp) has.
