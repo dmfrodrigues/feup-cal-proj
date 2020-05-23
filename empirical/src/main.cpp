@@ -2,7 +2,10 @@
 #include "DFS.h"
 #include "KosarajuV.h"
 #include "Astar.h"
+#include "Dijkstra.h"
 #include "ShortestPath.h"
+#include "ShortestPathAll.h"
+
 
 #include <iostream>
 #include <fstream>
@@ -10,7 +13,6 @@
 #include <chrono>
 
 typedef std::chrono::high_resolution_clock hrc;
-
 
 int main(){
     std::ofstream ofs("../results.csv");
@@ -47,13 +49,40 @@ int main(){
     std::vector<std::pair<int, long long>> astarTimes;
     for (size_t i = 0 ; i < sizes.size() ; ++i) {
         //ShortestPath *shortestPath = new Astar();
-        //shortestPath->initialize(&generators.at(i).getDWGraph(), 1, 6); <- Pick u and v
+        //shortestPath->initialize(generators.at(i).getDWGraph(), 1, 6); <- Pick u and v
         //shortestPath->run();
         //astarTimes.push_back(std::make_pair(sizes.at(i),shortestPath->getStatistics().execution_time));
     }
     std::cout << "Outputing to file\n";
     std::cout << "A*\n";
     for (std::pair<int, long long> pair : astarTimes) ofs << pair.first << "," << pair.second << ",\n";
+
+
+    std::cout << "Running Dijkstra ";
+    std::vector<std::pair<int, long long>> dijkstraTimes;
+    for (size_t i = 0 ; i < sizes.size() ; ++i){
+        ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra(), 8);
+        shortestPath->initialize(generators.at(i).getDWGraph());
+        shortestPath->run();
+        dijkstraTimes.push_back(std::make_pair(sizes.at(i),shortestPath->getStatistics().execution_time));
+    }
+    std::cout << "Outputing to file\n";
+    std::cout << "Dijkstra\n";
+    for (std::pair<int, long long> pair : dijkstraTimes) ofs << pair.first << "," << pair.second << ",\n";
+
+
+    std::cout << "Running Held-Karp ";
+    std::vector<std::pair<int, long long>> heldKarpTimes;
+    for (size_t i = 0 ; i < sizes.size() ; ++i){
+        ShortestPathAll *shortestPath = new ShortestPathAll::FromOneMany(new Dijkstra(), 8);
+        shortestPath->initialize(generators.at(i).getDWGraph());
+        shortestPath->run();
+        heldKarpTimes.push_back(std::make_pair(sizes.at(i),shortestPath->getStatistics().execution_time));
+    }
+    std::cout << "Outputing to file\n";
+    std::cout << "Held-Karp\n";
+    for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
+
 
     ofs.close();
     return 0;
