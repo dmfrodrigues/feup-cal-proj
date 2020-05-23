@@ -2,6 +2,7 @@
 #define CLIENT_H_INCLUDED
 
 #include "coord.h"
+#include "DWGraph.h"
 
 #include <string>
 #include <vector>
@@ -11,22 +12,20 @@ class Client {
 private:
 	std::string clientName;
 	int NIF;
-	int numPeople;
 
 	coord_t dest;
-	long long int arrival;
+	DWGraph::weight_t arrival;
 
 	bool direction;
 
 public:
     Client();
-    Client(std::string clientName, int NIF, int numPeople, coord_t dest, long long int arrival, bool direction);
+    Client(std::string clientName, int NIF, coord_t dest, long long int arrival, bool direction);
     
 	std::string getClientName() const;
 	int getNIF() const;
-	int getNumPeople() const;
 	coord_t getDest() const;
-	long long int getArrival() const;
+	DWGraph::weight_t getArrival() const;
     bool getDirection() const;
 
 	bool operator<(const Client &c) const;
