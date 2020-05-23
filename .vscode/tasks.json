@@ -2,6 +2,15 @@
     "tasks": [
         {
             "type": "shell",
+            "label": "build-main",
+            "command": "make",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "type": "shell",
             "label": "build-test",
             "command": "make",
             "args": [
