@@ -56,9 +56,9 @@ int main(){
         kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time));
     }
     std::cout << "Outputing to file\n";
-    ofs << "Kosaraju\n";
-    for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << ",\n";
-
+    ofs << "Kosaraju" << std::endl;
+    for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << "," << std::endl;
+    
 
     // std::cout << "Running A* on graphs...\n";
     // std::vector<std::pair<int, long long>> astarTimes;
