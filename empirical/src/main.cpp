@@ -43,28 +43,25 @@ int main(){
     for (auto g : generators) g.run();
     std::cout << "Populated!\n";
 
-    std::cout << "Running Kosaraju on graphs...\n";
-    std::vector<std::pair<int, long long>> kosarajuTimes;
-    for (size_t i = 0 ; i < sizes.size() ; ++i) {
-        std::cout << i << std::endl;
-        DFS r;
-        DUGraph g = DUGraph(*generators.at(i).getDWGraph());
-        KosarajuV k(&r);
-
-        long long time = 0;
-        for(int n = 0; n < NRUNS; ++n){
+    {
+        std::cout << "Running Kosaraju on graphs...\n";
+        std::vector<std::pair<int, long long>> kosarajuTimes;
+        for (size_t i = 0 ; i < sizes.size() ; ++i) {
+            std::cout << i << std::endl;
+            DFS r;
+            DUGraph g = DUGraph(*generators.at(i).getDWGraph());
             auto start_time = hrc::now();
+            KosarajuV k(&r);
             k.initialize(&g, 1);
-            k.run();    
+            k.run();
             auto finish_time = hrc::now();
-            time += std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time));
         }
-
-        kosarajuTimes.push_back(std::make_pair(sizes.at(i), time/NRUNS));
+        std::cout << "Outputing to file\n";
+        ofs << "Kosaraju" << std::endl;
+        for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << "," << std::endl;
     }
-    std::cout << "Outputing to file\n";
-    ofs << "Kosaraju\n";
-    for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << ",\n";
     
 
     // std::cout << "Running A* on graphs...\n";
@@ -79,23 +76,24 @@ int main(){
     // std::cout << "A*\n";
     // for (std::pair<int, long long> pair : astarTimes) ofs << pair.first << "," << pair.second << ",\n";
 
-
-    std::cout << "Running Dijkstra\n";
-    std::vector<std::pair<int, long long>> dijkstraTimes;
-    for (size_t i = 0 ; i < sizes.size() ; ++i){
-        std::cout << i << std::endl;
-        ShortestPathOneMany *shortestPath = new Dijkstra();
-        long long time = 0;
-        for(int n = 0; n < NRUNS; ++n){
-            shortestPath->initialize(generators.at(i).getDWGraph(), 1);
-            shortestPath->run();
-            time += shortestPath->getStatistics().execution_time;
+    {
+        std::cout << "Running Dijkstra\n";
+        std::vector<std::pair<int, long long>> dijkstraTimes;
+        for (size_t i = 0 ; i < sizes.size() ; ++i){
+            std::cout << i << std::endl;
+            ShortestPathOneMany *shortestPath = new Dijkstra();
+            long long time = 0;
+            for(int n = 0; n < NRUNS; ++n){
+                shortestPath->initialize(generators.at(i).getDWGraph(), 1);
+                shortestPath->run();
+                time += shortestPath->getStatistics().execution_time;
+            }
+            dijkstraTimes.push_back(std::make_pair(sizes.at(i),time/NRUNS));
         }
-        dijkstraTimes.push_back(std::make_pair(sizes.at(i),time/NRUNS));
+        std::cout << "Outputing to file\n";
+        ofs << "Dijkstra\n";
+        for (std::pair<int, long long> pair : dijkstraTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
-    std::cout << "Outputing to file\n";
-    ofs << "Dijkstra\n";
-    for (std::pair<int, long long> pair : dijkstraTimes) ofs << pair.first << "," << pair.second << ",\n";
 
     {
         std::cout << "Running Held-Karp" << std::endl;
