@@ -17,7 +17,8 @@ private:
             BE_THERE = 0,
             GET_CLIENT = 1
         };
-        Event(DWGraph::weight_t t, event_type a, long long c);
+        Event(DWGraph::weight_t t, event_type a, Client c);
+        Event(DWGraph::weight_t t, event_type a, DWGraph::node_t u);
         friend std::istream& operator>> (std::istream& is, event_type& e){
             short x; is >> x;
             e = static_cast<event_type>(x);
@@ -29,17 +30,44 @@ private:
         }
 
         friend std::istream& operator>> (std::istream& is, Event& e){
-            is >> e.t >> e.a >> e.c;
+            is >> e.t >> e.a;
+            switch(e.a){
+                case -1:
+                    is >> e.c;
+                    break;
+                case 0:
+                    is >> e.u;
+                    break;
+                case 1:
+                    is >> e.c;
+                    break;
+                default:
+                    break;
+            }
             return is;
         }
         friend std::ostream& operator<< (std::ostream& os, const Event& e){
-            os << e.t << e.a << e.c;
+            os << e.t << " " << e.a << " ";
+            switch(e.a){
+                case -1:
+                    os << e.c;
+                    break;
+                case 0:
+                    os << e.u;
+                    break;
+                case 1:
+                    os << e.c;
+                    break;
+                default:
+                    break;
+            }
             return os;
         }
     private:
         DWGraph::weight_t t;
         event_type a;
-        long long c;
+        Client c;
+        DWGraph::node_t u;
     };
 
     Van v;
@@ -63,6 +91,5 @@ public:
 
     friend std::ostream& operator<< (std::ostream& os, const Ride& r);
 };
-
 
 #endif //RIDE_H_INCLUDED

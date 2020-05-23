@@ -3,10 +3,18 @@
 typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
 
-Ride::Event::Event(DWGraph::weight_t t_, Ride::Event::event_type a_, long long c_){
-    t = t_;
-    a = a_;
-    c = c_;
+Ride::Event(DWGraph::weight_t t_, event_type a_, Client c_){
+    if (a_ == event_type::BE_THERE) throw std::invalid_argument("");
+    this->t = t_;
+    this ->a = a_;
+    this->c = c_;
+}
+
+Ride::Event(DWGraph::weight_t t_, event_type a_, DWGraph::node_t u_){
+    if (a_ != event_type::BE_THERE) throw std::invalid_argument("");
+    this->t = t_;
+    this ->a = a_;
+    this->u = u_;
 }
 
 Ride::Ride(){}
