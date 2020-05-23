@@ -157,6 +157,8 @@ MapGraph::~MapGraph(){
     delete closestPoint;
 }
 
+DWGraph::node_t MapGraph::getStationNode() const { return station; }
+
 DWGraph::DWGraph MapGraph::getFullGraph() const{
     DWGraph::DWGraph G;
     for(const auto &p: nodes) G.addNode(p.first);

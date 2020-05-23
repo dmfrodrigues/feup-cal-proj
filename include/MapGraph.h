@@ -54,6 +54,7 @@ private:
 public:
     MapGraph(const std::string &path);
     ~MapGraph();
+    DWGraph::node_t getStationNode() const;
     DWGraph::DWGraph getFullGraph() const;
     DWGraph::DWGraph getConnectedGraph() const;
     DWGraph::DWGraph getReducedGraph() const;
