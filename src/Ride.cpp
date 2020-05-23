@@ -1,6 +1,13 @@
 #include "Ride.h"
 
-Ride::Event::Event(){}
+typedef DWGraph::node_t node_t;
+typedef DWGraph::weight_t weight_t;
+
+Ride::Event::Event(DWGraph::weight_t t_, Ride::Event::event_type a_, long long c_){
+    t = t_;
+    a = a_;
+    c = c_;
+}
 
 Ride::Ride(){}
 
@@ -14,6 +21,15 @@ void Ride::addClient(Client c){
 
 const std::vector<Client>& Ride::getClients() const{
     return C;
+}
+
+void Ride::leaveStation(node_t station, weight_t t){
+    e.clear();
+    e.push_back(Event(t, Event::event_type::BE_THERE, station));
+}
+
+void Ride::dropClient(Client c, weight_t t){
+    e.push_back(Event(t, Event::event_type::DROP_CLIENT, c));
 }
 
 std::istream& operator>> (std::istream& is, Ride& r){
