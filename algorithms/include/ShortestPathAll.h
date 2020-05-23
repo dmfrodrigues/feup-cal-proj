@@ -39,7 +39,7 @@ public:
     virtual DWGraph::node_t getPrev(DWGraph::node_t s, DWGraph::node_t d) const = 0;
 
     /**
-     * @brief Retrieves the sequence of nodes of the path starting at node s and 
+     * @brief Retrieves the sequence of nodes of the path starting at node s and ending at d
      * 
      * @param s                             Starting Node
      * @param d                             Destination Node
