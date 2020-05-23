@@ -4,6 +4,18 @@ Ride::Event::Event(){}
 
 Ride::Ride(){}
 
+void Ride::setVan(Van v_){
+    this->v = v_;
+}
+
+void Ride::addClient(Client c){
+    C.push_back(c);
+}
+
+const std::vector<Client>& Ride::getClients() const{
+    return C;
+}
+
 std::istream& operator>> (std::istream& is, Ride& r){
         is >> r.v;
         

@@ -37,6 +37,10 @@ bool Client::getDirection() const {
     return direction;
 }
 
+bool Client::operator<(const Client &c) const{
+	return (arrival < c.arrival);
+}
+
 // std::vector<Client> Client::getClientsFromFile(std::string filename){
 //  std::vector<Client> result;
     

@@ -37,7 +37,7 @@ CFLAGS=$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
 
 O_FILES=$(ODIR)/Astar.o $(ODIR)/ClosestPoint.o $(ODIR)/DFS.o $(ODIR)/Dijkstra.o $(ODIR)/FloydWarshall.o $(ODIR)/Kosaraju.o $(ODIR)/KosarajuV.o $(ODIR)/SCCnode.o \
 	$(ODIR)/ShortestPath.o $(ODIR)/ShortestPathAll.o $(ODIR)/ShortestPathOneMany.o $(ODIR)/Tarjan.o $(ODIR)/VStripes.o $(ODIR)/NearestNeighbour.o \
-	$(ODIR)/HeldKarp.o
+	$(ODIR)/TravellingSalesman.o $(ODIR)/HeldKarp.o
 
 all: $(FLIB)
 

@@ -15,6 +15,8 @@ public:
 
     //std::vector<Van> getVansFromFile(std::string filename);
 
+    bool operator<(const Van &v) const;
+
     friend std::istream& operator>> (std::istream& is, Van& v);
 
     friend std::ostream& operator<< (std::ostream& os, Van& v);
