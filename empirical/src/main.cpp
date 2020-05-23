@@ -26,6 +26,7 @@ int main(){
     std::vector<std::pair<int, long long>> kosarajuTimes;
     for (size_t i = 0 ; i < sizes.size() ; ++i) {
         DFS r;
+        std::cout << generators.at(i).getDWGraph().getNodes().size() << std::endl;
         DUGraph g = DUGraph(generators.at(i).getDWGraph());
         auto start_time = hrc::now();
         KosarajuV k(&r);

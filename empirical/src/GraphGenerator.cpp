@@ -12,7 +12,7 @@ void GraphGenerator::run() {
         G.addNode(u);
         DWGraph::node_t v = 1 + (rand() % (u - 1));
         G.addEdge(u, v, rand() % 10000 + 1);
-        
+        G.addEdge(v, u, rand() % 10000 + 1);
     }
 }
 

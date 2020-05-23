@@ -10,6 +10,18 @@
             "options": {
                 "cwd": "${workspaceFolder}"
             }
+        },
+        {
+            "type": "shell",
+            "label": "build-empirical",
+            "command": "make",
+            "args": [
+                "-C",
+                "empirical"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
         }
     ],
     "version": "2.0.0"

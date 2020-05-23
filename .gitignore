@@ -30,3 +30,5 @@ main
 *.png
 lib*.a
 generator
+*.csv
+empirical/GraphGenerator
