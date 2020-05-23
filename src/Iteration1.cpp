@@ -61,7 +61,14 @@ void Iteration1::run(){
     vrp->initialize(&clients, &vans, M->getStationNode(), shortestPaths);
     vrp->run();
 
+    {
+        std::vector< Ride > rides = vrp->getGroups();
+        std::ofstream os(rides_path);
+        os << rides.size();
+        for(const Ride &r: rides){
+            os << r << "\n";
+        }
+    }
     
-
     delete vrp;
 }
