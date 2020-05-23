@@ -9,10 +9,10 @@ typedef DWGraph::weight_t weight_t;
 
 class weight_func : public TravellingSalesman::weight_function {
 private:
-    int N;
+    size_t N;
     const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths = nullptr;
 public:
-    weight_func(int N_, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths_){
+    weight_func(size_t N_, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths_){
         N = N_;
         shortestPaths = shortestPaths_;
     }
@@ -83,20 +83,26 @@ void RoutingHeuristic::run(){
             weight_t curr_time = leave_station_time;
             r.leaveStation(station, curr_time);
             
-            for(size_t i = 1; i < tour.size(); ++i){
-                const node_t &u = tour[i-1], &v = tour[i];
-                curr_time += shortestPaths.at(u)->getPathWeight(v);
+            for(size_t i = 1; i < tour.size()-1; ++i){
+                const node_t &fr = tour[i-1], &to = tour[i];
+                curr_time += shortestPaths.at(fr)->getPathWeight(to);
 
-                auto it = node2client.find(v);
+                auto it = node2client.find(to);
                 Client c = it->second;
                 node2client.erase(it);
 
                 r.dropClient(c, curr_time);
             }
+            curr_time += shortestPaths.at(tour[tour.size()-1])->getPathWeight(station);
+            r.arriveStation(station, curr_time);
+
+            v.first = curr_time;
         }
 
         delete tsp;
         delete w;
+
+        vans.push(v);
     }
 }
 

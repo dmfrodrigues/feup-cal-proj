@@ -5,6 +5,11 @@
 #include <vector>
 #include <fstream>
 
+#define HOURS_TO_MICROS ((long long)(60)*60*1000000)
+#define MIN_TO_MICROS ((long long)(60)*1000000)
+#define START_TIME (8*HOURS_TO_MICROS)
+#define END_TIME (8*HOURS_TO_MICROS + 20*MIN_TO_MICROS)
+
 void generator(int argc, const char *argv[]){
 
     if (argc != 2) throw std::invalid_argument("invalid number of arguments");
@@ -32,11 +37,23 @@ void generator(int argc, const char *argv[]){
     std::ofstream ofs (output_filename);
     if (!ofs.is_open()) throw std::runtime_error("Could not create output file");
 
+    std::list<Client> clients;
+
     for (int i = 0 ; i < n_res ; ++i){
-        Client temp(names_list.at(rand() % names_list.size()), rand() % 90000000 + 100000000, rand() % 11 + 1, nodes.at(rand() % nodes.size()).getCoord(), rand() % 86400000000, rand() % 2);
-        ofs << temp << std::endl;
+        Client temp(
+            names_list.at(rand() % names_list.size()),
+            rand() % 90000000 + 100000000,
+            nodes.at(rand() % nodes.size()).getCoord(),
+            START_TIME + rand() % (END_TIME - START_TIME), 
+            rand() % 2
+        );
+        clients.push_back(temp);
     }
-    ofs.close();
+
+    ofs << clients.size() << "\n";
+    for(const Client &c: clients)
+        ofs << c << "\n";
+
 }
 
 int main(int argc, char *argv[]){   

@@ -48,6 +48,11 @@ void Iteration1::run(){
     DWGraph::DWGraph G = M->getConnectedGraph();
 
     std::unordered_map<node_t, const ShortestPathOneMany*> shortestPaths;{
+        ShortestPathOneMany *sp = new Dijkstra();
+        sp->initialize(&G, M->getStationNode());
+        sp->run();
+        shortestPaths[M->getStationNode()] = sp;
+
         for(const auto &p: clients){
             ShortestPathOneMany *sp = new Dijkstra();
             sp->initialize(&G, p.second);

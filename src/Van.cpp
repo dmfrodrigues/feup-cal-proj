@@ -1,7 +1,7 @@
 #include "Van.h"
 
 
-int Van::getCapacity() {
+unsigned Van::getCapacity() {
 	return capacity;
 }
 

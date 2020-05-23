@@ -6,12 +6,12 @@
 
 class Van {
 private:
-	int capacity;
+	unsigned capacity;
     std::string license;
 
 public:
 
-	int getCapacity();
+	unsigned getCapacity();
 
     //std::vector<Van> getVansFromFile(std::string filename);
 
