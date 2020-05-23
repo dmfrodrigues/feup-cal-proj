@@ -68,6 +68,12 @@ private:
 public:
     Ride();
 
+    void setVan(Van v);
+
+    void addClient(Client c);
+
+    const std::vector<Client>& getClients() const;
+
     friend std::istream& operator>> (std::istream& is, Ride& r);
 
     friend std::ostream& operator<< (std::ostream& os, Ride& r);

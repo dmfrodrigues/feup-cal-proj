@@ -21,6 +21,10 @@ int Van::getCapacity() {
 // 	return result;
 // }
 
+bool Van::operator<(const Van &v) const{
+    return (license < v.license);
+}
+
 std::istream& operator>> (std::istream& is, Van& v){
         is >> v.license >> v.capacity;
         return is;

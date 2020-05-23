@@ -29,6 +29,8 @@ public:
 	long long int getArrival() const;
     bool getDirection() const;
 
+	bool operator<(const Client &c) const;
+
     //std::vector<Client> getClientsFromFile(std::string filename);
 
     friend std::istream& operator>> (std::istream& is, Client& c);
