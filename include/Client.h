@@ -35,7 +35,7 @@ public:
 
     friend std::istream& operator>> (std::istream& is, Client& c);
 
-    friend std::ostream& operator<< (std::ostream& os, Client& c);
+    friend std::ostream& operator<< (std::ostream& os, const Client& c);
 };
 
 #endif //CLIENT_H_INCLUDED

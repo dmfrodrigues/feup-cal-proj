@@ -40,11 +40,11 @@ std::istream& operator>> (std::istream& is, Ride& r){
         return is;
     }
 
-std::ostream& operator<< (std::ostream& os, Ride& r){
-	os << r.v << std::endl;
-    os << r.C.size() << std::endl;
-    for (size_t i = 0 ; i < r.C.size() ; ++i) os << r.C.at(i) << std::endl;
+std::ostream& operator<< (std::ostream& os, const Ride& r){
+	os << r.v;
+    os << "\n" << r.C.size();
+    for (size_t i = 0 ; i < r.C.size() ; ++i) os << "\n" << r.C.at(i);
     os << r.e.size() << std::endl;
-    for (size_t i = 0 ; i < r.e.size() ; ++i) os << r.e.at(i) << std::endl;
+    for (size_t i = 0 ; i < r.e.size() ; ++i) os << "\n" << r.e.at(i);
     return os;
 }
