@@ -9,6 +9,7 @@
 
 typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
+typedef std::chrono::high_resolution_clock hrc;
 
 const HeldKarp::id_t HeldKarp::INVALID_ID = std::numeric_limits<HeldKarp::id_t>::max();
 
@@ -63,6 +64,8 @@ weight_t HeldKarp::HK(const HeldKarp::set_t &S, id_t v){
 }
 
 void HeldKarp::run(){
+    auto start_time = hrc::now();
+
     set_t V = SET_FULL(id2node.size());
     std::pair< set_t, id_t> cur(V, INVALID_ID);
     weight_t c = DWGraph::INF;
@@ -82,6 +85,9 @@ void HeldKarp::run(){
         cur = P[cur.first][cur.second];
     }while(cur.second != s);
     path.push_front(id2node.at(s));
+
+    auto finish_time = hrc::now();
+    stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
 }
 
 std::list<node_t> HeldKarp::getTour() const{
