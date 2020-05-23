@@ -90,7 +90,7 @@ void RoutingHeuristic::run(){
 
                 r.dropClient(c, curr_time);
             }
-            curr_time += shortestPaths.at(tour[tour.size()-1])->getPathWeight(station);
+            curr_time += shortestPaths.at(tour[tour.size()-2])->getPathWeight(station);
             r.arriveStation(station, curr_time);
 
             v.first = curr_time;
