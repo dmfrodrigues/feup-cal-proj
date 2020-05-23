@@ -54,7 +54,7 @@ void Iteration1::run(){
         shortestPaths[M->getStationNode()] = sp;
 
         for(const auto &p: clients){
-            ShortestPathOneMany *sp = new Dijkstra();
+            sp = new Dijkstra();
             sp->initialize(&G, p.second);
             sp->run();
             shortestPaths[p.second] = sp;

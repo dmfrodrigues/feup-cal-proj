@@ -51,9 +51,8 @@ void RoutingHeuristic::initialize(const std::list<std::pair<Client, node_t> > *c
 }
 
 void RoutingHeuristic::run(){
-
+    rides.clear();
     while(!clients.empty()){
-        std::pair<weight_t, Van> v = vans.top(); vans.pop();
         Ride r;
         r.setVan(v.second);
         weight_t start_time = std::max(v.first, clients.front().first.getArrival());
@@ -98,6 +97,8 @@ void RoutingHeuristic::run(){
 
             v.first = curr_time;
         }
+
+        rides.push_back(r);
 
         delete tsp;
         delete w;
