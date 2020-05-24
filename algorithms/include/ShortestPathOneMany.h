@@ -49,18 +49,18 @@ public:
     virtual DWGraph::node_t getPrev(DWGraph::node_t d) const = 0;
 
     /**
-     * @brief Get the Path object
+     * @brief Retrieves the sequence of nodes of the path ending at d
      * 
-     * @param d 
-     * @return std::list<DWGraph::node_t> 
+     * @param d Destination Node
+     * @return std::list<DWGraph::node_t> Sequence of nodes that describe the path to d
      */
     virtual std::list<DWGraph::node_t> getPath(DWGraph::node_t d) const final;
 
     /**
-     * @brief Retrieves the sequence of nodes of the path starting at node s and ending at d
+     * @brief Retrieves the path weight of the one ending at d
      * 
      * @param d                     Destination Node
-     * @return DWGraph::weight_t    Sequence of nodes that describe the path from Node s to d
+     * @return DWGraph::weight_t    Sequence of nodes that describe the path to d
      */
     virtual DWGraph::weight_t getPathWeight(DWGraph::node_t d) const = 0;
 

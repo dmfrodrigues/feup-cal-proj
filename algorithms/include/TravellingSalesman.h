@@ -40,7 +40,7 @@ public:
      * 
      * @param nodes     List of the graph's nodes over which the algorithm will operate
      * @param s         Starting node
-     * @param w         
+     * @param w         weight_function instance
      */
     virtual void initialize(const std::list<DWGraph::node_t> *nodes, DWGraph::node_t s, weight_function *w) = 0;
     

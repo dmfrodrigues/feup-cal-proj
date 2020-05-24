@@ -20,6 +20,12 @@ public:
     DWGraph::weight_t getPathWeight(DWGraph::node_t d) const;
     statistics_t getStatistics() const;
     bool hasVisited(DWGraph::node_t u) const;
+
+    /**
+     * @brief Clones the class instance
+     * 
+     * @return Dijkstra* new class instance
+     */
     Dijkstra* clone() const;
 };
 
