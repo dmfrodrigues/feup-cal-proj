@@ -25,7 +25,6 @@ main
 *.edges
 *.points
 clients_*.clients
-*.vans
 *.rides
 *.png
 lib*.a
