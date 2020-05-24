@@ -26,7 +26,7 @@ public:
          * @param v                     Node to reach (goal)
          * @return DWGraph::weight_t    Cost to get from u to v
          */
-        virtual DWGraph::weight_t operator()(const std::unordered_set<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const = 0;
+        virtual DWGraph::weight_t operator()(const std::unordered_multiset<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const = 0;
     };
 
     /**

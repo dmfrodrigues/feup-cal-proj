@@ -16,7 +16,7 @@ public:
         N = N_;
         shortestPaths = shortestPaths_;
     }
-    DWGraph::weight_t operator()(const std::unordered_set<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const{
+    DWGraph::weight_t operator()(const std::unordered_multiset<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const{
         return (N-S.size())*shortestPaths->getPathWeight(u, v);
     }
 };

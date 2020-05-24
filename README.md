@@ -189,4 +189,5 @@ Other examples:
 ./main iteration1 resources/it1_01.vans resources/it1_02.clients resources/it1_02.rides
 ./main iteration1 resources/it1_01.vans resources/it1_03.clients resources/it1_03.rides
 ./main iteration2 resources/it2_01.vans resources/it1_03.clients resources/it2_01.rides
+./main iteration2 resources/it2_01.vans resources/it2_01.clients resources/it2_02.rides
 ```

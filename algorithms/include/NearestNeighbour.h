@@ -12,7 +12,7 @@ private:
     DWGraph::node_t s;
     weight_function *w = nullptr;
     std::list<DWGraph::node_t> path;
-    std::unordered_set<DWGraph::node_t> visited;
+    std::unordered_multiset<DWGraph::node_t> visited, unvisited;
     statistics_t stats;
     
     DWGraph::node_t findClosest(DWGraph::node_t u);
