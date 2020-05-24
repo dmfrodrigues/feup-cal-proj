@@ -186,8 +186,9 @@ RIDES       Rides file path (output).
 
 Other examples:
 ```sh
-./main iteration1 resources/it1_01.vans resources/it1_02.clients resources/it1_02.rides
-./main iteration1 resources/it1_01.vans resources/it1_03.clients resources/it1_03.rides
-./main iteration2 resources/it2_01.vans resources/it1_03.clients resources/it2_01.rides
-./main iteration2 resources/it2_01.vans resources/it2_01.clients resources/it2_02.rides
+./main iteration1 resources/it1_01.vans resources/it1_02.clients resources/it1_02.rides #Takes around 5 seconds
+./main iteration1 resources/it1_01.vans resources/it1_03.clients resources/it1_03.rides #Takes around 8 seconds
+./main iteration2 resources/it2_01.vans resources/it1_03.clients resources/it2_01.rides #Takes around 8 seconds
+./main iteration2 resources/it2_01.vans resources/it2_01.clients resources/it2_02.rides #Takes around 20 seconds
+./main iteration2 resources/it2_01.vans resources/it2_02.clients resources/it2_03.rides #Takes around 35 seconds
 ```
