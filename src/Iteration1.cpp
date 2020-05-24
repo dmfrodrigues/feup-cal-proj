@@ -13,45 +13,17 @@ typedef DWGraph::weight_t weight_t;
 
 Iteration1::Iteration1(){}
 
-void Iteration1::initialize(const MapGraph *M_, const std::string &vans_path_, const std::string &clients_path_, const std::string &rides_path_){
-    this->M            = M_;
-    this->vans_path    = vans_path_;
-    this->clients_path = clients_path_;
-    this->rides_path   = rides_path_;
-
-    // Vans
-    vans.clear();{
-        std::ifstream is(vans_path);
-        size_t numVans; is >> numVans;
-        for(size_t i = 0; i < numVans; ++i){
-            Van v; is >> v;
-            vans.push_back(v);
-        }
-    }
-
-    // Clients
-    clients.clear();{
-        std::ifstream is(clients_path);
-        size_t numClients; is >> numClients;
-        for(size_t i = 0; i < numClients; ++i){
-            Client c; is >> c;
-            node_t client_node = M->getClosestNode(c.getDest());
-            clients.push_back(std::make_pair(c, client_node));
-        }
-    }
-}
-
 void Iteration1::run(){
 
-    DWGraph::DWGraph G = M->getConnectedGraph();
+    DWGraph::DWGraph G = getM()->getConnectedGraph();
 
     std::unordered_map<node_t, const ShortestPathOneMany*> shortestPaths;{
         ShortestPathOneMany *sp = new Dijkstra();
-        sp->initialize(&G, M->getStationNode());
+        sp->initialize(&G, getM()->getStationNode());
         sp->run();
-        shortestPaths[M->getStationNode()] = sp;
+        shortestPaths[getM()->getStationNode()] = sp;
 
-        for(const auto &p: clients){
+        for(const auto &p: getClients()){
             sp = new Dijkstra();
             sp->initialize(&G, p.second);
             sp->run();
@@ -61,12 +33,12 @@ void Iteration1::run(){
 
     VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS, new HeldKarp());
 
-    vrp->initialize(&clients, &vans, M->getStationNode(), shortestPaths);
+    vrp->initialize(&getClients(), &getVans(), getM()->getStationNode(), shortestPaths);
     vrp->run();
 
     {
         std::vector< Ride > rides = vrp->getGroups();
-        std::ofstream os(rides_path);
+        std::ofstream os(getRidesPath());
         os << rides.size() << "\n";
         for(const Ride &r: rides){
             os << r << "\n";
