@@ -5,6 +5,7 @@
 
 #include "RoutingHeuristic.h"
 #include "Dijkstra.h"
+#include "HeldKarp.h"
 
 #include <fstream>
 
