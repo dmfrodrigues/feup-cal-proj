@@ -16,7 +16,11 @@ const HeldKarp::id_t HeldKarp::INVALID_ID = std::numeric_limits<HeldKarp::id_t>:
 HeldKarp::HeldKarp(){}
 
 void HeldKarp::initialize(const std::list<DWGraph::node_t> *nodes_, DWGraph::node_t s_, weight_function *w_){
+    path.clear();
+    stats = statistics_t();
     // Nodes
+    node2id.clear();
+    id2node.clear();
     id_t id = 0;
     for(const node_t &u: *nodes_){
         node2id[u] = id;

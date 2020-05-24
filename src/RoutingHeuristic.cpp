@@ -21,8 +21,9 @@ public:
     }
 };
 
-RoutingHeuristic::RoutingHeuristic(weight_t Dt_){
+RoutingHeuristic::RoutingHeuristic(weight_t Dt_, TravellingSalesman *tsp_){
     this->Dt = Dt_;
+    tsp = tsp_;
 }
 
 void RoutingHeuristic::initialize(const std::list<std::pair<Client, node_t> > *clients_, const std::list<Van> *vans_, node_t station_, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths_){
@@ -70,7 +71,7 @@ void RoutingHeuristic::run(){
         }
 
         TravellingSalesman::weight_function *w = new weight_func(nodes.size(), &shortestPaths);
-        TravellingSalesman *tsp = new HeldKarp();
+
         tsp->initialize(&nodes, station, w);
         tsp->run();
         {
@@ -98,7 +99,6 @@ void RoutingHeuristic::run(){
 
         rides.push_back(r);
 
-        delete tsp;
         delete w;
 
         vans.push(v);

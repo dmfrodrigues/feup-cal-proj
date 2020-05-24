@@ -13,7 +13,7 @@ private:
     template <class T> using state_struct = std::vector<std::vector<T> >;
     
     const weight_function *w = nullptr;
-    id_t s;
+    id_t s = INVALID_ID;
     std::list<DWGraph::node_t> path;
     statistics_t stats;
     std::unordered_map<DWGraph::node_t, id_t> node2id;

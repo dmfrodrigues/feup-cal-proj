@@ -167,10 +167,10 @@ Roads are coloured according to the following table:
 ./main path 1 255 41.1777 -8.598 41.1522 -8.6361
 ```
 
-### Iteration 1
+### Iterations
 
 ```
-./main iteration1 CLIENTS VANS RIDES
+./main (iteration1 | iteration2 | iteration3) CLIENTS VANS RIDES
 
 CLIENTS     Clients file path (input).
 VANS        Vans file path (input).
@@ -187,4 +187,6 @@ RIDES       Rides file path (output).
 Other examples:
 ```sh
 ./main iteration1 resources/it1_01.vans resources/it1_02.clients resources/it1_02.rides
+./main iteration1 resources/it1_01.vans resources/it1_03.clients resources/it1_03.rides
+./main iteration2 resources/it2_01.vans resources/it1_03.clients resources/it2_01.rides
 ```
