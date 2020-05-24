@@ -104,4 +104,4 @@ test: $(TEXE)
 	$(TEXE)
 
 $(TEXE): $(PROG) $(TDIR)/test.cpp $(LREQUIREMENTS)
-	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(O_FILES) $(TDIR)/test.cpp -o $(TEXE) $(LFLAGS)
+	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(TDIR)/test.cpp -o $(TEXE) $(LFLAGS)
