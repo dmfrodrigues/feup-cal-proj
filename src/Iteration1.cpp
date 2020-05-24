@@ -61,7 +61,7 @@ void Iteration1::run(){
         }
     }
 
-    VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS);
+    VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS, new HeldKarp());
 
     vrp->initialize(&clients, &vans, M->getStationNode(), shortestPaths);
     vrp->run();
