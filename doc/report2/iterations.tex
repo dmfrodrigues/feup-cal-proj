@@ -1,4 +1,4 @@
-\chapter{Iterations' descriptions} \label{iterations}
+\chapter{Project iterations} \label{iterations}
 
 All iterations work in four fundamentally independent stages:
 \begin{enumerate}
@@ -10,17 +10,15 @@ All iterations work in four fundamentally independent stages:
 
 In the end, results are printed to a file, which should be named with the extension \texttt{.rides}.\par
 
-Let $C$ be the number of clients.
+Let $C$ be the number of clients, and let $N$ be the maximum van capacity.
 
 \section{Iteration I}
 This iteration starts by processing the ``full" graph in order to get its ``connected version". This pre-processing is achieved by applying the \hyperref[algorithm-scc-kosaraju-v]{variant of Kosaraju's algorithm} which has a time complexity of $O(|E| + |V|)$.\par
 We then find for each client the closest node in the connected graph, using the \hyperref[algorithm-vstripes]{vertical stripes algorithm}, which is initialized once in time $O(\Delta x / \Delta + |V| \log |V|)$. In our case, we used $\Delta = 0.025\degree$, and since $\Delta x = 0.25\degree$ the first term is constant and neglibible, thus the time complexity is actually $O(|V| \log |V|)$. To perform the $C$ queries (one for each client), one needs time $O(C \log |V|)$.\par
-Afterwards, several instances of \hyperref[algorithm-shortestpath-dijkstra]{Dijkstra's algorithm} are run in paralell to get the length of the shortest paths between all clients' destinations and the station
-
-
-O) that takes advantage of multithreading (more precisely 8 threads). This algorithm runs in $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$ and due to the high number of calculations that are performed the multithreading implementation may not have significant impact in performance (NEED HELP HERE)
+Afterwards, several instances of \hyperref[algorithm-shortestpath-dijkstra]{Dijkstra's algorithm} are run in paralell to get the length of the shortest paths between all clients' destinations and the station, taking advantage of multithread architectures (more precisely using 8 threads). This algorithm runs in $O((|E|+|V|) \log |V|)$, with a reduction of around 6 times in execution time using several threads. We have also implemented Dijkstra's algorithm using a Fibonacci heap (namely, the \href{https://www.boost.org/}{Boost} library class \href{https://www.boost.org/doc/libs/1_49_0/doc/html/boost/heap/fibonacci_heap.html}{\texttt{fibonacci\_heap}}) instead of a binary heap, but since we were actually getting an increase of execution time by a factor of approximately $2$ (probably due to excessive clutter code in the implementation of \texttt{fibonacci\_heap}), we decided to stick to a binary heap and use some compilation flags that would provide us with some extra speed, such as \texttt{-Ofast}.
 \par
-To finish, it resorts to the Held Karp algorithm that detains a $O(|V|^2 \cdot 2^{|V|})$ complexity to find the optimal route given the clients, the van, the station and the shortest paths between nodes previously calculated, determining for the iteration a time complexity in the order of $O(|V|^2 \cdot 2^{|V|})$.
+In the end, we used the \hyperref[algorithm-vrp-heuristic]{simple \acrshort*{VRP} heuristic} which has a time complexity of $O(C \cdot \text{T}_\text{TSP})$ (where $\text{T}_\text{TSP}$ is the complexity of the \acrshort{TSP} algorithm we choose to solve the problem), and to find the optimal solution for each \acrshort{TSP} sub-problem we used the \hyperref[algorithm-tsp-heldkarp]{Held-Karp algorithm}, which has a complexity of $O(N^2 2^N)$, thus yielding a total time complexity of $O(C N^2 2^N)$ for this stage.
+
 
 \section{Iteration II}
 The second iteration 
