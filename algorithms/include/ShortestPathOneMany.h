@@ -57,7 +57,7 @@ public:
     virtual std::list<DWGraph::node_t> getPath(DWGraph::node_t d) const final;
 
     /**
-     * @brief Retrieves the sequence of nodes of the path ending at d
+     * @brief Retrieves the path weight of the one ending at d
      * 
      * @param d                     Destination Node
      * @return DWGraph::weight_t    Sequence of nodes that describe the path to d

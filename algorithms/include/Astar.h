@@ -6,11 +6,25 @@
 
 class Astar : public ShortestPath {
 public:
+    /**
+     * @brief Heuristic Interface
+     * 
+     */
     class heuristic_t {
     public:
+        /**
+         * @brief Heuristic Function 
+         * 
+         * @param u                     Node to analyse
+         * @return DWGraph::weight_t    Estimated distance/weight from u to the Destination Node
+         */
         virtual DWGraph::weight_t operator()(DWGraph::node_t u) const = 0;
     };
 private:
+    /**
+     * @brief Default Heuristic
+     * 
+     */
     class default_heuristic : public heuristic_t {
     public:
         default_heuristic();
