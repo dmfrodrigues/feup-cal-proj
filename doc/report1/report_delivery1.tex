@@ -79,6 +79,11 @@
     description={An algorithm is \emph{admissible} iff it always returns an optimal solution, if one exists. A function $\hat{h}$ that estimates $h$ is \emph{admissible} iff it always returns a lower bound for $h$ ($\forall x, \hat{h}(x) < h(x)$)}
 }
 
+\newglossaryentry{sweep line}{
+    name=sweep line,
+    description={A \emph{sweep line} algorithm is a generic approach that represents the search space as a two-dimensional space being swiped by an imaginary line. This is usually implemented by first ordering points by their $x$ coordinate and then iterating over them in that order. The most important observation is that, because geometric operations are limited by metrics, all operations needed by the algorithm only require to analyse the problem near the sweep line.}
+}
+
 \newglossaryentry{constructive}{
     name=constructive,
     description={An algorithm is \emph{constructive} when it progressively constructs a solution}
