@@ -66,6 +66,7 @@
             "name": "latexmk_rconly",
             "command": "latexmk",
             "args": [
+                "-synctex=1",
                 "--shell-escape",
                 "%DOC%",
                 "-pdf"
