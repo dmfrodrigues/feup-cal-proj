@@ -1,16 +1,30 @@
-\chapter{Iterations' Descriptions} \label{iterations}
+\chapter{Iterations' descriptions} \label{iterations}
 
-In general terms, each iteration is divided in three parts. Starts by obtaining the connected graph, computes then the shortest paths and finishes by solving an instance of the vehicle routing problem, displaying the results at end.
+All iterations work in four fundamentally independent stages:
+\begin{enumerate}
+    \item Get the \textbf{connected graph}.
+    \item For each client coordinate, find the \textbf{closest node}.
+    \item Find the \textbf{shortest paths} betwee all pairs of interesting nodes (train station and all nodes where clients need to be picked up).
+    \item Solve an instance of the \textbf{\acrlong*{TSP}}.
+\end{enumerate}
 
-\section{1st Iteration}
-This iteration starts by processing the "full" graph in order to get its "connected version". This pre-processing is achieved by applying the Variant of the Kosaraju Algorithm described in detail in chapter 6 which has a time complexity of $O(|E| + |V|)$ where $E$ represents the number of edges in the graph and $V$ the number of vertices.\par
-Afterwards, a collection of the it is used the Dijkstra's algorithm to get the shortest paths between the clients DESTINATION (OU POSICAO? CONFIRMAR ISTO) that takes advantage of multithreading (more precisely 8 threads). This algorithm runs in $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$ and due to the high number of calculations that are performed the multithreading implementation may not have significant impact in performance (NEED HELP HERE)
+In the end, results are printed to a file, which should be named with the extension \texttt{.rides}.\par
+
+Let $C$ be the number of clients.
+
+\section{Iteration I}
+This iteration starts by processing the ``full" graph in order to get its ``connected version". This pre-processing is achieved by applying the \hyperref[algorithm-scc-kosaraju-v]{variant of Kosaraju's algorithm} which has a time complexity of $O(|E| + |V|)$.\par
+We then find for each client the closest node in the connected graph, using the \hyperref[algorithm-vstripes]{vertical stripes algorithm}, which is initialized once in time $O(\Delta x / \Delta + |V| \log |V|)$. In our case, we used $\Delta = 0.025\degree$, and since $\Delta x = 0.25\degree$ the first term is constant and neglibible, thus the time complexity is actually $O(|V| \log |V|)$. To perform the $C$ queries (one for each client), one needs time $O(C \log |V|)$.\par
+Afterwards, several instances of \hyperref[algorithm-shortestpath-dijkstra]{Dijkstra's algorithm} are run in paralell to get the length of the shortest paths between all clients' destinations and the station
+
+
+O) that takes advantage of multithreading (more precisely 8 threads). This algorithm runs in $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$ and due to the high number of calculations that are performed the multithreading implementation may not have significant impact in performance (NEED HELP HERE)
 \par
 To finish, it resorts to the Held Karp algorithm that detains a $O(|V|^2 \cdot 2^{|V|})$ complexity to find the optimal route given the clients, the van, the station and the shortest paths between nodes previously calculated, determining for the iteration a time complexity in the order of $O(|V|^2 \cdot 2^{|V|})$.
 
-\section{2nd Iteration}
+\section{Iteration II}
 The second iteration 
 
-\section{3rd Iteration}
+\section{Iteration III}
 The third iteration was not implemented due to its complexity.
 

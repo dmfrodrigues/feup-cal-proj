@@ -4,7 +4,7 @@ We start by making an assumption: for all pivots we will evaluate, the closest p
 Now for finding the solution for a given pivot $p$, we find the stripe it belongs to, find its hypothetical position in that stripe and get the previous and next points in the ordered set, which will allow us to make a first estimate of the minimum distance, $d_0$. Now, we test all nodes in that stripe and also the stripes before and after the stripe of $p$, but only those for which $y_p - d_0 \leq y \leq y_p + d_0$.
 \begin{algorithm}[h]
     \caption{\Acrlong*{DFS}}
-    \label{alg-dfs}
+    \label{alg-vstripes}
     \begin{algorithmic}[1]
         \Function{VStripes\_Init}{$S$, $\Delta$}
             \State {$x_{\min} \gets -\infty$}
