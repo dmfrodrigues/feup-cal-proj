@@ -1,8 +1,5 @@
 #include "Iteration1.h"
 
-#include "Van.h"
-#include "Client.h"
-
 #include "RoutingHeuristic.h"
 #include "Dijkstra.h"
 #include "HeldKarp.h"
@@ -21,22 +18,19 @@ void Iteration1::initialize(const MapGraph *M_, const std::string &vans_path_, c
     this->vans_path    = vans_path_;
     this->clients_path = clients_path_;
     this->rides_path   = rides_path_;
-}
 
-std::list<Van> getVans(const std::string &vans_path){
-    std::list<Van> vans;
-    std::ifstream is(vans_path);
-    size_t numVans; is >> numVans;
-    for(size_t i = 0; i < numVans; ++i){
-        Van v; is >> v;
-        vans.push_back(v);
+    // Vans
+    vans.clear();{
+        std::ifstream is(vans_path);
+        size_t numVans; is >> numVans;
+        for(size_t i = 0; i < numVans; ++i){
+            Van v; is >> v;
+            vans.push_back(v);
+        }
     }
-    return vans;
-}
 
-void Iteration1::run(){
-    std::list<Van> vans = getVans(vans_path);
-    std::list< std::pair<Client, node_t> > clients;{
+    // Clients
+    clients.clear();{
         std::ifstream is(clients_path);
         size_t numClients; is >> numClients;
         for(size_t i = 0; i < numClients; ++i){
@@ -45,6 +39,9 @@ void Iteration1::run(){
             clients.push_back(std::make_pair(c, client_node));
         }
     }
+}
+
+void Iteration1::run(){
 
     DWGraph::DWGraph G = M->getConnectedGraph();
 
