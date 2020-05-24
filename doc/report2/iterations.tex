@@ -4,8 +4,13 @@ In general terms, each iteration is divided in three parts. Starts by obtaining 
 
 \section{1st Iteration}
 This iteration starts by processing the "full" graph in order to get its "connected version". This pre-processing is achieved by applying the Variant of the Kosaraju Algorithm described in detail in chapter 6 which has a time complexity of $O(|E| + |V|)$ where $E$ represents the number of edges in the graph and $V$ the number of vertices.\par
-
-Afterwards,
+Afterwards, a collection of the it is used the Dijkstra's algorithm to get the shortest paths between the clients DESTINATION (OU POSICAO? CONFIRMAR ISTO) that takes advantage of multithreading (more precisely 8 threads). This algorithm runs in $O(|E|\cdot \text{T}_{dk}+|V|\cdot \text{T}_{em})$ and due to the high number of calculations that are performed the multithreading implementation may not have significant impact in performance (NEED HELP HERE)
 \par
 To finish, it resorts to the Held Karp algorithm that detains a $O(|V|^2 \cdot 2^{|V|})$ complexity to find the optimal route given the clients, the van, the station and the shortest paths between nodes previously calculated, determining for the iteration a time complexity in the order of $O(|V|^2 \cdot 2^{|V|})$.
+
+\section{2nd Iteration}
+The second iteration 
+
+\section{3rd Iteration}
+The third iteration was not implemented due to its complexity.
 
