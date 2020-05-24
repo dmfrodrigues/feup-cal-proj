@@ -134,6 +134,11 @@ int main(){
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
 
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+
+    system("make -C ../resources")
+
     ofs.close();
     return 0;
 }

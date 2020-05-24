@@ -8,8 +8,9 @@ make clean      # Cleanup files (except submodules and generated client files)
 ## Running
 
 ```
-./generator NUM_CLIENTS START_TIME END_TIME [-t]
+./generator OUTPUT_FILE NUM_CLIENTS TIME_START TIME_END [-t]
 
+OUTPUT_FILE         Name of output file
 NUM_CLIENTS         Number of clients
 START_TIME          Time clients start arriving (in hours)
 END_TIME            Time clients end arriving (in hours)
@@ -18,7 +19,7 @@ END_TIME            Time clients end arriving (in hours)
 
 ### Examples
 ```sh
-./generator   8 8  8.25 -t > it1_01.clients
-./generator  30 8 22    -t > it1_02.clients
-./generator 100 8 22    -t > it1_03.clients
+./generator it1_01.clients  8   8   8.25    -t
+./generator it1_02.clients  30  8   22      -t
+./generator it1_03.clients  100 8   22      -t
 ```
