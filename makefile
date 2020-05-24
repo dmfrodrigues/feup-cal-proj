@@ -5,9 +5,12 @@ FORCE:
 
 CC     =g++
 
+LIB		=$(PROG)
 SDIR   =./src
 IDIR   =./include
 ODIR   =./obj
+LDIR	=./lib
+FLIB=$(LDIR)/lib$(LIB).a #Library file
 TDIR   =./test
 TEXE   =$(ODIR)/test
 
@@ -45,7 +48,8 @@ $(ALGS_FLIB): FORCE
 
 IFLAGS =-I$(IDIR) -I$(GV_IDIR) -I$(UTILS_IDIR) -I$(STRUCTS_IDIR) -I$(ALGS_IDIR)
 
-LFLAGS =-L$(GV_LDIR)      -l$(GV_LIB) \
+LFLAGS =-L$(LDIR)         -l$(LIB) \
+		-L$(GV_LDIR)      -l$(GV_LIB) \
 		-L$(ALGS_LDIR)    -l$(ALGS_LIB) \
 		-L$(STRUCTS_LDIR) -l$(STRUCTS_LIB) \
 		-L$(UTILS_LDIR)   -l$(UTILS_LIB)
@@ -65,10 +69,14 @@ CFLAGS=$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
 data: FORCE
 	make -C map
 
-O_FILES= $(ODIR)/Client.o $(ODIR)/RoutingHeuristic.o $(ODIR)/VehicleRouting.o $(ODIR)/Iteration.o $(ODIR)/Iteration1.o $(ODIR)/MapGraph.o $(ODIR)/MapViewer.o $(ODIR)/Van.o $(ODIR)/Ride.o
+$(PROG): $(FLIB) $(SDIR)/main.cpp $(LREQUIREMENTS)
+	$(CC) $(CFLAGS) $(SDIR)/main.cpp -o $(PROG) $(LFLAGS)
 
-$(PROG): $(O_FILES) $(SDIR)/main.cpp $(LREQUIREMENTS)
-	$(CC) $(CFLAGS) $(O_FILES) $(SDIR)/main.cpp -o $(PROG) $(LFLAGS)
+O_FILES= $(ODIR)/Client.o $(ODIR)/RoutingHeuristic.o $(ODIR)/VehicleRouting.o $(ODIR)/Iteration.o $(ODIR)/Iteration1.o $(ODIR)/Iteration2.o $(ODIR)/MapGraph.o $(ODIR)/MapViewer.o $(ODIR)/Van.o $(ODIR)/Ride.o
+
+$(FLIB): $(O_FILES) | $(LDIR)
+	rm -rf $(FLIB)
+	ar rvs $(FLIB) $(O_FILES)
 
 $(ODIR)/%.o: $(SDIR)/%.cpp | $(ODIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -76,8 +84,12 @@ $(ODIR)/%.o: $(SDIR)/%.cpp | $(ODIR)
 $(ODIR):
 	mkdir -p $@
 
+$(LDIR):
+	mkdir -p $@
+
 clean:
 	rm -rf $(ODIR)
+	rm -rf $(LDIR)
 	rm -f $(PROG)
 	make -C structures clean
 	make -C algorithms clean
@@ -91,5 +103,5 @@ cleanall:
 test: $(TEXE)
 	$(TEXE)
 
-$(TEXE): $(PROG) $(TDIR)/test.cpp $(O_FILES)
+$(TEXE): $(PROG) $(TDIR)/test.cpp $(LREQUIREMENTS)
 	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(O_FILES) $(TDIR)/test.cpp -o $(TEXE) $(LFLAGS)

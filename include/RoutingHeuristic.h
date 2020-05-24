@@ -2,6 +2,7 @@
 #define ROUTINGHEURISTIC_H_INCLUDED
 
 #include "VehicleRouting.h"
+#include "TravellingSalesman.h"
 
 #include "DWGraph.h"
 #include <queue>
@@ -14,15 +15,16 @@ private:
                    std::greater<std::pair<DWGraph::weight_t, Van>>> min_priority_queue;
 
     DWGraph::weight_t Dt;
+    TravellingSalesman *tsp = nullptr;
     DWGraph::node_t station;
     std::queue<std::pair<Client, DWGraph::node_t> > clients;
     std::multimap<DWGraph::node_t, Client> node2client;
     min_priority_queue vans;
-    std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths;
+    const ShortestPathAll *shortestPaths = nullptr;
     std::vector<Ride> rides;
 public:
-    RoutingHeuristic(DWGraph::weight_t Dt);
-    void initialize(const std::list<std::pair<Client, DWGraph::node_t> > *clients, const std::list<Van> *vans, DWGraph::node_t station, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths);
+    RoutingHeuristic(DWGraph::weight_t Dt, TravellingSalesman *tsp);
+    void initialize(const std::list<std::pair<Client, DWGraph::node_t> > *clients, const std::list<Van> *vans, DWGraph::node_t station, const ShortestPathAll *shortestPaths);
     void run();
     const std::vector< Ride >& getGroups() const;
 };

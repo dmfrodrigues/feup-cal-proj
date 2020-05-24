@@ -16,15 +16,20 @@ const HeldKarp::id_t HeldKarp::INVALID_ID = std::numeric_limits<HeldKarp::id_t>:
 HeldKarp::HeldKarp(){}
 
 void HeldKarp::initialize(const std::list<DWGraph::node_t> *nodes_, DWGraph::node_t s_, weight_function *w_){
+    path.clear();
+    stats = statistics_t();
     // Nodes
+    node2id.clear();
+    id2node.clear();
     id_t id = 0;
     for(const node_t &u: *nodes_){
-        node2id[u] = id;
+        node2id.insert(std::make_pair(u, id));
         id2node[id] = u;
         ++id;
     }
     // Source
-    this->s = node2id.at(s_);
+    auto it = node2id.find(s_); if(it == node2id.end()) throw std::out_of_range("");
+    this->s = it->second;
     // Weight function
     w = w_;
     // Others
@@ -38,7 +43,7 @@ void HeldKarp::initialize(const std::list<DWGraph::node_t> *nodes_, DWGraph::nod
 }
 
 weight_t HeldKarp::w_wrapper(const HeldKarp::set_t &S, HeldKarp::id_t u, HeldKarp::id_t v) const{
-    std::unordered_set<node_t> S_;
+    std::unordered_multiset<node_t> S_;
     for(id_t i = 0; i < id2node.size(); ++i) if(SET_CONTAINS(S, i)) S_.insert(id2node.at(i));
     return w->operator()(S_, id2node.at(u), id2node.at(v));
 }
