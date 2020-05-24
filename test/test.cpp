@@ -181,14 +181,6 @@ TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
             REQUIRE(dist[s][d] == shortestPath->getPathWeight(s, d));
         }
     }
-
-    REQUIRE(std::list<DWGraph::node_t>({0               }) == shortestPath->getPath(0, 0));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1            }) == shortestPath->getPath(0, 1));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2         }) == shortestPath->getPath(0, 2));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 3      }) == shortestPath->getPath(0, 3));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 3, 4   }) == shortestPath->getPath(0, 4));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5      }) == shortestPath->getPath(0, 5));
-    REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5, 6   }) == shortestPath->getPath(0, 6));
 }
 
 TEST_CASE("A* algorithm", "[shortestpath-astar]"){
@@ -277,7 +269,7 @@ private:
     const std::vector< std::vector<DWGraph::weight_t> > M;
 public:
     regular_weight(const std::vector< std::vector<DWGraph::weight_t> > &M_):M(M_){}
-    DWGraph::weight_t operator()(const std::unordered_set<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const{
+    DWGraph::weight_t operator()(const std::unordered_multiset<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const{
         return M[u][v];
     }
 };
