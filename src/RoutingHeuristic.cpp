@@ -10,14 +10,14 @@ typedef DWGraph::weight_t weight_t;
 class weight_func : public TravellingSalesman::weight_function {
 private:
     size_t N;
-    const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths = nullptr;
+    const ShortestPathAll *shortestPaths = nullptr;
 public:
-    weight_func(size_t N_, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> *shortestPaths_){
+    weight_func(size_t N_, const ShortestPathAll *shortestPaths_){
         N = N_;
         shortestPaths = shortestPaths_;
     }
     DWGraph::weight_t operator()(const std::unordered_set<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const{
-        return (N-S.size())*shortestPaths->at(u)->getPathWeight(v);
+        return (N-S.size())*shortestPaths->getPathWeight(u, v);
     }
 };
 
@@ -26,7 +26,7 @@ RoutingHeuristic::RoutingHeuristic(weight_t Dt_, TravellingSalesman *tsp_){
     tsp = tsp_;
 }
 
-void RoutingHeuristic::initialize(const std::list<std::pair<Client, node_t> > *clients_, const std::list<Van> *vans_, node_t station_, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths_){
+void RoutingHeuristic::initialize(const std::list<std::pair<Client, node_t> > *clients_, const std::list<Van> *vans_, node_t station_, const ShortestPathAll *shortestPaths_){
     std::vector<std::pair<Client, node_t>> vclients(clients_->begin(), clients_->end());
     std::sort(vclients.begin(), vclients.end());
     for(const auto &c: vclients){
@@ -70,7 +70,7 @@ void RoutingHeuristic::run(){
             leave_station_time = std::max(leave_station_time, c.first.getArrival());
         }
 
-        TravellingSalesman::weight_function *w = new weight_func(nodes.size(), &shortestPaths);
+        TravellingSalesman::weight_function *w = new weight_func(nodes.size(), shortestPaths);
 
         tsp->initialize(&nodes, station, w);
         tsp->run();
@@ -83,7 +83,7 @@ void RoutingHeuristic::run(){
             
             for(size_t i = 1; i < tour.size()-1; ++i){
                 const node_t &fr = tour[i-1], &to = tour[i];
-                curr_time += shortestPaths.at(fr)->getPathWeight(to);
+                curr_time += shortestPaths->getPathWeight(fr, to);
 
                 auto it = node2client.find(to);
                 Client c = it->second;
@@ -91,7 +91,7 @@ void RoutingHeuristic::run(){
 
                 r.dropClient(c, curr_time);
             }
-            curr_time += shortestPaths.at(tour[tour.size()-2])->getPathWeight(station);
+            curr_time += shortestPaths->getPathWeight(tour[tour.size()-2], station);
             r.arriveStation(station, curr_time);
 
             v.first = curr_time;

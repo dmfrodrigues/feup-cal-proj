@@ -20,11 +20,11 @@ private:
     std::queue<std::pair<Client, DWGraph::node_t> > clients;
     std::multimap<DWGraph::node_t, Client> node2client;
     min_priority_queue vans;
-    std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths;
+    const ShortestPathAll *shortestPaths = nullptr;
     std::vector<Ride> rides;
 public:
     RoutingHeuristic(DWGraph::weight_t Dt, TravellingSalesman *tsp);
-    void initialize(const std::list<std::pair<Client, DWGraph::node_t> > *clients, const std::list<Van> *vans, DWGraph::node_t station, const std::unordered_map<DWGraph::node_t, const ShortestPathOneMany*> shortestPaths);
+    void initialize(const std::list<std::pair<Client, DWGraph::node_t> > *clients, const std::list<Van> *vans, DWGraph::node_t station, const ShortestPathAll *shortestPaths);
     void run();
     const std::vector< Ride >& getGroups() const;
 };

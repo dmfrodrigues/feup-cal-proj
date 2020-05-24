@@ -1,9 +1,8 @@
-#include "Iteration1.h"
+#include "Iteration2.h"
 
 #include "RoutingHeuristic.h"
 #include "Dijkstra.h"
-#include "ShortestPathAll.h"
-#include "HeldKarp.h"
+#include "NearestNeighbour.h"
 
 #include <fstream>
 
@@ -12,7 +11,7 @@
 typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
 
-void Iteration1::run(){
+void Iteration2::run(){
     std::cout << "Getting connected graph..." << std::endl;
     DWGraph::DWGraph G = getM()->getConnectedGraph();
 
@@ -24,7 +23,7 @@ void Iteration1::run(){
     sp.run();
 
     std::cout << "Solving vehicle routing problem..." << std::endl;
-    VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS, new HeldKarp());
+    VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS, new NearestNeighbour());
 
     vrp->initialize(&getClients(), &getVans(), getM()->getStationNode(), &sp);
     vrp->run();

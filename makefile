@@ -65,7 +65,7 @@ CFLAGS=$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE)
 data: FORCE
 	make -C map
 
-O_FILES= $(ODIR)/Client.o $(ODIR)/RoutingHeuristic.o $(ODIR)/VehicleRouting.o $(ODIR)/Iteration.o $(ODIR)/Iteration1.o $(ODIR)/MapGraph.o $(ODIR)/MapViewer.o $(ODIR)/Van.o $(ODIR)/Ride.o
+O_FILES= $(ODIR)/Client.o $(ODIR)/RoutingHeuristic.o $(ODIR)/VehicleRouting.o $(ODIR)/Iteration.o $(ODIR)/Iteration1.o $(ODIR)/Iteration2.o $(ODIR)/MapGraph.o $(ODIR)/MapViewer.o $(ODIR)/Van.o $(ODIR)/Ride.o
 
 $(PROG): $(O_FILES) $(SDIR)/main.cpp $(LREQUIREMENTS)
 	$(CC) $(CFLAGS) $(O_FILES) $(SDIR)/main.cpp -o $(PROG) $(LFLAGS)
