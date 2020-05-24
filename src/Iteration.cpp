@@ -13,8 +13,6 @@ const std::list<Van>& Iteration::getVans() const{ return vans; }
 
 const std::list< std::pair<Client, node_t> >& Iteration::getClients() const{ return clients; }
 
-const std::string& Iteration::getRidesPath() const{ return rides_path; }
-
 void Iteration::initialize(const MapGraph *M_, const std::string &vans_path_, const std::string &clients_path_, const std::string &rides_path_){
     this->M            = M_;
     this->vans_path    = vans_path_;
@@ -44,7 +42,7 @@ void Iteration::initialize(const MapGraph *M_, const std::string &vans_path_, co
 }
 
 void Iteration::printRides(const std::vector<Ride> &rides) const{
-    std::ofstream os(getRidesPath());
+    std::ofstream os(rides_path);
     os << rides.size() << "\n";
     for(const Ride &r: rides){
         os << r << "\n";

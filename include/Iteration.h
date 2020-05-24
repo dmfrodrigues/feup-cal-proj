@@ -18,7 +18,6 @@ protected:
     const MapGraph *getM() const;
     const std::list<Van>& getVans() const;
     const std::list< std::pair<Client, DWGraph::node_t> >& getClients() const;
-    const std::string& getRidesPath() const;
     void printRides(const std::vector<Ride> &rides) const;
 public:
     virtual ~Iteration();
