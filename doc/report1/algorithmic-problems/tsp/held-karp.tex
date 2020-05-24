@@ -1,5 +1,6 @@
 \subsection{Held-Karp algorithm} \label{algorithm-tsp-heldkarp}
-The Held-Karp algorithm is a \gls{dynamic programming} approach to problems similar to the \acrlong*{TSP}, proposed in 1962 independently by Richard Bellman \cite{bellman62} and by Michael Held and Richard Karp \cite{held-karp62}. The main idea is that the current state can be uniquely described by the city $v$ we are at, and the set $S$ of cities we have already visited including $v$, and for each state we know the minimum cost $D(S,v)$ of reaching $v$ after having visited all cities in $S$ including $v$. The algorithm then relies on a trivial recurrent formula (with some additional base cases) to express the links between states in \textsc{HK}. Now that we have all states $(V, u), u \in V \backslash \{s\}$, we pick $u$ so as to minimize $D(V, u)+w(V,u,s)$ (given all nodes were visited, pick the node with the less weight to visit all nodes plus return to the source node $s$).
+The Held-Karp algorithm is a \gls{dynamic programming} approach to problems similar to the \acrlong*{TSP}, proposed in 1962 independently by Richard Bellman \cite{bellman62} and by Michael Held and Richard Karp \cite{held-karp62}. The main idea is that the current state can be uniquely described by the city $v$ we are at, and the set $S$ of cities we have already visited including $v$, and for each state we know the minimum cost $D(S,v)$ of reaching $v$ after having visited all cities in $S$ including $v$. The algorithm then relies on a trivial recurrent formula (with some additional base cases) to express the links between states in \textsc{HK}. Now that we have all states $(V, u), u \in V \backslash \{s\}$, we pick $u$ so as to minimize $D(V, u)+w(V,u,s)$ (given all nodes were visited, pick the node with the less weight to visit all nodes plus return to the source node $s$).\par
+As we will see, this algorithm has exponential complexity so it is only addequate for very small values of $|V|$, so set $S$ is usually implemented as a bitmask subset of $V$.
 \begin{algorithm}[H]
     \caption{Held-Karp algorithm}
     \label{alg:held-karp}
@@ -42,7 +43,6 @@ The Held-Karp algorithm is a \gls{dynamic programming} approach to problems simi
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
-As we will see, this algorithm has exponential complexity so it is only addequate for very small values of $|V|$, so set $S$ is usually implemented as a bitmask subset of $V$.
 \subsubsection{Proof of correctness}
 We will rather present an argument as to why these recurrencies are valid. A valid state can either be:
 \begin{itemize}
