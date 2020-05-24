@@ -42,3 +42,11 @@ void Iteration::initialize(const MapGraph *M_, const std::string &vans_path_, co
         }
     }
 }
+
+void Iteration::printRides(const std::vector<Ride> &rides) const{
+    std::ofstream os(getRidesPath());
+    os << rides.size() << "\n";
+    for(const Ride &r: rides){
+        os << r << "\n";
+    }
+}

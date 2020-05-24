@@ -38,11 +38,7 @@ void Iteration1::run(){
 
     {
         std::vector< Ride > rides = vrp->getGroups();
-        std::ofstream os(getRidesPath());
-        os << rides.size() << "\n";
-        for(const Ride &r: rides){
-            os << r << "\n";
-        }
+        Iteration::printRides(rides);
     }
     
     delete vrp;

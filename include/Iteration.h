@@ -6,6 +6,7 @@
 #include "MapGraph.h"
 #include "Van.h"
 #include "Client.h"
+#include "Ride.h"
 
 class Iteration {
 private:
@@ -18,6 +19,7 @@ protected:
     const std::list<Van>& getVans() const;
     const std::list< std::pair<Client, DWGraph::node_t> >& getClients() const;
     const std::string& getRidesPath() const;
+    void printRides(const std::vector<Ride> &rides) const;
 public:
     virtual ~Iteration();
     virtual void initialize(const MapGraph *M, const std::string &vans_path, const std::string &clients_path, const std::string &rides_path) final;
