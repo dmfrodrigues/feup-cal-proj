@@ -1,4 +1,4 @@
-#include "generator.h"
+#include "input_generator.h"
 
 int main(int argc, char *argv[]){   
 
@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
     long long end_time   = atof(argv[4])*HOURS_TO_MICROS;
     bool only_trainstation = (argc == 6 && string(argv[5]) == "-t");
 
-    Generator g("../map/processed/AMP.points", path, n_res, start_time, end_time, only_trainstation);
+    InputGenerator g("../map/processed/AMP.points", path, n_res, start_time, end_time, only_trainstation);
     g.run();
     return 0;
 }

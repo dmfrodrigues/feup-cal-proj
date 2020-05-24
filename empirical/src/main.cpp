@@ -6,12 +6,15 @@
 #include "ShortestPath.h"
 #include "ShortestPathAll.h"
 #include "HeldKarp.h"
-
+#include "input_generator.h"
+#include "Iteration1.h"
+#include "MapGraph.h"
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <stdio.h>
 
 #define NRUNS 5
 
@@ -42,7 +45,7 @@ int main(){
 
     for (auto g : generators) g.run();
     std::cout << "Populated!\n";
-
+/*
     {
         std::cout << "Running Kosaraju on graphs...\n";
         std::vector<std::pair<int, long long>> kosarajuTimes;
@@ -59,8 +62,8 @@ int main(){
             kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time));
         }
         std::cout << "Outputing to file\n";
-        ofs << "Kosaraju" << std::endl;
-        for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << "," << std::endl;
+        ofs << "Kosaraju\n";
+        for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
     
 
@@ -96,7 +99,7 @@ int main(){
     }
 
     {
-        std::cout << "Running Held-Karp" << std::endl;
+        std::cout << "Running Held-Karp\n";
         std::vector<size_t> sizes({2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
         std::vector<std::pair<int, long long>> heldKarpTimes;
         for (size_t i = 0 ; i < sizes.size() ; ++i){
@@ -133,11 +136,37 @@ int main(){
         ofs << "Held-Karp\n";
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
+*/
 
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
+    MapGraph M("../map/processed/AMP");
 
-    system("make -C ../resources")
+    {
+        std::cout << "Running 1st Iteration analysis\n";
+        std::vector<int> sizes = {5};
+        std::vector<InputGenerator> inputs;
+        std::vector<std::pair<int, long long>> firstIterationTimes;
+        for (int i : sizes) {
+            std::string c = "txts/c" + i; c += ".clients";
+            inputs.push_back(InputGenerator("../map/processed/AMP.points", c, i, rand() % 4 + 9, rand() % 4 + 19, true));
+        }
+        std::cout << "Generated clients ; running...\n";
+        for (size_t i = 0 ; i < sizes.size() ; ++i){
+            auto start_time = hrc::now();
+            Iteration1 it;
+            it.initialize(&M, "resources/it1_01.vans", inputs.at(i).getOutputPath(), "txts/r.rides");
+            it.run();
+            auto finish_time = hrc::now();
+            long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            firstIterationTimes.push_back(std::make_pair(sizes.at(i), execution_time));
+            std::string c = "c" + sizes.at(i); c += ".clients";
+            remove(c.c_str());
+        }
+        std::cout << "Outputing to file\n";
+        ofs << "1st Iteration\n";
+        for (std::pair<int, long long> pair : firstIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
+        remove("txts/r.rides");
+    }
+
 
     ofs.close();
     return 0;

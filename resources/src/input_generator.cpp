@@ -1,4 +1,4 @@
-#include "generator.h"
+#include "input_generator.h"
 
 long long large_rand(){
     long long r1 = rand();
@@ -6,7 +6,7 @@ long long large_rand(){
     return (r1 << 32) | r2;
 }
 
-Generator::Generator(string points_relative_path_, string output_path_, int n_res_, long long start_time_, long long end_time_, bool only_trainstation_){
+InputGenerator::InputGenerator(string points_relative_path_, string output_path_, int n_res_, long long start_time_, long long end_time_, bool only_trainstation_){
     this->points_relative_path = points_relative_path_;
     this->output_path = output_path_;
     this->n_res = n_res_;
@@ -15,7 +15,7 @@ Generator::Generator(string points_relative_path_, string output_path_, int n_re
     this->only_trainstation = only_trainstation_;
 }
 
-void Generator::run(){
+void InputGenerator::run(){
     srand(time(NULL));
 
     //Read interesting nodes
@@ -32,8 +32,6 @@ void Generator::run(){
 
     //List of names
     vector<string> names_list = {"Son","Man","Brandon","Fidel","Jc","Fabian","Dannie","Jerald","Hal","Doug","Maynard","Santos","Rigoberto","Franklyn","Howard","Dorian","Edgardo","Rogelio","Everette","Nicolas","Johnie","Jeffery","Carlos","Mickey","Moises","Brooks","Jay","Sean","Antony","Scottie","Felton","Alejandro","Antonia","Rudy","Nathanael","Rayford","Curt","Delmar","William","Denis","Anton","Antone","Osvaldo","Isaac","Freeman","Morton","Manuel","Samual","Sterling","Lewis","Liane","Alane","Rima","Magnolia","Valencia","An","Vicenta","Margene","Gia","Shery","Saran","Madge","Raeann","Buffy","Thalia","Hulda","Yuki","Lita","Venice","Easter","Sonya","Delois","Cleora","Sharri","Genie","Kyung","Petronila","Veta","Shawana","Adelia","Karine","Agnus","Inell","Ashton","Marian","Henriette","Cecelia","Tula","Arlean","Valarie","Talitha","Solange","Ila","Sara","Marline","Alexandria","Gaynelle","Patria","Jaclyn","Shauna","Josue","Yuk","Evette","Awilda","Berry","Linette","Ralph","Nathalie","Antony","Darci","Rhiannon","Rigoberto","Chrystal","Clarence","Clora","Genny","Renea","Maryam","Justine","Nada","Denisse","Matilda","Johnnie","Julee","Harriette","Carolann","Sharell","Bradley","Olinda","Leana","Belva","Jamila","Anna","Liane","Flavia","Deangelo","Loriann","Georgette","Latisha","Elias","Danita","Deborah","Shirlene","Simone","Alissa","Eleonor","Ethan","Elisabeth","Carrie","Debi","Louann","Carli","Collin","Scott","Hubert","Arcelia","Janell","Neal","Ida","Jazmine","Liberty","Geraldine","Greg","Clifford","Edna","Klara","Janae","Aisha","Laraine","Earnestine","Christinia","Ebonie","Gerardo","Genaro","Luis","Marcene","Hoa","Marg","Era","Virgie","Karri","Gilberte","Floria","Eda","Emilio","Jesica","Creola","Isadora","Logan","Moira","Kenda","Angelia","Theodora","Molly","Alpha","Rupert","Tod","Sherley","Chadwick","Na"};
-
-    list<Client> clients;
 
     for (int i = 0 ; i < n_res ; ++i){
         Client temp(
@@ -52,4 +50,8 @@ void Generator::run(){
     for(const Client &c: clients)
         ofs << c << "\n";
     ofs.close();
+}
+
+string InputGenerator::getOutputPath() const{
+    return output_path;
 }
