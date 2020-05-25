@@ -24,7 +24,7 @@ public:
     virtual void initialize(const DWGraph::DWGraph *G) = 0;
 
     /**
-     * @brief Executes the algorithm generating two 2D vector on with the distance between any pair of nodes and the other with (????)
+     * @brief Executes the algorithm
      * 
      */
     virtual void run() = 0;
@@ -47,20 +47,8 @@ public:
      */
     virtual std::list<DWGraph::node_t> getPath(DWGraph::node_t s, DWGraph::node_t d) const final;
 
-    /**
-     * @brief Retrieves the path weight between node s and d
-     * 
-     * @param s                     Starting Node
-     * @param d                     Destination Node
-     * @return DWGraph::weight_t    Weight of the path between the two nodes
-     */
     virtual DWGraph::weight_t getPathWeight(DWGraph::node_t s, DWGraph::node_t d) const = 0;
 
-    /**
-     * @brief Retrieves the statistics object
-     * 
-     * @return statistics_t Stores the execution time of the algorithm
-     */
     virtual statistics_t getStatistics() const = 0;
 
     /**
@@ -90,9 +78,9 @@ private:
     static void thread_func(ShortestPathAll::FromOneMany *p);
 public:
     /**
-     * @brief Constructor
+     * @brief Construct from oneMany and nthreads
      * 
-     * @param oneMany  Method of Shortest Path One Many to Use
+     * @param oneMany  Class instance
      * @param nthreads Number of Threads to Use
      */
     FromOneMany(ShortestPathOneMany *oneMany, size_t nthreads);
@@ -127,20 +115,8 @@ public:
      */
     DWGraph::node_t getPrev(DWGraph::node_t s, DWGraph::node_t d) const;
 
-    /**
-     * @brief Retrieves the path weight between node s and d
-     * 
-     * @param s                     Starting Node
-     * @param d                     Destination Node
-     * @return DWGraph::weight_t    Weight of the path between the two nodes
-     */
     DWGraph::weight_t getPathWeight(DWGraph::node_t s, DWGraph::node_t d) const;
 
-    /**
-     * @brief Retrieves the statistics object
-     * 
-     * @return statistics_t Stores the execution time of the algorithm
-     */
     statistics_t getStatistics() const;
 };
 

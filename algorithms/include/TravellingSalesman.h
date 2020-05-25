@@ -57,11 +57,6 @@ public:
      */
     virtual std::list<DWGraph::node_t> getTour() const = 0;
 
-    /**
-     * @brief Retrieves the statistics object
-     * 
-     * @return statistics_t Stores the execution time of the algorithm
-     */
     virtual statistics_t getStatistics() const = 0;
 };
 

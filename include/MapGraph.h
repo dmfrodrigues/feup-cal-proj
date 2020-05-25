@@ -53,6 +53,11 @@ private:
     coord_t min_coord, max_coord, mean_coord;
     std::list<way_t> ways;
 public:
+    /**
+     * @brief Construct from files
+     * 
+     * @param path pathname
+     */
     MapGraph(const std::string &path);
     ~MapGraph();
     DWGraph::node_t getStationNode() const;

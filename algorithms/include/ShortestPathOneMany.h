@@ -13,17 +13,9 @@
 class ShortestPathOneMany {
 private:
 
-    /**
-     * @brief Retrieve the Starting Node
-     * 
-     * @return DWGraph::node_t Starting Node
-     */
     virtual DWGraph::node_t getStart() const = 0;
 public:
-    /**
-     * @brief Shortest Path One Many object Destructor
-     * 
-     */
+
     virtual ~ShortestPathOneMany();
 
     /**
@@ -56,19 +48,8 @@ public:
      */
     virtual std::list<DWGraph::node_t> getPath(DWGraph::node_t d) const final;
 
-    /**
-     * @brief Retrieves the path weight of the one ending at d
-     * 
-     * @param d                     Destination Node
-     * @return DWGraph::weight_t    Sequence of nodes that describe the path to d
-     */
     virtual DWGraph::weight_t getPathWeight(DWGraph::node_t d) const = 0;
 
-    /**
-     * @brief Retrieves the statistics object
-     * 
-     * @return statistics_t Stores the execution time of the algorithm
-     */
     virtual statistics_t getStatistics() const = 0;
 
     /**
