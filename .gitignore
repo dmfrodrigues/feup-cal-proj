@@ -31,4 +31,6 @@ clients_*.clients
 lib*.a
 generator
 *.csv
+.~lock.results.csv#
+empirical/GenerateEmpirical
 empirical/GraphGenerator
