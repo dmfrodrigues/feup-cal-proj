@@ -4,7 +4,7 @@
 #include "DUGraph.h"
 
 /**
- * @brief Reachability Interface
+ * @brief Reachability (if a Node can or not be reached from another Node) Interface 
  * 
  */
 class Reachability{
@@ -18,7 +18,7 @@ public:
     virtual void initialize(const DUGraph *G, DUGraph::node_t s) = 0;
 
     /**
-     * @brief Computes for every Node if it can be reached starting at s (Starting Node data member)
+     * @brief Executes the algorithm
      * 
      */
     virtual void run() = 0;

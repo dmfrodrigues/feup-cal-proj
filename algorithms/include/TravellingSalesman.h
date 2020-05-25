@@ -45,7 +45,7 @@ public:
     virtual void initialize(const std::list<DWGraph::node_t> *nodes, DWGraph::node_t s, weight_function *w) = 0;
     
     /**
-     * @brief Executes the algorithm generating a route
+     * @brief Executes the algorithm, generating a route
      * 
      */
     virtual void run() = 0;
