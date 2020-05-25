@@ -7,11 +7,19 @@
 
 #include "DUGraph.h"
 
+/**
+ * @brief Point of interest
+ * 
+ */
 class point_t {
 private:
     encoded_string name = "";
     coord_t coord = coord_t();
 public:
+    /**
+     * @brief Construct without arguments
+     * 
+     */
     point_t();
 
     void setName(const encoded_string &s);

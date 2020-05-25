@@ -9,10 +9,7 @@
  */
 class SCCnode{
 public:
-    /**
-     * @brief SCCnode object destructor
-     * 
-     */
+
     virtual ~SCCnode();
 
     /**

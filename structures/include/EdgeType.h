@@ -1,6 +1,10 @@
 #ifndef EDGETYPE_H_INCLUDED
 #define EDGETYPE_H_INCLUDED
 
+/**
+ * @brief Edge types
+ * 
+ */
 enum edge_type_t : char{
     NO              = 'n',
     MOTORWAY        = 'M',

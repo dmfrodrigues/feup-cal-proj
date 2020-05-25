@@ -13,10 +13,7 @@
  */
 class ShortestPath {
 public:
-    /**
-     * @brief Shortest Path object Destructor
-     * 
-     */
+
     virtual ~ShortestPath();
 
     /**
@@ -28,18 +25,7 @@ public:
      */
     virtual void initialize(const DWGraph::DWGraph *G, DWGraph::node_t s, DWGraph::node_t d) = 0;
 
-    /**
-     * @brief Retrieve the Start Node
-     * 
-     * @return DWGraph::node_t Start Node
-     */
     virtual DWGraph::node_t getStart() const = 0;
-
-    /**
-     * @brief Retrieve the Destination Node
-     * 
-     * @return DWGraph::node_t Destination Node
-     */
     virtual DWGraph::node_t getDest () const = 0;
 
     /**
@@ -63,11 +49,6 @@ public:
      */
     virtual std::list<DWGraph::node_t> getPath() const final;
 
-    /**
-     * @brief Retrieves the path weight between two nodes
-     * 
-     * @return DWGraph::weight_t Weight of the path between the two nodes
-     */
     virtual DWGraph::weight_t getPathWeight() const = 0;
 
     /**
@@ -76,11 +57,6 @@ public:
      */
     class FromOneMany;
 
-    /**
-     * @brief Retrieves the statistics object
-     * 
-     * @return statistics_t Stores the execution time of the algorithm
-     */
     virtual statistics_t getStatistics() const = 0;
 
     /**
@@ -121,18 +97,8 @@ public:
      */
     virtual void run();
 
-    /**
-     * @brief Retrieves the Start Node
-     * 
-     * @return DWGraph::node_t Start Node
-     */
     virtual DWGraph::node_t getStart() const;
 
-    /**
-     * @brief Retrieves the Destination Node
-     * 
-     * @return DWGraph::node_t Destination Node
-     */
     virtual DWGraph::node_t getDest () const;
 
     /**
@@ -143,18 +109,8 @@ public:
      */
     virtual DWGraph::node_t getPrev(DWGraph::node_t u) const;
 
-    /**
-     * @brief Retrieves the path weight
-     * 
-     * @return DWGraph::weight_t Sequence of nodes that describe the path
-     */
     virtual DWGraph::weight_t getPathWeight() const;
 
-    /**
-     * @brief Retrieves the statistics object
-     * 
-     * @return statistics_t Stores the execution time of the algorithm
-     */
     virtual statistics_t getStatistics() const;
 
     /**

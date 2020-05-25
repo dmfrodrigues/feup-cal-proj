@@ -4,6 +4,10 @@
 #include <vector>
 #include <iostream>
 
+/**
+ * @brief Van class
+ * 
+ */
 class Van {
 private:
 	unsigned capacity;
@@ -12,8 +16,6 @@ private:
 public:
 
 	unsigned getCapacity();
-
-    //std::vector<Van> getVansFromFile(std::string filename);
 
     bool operator<(const Van &v) const;
 

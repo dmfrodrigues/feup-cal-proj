@@ -170,7 +170,7 @@ Roads are coloured according to the following table:
 ### Iterations
 
 ```
-./main (iteration1 | iteration2 | iteration3) CLIENTS VANS RIDES
+./main (iteration1 | iteration2) CLIENTS VANS RIDES
 
 CLIENTS     Clients file path (input).
 VANS        Vans file path (input).
