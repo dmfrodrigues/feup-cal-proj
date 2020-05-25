@@ -46,6 +46,11 @@ namespace DWGraph {
 }
 
 namespace std{
+    /**
+     * @brief template specialization for custom class DWGraph::Edge
+     * 
+     * @tparam  
+     */
     template<> struct hash<DWGraph::Edge>{
         std::size_t operator()(const DWGraph::Edge &e) const{
             return std::hash<DWGraph::node_t>()(e.v);
