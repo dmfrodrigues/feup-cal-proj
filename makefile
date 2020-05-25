@@ -93,6 +93,8 @@ clean:
 	rm -f $(PROG)
 	make -C structures clean
 	make -C algorithms clean
+	make -C empirical clean
+	make -C resources clean
 
 cleanall:
 	make clean

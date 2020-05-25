@@ -6,3 +6,4 @@ all: src/input_generator.cpp ../map/processed/AMP.points main.cpp
 
 clean:
 	rm -f input_generator
+	rm -f generator
