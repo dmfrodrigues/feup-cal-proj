@@ -33,3 +33,4 @@ generator
 *.csv
 .~lock.results.csv#
 empirical/GenerateEmpirical
+empirical/GraphGenerator
