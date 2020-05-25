@@ -145,7 +145,7 @@ int main(){
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
 
-/*
+
     MapGraph M("../map/processed/AMP");
 
     {
@@ -209,7 +209,7 @@ int main(){
         for (std::pair<int, long long> pair : secondIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
         remove("txts/r.rides");
     }
-*/
+
     {
         std::cout << "Running VStripes analysis (Varying nodes)\n";
         std::cout << "Generating grids...\n";
