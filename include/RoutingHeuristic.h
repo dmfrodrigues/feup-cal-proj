@@ -30,7 +30,7 @@ public:
     /**
      * @brief Construct from Delta and Travelling Salesman arguments 
      * 
-     * @param Dt    Delta (VStripes)
+     * @param Dt    Delta (maximum distance that VStripes uses to search around a given node)
      * @param tsp   Travelling Salesman instance
      */
     RoutingHeuristic(DWGraph::weight_t Dt, TravellingSalesman *tsp);
