@@ -1,3 +1,6 @@
+#ifndef GRAPH_GENERATOR_H_INCLUDED
+#define GRAPH_GENERATOR_H_INCLUDED
+
 #include "DWGraph.h"
 
 class GraphGenerator {
@@ -11,3 +14,5 @@ public:
     int getNum() const;
     DWGraph::DWGraph* getDWGraph() const;
 };
+
+#endif //GRAPH_GENERATOR_H_INCLUDED

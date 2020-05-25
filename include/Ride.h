@@ -8,10 +8,22 @@
 #include <vector>
 #include <iostream>
 
+/**
+ * @brief Ride class
+ * 
+ */
 class Ride {
 public:
+    /**
+     * @brief Event class
+     * 
+     */
     class Event{
     public:
+        /**
+         * @brief event_type enum
+         * 
+         */
         enum event_type:short{
             DROP_CLIENT = -1,
             BE_THERE = 0,
@@ -39,16 +51,34 @@ private:
 
 public:
     Ride();
-
+    
     void setVan(Van v);
 
     void addClient(Client c);
 
     const std::vector<Client>& getClients() const;
 
+    /**
+     * @brief Clear ride events and mark the leaving of the station
+     * 
+     * @param station node
+     * @param t duration of the event
+     */
     void leaveStation(DWGraph::node_t station, DWGraph::weight_t t);
+    /**
+     * @brief Mark arrival at the station
+     * 
+     * @param station node
+     * @param t duration of the event
+     */
     void arriveStation(DWGraph::node_t station, DWGraph::weight_t t);
 
+    /**
+     * @brief Mark the dropping off of a Client
+     * 
+     * @param c client
+     * @param t duration of the event
+     */
     void dropClient(Client c, DWGraph::weight_t t);
 
     friend std::istream& operator>> (std::istream& is, Ride& r);
