@@ -19,6 +19,7 @@ map/map_process
 *.glo
 *.gls
 *.dvi
+*.lof
 obj/
 main
 *.nodes
