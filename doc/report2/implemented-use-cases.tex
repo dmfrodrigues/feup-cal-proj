@@ -96,6 +96,10 @@ The A* versions are distinguished by the maximum speed they assume a car can go.
 If \texttt{-v} is not used and a road belongs to more than one of the paths found by the different algorithms, that road is coloured with the colour of the best path (e.g., a road belongs to the Blue and Magenta paths, then it is coloured magenta).\par
 If \texttt{-v} is used and a road is explored by more than one of the algorithms, that road is coloured with the colour of the worst path (e.g., a road is explored by the Blue and Magenta algorithms, then it is coloured blue).\par
 The colouring scheme for \texttt{-v} is based on the assumption that algorithms providing better answers explore more nodes, so to visualize all sets of explored edges we may assume in most cases that the set of edges explored by a worse algorithm are a subset of edges explored by a better algorithm, and then the user may assume, for instance, that all nodes painted in Blue were explored by the Magenta, Red and Pink algorithms.
+
+\section{Iterations}
+\texttt{./main (iteration1 | iteration2) CLIENTS VANS RIDES} loads clients and vans from files \texttt{CLIENTS} and \texttt{RIDES}, processes them to allocate clients and vans to rides, and prints the resulting rides to file \texttt{RIDES}. 
+
 \section{To implement}
 \begin{itemize}
     \item Given a list of vans and services for a day, find the set of routes for that day.
