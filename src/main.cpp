@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "graphviewer.h"
 #include "MapGraph.h"
 #include "Iteration1.h"

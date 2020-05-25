@@ -603,5 +603,15 @@ void MapGraph::drawReduced() const{
 }
 
 void MapGraph::drawRide(const Ride &r) const{
+    DWGraph::DWGraph G = connectedGraph;
+
+    std::list<node_t> path;
+    for(const Ride::Event &e: r.getEvents()){
+        if(e.getType() == Ride::Event::event_type::BE_THERE){
+            path.push_back(e.getNode());
+            continue;
+        }
+        coord_t c = e.getClient().getDest();
+    }
     
 }

@@ -22,6 +22,9 @@ public:
         Event(DWGraph::weight_t t, event_type a, DWGraph::node_t u);
 
         DWGraph::weight_t getTime() const;
+        event_type getType() const;
+        const Client& getClient() const;
+        DWGraph::node_t getNode() const;
 
         friend std::istream& operator>> (std::istream& is, event_type& e);
         friend std::ostream& operator<< (std::ostream& os, const event_type& e);
@@ -56,6 +59,8 @@ public:
 
     DWGraph::weight_t getStartTime() const;
     DWGraph::weight_t getEndTime  () const;
+
+    const std::vector<Event>& getEvents() const;
 
     friend std::istream& operator>> (std::istream& is, Ride& r);
 

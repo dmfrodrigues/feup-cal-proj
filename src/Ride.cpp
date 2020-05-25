@@ -21,6 +21,12 @@ Ride::Event::Event(DWGraph::weight_t t_, Event::event_type a_, DWGraph::node_t u
 
 DWGraph::weight_t Ride::Event::getTime() const{ return t; }
 
+Ride::Event::event_type Ride::Event::getType() const{ return a; }
+
+const Client& Ride::Event::getClient() const{ return c; }
+
+DWGraph::node_t Ride::Event::getNode() const{ return u; }
+
 Ride::Ride(){}
 
 void Ride::setVan(Van v_){
@@ -49,7 +55,9 @@ void Ride::dropClient(Client c, weight_t t){
 }
 
 DWGraph::weight_t Ride::getStartTime() const{ return e.begin()->getTime(); }
-DWGraph::weight_t Ride::getEndTime  () const{ return (e.end()--)->getTime(); }
+DWGraph::weight_t Ride::getEndTime  () const{ return (--e.end())->getTime(); }
+
+const std::vector<Ride::Event>& Ride::getEvents() const { return e; }
 
 std::istream& operator>> (std::istream& is, Ride& r){
         is >> r.v;
