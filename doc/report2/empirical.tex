@@ -1,51 +1,53 @@
 \chapter{Empirical complexity analysis} \label{empirical}
 
-\write18{ if [ ! -f 10anUvD.png ] ; then curl https://i.imgur.com/10anUvD.png -o 10anUvD.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{10anUvD}
-    \caption[Short caption, for list of figures]{A very very very long caption of a marvelous figure}
-\end{figure}
-
-\write18{ if [ ! -f IhNo0xr.png ] ; then curl https://i.imgur.com/IhNo0xr.png -o IhNo0xr.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{IhNo0xr}
-    \caption[Short caption, for list of figures]{A very very very long caption of a marvelous figure}
-\end{figure}
-
 \write18{ if [ ! -f 1h79vPO.png ] ; then curl https://i.imgur.com/1h79vPO.png -o 1h79vPO.png ; fi ; }
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{1h79vPO}
-    \caption[Short caption, for list of figures]{A very very very long caption of a marvelous figure}
-\end{figure}
-
-\write18{ if [ ! -f fd3hD1r.png ] ; then curl https://i.imgur.com/fd3hD1r.png -o fd3hD1r.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{fd3hD1r}
-    \caption[Short caption, for list of figures]{A very very very long caption of a marvelous figure}
+    \caption{\hyperref[algorithm-scc-kosaraju-v]{Kosaraju variant algorithm}'s empirical complexity}
 \end{figure}
 
 \write18{ if [ ! -f Fh9jvNP.png ] ; then curl https://i.imgur.com/Fh9jvNP.png -o Fh9jvNP.png ; fi ; }
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{Fh9jvNP}
-    \caption[Short caption, for list of figures]{A very very very long caption of a marvelous figure}
+    \caption{\hyperref[algorithm-shortestpath-dijkstra]{Dijkstra's algorithm} empirical complexity}
 \end{figure}
+
+\write18{ if [ ! -f fd3hD1r.png ] ; then curl https://i.imgur.com/fd3hD1r.png -o fd3hD1r.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{fd3hD1r}
+    \caption{\hyperref[algorithm-tsp-heldkarp]{Held-Karp algorithm}'s empirical complexity}
+\end{figure}
+
+\write18{ if [ ! -f 10anUvD.png ] ; then curl https://i.imgur.com/10anUvD.png -o 10anUvD.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{10anUvD}
+    \caption{\hyperref[algorithm-vstripes]{VStripes algorithm} empirical complexity with node size variation ($\Delta$ = 0.025)}
+\end{figure}
+
+\write18{ if [ ! -f IhNo0xr.png ] ; then curl https://i.imgur.com/IhNo0xr.png -o IhNo0xr.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{IhNo0xr}
+    \caption{\hyperref[algorithm-vstripes]{VStripes algorithm} empirical complexity with $\Delta$ variation (Number of nodes = 562500).}
+\end{figure}
+
+These results show that the impact of the $\Delta$ factor is negligable in the time complexity of the VStripes algorithm on sets of nodes of considerable size (i.e. 562500)
 
 \write18{ if [ ! -f JlsPaIZ.png ] ; then curl https://i.imgur.com/JlsPaIZ.png -o JlsPaIZ.png ; fi ; }
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{JlsPaIZ}
-    \caption[Short caption, for list of figures]{A very very very long caption of a marvelous figure}
+    \caption{\hyperref[iterations]{1st iteration}'s empirical complexity}
 \end{figure}
 
 \write18{ if [ ! -f IrkcKea.png ] ; then curl https://i.imgur.com/IrkcKea.png -o IrkcKea.png ; fi ; }
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{IrkcKea}
-    \caption[Short caption, for list of figures]{A very very very long caption of a marvelous figure}
+    \caption{\hyperref[iterations]{2nd iteration}'s empirical complexity}
 \end{figure}
 

@@ -8,10 +8,10 @@ We consider a stack $L$ has its top on the left side, and elements \emph{before}
 The unordered map data structure is an associative container that is made up of key-value pairs (with unique keys). It is part of the C++ Standard Library (STL) and will be used due to its average constant-time complexity of its operations of search, insertion and removal of elements, a consequence of an implementation based on hash tables.
 
 \section{Unordered Set}
-An unordered set is also an associative type of container from the STL. It stores a set of unique objects (keys) which are organized into buckets according to their hash values and are not sorted in any particular order. This implementation involving hashes allow for an average constant-time complexity in search, insertion and removal of elements.
+An unordered set is also an associative type of container from the STL. It stores a set of unique objects (keys) which are organized into buckets according to their hash values and are not sorted in any particular order. This implementation involving hashes allows for an average constant-time complexity in search, insertion and removal of elements.
 
 \section{List}
-The list container that will be used is the one implemented in the STL as doubly-linked lists which are characterized by keeping links to both the previous and the following element of the list, allowing it to be iterated forwards and backwards and provide constant-time insertions and erase operations, making it appropriate to represent groups of nodes.
+The list container that will be used is the one implemented in the STL as doubly-linked list which are characterized by keeping links to both the previous and the following element of the list, allowing it to be iterated forwards and backwards and provide constant-time insertions and erase operations, making it appropriate to represent groups of nodes.
 
 \section{Vector}
 A vector is a sequence container that internally uses a dynamically allocated array to store its elements (Standard Library). Vectors may allocate extra space for future expansion consuming more memory than arrays but have the edge in storage management/growth and have a constant-time complexity not only for insertions and removals at the end (amortized) but also for random access, being a good alternative for situations where the total number of elements is undetermined at the start.
@@ -20,7 +20,7 @@ A vector is a sequence container that internally uses a dynamically allocated ar
 The struct is a data structure useful to group elements of diferent data types. Its data members are stored in an ordered sequence, opposing the union where the memory reserved can fit only one but any of it's elements.
 
 \section{Priority Queue}
-The priority queue is implemented in the STL as a container adaptor (class that encapsulates a specific class's object), restricting the access to the elements of the container class. The "top" of the priority queue corresponds to the "back" of the container and its elements are ordered according to a strict weak ordering criteria, i.e. the first element is always the greatest. Therefore, it's time complexity constante for the greatest element and logarithmic for insertion and extraction.
+The priority queue is implemented in the STL as a container adaptor (class that encapsulates a specific class's object), restricting the access to the elements of the container class. The "top" of the priority queue corresponds to the "back" of the container and its elements are ordered according to a strict weak ordering criteria, i.e. the first element is always the greatest. Therefore, it detains a constant-time complexity for the greatest element and logarithmic for insertion and extraction.
 To note that a minimal priority queue can be achieved by using, for instance, the binary function object class "greater".
 
 \section{Shared Queue}
@@ -28,6 +28,5 @@ A shared queue corresponds in generic terms to a queue with a mutex which is an 
 
 \section{Graph}
 In generic terms, the representation of graphs will be based on the existence of Nodes (represented by an id (long long variable)) that connect with each other via Edges.
-In the case of an Directed Unweighted Graph (class DUGraph) the Nodes of a graph will be stored in a list and it's adjacency matrix will be represented by an unordered map whose key is the node id and the value is a list of Nodes, providing low lookup time as described in the previous data structures.
-The Directed Weighted Graph (class DWGraph) introduces a weight element distinguishing itself
-from the DUG. The Nodes are represented identically to the Directed Unweighted Graph's and are stored in an unordered set and the Edges are instances of a struct that stores the Node at which that Edge connects to and the weight (cost) of that Edge. There's also two unordered maps: one for the adjacency matrix and the other to keep track of the predecessors of a Node.
+In the case of the Directed Unweighted Graph (class DUGraph) the Nodes of a graph will be stored in a list and it's adjacency matrix will be represented by an unordered map whose key is the node id and the value is a list of Nodes, providing fast lookup time as described in the previous data structures.
+The Directed Weighted Graph (class DWGraph) introduces a weight element distinguishing itself from the DUG. The Nodes are represented identically to the Directed Unweighted Graph's and are stored in an unordered set and the Edges are instances of a struct that stores the Node at which that Edge connects to and the weight (cost) of that Edge. There's also two unordered maps: one for the adjacency matrix and the other to keep track of the predecessors of a Node.
