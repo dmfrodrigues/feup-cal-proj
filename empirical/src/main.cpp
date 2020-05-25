@@ -10,6 +10,7 @@
 #include "Iteration1.h"
 #include "Iteration2.h"
 #include "MapGraph.h"
+#include "VStripes.h"
 
 #include <iostream>
 #include <fstream>
@@ -208,11 +209,61 @@ int main(){
         for (std::pair<int, long long> pair : secondIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
         remove("txts/r.rides");
     }
-
-    {
-        
-    }
 */
+    {
+        std::cout << "Running VStripes analysis (Varying nodes)\n";
+        std::cout << "Generating grids...\n";
+        std::vector<std::list<coord_t>> grids;
+        std::vector<int> sizes = {5, 10, 50, 100, 250, 500, 750, 1000};
+        for (int size : sizes){
+            std::list<coord_t> x;
+            for(size_t i = 0 ; i < size ; ++i)
+                for (size_t j = 0 ; j < size ; ++j)
+                    x.push_back(coord_t(static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/41.3112)) + 41.0055 , static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/8.4925)) + 8.7523 - 10));
+            grids.push_back(x);
+        }
+        std::cout << "Running node analysis\n";
+
+        std::vector<std::pair<int, long long>> VStripesNodesIterationTimes;
+        for (size_t i = 0 ; i < sizes.size() ; ++i){
+            std::cout << sizes.at(i) << std::endl;
+            VStripes vs(0.025);
+            auto start_time = hrc::now();
+            for(int n = 0; n < NRUNS; ++n){
+                vs.initialize(grids.at(i));
+                vs.run();
+            }
+            auto finish_time = hrc::now();
+            long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            VStripesNodesIterationTimes.push_back(std::make_pair(sizes.at(i)*sizes.at(i), execution_time/NRUNS));
+        }
+        std::cout << "Outputing to file\n";
+        ofs << "VStripes Node varying Iteration\n";
+        for (std::pair<int, long long> pair : VStripesNodesIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
+
+
+        std::cout << "Running delta analysis\n";
+
+        std::list<coord_t> grid = grids.at(6);
+        std::vector<coord_t::deg_t> deltas = {0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.2, 0.25};
+        std::vector<std::pair<double, long long>> vStripesDeltasIterationTimes;
+        for (size_t i = 0 ; i < sizes.size() ; ++i){
+            std::cout << deltas.at(i) << std::endl;
+            VStripes vs(deltas.at(i));
+            auto start_time = hrc::now();
+            for(int n = 0; n < NRUNS; ++n){
+                vs.initialize(grid);
+                vs.run();
+            }
+            auto finish_time = hrc::now();
+            long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            vStripesDeltasIterationTimes.push_back(std::make_pair(deltas.at(i), execution_time/NRUNS));
+        }
+        std::cout << "Outputing to file\n";
+        ofs << "VStripes Delta varying Iteration\n";
+        for (std::pair<double, long long> pair : vStripesDeltasIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
+    }
+
     ofs.close();
     return 0;
 }
