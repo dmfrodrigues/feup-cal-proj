@@ -1,0 +1,38 @@
+\chapter{File formats} \label{appendix-fileformat}
+\section{Vans file}
+Vans files should have the \texttt{.vans} extension, and are organized like this:
+\\
+\\
+\texttt{[number of vans]}\\
+\texttt{[1st van license plate] [1st van capacity]}\\
+\texttt{[2nd van license plate] [2nd van capacity]}\\
+\texttt{...}
+
+
+\section{Clients file}
+Clients files should have the \texttt{.clients} extension, and are organized like this:
+\\
+\\
+\texttt{[number of clients]}\\
+\texttt{[1st client name] [1st client VAT number] [1st client latitude] [1st client longitude] [1st client time to start request] [1st client is going to the station? 0 if not, 1 otherwise]}\\
+\texttt{[2nd client name] [2nd client VAT number] [2nd client latitude] [2nd client longitude] [2nd client time to start request] [2nd client is going to the station? 0 if not, 1 otherwise]}\\
+\texttt{...}
+
+
+\section{Rides file}
+Rides files should have the \texttt{.rides} extension, and are organized like this:
+\\
+\\
+\texttt{[number of rides]}\\
+\texttt{[1st ride van license plate] [1st ride van capacity]}\\
+\texttt{[1st ride number of clients]}\\
+\texttt{[1st client...]}\\
+\texttt{[2nd client...]}\\
+\texttt{...}\\
+\texttt{[1st ride number of events]}\\
+\texttt{[1st ride, 1st event time] [1st ride, 1st event type] [1st ride, 1st event client or node]}\\
+\texttt{[1st ride, 2nd event time] [1st ride, 2nd event type] [1st ride, 2nd event client or node]}\\
+\texttt{...}\\
+\texttt{[2nd ride van license plate] [2nd ride van capacity]}\\
+\texttt{...}
+
