@@ -24,7 +24,7 @@ public:
     virtual void initialize(const DWGraph::DWGraph *G) = 0;
 
     /**
-     * @brief Executes the algorithm generating two 2D vector on with the distance between any pair of nodes and the other with (????)
+     * @brief Executes the algorithm
      * 
      */
     virtual void run() = 0;

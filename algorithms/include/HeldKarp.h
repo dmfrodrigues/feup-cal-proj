@@ -5,6 +5,10 @@
 
 #include <vector>
 
+/**
+ * @brief Held-Karp algorithm
+ * 
+ */
 class HeldKarp : public TravellingSalesman {
 private:
     typedef unsigned short id_t;
@@ -23,9 +27,34 @@ private:
 
     DWGraph::weight_t w_wrapper(const set_t &S, id_t u, id_t v) const;
 public:
+    /**
+     * @brief Construct without arguments
+     * 
+     */
     HeldKarp();
+
+    /**
+     * @brief Initializes data members such as the starting node that are required for the algorithm's execution
+     * 
+     * @param nodes     List of the graph's nodes over which the algorithm will operate
+     * @param s         Starting node
+     * @param w         weight_function instance
+     */
     void initialize(const std::list<DWGraph::node_t> *nodes, DWGraph::node_t s, weight_function *w);
+    
+    /**
+     * @brief Executes the algorithm
+     * 
+     */
     void run();
+
+    /**
+     * @brief Retrieves the minimum cost of reaching v after having visited all cities in S
+     * 
+     * @param S                     cities already visited
+     * @param v                     destination
+     * @return DWGraph::weight_t    cost
+     */
     DWGraph::weight_t HK(const set_t &S, id_t v);
     std::list<DWGraph::node_t> getTour() const;
     statistics_t getStatistics() const;
