@@ -17,7 +17,7 @@ private:
     std::unordered_map< node_t, std::list<node_t> > adj;
 public:
     /**
-     * @brief DUGraph Constructor
+     * @brief Construct without arguments
      * 
      */
     DUGraph();
