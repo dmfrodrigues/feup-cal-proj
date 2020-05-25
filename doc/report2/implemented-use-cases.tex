@@ -33,19 +33,30 @@ All graphical uses make use of \href{https://github.com/STEMS-group/GraphViewer}
         Slow                  & Gray, dashed
     \end{tabular}
 \end{center}
+
+\write18{ if [ ! -f Y8ZJyr3.png ] ; then curl https://i.imgur.com/Y8ZJyr3.png -o Y8ZJyr3.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.213]{Y8ZJyr3}
+    \caption{Map with types of roads}
+\end{figure}
+
 \subsection{Speed}
 \texttt{./main speed FRACTION FLAGS} draws the road network, colouring roads according to their maximum allowed speed. Roads are drawn according to the following scheme:
 \begin{center}
-    \begin{tabular}{r | l}
-        \textbf{Speed [$\SI{}{km/h}$] (up to)} & \textbf{Colour} \\ \hline
-                                  120 & Red             \\
-                                  100 & Orange          \\
-                                   80 & Yellow          \\
-                                   60 & Green           \\
-                                   50 & Black           \\
-                                   40 & Gray            
-    \end{tabular}
+    \begin{tabular}{r | l l l l l l}
+        \textbf{Speed [$\SI{}{km/h}$] (up to)} & 120 & 100    & 80     & 60    & 50    & 40 \\ \hline
+        \textbf{Color}                         & Red & Orange & Yellow & Green & Black & Gray      
+        \end{tabular}
 \end{center}
+
+\write18{ if [ ! -f Njimj9n.png ] ; then curl https://i.imgur.com/Njimj9n.png -o Njimj9n.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.213]{Njimj9n}
+    \caption{Map with types of roads}
+\end{figure}
+
 \subsection{Strongly connected components}
 \texttt{./main scc FRACTION FLAGS} draws the road network, colouring roads red if they connect two nodes in the train station's \acrshort{SCC}, or gray if at least one of the nodes is not in the train station's \acrshort{SCC}.
 \subsection{Shortest path}
@@ -64,10 +75,32 @@ The A* versions are distinguished by the maximum speed they assume a car can go.
         A* algorithm, $\SI{10}{km/h}$ & Cyan                 & Cyan                          
     \end{tabular}
 \end{center}
+
+\write18{ if [ ! -f OdwmfwK.png ] ; then curl https://i.imgur.com/OdwmfwK.png -o OdwmfwK.png ; fi ; }
+\write18{ if [ ! -f YTZbVeR.png ] ; then curl https://i.imgur.com/YTZbVeR.png -o YTZbVeR.png ; fi ; }
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[trim={420px 0 600px 0}, clip, scale=0.255]{OdwmfwK}
+        \caption{Without \texttt{-v}}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[trim={420px 0 600px 0}, clip, scale=0.255]{YTZbVeR}
+        \caption{With \texttt{-v}}
+    \end{subfigure}
+    \caption{Map with shortest path from \textit{Senhor da Pedra} beach (V. N. Gaia) to Porto Airport (Maia).}
+\end{figure}
+
 If \texttt{-v} is not used and a road belongs to more than one of the paths found by the different algorithms, that road is coloured with the colour of the best path (e.g., a road belongs to the Blue and Magenta paths, then it is coloured magenta).\par
 If \texttt{-v} is used and a road is explored by more than one of the algorithms, that road is coloured with the colour of the worst path (e.g., a road is explored by the Blue and Magenta algorithms, then it is coloured blue).\par
 The colouring scheme for \texttt{-v} is based on the assumption that algorithms providing better answers explore more nodes, so to visualize all sets of explored edges we may assume in most cases that the set of edges explored by a worse algorithm are a subset of edges explored by a better algorithm, and then the user may assume, for instance, that all nodes painted in Blue were explored by the Magenta, Red and Pink algorithms.
+
+\section{Iterations}
+\texttt{./main (iteration1 | iteration2) CLIENTS VANS RIDES} loads clients and vans from files \texttt{CLIENTS} and \texttt{RIDES}, processes them to allocate clients and vans to rides, and prints the resulting rides to file \texttt{RIDES}. 
+
 \section{To implement}
 \begin{itemize}
-    \item Given a list of vans and services for a day, find the set of routes for that day.
+    \item Given a rides file and a ride number, st of vans and services for a day, find the set of routes for that day.
 \end{itemize}
