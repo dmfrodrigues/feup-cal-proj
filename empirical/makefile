@@ -25,4 +25,4 @@ $(MAIN_FLIB): FORCE
 	make -C ..
 
 clean:
-	rm -f GraphGenerator
+	rm -f GenerateEmpirical

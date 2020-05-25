@@ -57,11 +57,13 @@ int main(){
             DUGraph g = DUGraph(*generators.at(i).getDWGraph());
             auto start_time = hrc::now();
             KosarajuV k(&r);
-            k.initialize(&g, 1);
-            k.run();
+            for(int n = 0; n < NRUNS; ++n){
+                k.initialize(&g, 1);
+                k.run();
+            }
             auto finish_time = hrc::now();
             long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
-            kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time));
+            kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time/NRUNS));
         }
         std::cout << "Outputing to file\n";
         ofs << "Kosaraju\n";
@@ -123,15 +125,18 @@ int main(){
             weight_matrix w(M);
 
             TravellingSalesman *tsp = new HeldKarp();
-            tsp->initialize(&nodes, source_node, &w);
-            try{
-                tsp->run();
-            } catch(const std::exception &e){
-                std::cerr << "Caught exception" << std::endl;
-                throw e;
+            long long time = 0;
+            for(int n = 0; n < NRUNS; ++n){
+                tsp->initialize(&nodes, source_node, &w);
+                try{
+                    tsp->run();
+                } catch(const std::exception &e){
+                    std::cerr << "Caught exception" << std::endl;
+                    throw e;
+                }
+                time += tsp->getStatistics().execution_time;
             }
-
-            heldKarpTimes.push_back(std::make_pair(sizes[i], tsp->getStatistics().execution_time));
+            heldKarpTimes.push_back(std::make_pair(sizes[i], time/NRUNS));
             delete tsp;
         }
         std::cout << "Outputing to file\n";
@@ -139,7 +144,7 @@ int main(){
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
 
-
+/*
     MapGraph M("../map/processed/AMP");
 
     {
@@ -204,7 +209,10 @@ int main(){
         remove("txts/r.rides");
     }
 
-
+    {
+        
+    }
+*/
     ofs.close();
     return 0;
 }
