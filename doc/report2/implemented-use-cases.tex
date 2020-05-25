@@ -97,10 +97,15 @@ If \texttt{-v} is not used and a road belongs to more than one of the paths foun
 If \texttt{-v} is used and a road is explored by more than one of the algorithms, that road is coloured with the colour of the worst path (e.g., a road is explored by the Blue and Magenta algorithms, then it is coloured blue).\par
 The colouring scheme for \texttt{-v} is based on the assumption that algorithms providing better answers explore more nodes, so to visualize all sets of explored edges we may assume in most cases that the set of edges explored by a worse algorithm are a subset of edges explored by a better algorithm, and then the user may assume, for instance, that all nodes painted in Blue were explored by the Magenta, Red and Pink algorithms.
 
+\subsection{Rides}
+\texttt{./main ride FRACTION FLAGS RIDES NUM\_RIDES} allows to visualize ride number \texttt{NUM\_RIDES} from rides file \texttt{RIDES}. Roads traversed while performing this ride are coloured red, and the train station and places where clients are dropped are marked with black circles.
+
+\write18{ if [ ! -f yEcn4Gi.png ] ; then curl https://i.imgur.com/yEcn4Gi.png -o yEcn4Gi.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[trim={230px 0 230px 0}, clip, scale=0.27]{yEcn4Gi}
+    \caption[Map of a ride]{Map of a ride, obtained by running \texttt{./main ride 1 255 resources/it1\_03.rides 1}. Check the \texttt{README.md} file to find how to create file \texttt{resources/it1\_03.rides} using the suggested examples.}
+\end{figure}
+
 \section{Iterations}
 \texttt{./main (iteration1 | iteration2) CLIENTS VANS RIDES} loads clients and vans from files \texttt{CLIENTS} and \texttt{RIDES}, processes them to allocate clients and vans to rides, and prints the resulting rides to file \texttt{RIDES}. 
-
-\section{To implement}
-\begin{itemize}
-    \item Given a rides file and a ride number, st of vans and services for a day, find the set of routes for that day.
-\end{itemize}

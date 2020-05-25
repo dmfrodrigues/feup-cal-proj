@@ -601,3 +601,71 @@ void MapGraph::drawReduced() const{
 
     mv->rearrange();
 }
+
+void MapGraph::drawRide(int fraction, int display, const Ride &r) const{
+    DWGraph::DWGraph G = connectedGraph;
+
+    std::unordered_set<node_t> visited_nodes, important_nodes; {
+        std::vector<node_t> path;{
+            for(const Ride::Event &e: r.getEvents()){
+                if(e.getType() == Ride::Event::event_type::BE_THERE){
+                    path.push_back(e.getNode());
+                    continue;
+                }
+                coord_t c = e.getClient().getDest();
+                path.push_back(coord2node.at(closestPoint->getClosestPoint(c)));
+            }
+        }
+        important_nodes = std::unordered_set<node_t>(path.begin(), path.end());
+        {
+            for(size_t i = 1; i < path.size(); ++i){
+                const node_t &u = path[i-1], &v = path[i];
+                ShortestPath *sp = new Astar(new DistanceHeuristic(nodes, nodes.at(v), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
+                sp->initialize(&G, u, v);
+                sp->run();
+                std::list<node_t> small_path = sp->getPath();
+                visited_nodes.insert(small_path.begin(), small_path.end());
+                delete sp;
+            }
+        }
+    }
+
+    MapViewer *gv = createMapViewer(min_coord, max_coord);
+
+    std::unordered_set<node_t> drawn_nodes;
+    size_t edge_id = 0;
+    for(const way_t &way: ways){
+
+        bool draw = display & display_map.at(way.edgeType);
+
+        if(!draw) continue;
+
+        node_t u = 0;
+        size_t i = 0;
+        for(const node_t &v: way.nodes){
+            if(!G.hasNode(v)) break;
+            if(i%fraction == 0 || i == way.nodes.size()-1){
+                if(drawn_nodes.find(v) == drawn_nodes.end()){
+                    drawn_nodes.insert(v);
+                    if(important_nodes.count(v)) gv->addNode(v, nodes.at(v), "BLACK", 35);
+                    else                         gv->addNode(v, nodes.at(v));
+                }
+                if(u != 0){
+                    std::string color = "LIGHT_GRAY";
+                    int width = 4;
+
+                    if(visited_nodes.count(u) && visited_nodes.count(v)){
+                        color = "RED";
+                        width = 8;
+                    }
+
+                    gv->addEdge(edge_id++, u, v, EdgeType::UNDIRECTED, color, width);
+                }
+                u = v;
+            }
+            ++i;
+        }
+    }
+    gv->rearrange();
+    
+}

@@ -167,6 +167,25 @@ Roads are coloured according to the following table:
 ./main path 1 255 41.1777 -8.598 41.1522 -8.6361
 ```
 
+#### Rides
+
+```
+./main ride FRACTION FLAGS RIDES NUM_RIDES
+
+FRACTION    Fraction of nodes to draw (improves display performance).
+FLAGS       Flag which roads to draw (add them to combine).
+RIDES       Rides file path (output).
+NUM_RIDES   Number of ride to be drawn.
+```
+
+Draws ride `NUM_RIDES` from file `RIDES`.
+
+##### Examples
+
+```sh
+./main ride 1 255 resources/it1_03.rides 1
+```
+
 ### Iterations
 
 ```

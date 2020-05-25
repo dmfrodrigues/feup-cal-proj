@@ -6,6 +6,7 @@
 #include "EdgeType.h"
 #include "coord.h"
 #include "ClosestPoint.h"
+#include "Ride.h"
 
 #include <map>
 
@@ -52,6 +53,11 @@ private:
     coord_t min_coord, max_coord, mean_coord;
     std::list<way_t> ways;
 public:
+    /**
+     * @brief Construct from files
+     * 
+     * @param path pathname
+     */
     MapGraph(const std::string &path);
     ~MapGraph();
     DWGraph::node_t getStationNode() const;
@@ -66,6 +72,7 @@ public:
     void drawPath  (int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst, bool visited) const;
     void drawPath  (int fraction, int display, coord_t src, coord_t dst, bool visited) const;
     void drawReduced() const;
+    void drawRide(int fraction, int display, const Ride &r) const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED

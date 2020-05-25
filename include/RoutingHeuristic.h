@@ -8,6 +8,10 @@
 #include <queue>
 #include <map>
 
+/**
+ * @brief Routing Heuristic 
+ * 
+ */
 class RoutingHeuristic : public VehicleRouting {
 private:
     typedef std::priority_queue<std::pair<DWGraph::weight_t, Van>,
@@ -23,8 +27,28 @@ private:
     const ShortestPathAll *shortestPaths = nullptr;
     std::vector<Ride> rides;
 public:
+    /**
+     * @brief Construct from Delta and Travelling Salesman arguments 
+     * 
+     * @param Dt    Delta (maximum distance that VStripes uses to search around a given node)
+     * @param tsp   Travelling Salesman instance
+     */
     RoutingHeuristic(DWGraph::weight_t Dt, TravellingSalesman *tsp);
+    
+    /**
+     * @brief Initializes data members that are required for the execution
+     * 
+     * @param clients           List of clients
+     * @param vans              List of vans
+     * @param station           Node of the station
+     * @param shortestPaths     Shortest Paths
+     */
     void initialize(const std::list<std::pair<Client, DWGraph::node_t> > *clients, const std::list<Van> *vans, DWGraph::node_t station, const ShortestPathAll *shortestPaths);
+
+    /**
+     * @brief Executes the algorithm
+     * 
+     */
     void run();
     const std::vector< Ride >& getGroups() const;
 };

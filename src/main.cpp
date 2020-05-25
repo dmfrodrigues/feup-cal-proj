@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "graphviewer.h"
 #include "MapGraph.h"
 #include "Iteration1.h"
@@ -50,6 +52,27 @@ void reduced(int, const char *[], const MapGraph &M){
     M.drawReduced();
 }
 
+void ride(int argc, const char *argv[], const MapGraph &M){
+    if(argc != 6) throw std::invalid_argument("invalid number of arguments");
+    int fraction = atoi(argv[2]);
+    int display  = atoi(argv[3]);
+    std::string rides_path = argv[4];
+    size_t ride_i = atol(argv[5]);
+
+    Ride r;{
+        std::ifstream is(rides_path);
+        size_t num_rides; is >> num_rides;
+        if(ride_i >= num_rides) throw std::invalid_argument("index too large");
+        Ride tmp;
+        for(size_t i = 0; i < ride_i; ++i) is >> tmp;
+        is >> r;
+    }
+    
+    std::cout << "Ride starts at " << r.getStartTime() << " and ends at " << r.getEndTime() << std::endl;
+
+    M.drawRide(fraction, display, r);
+}
+
 void iteration1(int argc, const char *argv[], const MapGraph &M){
     if(argc != 5) throw std::invalid_argument("invalid number of arguments");
     
@@ -88,6 +111,7 @@ int main(int argc, char *argv[]){
         if(opt == "scc"       ) scc       (argc, const_cast<const char **>(argv), M);
         if(opt == "path"      ) path      (argc, const_cast<const char **>(argv), M);
         if(opt == "reduced"   ) reduced   (argc, const_cast<const char **>(argv), M);
+        if(opt == "ride"      ) ride      (argc, const_cast<const char **>(argv), M);
         if(opt == "iteration1") iteration1(argc, const_cast<const char **>(argv), M);
         if(opt == "iteration2") iteration2(argc, const_cast<const char **>(argv), M);
     } catch(const std::invalid_argument &e){
