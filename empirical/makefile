@@ -26,3 +26,4 @@ $(MAIN_FLIB): FORCE
 
 clean:
 	rm -f GenerateEmpirical
+	rm -f GraphGenerator
