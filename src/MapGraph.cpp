@@ -601,3 +601,7 @@ void MapGraph::drawReduced() const{
 
     mv->rearrange();
 }
+
+void MapGraph::drawRide(const Ride &r) const{
+    
+}
