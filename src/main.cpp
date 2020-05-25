@@ -70,7 +70,7 @@ void ride(int argc, const char *argv[], const MapGraph &M){
     
     std::cout << "Ride starts at " << r.getStartTime() << " and ends at " << r.getEndTime() << std::endl;
 
-    M.drawRide(r);
+    M.drawRide(fraction, display, r);
 }
 
 void iteration1(int argc, const char *argv[], const MapGraph &M){

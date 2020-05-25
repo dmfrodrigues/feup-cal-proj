@@ -180,6 +180,12 @@ NUM_RIDES   Number of ride to be drawn.
 
 Draws ride `NUM_RIDES` from file `RIDES`.
 
+##### Examples
+
+```sh
+./main ride 1 255 resources/it1_03.rides 1
+```
+
 ### Iterations
 
 ```

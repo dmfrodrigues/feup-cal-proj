@@ -67,7 +67,7 @@ public:
     void drawPath  (int fraction, int display, DWGraph::node_t src, DWGraph::node_t dst, bool visited) const;
     void drawPath  (int fraction, int display, coord_t src, coord_t dst, bool visited) const;
     void drawReduced() const;
-    void drawRide(const Ride &r) const;
+    void drawRide(int fraction, int display, const Ride &r) const;
 };
 
 #endif //MAPGRAPH_H_INCLUDED
