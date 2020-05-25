@@ -97,6 +97,17 @@ If \texttt{-v} is not used and a road belongs to more than one of the paths foun
 If \texttt{-v} is used and a road is explored by more than one of the algorithms, that road is coloured with the colour of the worst path (e.g., a road is explored by the Blue and Magenta algorithms, then it is coloured blue).\par
 The colouring scheme for \texttt{-v} is based on the assumption that algorithms providing better answers explore more nodes, so to visualize all sets of explored edges we may assume in most cases that the set of edges explored by a worse algorithm are a subset of edges explored by a better algorithm, and then the user may assume, for instance, that all nodes painted in Blue were explored by the Magenta, Red and Pink algorithms.
 
+\subsection{Reduced graph}
+\texttt{./main reduced} allows to see the reduced version of the connected graph. This reduced graph was an early effort with the objective of rapidly finding the distance between any two nodes, by reducing the original graph by removing middle nodes in one-way and two-way roads.\par
+We were able to reduce the original graph (with $209774$ nodes and $386249$ edges) to a reduced graph with $42403$ nodes and $97249$ edges through an iterative process, a very significant decrease but nonetheless not enough to make it feasible to calculate the distance between all pairs of nodes in the reduced graph, even when using several threads (this operation would take an estimated $\SI{6}{min}$ to complete using a 12-thread CPU, which we considered to be excessive).
+
+\write18{ if [ ! -f BRxpvq4.png ] ; then curl https://i.imgur.com/BRxpvq4.png -o BRxpvq4.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.24]{BRxpvq4}
+    \caption[Map close-up of the reduced graph near Porto city centre]{Map close-up of the reduced graph near Porto city centre. Notice how \emph{Rotunda da Boavista} is drawn with the least amount of nodes possible, and how Freixo Bridge's lanes are not exactly paralell, since the two ways interface with other roads in the north end of the bridge using nodes that are relatively appart from each other.}
+\end{figure}
+
 \subsection{Rides}
 \texttt{./main ride FRACTION FLAGS RIDES NUM\_RIDES} allows to visualize ride number \texttt{NUM\_RIDES} from rides file \texttt{RIDES}. Roads traversed while performing this ride are coloured red, and the train station and places where clients are dropped are marked with black circles.
 

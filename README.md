@@ -167,6 +167,10 @@ Roads are coloured according to the following table:
 ./main path 1 255 41.1777 -8.598 41.1522 -8.6361
 ```
 
+#### Reduced
+
+`./main reduced` allows to see the reduced version of the connected graph. This reduced graph was an early effort with the objective of rapidly finding the distance between any two nodes, by reducing the original graph by removing middle nodes in one-way and two-way roads.
+
 #### Rides
 
 ```
