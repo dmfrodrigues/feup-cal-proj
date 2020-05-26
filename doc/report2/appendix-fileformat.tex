@@ -1,37 +1,35 @@
 \chapter{File formats} \label{appendix-fileformat}
 \section{Vans file}
 Vans files should have the \texttt{.vans} extension, and are organized like this:
-\\
-\\
-\texttt{[number of vans]}\\
-\texttt{[1st van license plate] [1st van capacity]}\\
-\texttt{[2nd van license plate] [2nd van capacity]}\\
-\texttt{...}
-
+\begin{lstlisting}[basewidth=0.5em]
+[number of vans]
+[1st van license plate] [1st van capacity]
+[2nd van license plate] [2nd van capacity]
+...
+\end{lstlisting}
 
 \section{Clients file}
 Clients files should have the \texttt{.clients} extension, and are organized like this:
-\\
-\\
-\texttt{[number of clients]}\\
-\texttt{[1st client name] [1st client VAT number] [1st client latitude] [1st client longitude] [1st client time to start request] [1st client is going to the station? 0 if not, 1 otherwise]}\\
-\texttt{[2nd client...]}\\
-\texttt{...}
-
+\begin{lstlisting}[basewidth=0.5em]
+[number of clients]
+[1st client name] [VAT] [latitude] [longitude] [pickup time] [1 going to station, 0 otherwise]
+[2nd client name] ...
+...
+\end{lstlisting}
 
 \section{Rides file}
 Rides files should have the \texttt{.rides} extension, and are organized like this:
-\\
-\\
-\texttt{[number of rides]}\\
-\texttt{[1st ride van license plate] [1st ride van capacity]}\\
-\texttt{[1st ride number of clients]}\\
-\texttt{[1st client...]}\\
-\texttt{...}\\
-\texttt{[1st ride number of events]}\\
-\texttt{[1st ride, 1st event time] [1st ride, 1st event type] [1st ride, 1st event client or node]}\\
-\texttt{[1st ride, 2nd event time] [1st ride, 2nd event type] [1st ride, 2nd event client or node]}\\
-\texttt{...}\\
-\texttt{[2nd ride van license plate] [2nd ride van capacity]}\\
-\texttt{...}
+\begin{lstlisting}[basewidth=0.5em]
+[number of rides]
+[1st ride van license plate] [1st ride van capacity]
+[1st ride number of clients]
+[1st client...]
+...
+[1st ride number of events]
+[1st ride, 1st event time] [1st ride, 1st event type] [1st ride, 1st event client or node]
+[1st ride, 2nd event time] [1st ride, 2nd event type] [1st ride, 2nd event client or node]
+...
+[2nd ride van license plate] [2nd ride van capacity]
+...
+\end{lstlisting}
 
