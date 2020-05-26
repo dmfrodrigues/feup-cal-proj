@@ -2,7 +2,6 @@
 
 #include "RoutingHeuristic.h"
 #include "Dijkstra.h"
-#include "ShortestPathAll.h"
 #include "HeldKarp.h"
 
 #include <fstream>
@@ -17,17 +16,20 @@ void Iteration1::run(){
     DWGraph::DWGraph G = getM()->getConnectedGraph();
 
     std::cout << "Getting shortest paths..." << std::endl;
+    const int nthreads = std::thread::hardware_concurrency();
+    std::cout << "    Using " << nthreads << " threads" << std::endl;
     std::unordered_set<node_t> nodes({getM()->getStationNode()});
     for(const auto &p: getClients()) nodes.insert(p.second);
-    ShortestPathAll::FromOneMany sp(new Dijkstra(), 8);
+    ShortestPathAll::FromOneMany sp(new Dijkstra(), nthreads);
     sp.initialize(&G, nodes);
     sp.run();
+    std::cout << "    Took " << sp.getStatistics().execution_time << " micros" << std::endl;
 
     std::cout << "Solving vehicle routing problem..." << std::endl;
     VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS, new HeldKarp());
-
     vrp->initialize(&getClients(), &getVans(), getM()->getStationNode(), &sp);
     vrp->run();
+    std::cout << "    Took " << vrp->getStatistics().execution_time << " micros" << std::endl;
 
     {
         std::vector< Ride > rides = vrp->getGroups();

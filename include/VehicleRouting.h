@@ -34,6 +34,9 @@ public:
      * 
      */
     virtual void run() = 0;
+
+    virtual statistics_t getStatistics() const = 0;
+
     virtual const std::vector< Ride >& getGroups() const = 0;
 };
 

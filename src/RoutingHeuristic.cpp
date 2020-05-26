@@ -6,6 +6,7 @@
 
 typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
+typedef std::chrono::high_resolution_clock hrc;
 
 class weight_func : public TravellingSalesman::weight_function {
 private:
@@ -52,6 +53,8 @@ void RoutingHeuristic::initialize(const std::list<std::pair<Client, node_t> > *c
 }
 
 void RoutingHeuristic::run(){
+    auto start_time = hrc::now();
+
     rides.clear();
     while(!clients.empty()){
         Ride r;
@@ -103,6 +106,13 @@ void RoutingHeuristic::run(){
 
         vans.push(v);
     }
+
+    auto finish_time = hrc::now();
+    stats.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+}
+
+statistics_t RoutingHeuristic::getStatistics() const{
+    return stats;
 }
 
 const std::vector< Ride >& RoutingHeuristic::getGroups() const{

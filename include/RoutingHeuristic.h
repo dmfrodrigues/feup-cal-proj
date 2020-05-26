@@ -26,6 +26,7 @@ private:
     min_priority_queue vans;
     const ShortestPathAll *shortestPaths = nullptr;
     std::vector<Ride> rides;
+    statistics_t stats;
 public:
     /**
      * @brief Construct from Delta and Travelling Salesman arguments 
@@ -50,6 +51,9 @@ public:
      * 
      */
     void run();
+
+    statistics_t getStatistics() const;
+
     const std::vector< Ride >& getGroups() const;
 };
 
