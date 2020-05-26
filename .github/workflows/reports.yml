@@ -20,3 +20,6 @@ jobs:
     - name: report2
       run: |
         make report_delivery2.pdf
+
+    - name: testzip
+      run: make testzip
