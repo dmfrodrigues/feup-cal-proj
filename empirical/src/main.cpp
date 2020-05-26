@@ -169,14 +169,15 @@ int main(){
     {
         DWGraph::DWGraph graph = M.getConnectedGraph();
         std::unordered_map<DWGraph::node_t, coord_t> nodes = M.getNodes();
+        const auto &connected_nodes = graph.getNodes();
         std::cout << "Running A*\n";
         int tries = 0;
         std::map<DWGraph::weight_t, long long> distancesAndTimes;
         std::map<DWGraph::weight_t, int> nValuesInserted;
         while(distancesAndTimes.size() < 108){
             std::cout << tries << "\n"; tries++;
-            auto src = nodes.begin(); std::advance(src, rand() % nodes.size()); DWGraph::node_t srcN = src->first;
-            auto dst = nodes.begin(); std::advance(dst, rand() % nodes.size()); DWGraph::node_t dstN = dst->first;
+            auto src = connected_nodes.begin(); std::advance(src, rand() % connected_nodes.size()); DWGraph::node_t srcN = *src;
+            auto dst = connected_nodes.begin(); std::advance(dst, rand() % connected_nodes.size()); DWGraph::node_t dstN = *dst;
 
             Astar as(new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
             as.initialize(&graph, srcN, dstN);

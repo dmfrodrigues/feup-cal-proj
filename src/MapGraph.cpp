@@ -79,7 +79,8 @@ MapGraph::speed_t MapGraph::way_t::getRealSpeed() const{
 
 MapGraph::MapGraph(const std::string &path){
     {
-        std::ifstream is(path + ".nodes");
+        std::ifstream is; is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        is.open(path + ".nodes");
         size_t numberNodes; is >> numberNodes;
         for(size_t i = 0; i < numberNodes; ++i){
             coord_t::deg_t lat, lon;
@@ -90,7 +91,8 @@ MapGraph::MapGraph(const std::string &path){
         }
     }
     {
-        std::ifstream is(path + ".edges");
+        std::ifstream is; is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        is.open(path + ".edges");
         size_t numberWays; is >> numberWays; 
         for(size_t i = 0; i < numberWays; ++i){
             way_t way; char c;
@@ -117,7 +119,8 @@ MapGraph::MapGraph(const std::string &path){
     fullGraph = getFullGraph();
     {
         coord_t station_coord; {
-            std::ifstream is(path + ".points");
+            std::ifstream is; is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+            is.open(path + ".points");
             size_t numberPoints; is >> numberPoints;
             is >> station_coord;
         }
