@@ -1,6 +1,12 @@
 \documentclass{report}[a4paper]
 \usepackage[top=35mm,bottom=35mm,left=25mm,right=25mm]{geometry} % Margins
 
+% Do not put extra space between figures of different chapters in the list of figures
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{}
+\makeatother
+
 % Decent underlines
 \usepackage[normalem]{ulem}
 
@@ -167,7 +173,6 @@ Class 6, group 5 \vspace{0.5em} \\
 \maketitle
 \setcounter{tocdepth}{2}
 \tableofcontents
-\makeatletter\def\ttl@tocsep{}\makeatother
 \listoffigures
 \listofalgorithms
 \clearpage
