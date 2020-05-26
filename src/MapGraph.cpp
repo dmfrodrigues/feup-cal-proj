@@ -251,6 +251,11 @@ DWGraph::node_t MapGraph::getClosestNode(coord_t c) const{
     return node;
 }
 
+std::unordered_map<DWGraph::node_t, coord_t> MapGraph::getNodes() const{
+    return nodes;
+}
+
+
 const std::unordered_map<edge_type_t, MapGraph::Display> MapGraph::display_map = {
     {edge_type_t::MOTORWAY      , Display::MOTORWAY   },
     {edge_type_t::MOTORWAY_LINK , Display::MOTORWAY   },

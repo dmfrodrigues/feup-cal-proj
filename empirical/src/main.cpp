@@ -27,6 +27,9 @@ typedef std::vector<weight_t> VI;
 typedef std::vector<VI> VVI;
 typedef std::chrono::high_resolution_clock hrc;
 
+#define SECONDS_TO_MICROS       1000000     // Convert seconds to milliseconds
+#define KMH_TO_MS               (1.0/3.6)   // Convert km/h to m/s
+
 class weight_matrix : public TravellingSalesman::weight_function {
 private:
     const VVI &M;
@@ -34,6 +37,21 @@ public:
     weight_matrix(const VVI &M_):M(M_){}
     DWGraph::weight_t operator()(const std::unordered_multiset<DWGraph::node_t> &S, const DWGraph::node_t &u, const DWGraph::node_t &v) const{
         return M.at(u).at(v);
+    }
+};
+
+class MapGraph::DistanceHeuristic : public Astar::heuristic_t{
+private:
+    const std::unordered_map<node_t, coord_t> &nodes;
+    coord_t dst_pos;
+    double factor;
+public:
+    DistanceHeuristic(const std::unordered_map<node_t, coord_t> &nodes_,
+                      coord_t dst_pos_,
+                      double factor_): nodes(nodes_), dst_pos(dst_pos_), factor(factor_){}
+    weight_t operator()(node_t u) const{
+        auto d = coord_t::getDistanceSI(dst_pos, nodes.at(u));
+        return weight_t(d*factor);
     }
 };
 
@@ -48,7 +66,7 @@ int main(){
 
     for (auto g : generators) g.run();
     std::cout << "Populated!\n";
-
+/*
     {
         std::cout << "Running Kosaraju on graphs...\n";
         std::vector<std::pair<int, long long>> kosarajuTimes;
@@ -144,10 +162,38 @@ int main(){
         ofs << "Held-Karp\n";
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
-
+*/
 
     MapGraph M("../map/processed/AMP");
 
+    {
+        DWGraph::DWGraph graph = M.getConnectedGraph();
+        std::unordered_map<DWGraph::node_t, coord_t> nodes = M.getNodes();
+        std::cout << "Running A*\n";
+        int tries = 0;
+        std::map<DWGraph::weight_t, long long> distancesAndTimes;
+        std::map<DWGraph::weight_t, int> nValuesInserted;
+        while(distancesAndTimes.size() < 108){
+            std::cout << tries << "\n"; tries++;
+            auto src = nodes.begin(); std::advance(src, rand() % nodes.size()); DWGraph::node_t srcN = src->first;
+            auto dst = nodes.begin(); std::advance(dst, rand() % nodes.size()); DWGraph::node_t dstN = dst->first;
+
+            Astar as(new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
+            as.initialize(&graph, srcN, dstN);
+            as.run();
+            DWGraph::weight_t dist = as.getPath().size(); if(dist == 0) continue;
+            long long time = as.getStatistics().execution_time;
+            
+            if (!nValuesInserted.insert(std::make_pair<DWGraph::weight_t&, int>(dist, 1)).second) nValuesInserted[dist]++;
+            if (!distancesAndTimes.insert(std::make_pair<DWGraph::weight_t&, long long&>(dist, time)).second) distancesAndTimes[dist] += time;
+        }
+        
+        std::cout << "Outputing to file\n";
+        ofs << "A*\n";
+        for (std::pair<DWGraph::weight_t, long long> pair : distancesAndTimes) ofs << pair.first << "," << pair.second / nValuesInserted[pair.first] << ",\n";
+    }
+
+/*
     {
         std::cout << "Running 1st Iteration analysis\n";
         std::vector<int> sizes = {1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000};
@@ -263,6 +309,7 @@ int main(){
         ofs << "VStripes Delta varying Iteration\n";
         for (std::pair<double, long long> pair : vStripesDeltasIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
+*/
 
     ofs.close();
     return 0;

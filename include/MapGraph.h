@@ -65,6 +65,7 @@ public:
     DWGraph::DWGraph getConnectedGraph() const;
     DWGraph::DWGraph getReducedGraph() const;
     DWGraph::node_t getClosestNode(coord_t c) const;
+    std::unordered_map<DWGraph::node_t, coord_t> getNodes() const;
     void drawRoads (int fraction, int display) const;
     void drawSpeeds(int fraction, int display) const;
     void drawSCC   (int fraction, int display) const;
