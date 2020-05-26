@@ -89,19 +89,6 @@ int main(){
         for (std::pair<int, long long> pair : kosarajuTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
     
-
-    // std::cout << "Running A* on graphs...\n";
-    // std::vector<std::pair<int, long long>> astarTimes;
-    // for (size_t i = 0 ; i < sizes.size() ; ++i) {
-    //     ShortestPath *shortestPath = new Astar();
-    //     shortestPath->initialize(generators.at(i).getDWGraph(), 1, 6); <- Pick u and v
-    //     shortestPath->run();
-    //     astarTimes.push_back(std::make_pair(sizes.at(i),shortestPath->getStatistics().execution_time));
-    // }
-    // std::cout << "Outputing to file\n";
-    // std::cout << "A*\n";
-    // for (std::pair<int, long long> pair : astarTimes) ofs << pair.first << "," << pair.second << ",\n";
-
     {
         std::cout << "Running Dijkstra\n";
         std::vector<std::pair<int, long long>> dijkstraTimes;
@@ -174,7 +161,7 @@ int main(){
         int tries = 0;
         std::map<DWGraph::weight_t, long long> distancesAndTimes;
         std::map<DWGraph::weight_t, int> nValuesInserted;
-        while(distancesAndTimes.size() < 108){
+        while(distancesAndTimes.size() < 200){
             std::cout << tries << "\n"; tries++;
             auto src = connected_nodes.begin(); std::advance(src, rand() % connected_nodes.size()); DWGraph::node_t srcN = *src;
             auto dst = connected_nodes.begin(); std::advance(dst, rand() % connected_nodes.size()); DWGraph::node_t dstN = *dst;
