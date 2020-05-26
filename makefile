@@ -1,4 +1,5 @@
 PROG   =main
+GROUP  =CAL1920_Turma6_G5
 all: $(PROG) data
 
 FORCE:
@@ -101,9 +102,35 @@ cleanall:
 	make -C utils clean
 	make -C map clean
 	make -C GraphViewer clean
+	git clean -dfX
 
 test: $(TEXE)
 	$(TEXE)
 
 $(TEXE): $(PROG) $(TDIR)/test.cpp $(LREQUIREMENTS)
 	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(TDIR)/test.cpp -o $(TEXE) $(LFLAGS)
+
+# Create zip file to submit
+zip: cleanall report_delivery2.pdf
+	git clean doc -dfX
+	git submodule update --init --recursive
+	git lfs fetch --all
+	zip --symlinks $(GROUP).zip -r algorithms doc empirical GraphViewer include map resources src structures test utils makefile README.md
+
+report_delivery1.pdf: FORCE
+	cd doc/report1 && latexmk --shell-escape report_delivery1.tex -pdf
+	mv doc/report1/report_delivery1.pdf .
+
+report_delivery2.pdf: FORCE
+	cd doc/report2 && latexmk --shell-escape report_delivery2.tex -pdf
+	mv doc/report2/report_delivery2.pdf .
+
+DEST=~/Documents
+
+# Test zip file to submit
+testzip: zip
+	rm -rf $(DEST)/$(GROUP)
+	unzip $(GROUP).zip -d $(DEST)
+	make -C $(DEST)/$(GROUP)/ test
+	rm -rf $(DEST)/$(GROUP)
+

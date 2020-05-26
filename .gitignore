@@ -34,3 +34,4 @@ generator
 .~lock.results.csv#
 empirical/GenerateEmpirical
 empirical/GraphGenerator
+*.zip
