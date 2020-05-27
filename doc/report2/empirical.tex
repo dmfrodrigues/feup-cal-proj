@@ -2,17 +2,20 @@
 
 
 \write18{ if [ ! -f gr6N6Ap.png ] ; then curl https://i.imgur.com/gr6N6Ap.png -o gr6N6Ap.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{gr6N6Ap}
-    \caption{\hyperref[algorithm-shortestpath-dijkstra]{Dijkstra's algorithm} empirical complexity}
-\end{figure}
-
 \write18{ if [ ! -f b6wY2NU.png ] ; then curl https://i.imgur.com/b6wY2NU.png -o b6wY2NU.png ; fi ; }
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{b6wY2NU}
-    \caption{\hyperref[algorithm-shortestpath-astar]{A* algorithm} empirical complexity}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{gr6N6Ap}
+        % \caption{\hyperref[algorithm-shortestpath-dijkstra]{Dijkstra's algorithm}}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{b6wY2NU}
+        % \caption{\hyperref[algorithm-shortestpath-astar]{A* algorithm}}
+    \end{subfigure}
+    \caption{Shortest path algorithms empirical complexity}
 \end{figure}
 
 \write18{ if [ ! -f vcDppRN.png ] ; then curl https://i.imgur.com/vcDppRN.png -o vcDppRN.png ; fi ; }
@@ -23,20 +26,31 @@
 \end{figure}
 
 \write18{ if [ ! -f ahcy7lO.png ] ; then curl https://i.imgur.com/ahcy7lO.png -o ahcy7lO.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{ahcy7lO}
-    \caption{\hyperref[algorithm-vstripes]{Vertical stripes algorithm} empirical complexity, varying number of points ($\Delta$ = 0.025)}
-\end{figure}
-
 \write18{ if [ ! -f G0umKaD.png ] ; then curl https://i.imgur.com/G0umKaD.png -o G0umKaD.png ; fi ; }
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{G0umKaD}
-    \caption{\hyperref[algorithm-vstripes]{Vertical stripes algorithm} empirical complexity with $\Delta$ variation (number of nodes = 1000000).}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{ahcy7lO}
+        \caption{Varying number of points ($\Delta$ = 0.025)}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{G0umKaD}
+        \caption{Varying $\Delta$ (number of nodes = 1000000)}
+    \end{subfigure}
+    \caption{\hyperref[algorithm-vstripes]{Vertical stripes algorithm} empirical complexity}
 \end{figure}
 
 These results show that the impact of the $\Delta$ factor is negligible in the time complexity of the VStripes algorithm on sets of nodes of considerable size (i.e. 1000000).
+
+\write18{ if [ ! -f CInL9tQ.png ] ; then curl https://i.imgur.com/CInL9tQ.png -o CInL9tQ.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{CInL9tQ}
+    \caption{\hyperref[algorithm-vstripes]{Vertical stripes queries} empirical complexity}
+\end{figure}
+
 
 \write18{ if [ ! -f yQHAGxj.png ] ; then curl https://i.imgur.com/yQHAGxj.png -o yQHAGxj.png ; fi ; }
 \begin{figure}[H]
@@ -52,12 +66,12 @@ These results show that the impact of the $\Delta$ factor is negligible in the t
     \begin{subfigure}{0.49\textwidth}
         \centering
         \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{tcMr14Z}
-        \caption{\hyperref[iterations-1]{1st iteration}}
+        % \caption{\hyperref[iterations-1]{1st iteration}}
     \end{subfigure}
     \begin{subfigure}{0.49\textwidth}
         \centering
         \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{aabSfZF}
-        \caption{\hyperref[iterations-2]{2nd iteration}}
+        % \caption{\hyperref[iterations-2]{2nd iteration}}
     \end{subfigure}
     \caption{\hyperref[iterations]{Implemented iterations}' empirical complexity}
 \end{figure}
