@@ -16,6 +16,8 @@ public:
      */
     class heuristic_t {
     public:
+        virtual ~heuristic_t();
+
         /**
          * @brief Heuristic Function 
          * 

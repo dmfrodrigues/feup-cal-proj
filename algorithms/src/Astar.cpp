@@ -16,6 +16,8 @@ typedef std::priority_queue<std::pair<weight_t, node_t>,
 typedef std::chrono::high_resolution_clock hrc;
 #define mk(a, b) (std::make_pair((a), (b)))
 
+Astar::heuristic_t::~heuristic_t(){}
+
 Astar::default_heuristic::default_heuristic(){}
 
 const Astar::default_heuristic Astar::h_default;

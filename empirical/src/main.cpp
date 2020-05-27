@@ -168,12 +168,12 @@ int main(){
             DWGraph::node_t srcN = connected_nodes[rand() % connected_nodes.size()];
             DWGraph::node_t dstN = connected_nodes[rand() % connected_nodes.size()];
 
-            Astar::heuristic_t *w = new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS))
+            Astar::heuristic_t *w = new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS));
             ShortestPath *sp = new Astar(w);
-            as->initialize(&graph, srcN, dstN);
-            as->run();
-            DWGraph::weight_t dist = as.getPathWeight(); if(dist == 0) continue;
-            long long time = as.getStatistics().execution_time;
+            sp->initialize(&graph, srcN, dstN);
+            sp->run();
+            DWGraph::weight_t dist = sp->getPathWeight(); if(dist == 0) continue;
+            long long time = sp->getStatistics().execution_time;
             if (!nValuesInserted.insert(std::make_pair<DWGraph::weight_t&, int>(dist, 1)).second) nValuesInserted[dist]++;
             if (!distancesAndTimes.insert(std::make_pair<DWGraph::weight_t&, long long&>(dist, time)).second) distancesAndTimes[dist] += time;
         
@@ -252,8 +252,8 @@ int main(){
         std::cout << "Running VStripes analysis (Varying nodes)\n";
         std::cout << "Generating grids...\n";
         std::vector<std::list<coord_t>> grids;
-        std::vector<int> sizes = {2, 4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000};
-        for (int size : sizes){
+        std::vector<size_t> sizes = {2, 4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000};
+        for (size_t size : sizes){
             std::list<coord_t> x;
             for(size_t i = 0 ; i < size ; ++i)
                 for (size_t j = 0 ; j < size ; ++j)
@@ -282,10 +282,10 @@ int main(){
 
         std::cout << "Running delta analysis\n";
 
-        std::list<coord_t> grid = grids.at(6);
+        std::list<coord_t> grid = grids.at(14);
         std::vector<coord_t::deg_t> deltas = {0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.2, 0.25};
         std::vector<std::pair<double, long long>> vStripesDeltasIterationTimes;
-        for (size_t i = 0 ; i < sizes.size() ; ++i){
+        for (size_t i = 0 ; i < deltas.size() ; ++i){
             std::cout << deltas.at(i) << std::endl;
             VStripes vs(deltas.at(i));
             auto start_time = hrc::now();
