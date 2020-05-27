@@ -8,7 +8,7 @@
         \Function{DFS}{$G(V,E)$, $u$}
             \If {$u \in D$} \Return {$ $}
             \EndIf 
-            \State {$D \gets D \cap \{u\}$}
+            \State {$D \gets D \cup \{u\}$}
             \For {$v \in \Call{Adj}{G, u}$} {$\Call{DFS}{G, v}$}
             \EndFor
             \State \Return $D$
@@ -17,18 +17,18 @@
 \end{algorithm}
 \subsubsection{Proof of correctness}
 \begin{lemma} \label{lem:dfs}
-    If $s \leadsto u$ and $v \in Adj(G, u)$, then $s \leadsto v$.
+    If $s \leadsto u$ and $v \in Adj(u)$, then $s \leadsto v$.
 \end{lemma}
 \begin{proof}
     If $s \leadsto u$, then $\exists p \in P_G \colon p_1 = s \wedge p_{|p|} = u$; let that path be $p^u$.\par
-    If $v \in Adj(G, u)$ then $p^v \coloneqq \langle p^u, v \rangle = \langle p^u_1, p^u_2,...,p^u_{|p^u|}, v\rangle$ is either a valid path (thus $s \leadsto v$ because of $p^v$), or an invalid path which means $p^u_j = v$ for some $j$, in which case $s \leadsto v$ because of $p^u[1:j]$.
+    If $v \in Adj(u)$ then $p^v \coloneqq \langle p^u, v \rangle = \langle p^u_1, p^u_2,...,p^u_{|p^u|}, v\rangle$ is either a valid path (thus $s \leadsto v$ because of $p^v$), or an invalid path which means $p^u_j = v$ for some $j$, in which case $s \leadsto v$ because of $p^u[1:j]$.
 \end{proof}
 \vspace{2em}
 \begin{theorem} \label{teor:dfs}
     \Acrlong*{DFS} algorithm starting in $s$ finds all nodes reachable from $s$.
 \end{theorem}
 \begin{proof} \textbf{Base case:} $u=s$; $s$ is trivially reachable from itself. \\
-\textbf{Inductive step:} assume \textsc{DFS} is always called for a node $u \colon s \leadsto u$. Thus, by lemma \ref{lem:dfs} we know $\forall v \in Adj(G,u), s \leadsto v$. Since \textsc{DFS} is only called for the nodes in $Adj(G,u)$, the inductive implication holds.\par
+\textbf{Inductive step:} assume \textsc{DFS} is always called for a node $u \colon s \leadsto u$. Thus, by lemma \ref{lem:dfs} we know $\forall v \in Adj(u), s \leadsto v$. Since \textsc{DFS} is only called for the nodes in $Adj(u)$, the inductive implication holds.\par
 We have thus proven the theorem correct by induction.
 \end{proof}
 \subsubsection{Complexity analysis}

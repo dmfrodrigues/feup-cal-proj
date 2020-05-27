@@ -16,9 +16,7 @@ To solve the first problem, we believe adding some conditions to the TSP/VRP sol
 As for the second problem, priority will be given to clients with reservation, meaning a client without reservation will be assigned to one of the vans in the train station at the time of his/her arrival (or the next van that arrives to the station, in case all vans are travelling at the time that client arrives). Additionally, that client will only be accepted if it meets the two following conditions: the van is still able to execute its following travels and the client doesn't add more than a certain time (around $\SI{10}{min}$) to the trip that van was going to make. If there is a van not in a route at that time and that can transport that client while being able to still execute the posterior travels, then a new route is created only for that passenger.\par
 If the client has to wait for more than a certain time limit (maybe $\SI{1}{h}$), he/she is ultimately rejected.
 \section{Path-finding} \label{problem-decomposition-pathfinding}
-We will take advantage of the hierarchical difference between $G$ and $G'$ to make path-finding faster.\par
-Since $G'$ is not too large, we can pre-calculate distances between all pairs of nodes in $G'$.
-Then, all we have to do is find the two nodes on the ends of the origin's street, and the two nodes on the ends of the destination's street, and try out all the four possibilities.
+We will use the algorithms listed in section \ref{algorithm-shortestpath} to solve the different path-finding problems.
 \section{\texorpdfstring{\Acrlong*{TSP}}{Travelling salesman problem}} \label{problem-decomposition-tsp}
 This problem is more thoroughly described in section \ref{algorithm-tsp}.
 \section{\texorpdfstring{\Acrlong*{VRP}}{Vehicle routing problem}} \label{problem-decomposition-vrp}
