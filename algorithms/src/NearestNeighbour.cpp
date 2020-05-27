@@ -17,21 +17,19 @@ void NearestNeighbour::initialize(const std::list<DWGraph::node_t> *nodes_, DWGr
     this->path.clear();
     this->visited.clear();
     this->unvisited = std::unordered_multiset<node_t>(nodes->begin(), nodes->end());
-
-    this->path.push_back(this->s);
 }
 
 void NearestNeighbour::run() {
     auto start_time = hrc::now();
 
-    node_t currentNode = this->s;
+    node_t u = s;
+    path.push_back(u);
 
     for (size_t i = 0; i < nodes->size() - 1; ++i) {
-        node_t u = findClosest(currentNode);
-        path.push_back(u);
         visited.insert(u);
         unvisited.erase(unvisited.find(u));
-        currentNode = u;
+        u = findClosest(u);
+        path.push_back(u);
     }
     // back to the starting node
     this->path.push_back(this->s);
@@ -45,7 +43,7 @@ node_t NearestNeighbour::findClosest(node_t u) {
     node_t ret = DWGraph::INVALID_NODE;
     weight_t c = DWGraph::INF;
 
-    for (const node_t &v: *nodes) { if(v == u || v == s) continue;       // node cannot be the starting node (s)
+    for (const node_t &v: *nodes) {
         if (unvisited.count(v)) {                                        // and must not have yet been visited
             weight_t c_ = w->operator()(visited, u, v);
             if (c_ < c) {
@@ -55,7 +53,6 @@ node_t NearestNeighbour::findClosest(node_t u) {
         }
     }
     if(ret == DWGraph::INVALID_NODE){
-        for(const node_t &u: *nodes) std::cout << u << std::endl;
         throw std::logic_error("no closest node to " + std::to_string(u));
     }
     return ret;
