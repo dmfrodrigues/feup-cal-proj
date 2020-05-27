@@ -7,13 +7,14 @@ This algorithm follows the recurrence adapted from \cite{intro-alg}:
 
 \begin{equation}
     dist(i,j)^{(k)}=\begin{dcases}
-        \infty                                                         &: k=0 \wedge (i,j) \not \in E \\
-        w(i,j)                                                         &: k=0 \wedge (i,j) \in E\\
-        \min\{dist(i,j)^{(k-1)}, dist(i,k)^{(k-1)} + dist(k,j)^{(k-1)}\}, &: k \geq 1
+        0                                                                &: i=j \\
+        \infty                                                           &: k=0 \wedge (i,j) \not \in E \\
+        w(i,j)                                                           &: k=0 \wedge (i,j) \in E\\
+        \min\{dist(i,j)^{(k-1)}, dist(i,k)^{(k-1)} + dist(k,j)^{(k-1)}\} &: k \geq 1
     \end{dcases}
 \end{equation}
 
-The base case corresponds to $k=0$ where $dist(i, j)^{(0)}$ is the value of the edge if it exists (or $\infty$ otherwise) that connects those two vertices.
+The base cases are $k=0$, where $dist(i, j)^{(0)}$ is the value of the edge from $i$ to $j$ if it exists (or $\infty$ otherwise).
 Otherwise, the length of the shortest path from $i$ to $j$ is the least of the length of the path without considering the vertex labeled as $k$,
 or the length of the shortest path from $i$ to $j$ via $k$ (i.e., from $i$ to $k$ and from $k$ to $j$).\par
 
@@ -48,8 +49,8 @@ or the length of the shortest path from $i$ to $j$ via $k$ (i.e., from $i$ to $k
 \end{algorithm}
 
 \subsubsection{Complexity analysis}
-By comparing every path of the graph between each pair of vertices, the Floyd-Warshall algorithm has a time complexity of $O(|V|^3)$ due not only to the three nested $for$ loops but also to the fact all elementary operations having $O(1)$ run time.\par
-When it comes to memory, by creating $k$ matrices, one for each iteration of the outer-most \textbf{for} loop, it takes up $O(|V|^3)$. This can be reduced to $O(|V|^2)$ if, on processing $dist^{(k)}$, we only hold the previous matrix $dist^{(k-1)}$, or we can even reduce it in half if we always perform updates over the same matrix, thus making unnecessary to hold the previous matrix.
+By comparing every path of the graph between each pair of vertices, the Floyd-Warshall algorithm has a time complexity of $O(|V|^3)$ due not only to the three nested \textbf{for} loops but also to the fact all elementary operations having $O(1)$ run time.\par
+When it comes to memory, by creating $k$ matrices, one for each iteration of the outer-most \textbf{for} loop, it takes up $O(|V|^3)$. This can be reduced to $O(|V|^2)$ if, on processing $dist^{(k)}$, we only hold $dist^{(k-1)}$. We can even halve it by always updating the same matrix, making the previous matrix unnecessary.
 
 \subsubsection{Remarks}
-The added flexibility of working with negative-weight edges is not particularly useful in our case, since the time it takes to travel between two places must be equal to (should the two positions be the same) or greater than zero. Besides, Dijkstra's algorithm can produce the same result in time $O(|V|^2 \log {|V|})$.
+The added flexibility of working with negative-weight edges is not particularly useful in our case, since the time it takes to travel between two places must be non-negative. Besides, Dijkstra's algorithm can produce the same result in time $O(|V|(|E|+|V|)\log {|V|})$, or $O(|V|^2 \log |V|)$ if the graph is sparse as is the case.

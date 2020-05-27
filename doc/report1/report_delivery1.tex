@@ -1,6 +1,12 @@
 \documentclass{report}[a4paper]
 \usepackage[top=35mm,bottom=35mm,left=25mm,right=25mm]{geometry} % Margins
 
+% Do not put extra space between figures of different chapters in the list of figures
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{}
+\makeatother
+
 % Decent underlines
 \usepackage[normalem]{ulem}
 
@@ -25,6 +31,7 @@
 %\usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+\usepackage{listings}
 
 % Tables with bold rows
 \usepackage{tabularx}
@@ -44,6 +51,7 @@
 % \usepackage{xcolor}
 \newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}} % scientific notation
 \usepackage{siunitx} %SI units
+\newcommand{\degree}{^{\circ}}
 
 % Definitions, theorems, remarks,...
 \usepackage{amsthm}
@@ -165,6 +173,7 @@ Class 6, group 5 \vspace{0.5em} \\
 \maketitle
 \setcounter{tocdepth}{2}
 \tableofcontents
+\listoffigures
 \listofalgorithms
 \clearpage
 \printglossary[type=\acronymtype]
