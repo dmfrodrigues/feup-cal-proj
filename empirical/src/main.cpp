@@ -66,7 +66,7 @@ int main(){
 
     for (auto g : generators) g.run();
     std::cout << "Populated!\n";
-    /*
+    
     {
         std::cout << "Running Kosaraju on graphs...\n";
         std::vector<std::pair<int, long long>> kosarajuTimes;
@@ -150,22 +150,23 @@ int main(){
         ofs << "Held-Karp\n";
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
-    */
+    
 
     MapGraph M("../map/processed/AMP");
-    /*
+    
     {
         DWGraph::DWGraph graph = M.getConnectedGraph();
         std::unordered_map<DWGraph::node_t, coord_t> nodes = M.getNodes();
-        const auto &connected_nodes = graph.getNodes();
+        const std::vector<node_t> connected_nodes(graph.getNodes().begin(), graph.getNodes().end());
         std::cout << "Running A*\n";
         int tries = 0;
         std::map<DWGraph::weight_t, long long> distancesAndTimes;
         std::map<DWGraph::weight_t, int> nValuesInserted;
         while(distancesAndTimes.size() < 500){
             std::cout << tries << "\n"; tries++;
-            auto src = connected_nodes.begin(); std::advance(src, rand() % connected_nodes.size()); DWGraph::node_t srcN = *src;
-            auto dst = connected_nodes.begin(); std::advance(dst, rand() % connected_nodes.size()); DWGraph::node_t dstN = *dst;
+
+            DWGraph::node_t srcN = connected_nodes[rand() % connected_nodes.size()];
+            DWGraph::node_t dstN = connected_nodes[rand() % connected_nodes.size()];
 
             Astar as(new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
             as.initialize(&graph, srcN, dstN);
@@ -174,6 +175,7 @@ int main(){
             long long time = as.getStatistics().execution_time;
             
             if (!nValuesInserted.insert(std::make_pair<DWGraph::weight_t&, int>(dist, 1)).second) nValuesInserted[dist]++;
+
             if (!distancesAndTimes.insert(std::make_pair<DWGraph::weight_t&, long long&>(dist, time)).second) distancesAndTimes[dist] += time;
         }
         
@@ -212,7 +214,7 @@ int main(){
         for (std::pair<int, long long> pair : firstIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
         remove("r.rides");
     }
-    */
+    
     {
         std::cout << "Running 2nd Iteration analysis\n";
         std::vector<int> sizes = {2, 4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000};
