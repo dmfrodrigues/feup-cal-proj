@@ -66,7 +66,7 @@ int main(){
 
     for (auto g : generators) g.run();
     std::cout << "Populated!\n";
-    
+ /*   
     {
         std::cout << "Running Kosaraju on graphs...\n";
         std::vector<std::pair<int, long long>> kosarajuTimes;
@@ -151,9 +151,8 @@ int main(){
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
     
-
     MapGraph M("../map/processed/AMP");
-    
+
     {
         DWGraph::DWGraph graph = M.getConnectedGraph();
         std::unordered_map<DWGraph::node_t, coord_t> nodes = M.getNodes();
@@ -247,12 +246,12 @@ int main(){
         for (std::pair<int, long long> pair : secondIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
         remove("r.rides");
     }
-
+*/
     {
-        std::cout << "Running VStripes analysis (Varying nodes)\n";
+        std::cout << "Running VStripes init analysis\n";
         std::cout << "Generating grids...\n";
         std::vector<std::list<coord_t>> grids;
-        std::vector<size_t> sizes = {2, 4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000};
+        std::vector<size_t> sizes = {2, 4, 6, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 125, 150, 175, 200, 250, 300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 520, 540, 560, 580, 600, 620, 640, 660, 680, 700, 720, 740, 760, 780, 800, 820, 840, 860, 880, 900, 920, 940, 960, 980, 1000};
         for (size_t size : sizes){
             std::list<coord_t> x;
             for(size_t i = 0 ; i < size ; ++i)
@@ -260,7 +259,9 @@ int main(){
                     x.push_back(coord_t(static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/41.3112)) + 41.0055 , static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/8.4925)) + 8.7523 - 10));
             grids.push_back(x);
         }
-        std::cout << "Running node analysis\n";
+
+        /*
+        std::cout << "Node varying\n";
 
         std::vector<std::pair<int, long long>> VStripesNodesIterationTimes;
         for (size_t i = 0 ; i < sizes.size() ; ++i){
@@ -278,9 +279,28 @@ int main(){
         std::cout << "Outputing to file\n";
         ofs << "VStripes Node varying Iteration\n";
         for (std::pair<int, long long> pair : VStripesNodesIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
+*/
 
-
-        std::cout << "Running delta analysis\n";
+        std::cout << "Query times\n";
+        
+        std::vector<std::pair<int, double>> VStripesQueryTimes;
+        for (size_t i = 0 ; i < sizes.size() ; ++i){
+            std::cout << sizes.at(i) << std::endl;
+            VStripes vs(0.025);
+            vs.initialize(grids.at(i));
+            vs.run();
+            coord_t point(static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/41.3112)) + 41.0055 , static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/8.4925)) + 8.7523 - 10);
+            auto start_time = hrc::now();
+            for (long j = 0 ; j < 1000000 ; j++) vs.getClosestPoint(point);
+            auto finish_time = hrc::now();
+            long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            VStripesQueryTimes.push_back(std::make_pair(sizes.at(i)*sizes.at(i), (double)execution_time/1000000));
+        }
+        std::cout << "Outputing to file\n";
+        ofs << "VStripes Query Iteration\n";
+        for (std::pair<int, double> pair : VStripesQueryTimes) ofs << pair.first << "," << pair.second << ",\n";
+/*
+        std::cout << "Delta varying\n";
 
         std::list<coord_t> grid = grids.at(14);
         std::vector<coord_t::deg_t> deltas = {0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.2, 0.25};
@@ -300,7 +320,9 @@ int main(){
         std::cout << "Outputing to file\n";
         ofs << "VStripes Delta varying Iteration\n";
         for (std::pair<double, long long> pair : vStripesDeltasIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
+        */
     }
+
 
     ofs.close();
     return 0;
