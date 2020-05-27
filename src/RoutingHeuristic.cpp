@@ -62,11 +62,11 @@ void RoutingHeuristic::run(){
         std::pair<weight_t, Van> v = vans.top(); vans.pop();
         r.setVan(v.second);
 
-        weight_t start_time = std::max(v.first, clients.front().first.getArrival());
-        weight_t leave_station_time = start_time;
+        weight_t start_ride_time = std::max(v.first, clients.front().first.getArrival());
+        weight_t leave_station_time = start_ride_time;
         std::list<node_t> nodes; nodes.push_back(station);
         while(r.getClients().size() < v.second.getCapacity() &&
-              !clients.empty() && clients.front().first.getArrival() < start_time+Dt){
+              !clients.empty() && clients.front().first.getArrival() < start_ride_time+Dt){
             auto c = clients.front(); clients.pop();
             r.addClient(c.first);
             nodes.push_back(c.second);

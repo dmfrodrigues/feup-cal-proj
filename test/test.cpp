@@ -361,7 +361,7 @@ TEST_CASE("Held-Karp algorithm", "[tsp-heldkarp]"){
     REQUIRE(std::list<DWGraph::node_t>({0, 2, 3, 1, 0}) == path);
     std::vector<DWGraph::node_t> v(path.begin(), path.end());
     DWGraph::weight_t total_weight = 0;
-    for(int i = 1; i < v.size(); ++i) total_weight += w({}, v[i-1], v[i]);
+    for(size_t i = 1; i < v.size(); ++i) total_weight += w({}, v[i-1], v[i]);
     REQUIRE(total_weight == 21);
 
     tsp->initialize(&nodes, 1, &w); tsp->run();

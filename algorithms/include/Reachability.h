@@ -9,6 +9,8 @@
  */
 class Reachability{
 public:
+    virtual ~Reachability();
+    
     /**
      * @brief Initializes the Directed Unweighted Graph and the starting data members required by the algorithm
      * 

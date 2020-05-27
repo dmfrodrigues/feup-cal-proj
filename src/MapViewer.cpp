@@ -18,12 +18,12 @@ void MapViewer::addNode(node_t i, coord_t c){
     if(!GraphViewer::addNode(nodes[i] = next_id++, x, y))   throw std::runtime_error("");
 }
 
-void MapViewer::addNode(node_t i, coord_t c, std::string color, window_t width){
+void MapViewer::addNode(node_t i, coord_t c, std::string color, window_t w){
     window_t x = (window_t)(double)(+(c.getLon() - nw_corner.getLon())*COORDMULT);
     window_t y = (window_t)(double)(-(c.getLat() - nw_corner.getLat())*COORDMULT);
     if(!GraphViewer::addNode(nodes[i] = next_id++, x, y))   throw std::runtime_error("");
     if(!GraphViewer::setVertexColor(nodes[i], color    ))   throw std::runtime_error("");
-    if(!GraphViewer::setVertexSize (nodes[i], width    ))   throw std::runtime_error("");
+    if(!GraphViewer::setVertexSize (nodes[i], w        ))   throw std::runtime_error("");
 }
 
 void MapViewer::addEdge(edge_t i, node_t u, node_t v, int edge_type, std::string color, window_t w, bool dashed){

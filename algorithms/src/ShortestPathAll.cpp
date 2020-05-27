@@ -8,6 +8,8 @@ typedef DWGraph::node_t node_t;
 typedef DWGraph::weight_t weight_t;
 typedef std::chrono::high_resolution_clock hrc;
 
+ShortestPathAll::~ShortestPathAll(){}
+
 std::list<node_t> ShortestPathAll::getPath(node_t s, node_t d) const{
     std::list<node_t> res;
     while(d != s){

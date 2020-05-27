@@ -16,6 +16,8 @@
  */
 class ShortestPathAll {
 public:
+    virtual ~ShortestPathAll();
+
     /**
      * @brief Initializes the data members that are required for the algorithm's execution such as the G graph
      * 
