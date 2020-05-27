@@ -1,62 +1,62 @@
 \chapter{Empirical complexity analysis} \label{empirical}
 
-\write18{ if [ ! -f 1h79vPO.png ] ; then curl https://i.imgur.com/1h79vPO.png -o 1h79vPO.png ; fi ; }
+
+\write18{ if [ ! -f gr6N6Ap.png ] ; then curl https://i.imgur.com/gr6N6Ap.png -o gr6N6Ap.png ; fi ; }
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{1h79vPO}
-    \caption{\hyperref[algorithm-scc-kosaraju-v]{Variant of Kosaraju's algorithm} empirical complexity}
-\end{figure}
-
-\write18{ if [ ! -f 1h79vPO.png ] ; then curl https://i.imgur.com/1h79vPO.png -o 1h79vPO.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{1h79vPO}
-    \caption{\hyperref[algorithm-shortestpath-astar]{A* algorithm}'s empirical complexity}
-\end{figure}
-
-
-\write18{ if [ ! -f Fh9jvNP.png ] ; then curl https://i.imgur.com/Fh9jvNP.png -o Fh9jvNP.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{Fh9jvNP}
+    \includegraphics[scale=0.5]{gr6N6Ap}
     \caption{\hyperref[algorithm-shortestpath-dijkstra]{Dijkstra's algorithm} empirical complexity}
 \end{figure}
 
-\write18{ if [ ! -f fd3hD1r.png ] ; then curl https://i.imgur.com/fd3hD1r.png -o fd3hD1r.png ; fi ; }
+\write18{ if [ ! -f b6wY2NU.png ] ; then curl https://i.imgur.com/b6wY2NU.png -o b6wY2NU.png ; fi ; }
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{fd3hD1r}
+    \includegraphics[scale=0.5]{b6wY2NU}
+    \caption{\hyperref[algorithm-shortestpath-astar]{A* algorithm} empirical complexity}
+\end{figure}
+
+\write18{ if [ ! -f vcDppRN.png ] ; then curl https://i.imgur.com/vcDppRN.png -o vcDppRN.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{vcDppRN}
+    \caption{\hyperref[algorithm-scc-kosaraju-v]{Variant of Kosaraju's algorithm} empirical complexity}
+\end{figure}
+
+\write18{ if [ ! -f ahcy7lO.png ] ; then curl https://i.imgur.com/ahcy7lO.png -o ahcy7lO.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{ahcy7lO}
+    \caption{\hyperref[algorithm-vstripes]{Vertical stripes algorithm} empirical complexity, varying number of points ($\Delta$ = 0.025)}
+\end{figure}
+
+\write18{ if [ ! -f G0umKaD.png ] ; then curl https://i.imgur.com/G0umKaD.png -o G0umKaD.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{G0umKaD}
+    \caption{\hyperref[algorithm-vstripes]{Vertical stripes algorithm} empirical complexity with $\Delta$ variation (number of nodes = 1000000).}
+\end{figure}
+
+These results show that the impact of the $\Delta$ factor is negligible in the time complexity of the VStripes algorithm on sets of nodes of considerable size (i.e. 1000000).
+
+\write18{ if [ ! -f yQHAGxj.png ] ; then curl https://i.imgur.com/yQHAGxj.png -o yQHAGxj.png ; fi ; }
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{yQHAGxj}
     \caption{\hyperref[algorithm-tsp-heldkarp]{Held-Karp algorithm} empirical complexity}
 \end{figure}
 
-\write18{ if [ ! -f 10anUvD.png ] ; then curl https://i.imgur.com/10anUvD.png -o 10anUvD.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{10anUvD}
-    \caption{\hyperref[algorithm-vstripes]{VStripes algorithm} empirical complexity with node size variation ($\Delta$ = 0.025)}
-\end{figure}
-
-\write18{ if [ ! -f IhNo0xr.png ] ; then curl https://i.imgur.com/IhNo0xr.png -o IhNo0xr.png ; fi ; }
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{IhNo0xr}
-    \caption{\hyperref[algorithm-vstripes]{VStripes algorithm} empirical complexity with $\Delta$ variation (number of nodes = 562500).}
-\end{figure}
-
-These results show that the impact of the $\Delta$ factor is negligible in the time complexity of the VStripes algorithm on sets of nodes of considerable size (i.e. 562500)
-
-\write18{ if [ ! -f IrkcKea.png ] ; then curl https://i.imgur.com/IrkcKea.png -o IrkcKea.png ; fi ; }
-\write18{ if [ ! -f JlsPaIZ.png ] ; then curl https://i.imgur.com/JlsPaIZ.png -o JlsPaIZ.png ; fi ; }
+\write18{ if [ ! -f tcMr14Z.png ] ; then curl https://i.imgur.com/tcMr14Z.png -o tcMr14Z.png ; fi ; }
+\write18{ if [ ! -f aabSfZF.png ] ; then curl https://i.imgur.com/aabSfZF.png -o aabSfZF.png ; fi ; }
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.3]{IrkcKea}
+        \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{tcMr14Z}
         \caption{\hyperref[iterations-1]{1st iteration}}
     \end{subfigure}
     \begin{subfigure}{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.3]{JlsPaIZ}
+        \includegraphics[trim={20px 0 10px 0}, clip, scale=0.4]{aabSfZF}
         \caption{\hyperref[iterations-2]{2nd iteration}}
     \end{subfigure}
     \caption{\hyperref[iterations]{Implemented iterations}' empirical complexity}
