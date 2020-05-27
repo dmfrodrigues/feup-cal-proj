@@ -94,15 +94,15 @@ int main(){
         std::vector<std::pair<int, long long>> dijkstraTimes;
         for (size_t i = 0 ; i < sizes.size() ; ++i){
             std::cout << i << std::endl;
-            ShortestPathOneMany *shortestPath = new Dijkstra();
+            ShortestPathOneMany *sp = new Dijkstra();
             long long time = 0;
             for(int n = 0; n < NRUNS; ++n){
-                shortestPath->initialize(generators.at(i).getDWGraph(), 1);
-                shortestPath->run();
-                time += shortestPath->getStatistics().execution_time;
+                sp->initialize(generators.at(i).getDWGraph(), 1);
+                sp->run();
+                time += sp->getStatistics().execution_time;
             }
             dijkstraTimes.push_back(std::make_pair(sizes.at(i),time/NRUNS));
-            delete shortestPath;
+            delete sp;
         }
         std::cout << "Outputing to file\n";
         ofs << "Dijkstra\n";
@@ -168,15 +168,17 @@ int main(){
             DWGraph::node_t srcN = connected_nodes[rand() % connected_nodes.size()];
             DWGraph::node_t dstN = connected_nodes[rand() % connected_nodes.size()];
 
-            Astar as(new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
-            as.initialize(&graph, srcN, dstN);
-            as.run();
+            Astar::heuristic_t *w = new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS))
+            ShortestPath *sp = new Astar(w);
+            as->initialize(&graph, srcN, dstN);
+            as->run();
             DWGraph::weight_t dist = as.getPathWeight(); if(dist == 0) continue;
             long long time = as.getStatistics().execution_time;
-            
             if (!nValuesInserted.insert(std::make_pair<DWGraph::weight_t&, int>(dist, 1)).second) nValuesInserted[dist]++;
-
             if (!distancesAndTimes.insert(std::make_pair<DWGraph::weight_t&, long long&>(dist, time)).second) distancesAndTimes[dist] += time;
+        
+            delete sp;
+            delete w;
         }
         
         std::cout << "Outputing to file\n";

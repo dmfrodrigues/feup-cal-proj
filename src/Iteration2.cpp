@@ -20,14 +20,16 @@ void Iteration2::run(){
     std::cout << "    Using " << nthreads << " threads" << std::endl;
     std::unordered_set<node_t> nodes({getM()->getStationNode()});
     for(const auto &p: getClients()) nodes.insert(p.second);
-    ShortestPathAll::FromOneMany sp(new Dijkstra(), nthreads);
-    sp.initialize(&G, nodes);
-    sp.run();
-    std::cout << "    Took " << sp.getStatistics().execution_time << " micros" << std::endl;
+    ShortestPathOneMany *sp1m = new Dijkstra();
+    ShortestPathAll::FromOneMany *sp = new ShortestPathAll::FromOneMany(sp1m, nthreads);
+    sp->initialize(&G, nodes);
+    sp->run();
+    std::cout << "    Took " << sp->getStatistics().execution_time << " micros" << std::endl;
 
     std::cout << "Solving vehicle routing problem..." << std::endl;
-    VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS, new NearestNeighbour());
-    vrp->initialize(&getClients(), &getVans(), getM()->getStationNode(), &sp);
+    TravellingSalesman *tsp = new NearestNeighbour();
+    VehicleRouting *vrp = new RoutingHeuristic(20*MIN_TO_MICROS, tsp);
+    vrp->initialize(&getClients(), &getVans(), getM()->getStationNode(), sp);
     vrp->run();
     std::cout << "    Took " << vrp->getStatistics().execution_time << " micros" << std::endl;
 
@@ -35,6 +37,8 @@ void Iteration2::run(){
         std::vector< Ride > rides = vrp->getGroups();
         Iteration::printRides(rides);
     }
-    
+
     delete vrp;
+    delete sp;
+    delete sp1m;
 }

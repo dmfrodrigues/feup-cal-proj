@@ -180,7 +180,8 @@ DWGraph::DWGraph MapGraph::getFullGraph() const{
 DWGraph::DWGraph MapGraph::getConnectedGraph() const{
     DWGraph::DWGraph G = fullGraph;
     DUGraph Gu = (DUGraph)G;
-    SCCnode *scc = new KosarajuV(new DFS());
+    Reachability *r = new DFS();
+    SCCnode *scc = new KosarajuV(r);
     scc->initialize(&Gu, station);
     scc->run();
     std::list<node_t> nodes_to_remove;
@@ -190,6 +191,7 @@ DWGraph::DWGraph MapGraph::getConnectedGraph() const{
         }
     }
     delete scc;
+    delete r;
     G.removeNodes(nodes_to_remove.begin(), nodes_to_remove.end());
     return G;
 }
@@ -479,12 +481,19 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
         "A* algorithm, 10km/h"
     });
 
+    std::vector<Astar::heuristic_t*> heuristics({
+        new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)),
+        new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(60.0*KMH_TO_MS)),
+        new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(30.0*KMH_TO_MS)),
+        new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(10.0*KMH_TO_MS))
+    });
+
     std::vector<ShortestPath*> shortestPaths({
         new Astar(),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(60.0*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(30.0*KMH_TO_MS))),
-        new Astar(new DistanceHeuristic(nodes, nodes.at(dst), double(SECONDS_TO_MICROS)/(10.0*KMH_TO_MS)))
+        new Astar(heuristics[0]),
+        new Astar(heuristics[1]),
+        new Astar(heuristics[2]),
+        new Astar(heuristics[3])
     });
 
     std::vector<std::string> pathColor({
@@ -577,6 +586,7 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
     }
     gv->rearrange();
     
+    for(Astar::heuristic_t *p: heuristics) delete p;
     for(ShortestPath *p: shortestPaths) delete p;
 }
 
@@ -628,12 +638,14 @@ void MapGraph::drawRide(int fraction, int display, const Ride &r) const{
         {
             for(size_t i = 1; i < path.size(); ++i){
                 const node_t &u = path[i-1], &v = path[i];
-                ShortestPath *sp = new Astar(new DistanceHeuristic(nodes, nodes.at(v), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
+                Astar::heuristic_t *w = new DistanceHeuristic(nodes, nodes.at(v), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS));
+                ShortestPath *sp = new Astar(w);
                 sp->initialize(&G, u, v);
                 sp->run();
                 std::list<node_t> small_path = sp->getPath();
                 visited_nodes.insert(small_path.begin(), small_path.end());
                 delete sp;
+                delete w;
             }
         }
     }
