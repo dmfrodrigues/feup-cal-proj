@@ -16,7 +16,7 @@ InputGenerator::InputGenerator(string points_relative_path_, string output_path_
 }
 
 void InputGenerator::run(){
-    srand(time(NULL));
+    //srand(time(NULL));
 
     //Read interesting nodes
     vector<point_t> nodes;
@@ -44,8 +44,12 @@ void InputGenerator::run(){
         clients.push_back(temp);
     }
 
-    std::ofstream ofs(output_path);
-    if (!ofs.is_open()) throw runtime_error("Could not create output file");
+    std::ofstream ofs; ofs.exceptions(std::iostream::failbit | std::iostream::badbit);
+    try{
+        ofs.open(output_path);
+    } catch(...){
+        std::cerr << "errno=" << errno << std::endl;
+    }
     ofs << clients.size() << "\n";
     for(const Client &c: clients)
         ofs << c << "\n";

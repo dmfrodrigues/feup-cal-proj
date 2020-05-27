@@ -33,6 +33,8 @@ TEST_CASE("Depth-First Search", "[reachability-dfs]"){
     REQUIRE(r->is_reachable(7) == false);
     REQUIRE(r->is_reachable(8) == false);
 
+    delete r;
+
 }
 
 TEST_CASE("Graph transpose", "[graph-transpose]"){
@@ -75,6 +77,8 @@ TEST_CASE("DFS on transpose", "[dfs-transpose]"){
     REQUIRE(r->is_reachable(6) == false);
     REQUIRE(r->is_reachable(7) == false);
     REQUIRE(r->is_reachable(8) == false);
+
+    delete r;
 }
 
 
@@ -104,6 +108,7 @@ TEST_CASE("Floyd-Warshall", "[floyd-warshall]") {
     REQUIRE(std::list<DWGraph::node_t>({3, 1})          == fw->getPath(3, 1));
     REQUIRE(std::list<DWGraph::node_t>({3, 1, 0, 2})    == fw->getPath(3, 2));
     
+    delete fw;
 }
 
 
@@ -132,6 +137,8 @@ TEST_CASE("Dijkstra's algorithm", "[shortestpath-dijkstra]"){
         REQUIRE(6 == shortestPath->getPathWeight(4));
         REQUIRE(5 == shortestPath->getPathWeight(5));
         REQUIRE(9 == shortestPath->getPathWeight(6));
+
+        delete shortestPath;
     }
     {
         ShortestPathOneMany *shortestPath = new Dijkstra();
@@ -153,6 +160,8 @@ TEST_CASE("Dijkstra's algorithm", "[shortestpath-dijkstra]"){
         REQUIRE(5 == shortestPath->getPathWeight(4));
         REQUIRE(4 == shortestPath->getPathWeight(5));
         REQUIRE(8 == shortestPath->getPathWeight(6));
+
+        delete shortestPath;
     }
 }
 
@@ -181,6 +190,8 @@ TEST_CASE("Dijkstra's algorithm for all", "[shortestpathall-dijkstra]"){
             REQUIRE(dist[s][d] == shortestPath->getPathWeight(s, d));
         }
     }
+
+    delete shortestPath;
 }
 
 TEST_CASE("A* algorithm", "[shortestpath-astar]"){
@@ -195,6 +206,8 @@ TEST_CASE("A* algorithm", "[shortestpath-astar]"){
 
     REQUIRE(9 == shortestPath->getPathWeight());
     REQUIRE(std::list<DWGraph::node_t>({0, 1, 2, 5, 6   }) == shortestPath->getPath());
+
+    delete shortestPath;
 }
 
 TEST_CASE("Kosaraju variant testing", "[scc-kosarajuv]"){
@@ -359,4 +372,6 @@ TEST_CASE("Held-Karp algorithm", "[tsp-heldkarp]"){
 
     tsp->initialize(&nodes, 3, &w); tsp->run();
     REQUIRE(std::list<DWGraph::node_t>({3, 1, 0, 2, 3}) == tsp->getTour());
+
+    delete tsp;
 }

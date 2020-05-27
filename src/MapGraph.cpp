@@ -132,8 +132,8 @@ MapGraph::MapGraph(const std::string &path){
         ClosestPoint *closestPoint_initial = new VStripes(0.025);
         closestPoint_initial->initialize(nodes_list);
         closestPoint_initial->run();
-
         coord_t station_closest = closestPoint_initial->getClosestPoint(station_coord);
+        delete closestPoint_initial;
         
         station = DWGraph::INVALID_NODE;
         

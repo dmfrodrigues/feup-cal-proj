@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <sstream>
 
-#define NRUNS 5
+#define NRUNS 20
 
 typedef DWGraph::weight_t weight_t;
 typedef DWGraph::node_t node_t;
@@ -66,7 +66,7 @@ int main(){
 
     for (auto g : generators) g.run();
     std::cout << "Populated!\n";
-/*
+    /*
     {
         std::cout << "Running Kosaraju on graphs...\n";
         std::vector<std::pair<int, long long>> kosarajuTimes;
@@ -102,6 +102,7 @@ int main(){
                 time += shortestPath->getStatistics().execution_time;
             }
             dijkstraTimes.push_back(std::make_pair(sizes.at(i),time/NRUNS));
+            delete shortestPath;
         }
         std::cout << "Outputing to file\n";
         ofs << "Dijkstra\n";
@@ -110,7 +111,7 @@ int main(){
 
     {
         std::cout << "Running Held-Karp\n";
-        std::vector<size_t> sizes({2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+        std::vector<size_t> sizes({2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
         std::vector<std::pair<int, long long>> heldKarpTimes;
         for (size_t i = 0 ; i < sizes.size() ; ++i){
             std::cout << i << std::endl;
@@ -149,10 +150,10 @@ int main(){
         ofs << "Held-Karp\n";
         for (std::pair<int, long long> pair : heldKarpTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
-*/
+    */
 
     MapGraph M("../map/processed/AMP");
-
+    /*
     {
         DWGraph::DWGraph graph = M.getConnectedGraph();
         std::unordered_map<DWGraph::node_t, coord_t> nodes = M.getNodes();
@@ -181,14 +182,13 @@ int main(){
         for (std::pair<DWGraph::weight_t, long long> pair : distancesAndTimes) ofs << pair.first << "," << pair.second / nValuesInserted[pair.first] << ",\n";
     }
 
-/*
     {
         std::cout << "Running 1st Iteration analysis\n";
-        std::vector<int> sizes = {1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000};
+        std::vector<int> sizes = {2, 4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000};
         std::vector<InputGenerator> inputs;
         std::vector<std::pair<int, long long>> firstIterationTimes;
         for (int i : sizes) {
-            std::ostringstream oss; oss << "txts/c" << i << ".clients";
+            std::ostringstream oss; oss << "c" << i << ".clients";
             std::string c = oss.str();
             std::cout << c << std::endl;
             inputs.push_back(InputGenerator("../map/processed/AMP.points", c, i, rand() % 4 + 9, rand() % 4 + 19, true));
@@ -199,7 +199,7 @@ int main(){
             std::cout << sizes.at(i) << std::endl;
             auto start_time = hrc::now();
             Iteration1 it;
-            it.initialize(&M, "../resources/it1_01.vans", inputs.at(i).getOutputPath(), "txts/r.rides");
+            it.initialize(&M, "../resources/it1_01.vans", inputs.at(i).getOutputPath(), "r.rides");
             it.run();
             auto finish_time = hrc::now();
             long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
@@ -210,16 +210,16 @@ int main(){
         std::cout << "Outputing to file\n";
         ofs << "1st Iteration\n";
         for (std::pair<int, long long> pair : firstIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
-        remove("txts/r.rides");
+        remove("r.rides");
     }
-
+    */
     {
         std::cout << "Running 2nd Iteration analysis\n";
-        std::vector<int> sizes = {1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000};
+        std::vector<int> sizes = {2, 4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000};
         std::vector<InputGenerator> inputs;
         std::vector<std::pair<int, long long>> secondIterationTimes;
         for (int i : sizes) {
-            std::ostringstream oss; oss << "txts/c" << i << ".clients";
+            std::ostringstream oss; oss << "c" << i << ".clients";
             std::string c = oss.str();
             std::cout << c << std::endl;
             inputs.push_back(InputGenerator("../map/processed/AMP.points", c, i, rand() % 4 + 9, rand() % 4 + 19, true));
@@ -230,7 +230,7 @@ int main(){
             std::cout << sizes.at(i) << std::endl;
             auto start_time = hrc::now();
             Iteration2 it;
-            it.initialize(&M, "../resources/it2_01.vans", inputs.at(i).getOutputPath(), "txts/r.rides");
+            it.initialize(&M, "../resources/it2_01.vans", inputs.at(i).getOutputPath(), "r.rides");
             it.run();
             auto finish_time = hrc::now();
             long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
@@ -241,14 +241,14 @@ int main(){
         std::cout << "Outputing to file\n";
         ofs << "2nd Iteration\n";
         for (std::pair<int, long long> pair : secondIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
-        remove("txts/r.rides");
+        remove("r.rides");
     }
 
     {
         std::cout << "Running VStripes analysis (Varying nodes)\n";
         std::cout << "Generating grids...\n";
         std::vector<std::list<coord_t>> grids;
-        std::vector<int> sizes = {5, 10, 50, 100, 250, 500, 750, 1000};
+        std::vector<int> sizes = {2, 4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000};
         for (int size : sizes){
             std::list<coord_t> x;
             for(size_t i = 0 ; i < size ; ++i)
@@ -297,7 +297,6 @@ int main(){
         ofs << "VStripes Delta varying Iteration\n";
         for (std::pair<double, long long> pair : vStripesDeltasIterationTimes) ofs << pair.first << "," << pair.second << ",\n";
     }
-*/
 
     ofs.close();
     return 0;
