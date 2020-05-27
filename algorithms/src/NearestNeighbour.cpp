@@ -55,6 +55,7 @@ node_t NearestNeighbour::findClosest(node_t u) {
         }
     }
     if(ret == DWGraph::INVALID_NODE){
+        for(const node_t &u: *nodes) std::cout << u << std::endl;
         throw std::logic_error("no closest node to " + std::to_string(u));
     }
     return ret;
