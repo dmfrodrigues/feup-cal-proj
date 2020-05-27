@@ -161,7 +161,7 @@ int main(){
         int tries = 0;
         std::map<DWGraph::weight_t, long long> distancesAndTimes;
         std::map<DWGraph::weight_t, int> nValuesInserted;
-        while(distancesAndTimes.size() < 200){
+        while(distancesAndTimes.size() < 500){
             std::cout << tries << "\n"; tries++;
             auto src = connected_nodes.begin(); std::advance(src, rand() % connected_nodes.size()); DWGraph::node_t srcN = *src;
             auto dst = connected_nodes.begin(); std::advance(dst, rand() % connected_nodes.size()); DWGraph::node_t dstN = *dst;
@@ -169,7 +169,7 @@ int main(){
             Astar as(new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
             as.initialize(&graph, srcN, dstN);
             as.run();
-            DWGraph::weight_t dist = as.getPath().size(); if(dist == 0) continue;
+            DWGraph::weight_t dist = as.getPathWeight(); if(dist == 0) continue;
             long long time = as.getStatistics().execution_time;
             
             if (!nValuesInserted.insert(std::make_pair<DWGraph::weight_t&, int>(dist, 1)).second) nValuesInserted[dist]++;
