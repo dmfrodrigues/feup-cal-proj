@@ -48,7 +48,7 @@ void ShortestPathAll::FromOneMany::thread_func(ShortestPathAll::FromOneMany *p){
         try{
             s = p->Q.pop();
         } catch(const std::logic_error &e) {
-            return;
+            break;
         }
         auto &dist = p->dist.at(s);
         sp->initialize(p->G, s);
