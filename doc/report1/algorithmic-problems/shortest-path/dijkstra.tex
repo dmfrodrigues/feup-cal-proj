@@ -25,7 +25,7 @@ The fundamental idea is that, at each moment, we hold a set $Q$ of unprocessed n
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
-To achieve the least time complexity, the graph is usually represented as an adjacency list $Adj$, and $Q$ is a minimum priority queue.
+To achieve the least time complexity, the graph is usually represented as an adjacency list, and $Q$ is a minimum priority queue.
 \subsubsection{Proof of correctness} \label{sec:dijkstra-PoC}
 The full proof is rather long and is promptly available (for instance, in \cite[p.~659]{intro-alg}), thus we will only present a short argument for correctness based on cycle invariants/variants for the \textbf{while} loop.
 \begin{itemize}

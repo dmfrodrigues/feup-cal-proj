@@ -1,7 +1,7 @@
 \chapter{Graph connectivity} \label{connectivity-graphs}
-On visual inspection of the graph, it was obvious that not every node would be reachable from the trains station, making graph pre-processing a necessity to remove unreachable nodes.
+On visual inspection of the graph, it was obvious that not every node would be reachable from the train station, making graph pre-processing a necessity to remove unreachable nodes.
 For this effect, we used the \hyperref[algorithm-scc-kosaraju-v]{variant of Kosaraju's algorithm}, which we considered to be the most reliable option, both because its complexity was equivalent to other \acrshort{SCC} algorithm alternatives and also since its simple implementation left no doubt about its correct implementation.\par
-Using method \texttt{MapGraph::getConnectedGraph} (\texttt{MapGraph.cpp}), we applied this processing to the full graph, obtaining a connected graph with $209872$ nodes (a reduction of $1.64\%$ from $213367$) and $386249$ edges (a reduction of $1.21\%$ from $390983$), a significant improvement from the full graph obtained from \texttt{MapGraph::getFullGraph} (\texttt{MapGraph.cpp}), and a very important stage to avoid unreachability problems.
+Using method \texttt{MapGraph::getConnectedGraph} (\texttt{MapGraph.cpp}), we applied this processing to the full graph, obtaining a connected graph with $209872$ nodes (a reduction of $1.64\%$ from $213367$) and $386249$ edges (a reduction of $1.21\%$ from $390983$), a slight improvement from the full graph obtained from \texttt{MapGraph::getFullGraph} (\texttt{MapGraph.cpp}), and a very important stage to avoid unreachability problems.
 \write18{ if [ ! -f 3CndwLU.png ] ; then curl https://i.imgur.com/3CndwLU.png -o 3CndwLU.png ; fi ; }
 \write18{ if [ ! -f YwCUPvM.png ] ; then curl https://i.imgur.com/YwCUPvM.png -o YwCUPvM.png ; fi ; }
 \write18{ if [ ! -f faPYR6B.png ] ; then curl https://i.imgur.com/faPYR6B.png -o faPYR6B.png ; fi ; }

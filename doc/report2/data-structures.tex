@@ -30,3 +30,6 @@ A minimum-priority queue is similar to a maximum-priority queue, except elements
 We have already presented a theoretical definition of a graph, so now we will only mention our implementations, \texttt{DUGraph} and \texttt{DWGraph}.\par
 Both structures represent a graph as an adjacency list, where we map each node to a set/map containing all adjacent nodes/edges. The only difference between \texttt{DUGraph} and \texttt{DWGraph} is that \texttt{DUGraph} stores the set of adjacent nodes for each node, while \texttt{DWGraph} stores for each node $u$ a map of pairs (node $v$, weight $c$), meaning there is an edge from $u$ to $v$ and the cost of going from $u$ to $v$ is $w(u,v)=c$.\par
 We additionally keep some other structures, such as a list of all nodes so we can return a constant reference to the list of all nodes in constant time, as well as a mapping from each node to their precedessors, so we can more rapidly delete edges to any node $v$.
+
+\section{Vertical stripes}
+The \hyperref[algorithm-vstripes]{vertical stripes algorithm} is more of a data structure than an algorithm. Please check section \ref{algorithm-vstripes} for more details on this data structure/algorithm.
