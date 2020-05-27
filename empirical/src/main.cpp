@@ -75,14 +75,14 @@ int main(){
             DFS r;
             DUGraph g = DUGraph(*generators.at(i).getDWGraph());
             auto start_time = hrc::now();
-            // KosarajuV k(&r);
-            // for(int n = 0; n < NRUNS; ++n){
-            //     k.initialize(&g, 1);
-            //     k.run();
-            // }
-            // auto finish_time = hrc::now();
-            // long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
-            // kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time/NRUNS));
+            KosarajuV k(&r);
+            for(int n = 0; n < NRUNS; ++n){
+                k.initialize(&g, 1);
+                k.run();
+            }
+            auto finish_time = hrc::now();
+            long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            kosarajuTimes.push_back(std::make_pair(sizes.at(i), execution_time/NRUNS));
         }
         std::cout << "Outputing to file\n";
         ofs << "Kosaraju\n";
@@ -95,13 +95,13 @@ int main(){
         for (size_t i = 0 ; i < sizes.size() ; ++i){
             std::cout << i << std::endl;
             ShortestPathOneMany *shortestPath = new Dijkstra();
-            // long long time = 0;
-            // for(int n = 0; n < NRUNS; ++n){
-            //     shortestPath->initialize(generators.at(i).getDWGraph(), 1);
-            //     shortestPath->run();
-            //     time += shortestPath->getStatistics().execution_time;
-            // }
-            // dijkstraTimes.push_back(std::make_pair(sizes.at(i),time/NRUNS));
+            long long time = 0;
+            for(int n = 0; n < NRUNS; ++n){
+                shortestPath->initialize(generators.at(i).getDWGraph(), 1);
+                shortestPath->run();
+                time += shortestPath->getStatistics().execution_time;
+            }
+            dijkstraTimes.push_back(std::make_pair(sizes.at(i),time/NRUNS));
             delete shortestPath;
         }
         std::cout << "Outputing to file\n";
@@ -131,20 +131,20 @@ int main(){
             }
             weight_matrix w(M);
 
-            // TravellingSalesman *tsp = new HeldKarp();
-            // long long time = 0;
-            // for(int n = 0; n < NRUNS; ++n){
-            //     tsp->initialize(&nodes, source_node, &w);
-            //     try{
-            //         tsp->run();
-            //     } catch(const std::exception &e){
-            //         std::cerr << "Caught exception" << std::endl;
-            //         throw e;
-            //     }
-            //     time += tsp->getStatistics().execution_time;
-            // }
-            // heldKarpTimes.push_back(std::make_pair(sizes[i], time/NRUNS));
-            // delete tsp;
+            TravellingSalesman *tsp = new HeldKarp();
+            long long time = 0;
+            for(int n = 0; n < NRUNS; ++n){
+                tsp->initialize(&nodes, source_node, &w);
+                try{
+                    tsp->run();
+                } catch(const std::exception &e){
+                    std::cerr << "Caught exception" << std::endl;
+                    throw e;
+                }
+                time += tsp->getStatistics().execution_time;
+            }
+            heldKarpTimes.push_back(std::make_pair(sizes[i], time/NRUNS));
+            delete tsp;
         }
         std::cout << "Outputing to file\n";
         ofs << "Held-Karp\n";
@@ -168,13 +168,11 @@ int main(){
             DWGraph::node_t srcN = connected_nodes[rand() % connected_nodes.size()];
             DWGraph::node_t dstN = connected_nodes[rand() % connected_nodes.size()];
 
-            // Astar as(new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
-            // as.initialize(&graph, srcN, dstN);
-            // as.run();
-            // DWGraph::weight_t dist = as.getPathWeight(); if(dist == 0) continue;
-            DWGraph::weight_t dist = tries;
-
-            long long time = tries;
+            Astar as(new MapGraph::DistanceHeuristic(nodes, nodes.at(dstN), double(SECONDS_TO_MICROS)/(90.0*KMH_TO_MS)));
+            as.initialize(&graph, srcN, dstN);
+            as.run();
+            DWGraph::weight_t dist = as.getPathWeight(); if(dist == 0) continue;
+            long long time = as.getStatistics().execution_time;
             
             if (!nValuesInserted.insert(std::make_pair<DWGraph::weight_t&, int>(dist, 1)).second) nValuesInserted[dist]++;
 
@@ -204,12 +202,12 @@ int main(){
             auto start_time = hrc::now();
             Iteration1 it;
             it.initialize(&M, "../resources/it1_01.vans", inputs.at(i).getOutputPath(), "r.rides");
-            // it.run();
-            // auto finish_time = hrc::now();
-            // long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
-            // firstIterationTimes.push_back(std::make_pair(sizes.at(i), execution_time));
-            // std::string c = inputs.at(i).getOutputPath();
-            // remove(c.c_str());
+            it.run();
+            auto finish_time = hrc::now();
+            long long execution_time = std::chrono::duration_cast<std::chrono::microseconds>(finish_time - start_time).count();
+            firstIterationTimes.push_back(std::make_pair(sizes.at(i), execution_time));
+            std::string c = inputs.at(i).getOutputPath();
+            remove(c.c_str());
         }
         std::cout << "Outputing to file\n";
         ofs << "1st Iteration\n";
