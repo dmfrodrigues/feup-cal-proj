@@ -20,13 +20,7 @@
 
 ## Installing
 
-If you are cloning from GitHub, you should pull all LFS files with
-
-```sh
-git lfs fetch --all
-```
-
-and pull all submodules with
+If you are cloning from GitHub, you should pull all submodules with
 
 ```sh
 git submodule update --init --recursive # If for the first time
@@ -40,6 +34,8 @@ make clean      # Cleanup files (except submodules and map/)
 make cleanall   # Cleanup all files
 make test       # Run unit tests
 ```
+
+`make` automatically downloads the sample map file `map.xml` we used to develop this project, using `wget`. You must install `wget` to properly get the file, or otherwise download `map.zip` from [this link](https://drive.google.com/uc?id=1cEqe8l_cDt1A1aqe7wAWVAMhYqSejv9L), unzip it and copy its content to `map/original`.
 
 ## Running
 
