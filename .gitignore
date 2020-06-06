@@ -35,3 +35,4 @@ generator
 empirical/GenerateEmpirical
 empirical/GraphGenerator
 *.zip
+*.xml

@@ -1,4 +1,5 @@
 PROCESSED_DIR=./processed
+ORIGINAL_DIR =./original
 all: $(PROCESSED_DIR)/AMP.nodes
 
 PROG=./map_process
@@ -40,6 +41,14 @@ $(PROG): map_process.cpp $(UTILS_FLIB) $(STRUCTS_FLIB)
 
 $(PROCESSED_DIR)/AMP.nodes: $(PROG) original/map.xml | $(PROCESSED_DIR)
 	$(PROG) $(PROCESSED_DIR)/AMP < original/map.xml
+
+original/map.xml: | $(ORIGINAL_DIR)
+	wget https://drive.google.com/uc?id=1cEqe8l_cDt1A1aqe7wAWVAMhYqSejv9L --output-document original/map.zip
+	unzip original/map.zip -d original
+	rm -f original/map.zip
+
+$(ORIGINAL_DIR):
+	mkdir -p $@
 
 $(PROCESSED_DIR):
 	mkdir -p $@
