@@ -26,9 +26,21 @@ jobs:
       run: |
         make report_delivery1.pdf
 
+    - name: Upload delivery1 report
+      uses: actions/upload-artifact@v2
+      with:
+        name: report_delivery1.pdf
+        path: report_delivery1.pdf
+
     - name: report2
       run: |
         make report_delivery2.pdf
+
+    - name: Upload delivery2 report
+      uses: actions/upload-artifact@v2
+      with:
+        name: report_delivery2.pdf
+        path: report_delivery2.pdf
 
     - name: testzip
       run: make testzip
