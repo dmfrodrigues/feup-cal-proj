@@ -12,11 +12,63 @@
 - **Course:** [CAL](https://sigarra.up.pt/feup/en/UCURR_GERAL.FICHA_UC_VIEW?pv_ocorrencia_id=436441) (Algorithm Design and Analysis)
 <!-- - **Project grade:** ??/20.0 -->
 - **Group members:**
-    - Diogo Miguel Ferreira Rodrigues (dmfrodrigues2000@gmail.com / diogo.rodrigues@fe.up.pt)
-    - João António Cardoso Vieira e Basto de Sousa (up201806613@fe.up.pt)
-    - Rafael Soares Ribeiro (up201806330@fe.up.pt)
+    - [Diogo Miguel Ferreira Rodrigues](https://github.com/dmfrodrigues) (<dmfrodrigues2000@gmail.com> / <diogo.rodrigues@fe.up.pt>)
+    - [João António Cardoso Vieira e Basto de Sousa](https://github.com/JoaoASousa) (<up201806613@fe.up.pt>)
+    - [Rafael Soares Ribeiro](https://github.com/up201806330) (<up201806330@fe.up.pt>)
 
 ## Media
+
+| The original map, as rendered by [OpenStreetMap](https://www.openstreetmap.org/#map=11/41.1373/-8.6524) | As rendered by our program |
+|--------------------------------------|--------------------------------------|
+| ![](https://i.imgur.com/UtWtfIR.png) | ![](https://i.imgur.com/RjuJlxT.png) |
+
+
+| `view` - Types of roads              | `speed` - Maximum allowed speed      |
+|--------------------------------------|--------------------------------------|
+| ![](https://i.imgur.com/Y8ZJyr3.png) | ![](https://i.imgur.com/Njimj9n.png) |
+
+| `path` - Shortest path | `path -v` - Nodes visited by each shortest path algorithm |
+|--------------------------------------|--------------------------------------|
+| ![](https://i.imgur.com/OdwmfwK.png) | ![](https://i.imgur.com/YTZbVeR.png) |
+
+| `reduce` - Close-up view             | `ride` - Check ride path             |
+|--------------------------------------|--------------------------------------|
+| ![](https://i.imgur.com/BRxpvq4.png) | ![](https://i.imgur.com/yEcn4Gi.png) |
+
+<table>
+    <tr>
+        <th>
+            Connectivity
+        </th>
+        <th>
+            Closeup 1
+        </th>
+    </tr>
+    <tr>
+        <td rowspan=3>
+            <img src="https://i.imgur.com/3CndwLU.png">
+        </td>
+        <td>
+            <img src="https://i.imgur.com/YwCUPvM.png">
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Closeup 2
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <img src="https://i.imgur.com/faPYR6B.png">
+        </td>
+    </tr>
+</table>
+
+## Report
+
+Reports are compiled by Github Actions, to see them go to `Actions > Workflows > Compile reports`, go to the most recent action and check `This run > Artifacts`.
+
+You can always check the most recent release.
 
 ## Installing
 
