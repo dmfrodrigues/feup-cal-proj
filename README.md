@@ -20,7 +20,7 @@
 
 | The original map, as rendered by [OpenStreetMap](https://www.openstreetmap.org/#map=11/41.1373/-8.6524) | As rendered by our program |
 |--------------------------------------|--------------------------------------|
-| ![](https://i.imgur.com/UtWtfIR.png) | ![](https://i.imgur.com/wE0zyNw.png) |
+| <img src="https://i.imgur.com/UtWtfIR.png" width="500"> | <img src="https://i.imgur.com/wE0zyNw.png" width="670"> |
 
 
 | `view` - Types of roads              | `speed` - Maximum allowed speed      |
@@ -29,7 +29,7 @@
 
 | `path` - Shortest path | `path -v` - Nodes visited by each shortest path algorithm |
 |--------------------------------------|--------------------------------------|
-| ![](https://i.imgur.com/OdwmfwK.png) | ![](https://i.imgur.com/YTZbVeR.png) |
+| ![](https://i.imgur.com/r3x6KfR.png) | ![](https://i.imgur.com/NIdLnt4.png) |
 
 | `reduce` - Close-up view             | `ride` - Check ride path             |
 |--------------------------------------|--------------------------------------|
