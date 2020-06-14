@@ -20,7 +20,7 @@
 
 | The original map, as rendered by [OpenStreetMap](https://www.openstreetmap.org/#map=11/41.1373/-8.6524) | As rendered by our program |
 |--------------------------------------|--------------------------------------|
-| ![](https://i.imgur.com/UtWtfIR.png) | ![](https://i.imgur.com/RjuJlxT.png) |
+| ![](https://i.imgur.com/UtWtfIR.png) | ![](https://i.imgur.com/wE0zyNw.png) |
 
 
 | `view` - Types of roads              | `speed` - Maximum allowed speed      |
@@ -38,28 +38,28 @@
 <table>
     <tr>
         <th>
-            Connectivity
+            <code>scc</code> - Train station strongly connected component
         </th>
         <th>
-            Closeup 1
+            Closeup, near Freixo Bridge
         </th>
     </tr>
     <tr>
         <td rowspan=3>
-            <img src="https://i.imgur.com/3CndwLU.png">
+            <img src="https://i.imgur.com/s8YZwUP.png" width="600">
         </td>
         <td>
-            <img src="https://i.imgur.com/YwCUPvM.png">
+            <img src="https://i.imgur.com/YwCUPvM.png" width="500">
         </td>
     </tr>
     <tr>
         <th>
-            Closeup 2
+            Closeup, near A41 and A32 (Sandim, V. N. Gaia)
         </th>
     </tr>
     <tr>
         <td>
-            <img src="https://i.imgur.com/faPYR6B.png">
+            <img src="https://i.imgur.com/faPYR6B.png" width="500">
         </td>
     </tr>
 </table>
