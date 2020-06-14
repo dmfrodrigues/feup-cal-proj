@@ -7,3 +7,6 @@
 [submodule "utils"]
 	path = utils
 	url = https://github.com/dmfrodrigues/utils.git
+[submodule "GraphViewer"]
+	path = GraphViewer
+	url = https://github.com/STEMS-group/GraphViewer.git
