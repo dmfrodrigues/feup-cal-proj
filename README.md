@@ -1,7 +1,8 @@
 # PortoCityTransfers <!-- {#mainpage} -->
 
-![Compile reports](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile%20reports/badge.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+![Compile reports](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile%20reports/badge.svg)
 ![Test](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Test/badge.svg)
 
 - **Project name:** PortoCityTransfers
