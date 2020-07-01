@@ -11,7 +11,7 @@
 - **Tools:** C++
 - **Institution:** [FEUP](https://sigarra.up.pt/feup/en/web_page.Inicial)
 - **Course:** [CAL](https://sigarra.up.pt/feup/en/UCURR_GERAL.FICHA_UC_VIEW?pv_ocorrencia_id=436441) (Algorithm Design and Analysis)
-<!-- - **Project grade:** ??/20.0 -->
+- **Project grade:** 19.2/20.0
 - **Group members:**
     - [Diogo Miguel Ferreira Rodrigues](https://github.com/dmfrodrigues) (<dmfrodrigues2000@gmail.com> / <diogo.rodrigues@fe.up.pt>)
     - [João António Cardoso Vieira e Basto de Sousa](https://github.com/JoaoASousa) (<up201806613@fe.up.pt>)
@@ -65,12 +65,6 @@
     </tr>
 </table>
 
-## Report
-
-Reports are compiled by Github Actions, to see them go to `Actions > Workflows > Compile reports`, go to the most recent action and check `This run > Artifacts`.
-
-You can always check the most recent release.
-
 ## Installing
 
 If you are cloning from GitHub, you should pull all submodules with
@@ -90,7 +84,7 @@ make test       # Run unit tests
 
 `make` automatically downloads the sample map file `map.xml` we used to develop this project, using `wget`. You must install `wget` to properly get the file, or otherwise download `map.zip` from [this link](https://drive.google.com/uc?id=1cEqe8l_cDt1A1aqe7wAWVAMhYqSejv9L), unzip it and copy its content to `map/original`.
 
-## Running
+## Usage
 
 ### Interesting locations
 
@@ -264,3 +258,17 @@ Other examples:
 ./main iteration2 resources/it2_01.vans resources/it2_01.clients resources/it2_02.rides #Takes around 20 seconds
 ./main iteration2 resources/it2_01.vans resources/it2_02.clients resources/it2_03.rides #Takes around 35 seconds
 ```
+
+## Reports
+
+Reports are compiled by Github Actions, to see them go to [`Actions`](https://github.com/dmfrodrigues/feup-cal-proj/actions) > `Workflows` > [`Compile reports`](https://github.com/dmfrodrigues/feup-cal-proj/actions?query=workflow%3A%22Compile+reports%22), go to the most recent action and check `This run > Artifacts`.
+
+You can also check the releases.
+
+## License
+
+© 2020 Diogo Rodrigues, João António Sousa, Rafael Ribeiro
+
+All files are licensed under [GNU General Public License v3](LICENSE), to the exception of:
+- submodules, which are subject to specific licenses
+- map data, which was extracted from OpenStreetMap under the Open Database License; refer to the report for further details
