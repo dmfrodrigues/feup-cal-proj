@@ -10,7 +10,7 @@ Kosaraju's algorithm was first sugested by Sambasiva Rao Kosaraju in 1978, but o
             \Function{Kosaraju}{$G(V,E)$}
             \For{$u \in V$} {$SCC(u) \gets \text{NULL}$}
             \EndFor
-            \For{$u \in G$} {\Call{DFS\_K}{$G$, $u$}}
+            \For{$u \in V$} {\Call{DFS\_K}{$G$, $u$}}
             \EndFor
             \While{$!L.\Call{Empty}{ }$} \label{alg:kosaraju-start-cycle}
                 \State{$u \gets L. \Call{Pop}{ }$}
