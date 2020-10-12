@@ -64,8 +64,7 @@ public:
     dir_t dir;
     speed_t speed;
     edge_type_t edgeType;
-    way_t(xml_node<> *it, edge_type_t eType){
-        edgeType = eType;
+    way_t(xml_node<> *it, edge_type_t eType): edgeType(eType) {
         get_way(it);
         dir = get_dir(it);
         speed = get_speed(it);
