@@ -28,7 +28,7 @@
                 }
             ],
             "preLaunchTask": "build-main"
-        }
+        },
         {
             "name": "Debug test",
             "type": "cppdbg",
