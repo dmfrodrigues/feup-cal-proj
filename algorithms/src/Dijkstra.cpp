@@ -1,4 +1,4 @@
-#pragma GCC target("tune=native")
+// #pragma GCC target("tune=native")
 
 #include "Dijkstra.h"
 
