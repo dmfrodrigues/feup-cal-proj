@@ -2,11 +2,9 @@
 
 #define COORDMULT               50000       // Multiply coordinates to get integer positions
 
-MapViewer::MapViewer(window_t w, window_t h, coord_t min_, coord_t max_):
-    GraphViewer(w, h, false), min(min_), max(max_){
-    if(!GraphViewer::defineEdgeCurved(false))   throw std::runtime_error("");
+MapViewer::MapViewer(window_t w_, window_t h_, coord_t min_, coord_t max_):
+    GraphViewer(), w(w_), h(h_), min(min_), max(max_){
     if(!GraphViewer::defineVertexSize(0))       throw std::runtime_error("");
-    if(!GraphViewer::createWindow(w, h))        throw std::runtime_error("");
     coord_t mean = (min+max)/2;
     coord_t size(double(h)/COORDMULT, double(w)/COORDMULT);
     nw_corner = mean + coord_t(size.getLat()/2, -size.getLon()/2);
@@ -33,6 +31,10 @@ void MapViewer::addEdge(edge_t i, node_t u, node_t v, int edge_type, std::string
     if(!GraphViewer::setEdgeDashed((int)i, dashed))                     throw std::runtime_error("");
 }
 
-void MapViewer::rearrange(){
-    if(!GraphViewer::rearrange()) throw std::runtime_error("");
+void MapViewer::createWindow(){
+    if(!GraphViewer::createWindow(w, h)) throw std::runtime_error("");
+}
+
+void MapViewer::join(){
+    GraphViewer::join();
 }

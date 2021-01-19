@@ -16,12 +16,12 @@ TDIR   =./test
 TEXE   =$(ODIR)/test
 
 GV_LIB =graphviewer
-GV_DIR =./GraphViewer
-GV_IDIR=$(GV_DIR)/cpp
+GV_DIR =./GraphViewerCpp
+GV_IDIR=$(GV_DIR)/include
 GV_LDIR=$(GV_DIR)/lib
-GV_FLIB=$(GV_LDIR)/lib$(GV_LIB).a
+GV_FLIB=$(GV_LDIR)/lib/lib$(GV_LIB).a
 $(GV_FLIB): FORCE
-	make -C $(GV_DIR)
+	cd $(GV_DIR) && mkdir -p build && cd build && cmake .. && cmake --build .
 
 UTILS_LIB =utils
 UTILS_DIR =./utils
@@ -53,7 +53,9 @@ LFLAGS =-L$(LDIR)         -l$(LIB) \
 		-L$(GV_LDIR)      -l$(GV_LIB) \
 		-L$(ALGS_LDIR)    -l$(ALGS_LIB) \
 		-L$(STRUCTS_LDIR) -l$(STRUCTS_LIB) \
-		-L$(UTILS_LDIR)   -l$(UTILS_LIB)
+		-L$(UTILS_LDIR)   -l$(UTILS_LIB) \
+		-lsfml-graphics -lsfml-window -lsfml-system \
+		-lX11
 
 LREQUIREMENTS=$(GV_FLIB) $(ALGS_FLIB) $(STRUCTS_FLIB) $(UTILS_FLIB)
 
@@ -101,7 +103,10 @@ cleanall:
 	make clean
 	make -C utils clean
 	make -C map clean
-	make -C GraphViewer clean
+	rm -rf GraphViewerCpp/build
+	rm -rf GraphViewerCpp/lib
+	rm -rf GraphViewerCpp/example/build
+	rm -rf GraphViewerCpp/example/example
 	git clean -dfX
 
 test: $(TEXE)
@@ -117,7 +122,7 @@ $(GROUP).zip: cleanall report_delivery2.pdf
 	git clean doc -dfX
 	git submodule update --init --recursive
 	mkdir -p $(GROUP)
-	cp -r algorithms doc empirical GraphViewer include map resources src structures test utils makefile README.md report_delivery2.pdf $(GROUP)
+	cp -r algorithms doc empirical GraphViewerCpp include map resources src structures test utils makefile README.md report_delivery2.pdf $(GROUP)
 	zip --symlinks $(GROUP).zip -r $(GROUP)
 	rm -rf $(GROUP)
 

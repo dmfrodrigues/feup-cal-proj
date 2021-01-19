@@ -5,6 +5,8 @@
 #include "Iteration1.h"
 #include "Iteration2.h"
 
+#include <X11/Xlib.h>
+
 void view(int argc, const char *argv[], const MapGraph &M){
     if(argc != 4) throw std::invalid_argument("invalid number of arguments");
     int fraction = atoi(argv[2]);
@@ -102,6 +104,8 @@ void iteration2(int argc, const char *argv[], const MapGraph &M){
 }
 
 int main(int argc, char *argv[]){
+    XInitThreads();
+
     try {
         if(argc < 2) throw std::invalid_argument("at least one argument must be provided");
         MapGraph M("map/processed/AMP");

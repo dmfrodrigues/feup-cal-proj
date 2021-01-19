@@ -362,7 +362,8 @@ void MapGraph::drawRoads(int fraction, int display) const{
         }
         
     }
-    gv->rearrange();
+    gv->createWindow();
+    gv->join();
 }
 
 void MapGraph::drawSpeeds(int fraction, int display) const{
@@ -407,7 +408,8 @@ void MapGraph::drawSpeeds(int fraction, int display) const{
         }
         
     }
-    gv->rearrange();
+    gv->createWindow();
+    gv->join();
 }
 
 void MapGraph::drawSCC(int fraction, int display) const{
@@ -452,7 +454,8 @@ void MapGraph::drawSCC(int fraction, int display) const{
         }
         
     }
-    gv->rearrange();
+    gv->createWindow();
+    gv->join();
 }
 
 class MapGraph::DistanceHeuristic : public Astar::heuristic_t{
@@ -584,10 +587,12 @@ void MapGraph::drawPath(int fraction, int display, node_t src, node_t dst, bool 
             ++i;
         }
     }
-    gv->rearrange();
+    gv->createWindow();
     
     for(Astar::heuristic_t *p: heuristics) delete p;
     for(ShortestPath *p: shortestPaths) delete p;
+    
+    gv->join();
 }
 
 void MapGraph::drawPath(int fraction, int display, coord_t src, coord_t dst, bool visited) const{
@@ -617,7 +622,8 @@ void MapGraph::drawReduced() const{
         }
     }
 
-    mv->rearrange();
+    mv->createWindow();
+    mv->join();
 }
 
 void MapGraph::drawRide(int fraction, int display, const Ride &r) const{
@@ -686,6 +692,6 @@ void MapGraph::drawRide(int fraction, int display, const Ride &r) const{
             ++i;
         }
     }
-    gv->rearrange();
-    
+    gv->createWindow();
+    gv->join();
 }

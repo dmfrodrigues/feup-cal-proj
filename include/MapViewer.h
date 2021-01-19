@@ -9,6 +9,7 @@ public:
     typedef long long node_t;
     typedef long long edge_t;
 private:
+    const int w, h;
     const coord_t min, max;
     coord_t nw_corner;
     std::unordered_map<node_t, int> nodes;
@@ -26,5 +27,6 @@ public:
     void addNode(node_t i, coord_t c);
     void addNode(node_t i, coord_t c, std::string color, window_t width);
     void addEdge(edge_t i, node_t u, node_t v, int edge_type, std::string color, window_t width, bool dashed = false);
-    void rearrange();
+    void createWindow();
+    void join();
 };
