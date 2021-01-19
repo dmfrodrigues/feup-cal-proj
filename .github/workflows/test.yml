@@ -12,6 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install SFML
+      run: |
+        sudo apt install -y libsfml-dev
+
     - name: Checkout submodules
       shell: bash
       run: |
