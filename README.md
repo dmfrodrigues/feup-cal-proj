@@ -3,6 +3,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ![Compile reports](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Compile%20reports/badge.svg)
+![Build](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Build/badge.svg)
 ![Test](https://github.com/dmfrodrigues/feup-cal-proj/workflows/Test/badge.svg)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/7947c4e515f64efba85fbabf2b530cd6)](https://www.codacy.com/gh/dmfrodrigues/feup-cal-proj/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dmfrodrigues/feup-cal-proj&amp;utm_campaign=Badge_Grade)
 
