@@ -1,4 +1,4 @@
-name: Compile reports
+name: Build
 
 on:
   push:
@@ -12,9 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: apt
-      run: sudo apt install -y texlive-latex-extra texlive-science latexmk curl
-
     - name: Checkout submodules
       shell: bash
       run: |
@@ -24,25 +21,5 @@ jobs:
         git submodule sync --recursive
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
-    - name: report1
-      run: |
-        make report_delivery1.pdf
-
-    - name: Upload delivery1 report
-      uses: actions/upload-artifact@v2
-      with:
-        name: report_delivery1.pdf
-        path: report_delivery1.pdf
-
-    - name: report2
-      run: |
-        make report_delivery2.pdf
-
-    - name: Upload delivery2 report
-      uses: actions/upload-artifact@v2
-      with:
-        name: report_delivery2.pdf
-        path: report_delivery2.pdf
-
-    - name: testzip
-      run: make testzip
+    - name: build
+      run: make
