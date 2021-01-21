@@ -35,6 +35,7 @@ void MapViewer::addEdge(edge_t i, node_t u, node_t v, int edge_type, std::string
 }
 
 void MapViewer::createWindow(){
+    GraphViewer::setZipEdges(true);
     if(!GraphViewer::createWindow(w, h)) throw std::runtime_error("");
 }
 
