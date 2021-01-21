@@ -154,6 +154,9 @@ MapGraph::MapGraph(const std::string &path){
         closestPoint->initialize(nodes_list);
         closestPoint->run();
     }
+
+    std::cout << "Nodes: " << connectedGraph.getNodes().size() << std::endl;
+    std::cout << "Edges: " << connectedGraph.getNumberEdges()  << std::endl;
 }
 
 MapGraph::~MapGraph(){

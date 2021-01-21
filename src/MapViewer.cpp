@@ -8,6 +8,9 @@ MapViewer::MapViewer(window_t w_, window_t h_, coord_t min_, coord_t max_):
     coord_t mean = (min+max)/2;
     coord_t size(double(h)/COORDMULT, double(w)/COORDMULT);
     nw_corner = mean + coord_t(size.getLat()/2, -size.getLon()/2);
+
+    GraphViewer::setEnabledNodes(false);
+    GraphViewer::setEnabledEdgesText(false);
 }
 
 void MapViewer::addNode(node_t i, coord_t c){
