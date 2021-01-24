@@ -4,7 +4,6 @@
 
 MapViewer::MapViewer(window_t w_, window_t h_, coord_t min_, coord_t max_):
     GraphViewer(), w(w_), h(h_), min(min_), max(max_){
-    if(!GraphViewer::defineVertexSize(0))       throw std::runtime_error("");
     coord_t mean = (min+max)/2;
     coord_t size(double(h)/COORDMULT, double(w)/COORDMULT);
     nw_corner = mean + coord_t(size.getLat()/2, -size.getLon()/2);
@@ -14,29 +13,32 @@ MapViewer::MapViewer(window_t w_, window_t h_, coord_t min_, coord_t max_):
 }
 
 void MapViewer::addNode(node_t i, coord_t c){
-    window_t x = (window_t)(double)(+(c.getLon() - nw_corner.getLon())*COORDMULT);
-    window_t y = (window_t)(double)(-(c.getLat() - nw_corner.getLat())*COORDMULT);
-    if(!GraphViewer::addNode(nodes[i] = next_id++, x, y))   throw std::runtime_error("");
+    float x = float(+(c.getLon() - nw_corner.getLon())*COORDMULT);
+    float y = float(-(c.getLat() - nw_corner.getLat())*COORDMULT);
+    GraphViewer::addNode(GraphViewer::Node(i, sf::Vector2f(x, y)));
 }
 
-void MapViewer::addNode(node_t i, coord_t c, std::string color, window_t w){
+void MapViewer::addNode(node_t i, coord_t c, const sf::Color &color, window_t w){
     window_t x = (window_t)(double)(+(c.getLon() - nw_corner.getLon())*COORDMULT);
     window_t y = (window_t)(double)(-(c.getLat() - nw_corner.getLat())*COORDMULT);
-    if(!GraphViewer::addNode(nodes[i] = next_id++, x, y))   throw std::runtime_error("");
-    if(!GraphViewer::setVertexColor(nodes[i], color    ))   throw std::runtime_error("");
-    if(!GraphViewer::setVertexSize (nodes[i], w        ))   throw std::runtime_error("");
+    GraphViewer::Node &node = GraphViewer::addNode(GraphViewer::Node(i, sf::Vector2f(x, y)));
+    node.setColor(color);
+    node.setSize(w);
 }
 
-void MapViewer::addEdge(edge_t i, node_t u, node_t v, int edge_type, std::string color, window_t w, bool dashed){
-    if(!GraphViewer::addEdge((int)i, nodes[u], nodes[v], edge_type))    throw std::runtime_error("");
-    if(!GraphViewer::setEdgeColor((int)i, color))                       throw std::runtime_error("");
-    if(!GraphViewer::setEdgeThickness((int)i, w))                       throw std::runtime_error("");
-    if(!GraphViewer::setEdgeDashed((int)i, dashed))                     throw std::runtime_error("");
+void MapViewer::addEdge(edge_t i, node_t u, node_t v, GraphViewer::Edge::EdgeType edge_type, const sf::Color &color, window_t w, bool dashed){
+    const GraphViewer::Node &uNode = getNode(u);
+    const GraphViewer::Node &vNode = getNode(v);
+    
+    GraphViewer::Edge &edge = GraphViewer::addEdge(GraphViewer::Edge((int)i, &uNode, &vNode, edge_type));
+    edge.setColor(color);
+    edge.setThickness(w);
+    edge.setDashed(dashed);
 }
 
 void MapViewer::createWindow(){
     GraphViewer::setZipEdges(true);
-    if(!GraphViewer::createWindow(w, h)) throw std::runtime_error("");
+    GraphViewer::createWindow(w, h);
 }
 
 void MapViewer::join(){
