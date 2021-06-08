@@ -32,7 +32,7 @@ jobs:
     - name: report1
       run: |
         cd doc/report1
-        ./compile_report1.pdf
+        ./compile_report1.sh
 
     - name: Upload delivery1 report
       uses: actions/upload-artifact@v2
@@ -43,7 +43,7 @@ jobs:
     - name: report2
       run: |
         cd doc/report2
-        ./compile_report2.pdf
+        ./compile_report2.sh
 
     - name: Upload delivery2 report
       uses: actions/upload-artifact@v2
