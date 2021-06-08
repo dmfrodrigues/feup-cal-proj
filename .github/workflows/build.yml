@@ -26,6 +26,11 @@ jobs:
         git submodule sync --recursive
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
+    - name: chmod
+      run: |
+        chmod u+x doc/report1/compile_report1.sh
+        chmod u+x doc/report2/compile_report2.sh
+
     - name: build
       run: |
         mkdir build
