@@ -17,6 +17,9 @@ jobs:
         sudo apt update
         sudo apt install -y libsfml-dev
 
+    - name: Install LaTeX and dependencies
+      run: sudo apt install -y texlive-latex-extra texlive-science latexmk curl
+
     - name: Checkout submodules
       shell: bash
       run: |
