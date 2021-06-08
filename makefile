@@ -26,12 +26,10 @@ $(TEXE): $(PROG) $(TDIR)/test.cpp $(LREQUIREMENTS)
 	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(TDIR)/test.cpp -o $(TEXE) $(LFLAGS)
 
 doc/report1/report_delivery1.pdf:
-	cd doc/report1
-	./compile_report1.sh
+	cd doc/report1 && ./compile_report1.sh
 
 doc/report2/report_delivery2.pdf:
-	cd doc/report2
-	./compile_report2.sh
+	cd doc/report2 && ./compile_report2.sh
 
 # Create zip file to submit
 zip: $(GROUP).zip
