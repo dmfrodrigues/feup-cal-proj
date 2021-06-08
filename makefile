@@ -35,7 +35,8 @@ doc/report2/report_delivery2.pdf:
 zip: $(GROUP).zip
 
 $(GROUP).zip: doc/report2/report_delivery2.pdf
-	zip --symlinks $(GROUP).zip -r algorithms empirical GraphViewerCpp include map resources src structures test utils makefile README.md doc/report2/report_delivery2.pdf
+	zip -q --symlinks $(GROUP).zip -r algorithms empirical GraphViewerCpp include map resources src structures test utils makefile README.md CMakeLists.txt
+	zip -q $(GROUP).zip -j doc/report2/report_delivery2.pdf
 
 DEST=~/Documents
 
