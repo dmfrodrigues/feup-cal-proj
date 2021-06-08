@@ -12,9 +12,9 @@ set(CMAKE_CXX_STANDARD 14)
 add_subdirectory("lib/GraphViewerCpp")
 include_directories("lib/GraphViewerCpp/include")
 
-include_directories("include" "algorithms/include")
+include_directories("include" "algorithms/include" "structures/include" "utils/include")
 
-file(GLOB_RECURSE SRC "src/*.cpp" "algorithms/src/*.h")
+file(GLOB_RECURSE SRC "src/*.cpp" "algorithms/src/*.cpp" "structures/src/*.cpp" "utils/src/*.cpp")
 add_executable(cal_proj ${SRC})
 
 target_link_libraries(${PROJECT_NAME} graphviewer)
