@@ -1,29 +1,4 @@
-PROG   =main
 GROUP  =CAL1920_Turma6_G5
-all: $(PROG) data
-
-FORCE:
-
-CC     =g++
-
-LIB		=$(PROG)
-TDIR   =./test
-TEXE   =$(ODIR)/test
-
-data: FORCE
-	make -C map
-
-clean:
-	rm -rf $(ODIR)
-	rm -rf $(LDIR)
-	rm -f $(PROG)
-	make -C resources clean
-
-test: $(TEXE)
-	$(TEXE)
-
-$(TEXE): $(PROG) $(TDIR)/test.cpp $(LREQUIREMENTS)
-	$(CC) $(CFLAGS) -I$(TDIR)/Catch2/single_include/catch2 $(TDIR)/test.cpp -o $(TEXE) $(LFLAGS)
 
 doc/report1/report_delivery1.pdf:
 	cd doc/report1 && ./compile_report1.sh

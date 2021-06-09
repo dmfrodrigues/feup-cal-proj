@@ -4,6 +4,8 @@
 
 MapViewer::MapViewer(window_t w_, window_t h_, coord_t min_, coord_t max_):
     GraphViewer(), w(w_), h(h_), min(min_), max(max_){
+    GraphViewer::Node::setDefaultSize(0);
+    
     coord_t mean = (min+max)/2;
     coord_t size(double(h)/COORDMULT, double(w)/COORDMULT);
     nw_corner = mean + coord_t(size.getLat()/2, -size.getLon()/2);

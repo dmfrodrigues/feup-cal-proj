@@ -1,4 +1,7 @@
 #include <bits/stdc++.h>
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #include "rapidxml.hpp"
 #include "EdgeType.h"
 #include "coord.h"
@@ -159,6 +162,28 @@ edge_type_t get_edge_type(xml_node<> *it) {
 
 int main(int argc, char *argv[]) {
     assert(argc == 2);
+    // Create destination directory
+    {
+        string s = string(argv[1]);
+        long i = long(s.size()-1) - long(find(s.rbegin(), s.rend(), '/') - s.rbegin());
+        if(i >= 0) {
+            s = s.substr(0, i);
+            if(fs::exists(s)){
+                cout << "Directory already exists: " + s + "; proceeding" << endl;
+            } else {
+                cout << "Creating directory " + s << endl;
+                assert(fs::create_directories(s));
+            }
+        }
+    }
+    // Check if files already exist
+    {
+        if(fs::exists(string(argv[1]) + ".nodes")){
+            cout << "Files already exist, exiting" << endl;
+            return 0;
+        }
+    }
+    //
     char *text = nullptr; {
         string all = "";
         string buf;
@@ -195,15 +220,30 @@ int main(int argc, char *argv[]) {
             if(nodes.count(u)) nodes[u] = coord;
         }
     }
+
     // Print nodes
     {
-        ofstream os(string(argv[1]) + ".nodes");
+        ofstream os;
+        os.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        try {
+            os.open(string(argv[1]) + ".nodes");
+        } catch(std::ofstream::failure e) {
+            cerr << "ERROR: Failed to open file " << string(argv[1]) + ".nodes" << endl;
+            return 1;
+        }
         os << nodes.size() << "\n";
         for(const std::pair<DWGraph::node_t, coord_t> &u: nodes) os << u.first << " " << u.second << "\n";
     }
     // Print ways/edges
     {
-        ofstream os(string(argv[1]) + ".edges");
+        ofstream os;
+        os.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        try {
+            os.open(string(argv[1]) + ".edges");
+        } catch(std::ofstream::failure e) {
+            cerr << "ERROR: Failed to open file " << string(argv[1]) + ".edges" << endl;
+            return 1;
+        }
         size_t sz = 0;
         for(const way_t &w: ways){
             sz += w.getNumWays();
@@ -241,7 +281,14 @@ int main(int argc, char *argv[]) {
     }
     // Print points of interest
     {
-        ofstream os(string(argv[1]) + ".points");
+        ofstream os;
+        os.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        try {
+            os.open(string(argv[1]) + ".points");
+        } catch(std::ofstream::failure e) {
+            cerr << "ERROR: Failed to open file " << string(argv[1]) + ".points" << endl;
+            return 1;
+        }
         os << points.size() << "\n";
         for(const auto &p: points){
             os << p << "\n";
