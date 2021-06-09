@@ -45,5 +45,5 @@ testzip: $(GROUP).zip
 	rm -rf $(DEST)/$(GROUP)
 	mkdir -p $(DEST)/$(GROUP)
 	unzip $(GROUP).zip -d $(DEST)/$(GROUP)
-	cd $(DEST)/$(GROUP) && mkdir build && cd build && cmake .. && cmake --build
+	cd $(DEST)/$(GROUP) && mkdir build && cd build && cmake .. && cmake --build .
 	cd $(DEST)/$(GROUP) && mkdir build && cd build && cmake .. && make tests && ./tests
