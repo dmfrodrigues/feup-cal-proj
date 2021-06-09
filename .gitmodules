@@ -4,9 +4,6 @@
 [submodule "test/Catch2"]
 	path = test/Catch2
 	url = https://github.com/catchorg/Catch2.git
-[submodule "utils"]
-	path = utils
-	url = https://github.com/dmfrodrigues/utils.git
 [submodule "GraphViewerCpp"]
-	path = GraphViewerCpp
+	path = lib/GraphViewerCpp
 	url = https://github.com/dmfrodrigues/GraphViewerCpp.git

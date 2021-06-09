@@ -1,4 +1,4 @@
-name: Compile reports
+name: Zip
 
 on:
   push:
@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install SFML
+      run: |
+        sudo apt update
+        sudo apt install -y libsfml-dev
 
     - name: Install LaTeX and dependencies
       run: sudo apt install -y texlive-latex-extra texlive-science latexmk curl
@@ -29,24 +34,17 @@ jobs:
         chmod u+x doc/report1/compile_report1.sh
         chmod u+x doc/report2/compile_report2.sh
 
-    - name: report1
+    - name: zip
       run: |
-        cd doc/report1
-        ./compile_report1.sh
+        make zip
 
-    - name: Upload delivery1 report
+    - name: Upload zip
       uses: actions/upload-artifact@v2
       with:
-        name: report_delivery1.pdf
-        path: doc/report1/report_delivery1.pdf
+        name: CAL1920_Turma6_G5.zip
+        path: CAL1920_Turma6_G5.zip
 
-    - name: report2
+
+    - name: test zip
       run: |
-        cd doc/report2
-        ./compile_report2.sh
-
-    - name: Upload delivery2 report
-      uses: actions/upload-artifact@v2
-      with:
-        name: report_delivery2.pdf
-        path: doc/report2/report_delivery2.pdf
+        make testzip
