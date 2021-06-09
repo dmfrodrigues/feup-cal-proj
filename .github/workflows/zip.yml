@@ -38,6 +38,13 @@ jobs:
       run: |
         make zip
 
+    - name: Upload zip
+      uses: actions/upload-artifact@v2
+      with:
+        name: CAL1920_Turma6_G5.zip
+        path: CAL1920_Turma6_G5.zip
+
+
     - name: test zip
       run: |
         make testzip
