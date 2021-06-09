@@ -18,13 +18,26 @@ add_subdirectory("lib/GraphViewerCpp")
 include_directories("lib/GraphViewerCpp/include")
 
 include_directories("include" "algorithms/include" "structures/include" "utils/include")
-file(GLOB_RECURSE SRC "src/*.cpp" "algorithms/src/*.cpp" "structures/src/*.cpp" "utils/src/*.cpp")
-add_executable(cal_proj ${SRC})
-
-target_link_libraries(${PROJECT_NAME} graphviewer)
+file(GLOB_RECURSE SRC "algorithms/src/*.cpp" "structures/src/*.cpp" "utils/src/*.cpp")
+file(GLOB_RECURSE SRC_DRIVERS "src/*.cpp")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     message("Detected GNU GCC, adding some compilation flags for cal_proj algorithms")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_FLAGS_OPTIMIZE}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_FLAGS_PARANOID}")
 endif()
+
+# ################ MAIN ################
+
+add_executable(cal_proj ${SRC} ${SRC_DRIVERS})
+target_link_libraries(${PROJECT_NAME} graphviewer)
+
+# ################ TESTS ################
+
+add_subdirectory("test/Catch2")
+include_directories("test/Catch2/src")
+add_executable(tests test/test.cpp ${SRC})
+target_link_libraries(tests PRIVATE Catch2WithMain)
+include(CTest)
+include(test/Catch2/extras/Catch.cmake)
+catch_discover_tests(tests)
