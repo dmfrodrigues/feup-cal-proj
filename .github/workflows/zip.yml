@@ -1,0 +1,43 @@
+name: Zip
+
+on:
+  push:
+    branches: [ master , dev ]
+  pull_request:
+    branches: [ master , dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install SFML
+      run: |
+        sudo apt update
+        sudo apt install -y libsfml-dev
+
+    - name: Install LaTeX and dependencies
+      run: sudo apt install -y texlive-latex-extra texlive-science latexmk curl
+
+    - name: Checkout submodules
+      shell: bash
+      run: |
+        # If your submodules are configured to use SSH instead of HTTPS please uncomment the following line
+        # git config --global url."https://github.com/".insteadOf "git@github.com:"
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+    - name: chmod
+      run: |
+        chmod u+x doc/report1/compile_report1.sh
+        chmod u+x doc/report2/compile_report2.sh
+
+    - name: zip
+      run: |
+        make zip
+
+    - name: test zip
+      run: |
+        make testzip

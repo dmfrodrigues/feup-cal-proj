@@ -44,6 +44,5 @@ DEST=~/Documents
 testzip: $(GROUP).zip
 	rm -rf $(DEST)/$(GROUP)
 	unzip $(GROUP).zip -d $(DEST)
-	make -C $(DEST)/$(GROUP)/ test
-	rm -rf $(DEST)/$(GROUP)
-
+	cd $(DEST)/$(GROUP) && mkdir build && cd build && cmake .. && cmake --build
+	cd $(DEST)/$(GROUP) && mkdir build && cd build && cmake .. && make tests && ./tests
